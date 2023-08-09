@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:scrabble_scorer/scrabble_key.dart';
 
 class ScrabbleKeyboardState extends ChangeNotifier {
@@ -20,12 +19,16 @@ class ScrabbleKeyboardState extends ChangeNotifier {
 }
 
 class ScrabbleKeyboard extends StatelessWidget {
-  final List<String> keyboardRows = ['QWERTYUIOP', 'ASDFGHJKL', '_ZXCVBNM<'];
+  const ScrabbleKeyboard({super.key});
+
+  static const List<String> keyboardRows = [
+    'QWERTYUIOP',
+    'ASDFGHJKL',
+    '_ZXCVBNM<'
+  ];
 
   @override
   Widget build(BuildContext context) {
-    final keyboardState = Provider.of<ScrabbleKeyboardState>(context);
-
     return Column(
       children: keyboardRows.map((row) {
         return Row(
