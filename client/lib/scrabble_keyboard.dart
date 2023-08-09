@@ -1,38 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:scrabble_scorer/scrabble_key.dart';
 
 class ScrabbleKeyboardState extends ChangeNotifier {
-  String _typedText = '';
-
-  String get typedText => _typedText;
+  String typedText = '';
 
   void type(String letter) {
     if (letter == '<') {
-      if (_typedText.length > 0) {
-        _typedText = _typedText.substring(0, _typedText.length - 1);
+      if (typedText.isNotEmpty) {
+        typedText = typedText.substring(0, typedText.length - 1);
       }
     } else {
-      _typedText += letter;
+      typedText += letter;
     }
     notifyListeners();
   }
 }
 
 class ScrabbleKeyboard extends StatelessWidget {
-  final List<String> keyboardRows = ['QWERTYUIOP', 'ASDFGHJKL', '_ZXCVBNM<'];
+  const ScrabbleKeyboard({super.key});
+
+  static const List<String> keyboardRows = [
+    'QWERTYUIOP',
+    'ASDFGHJKL',
+    '_ZXCVBNM<'
+  ];
 
   @override
   Widget build(BuildContext context) {
-    final keyboardState = Provider.of<ScrabbleKeyboardState>(context);
-
     return Column(
       children: keyboardRows.map((row) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: row.split('').map((letter) {
-            return ScrabbleKey(letter);
-          }).toList(),
+          children: row.split('').map((letter) => ScrabbleKey(letter)).toList(),
         );
       }).toList(),
     );
