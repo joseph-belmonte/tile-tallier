@@ -31,9 +31,7 @@ class ScrabbleKeyboard extends StatelessWidget {
       children: keyboardRows.map((row) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: row.split('').map((letter) {
-            return ScrabbleKey(letter);
-          }).toList(),
+          children: row.split('').map((letter) => ScrabbleKey(letter)).toList(),
         );
       }).toList(),
     );
