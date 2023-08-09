@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:scrabble_scorer/scrabble_keyboard.dart';
 
 class ScrabbleKey extends StatelessWidget {
   final String letter;
@@ -6,6 +8,7 @@ class ScrabbleKey extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final keyboardState = Provider.of<ScrabbleKeyboardState>(context);
     Widget keyCap;
     if (letter == "_") {
       keyCap = const Icon(
@@ -20,22 +23,28 @@ class ScrabbleKey extends StatelessWidget {
         size: 14,
       );
     } else {
-      keyCap = Text(
-        letter,
-        style: const TextStyle(color: Colors.white, fontSize: 14),
+      keyCap = TextButton(
+        style: TextButton.styleFrom(
+          textStyle: const TextStyle(color: Colors.white, fontSize: 14),
+        ),
+        onPressed: () {},
+        child: Text(
+          letter,
+        ),
       );
     }
 
-    return Container(
-        width: 30,
-        height: 50,
-        alignment: Alignment.center,
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.all(2),
-        decoration: BoxDecoration(
-            color: Colors.grey,
-            border: Border.all(color: Colors.black87, width: 1),
-            borderRadius: BorderRadius.circular(4)),
-        child: keyCap);
+    return GestureDetector(
+      onTap: () {
+        keyboardState.type(letter);
+      },
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: Text(
+          letter,
+          style: TextStyle(fontSize: 20),
+        ),
+      ),
+    );
   }
 }

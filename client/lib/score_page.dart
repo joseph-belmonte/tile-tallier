@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scrabble_scorer/scrabble_grid.dart';
+import 'package:provider/provider.dart';
 import 'package:scrabble_scorer/scrabble_keyboard.dart';
 
 class ScorePage extends StatefulWidget {
@@ -11,34 +11,52 @@ class ScorePage extends StatefulWidget {
 }
 
 class _ScorePageState extends State<ScorePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: const Column(
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          ScrabbleGrid(),
-          ScrabbleKeyboard(),
+          Row(children: [Text("Top Row")]),
+          WritingZone(),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+    );
+  }
+}
+
+class WritingZone extends StatefulWidget {
+  const WritingZone({
+    super.key,
+  });
+
+  @override
+  State<StatefulWidget> createState() {
+    return _WritingZoneState();
+  }
+}
+
+class _WritingZoneState extends State<WritingZone> {
+  @override
+  Widget build(BuildContext context) {
+    final scrabbleKeyboardState = Provider.of<ScrabbleKeyboardState>(context);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Container(
+              color: Colors.pink,
+              width: double.infinity,
+              child: Text(scrabbleKeyboardState.typedText,
+                  style: const TextStyle(fontSize: 20)),
+            ),
+            ScrabbleKeyboard(),
+          ],
+        ),
+      ],
     );
   }
 }
