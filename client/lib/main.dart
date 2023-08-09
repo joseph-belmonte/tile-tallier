@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
-import 'scarbble_scorer.dart';
+import 'package:provider/provider.dart';
+import 'package:scrabble_scorer/scrabble_scorer.dart';
+import 'package:scrabble_scorer/scrabble_keyboard.dart';
 
 void main() {
-  runApp(const ScrabbleScorer());
+  runApp(ChangeNotifierProvider(
+    create: (context) => ScrabbleKeyboardState(),
+    child: ScrabbleScorer(),
+  ));
 }
