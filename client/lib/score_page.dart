@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scrabble_scorer/display_zone.dart';
 import 'package:scrabble_scorer/writing_zone.dart';
 
 class ScorePage extends StatefulWidget {
@@ -16,6 +17,7 @@ class _ScorePageState extends State<ScorePage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: const [
+          DisplayZone(),
           WritingZone(),
         ],
       ),
