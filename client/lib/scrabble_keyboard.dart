@@ -5,12 +5,23 @@ class ScrabbleKeyboardState extends ChangeNotifier {
   String typedText = '';
 
   void type(String letter) {
-    if (letter == '<') {
-      if (typedText.isNotEmpty) {
-        typedText = typedText.substring(0, typedText.length - 1);
-      }
-    } else {
-      typedText += letter;
+    switch (letter) {
+      case '_':
+        if (typedText.isNotEmpty) {
+          print("Entered word: $typedText");
+        } else {
+          print("Nothing to add");
+        }
+        break;
+      case '<':
+        if (typedText.isNotEmpty) {
+          typedText = typedText.substring(0, typedText.length - 1);
+        } else {
+          print("Nothing to delete");
+        }
+        break;
+      default:
+        typedText += letter;
     }
     notifyListeners();
   }
