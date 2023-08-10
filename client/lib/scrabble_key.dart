@@ -11,11 +11,21 @@ class ScrabbleKey extends StatelessWidget {
   Widget build(BuildContext context) {
     final keyboardState = Provider.of<ScrabbleKeyboardState>(context);
 
+    Widget keyChild;
+
+    if (letter == '_') {
+      keyChild = Icon(Icons.keyboard_return);
+    } else if (letter == '<') {
+      keyChild = Icon(Icons.backspace);
+    } else {
+      keyChild = Text(letter, style: const TextStyle(fontSize: 20));
+    }
+
     return GestureDetector(
       onTap: () => keyboardState.type(letter),
       child: Container(
         padding: const EdgeInsets.all(10),
-        child: Text(letter, style: const TextStyle(fontSize: 20)),
+        child: keyChild,
       ),
     );
   }
