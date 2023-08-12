@@ -3,6 +3,7 @@ import 'package:scrabble_scorer/scrabble_key.dart';
 
 class ScrabbleKeyboardState extends ChangeNotifier {
   String typedText = '';
+
   var wordEntered = false;
 
   void type(String letter) {
@@ -24,6 +25,7 @@ class ScrabbleKeyboardState extends ChangeNotifier {
         break;
       default:
         typedText += letter;
+
     }
     notifyListeners();
   }

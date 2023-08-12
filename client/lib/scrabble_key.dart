@@ -11,6 +11,7 @@ class ScrabbleKey extends StatelessWidget {
   Widget build(BuildContext context) {
     final keyboardState = Provider.of<ScrabbleKeyboardState>(context);
 
+
     Widget keyChild;
 
     if (letter == '_') {
@@ -26,6 +27,7 @@ class ScrabbleKey extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(10),
         child: keyChild,
+
       ),
     );
   }
