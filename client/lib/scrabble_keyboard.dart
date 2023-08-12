@@ -3,21 +3,23 @@ import 'package:scrabble_scorer/scrabble_key.dart';
 
 class ScrabbleKeyboardState extends ChangeNotifier {
   String typedText = '';
+  var wordEntered = false;
 
   void type(String letter) {
     switch (letter) {
       case '_':
         if (typedText.isNotEmpty) {
-          print("Entered word: $typedText");
+          wordEntered = true;
+          print('Entered word: $typedText');
         } else {
-          print("Nothing to add");
+          print('Nothing to add');
         }
         break;
       case '<':
         if (typedText.isNotEmpty) {
           typedText = typedText.substring(0, typedText.length - 1);
         } else {
-          print("Nothing to delete");
+          print('Nothing to delete');
         }
         break;
       default:

@@ -27,12 +27,12 @@ class _WritingZoneState extends State<WritingZone> {
 
   @override
   Widget build(BuildContext context) {
-    final scrabbleKeyboardState = Provider.of<ScrabbleKeyboardState>(context);
+    var scrabbleKeyboardState = Provider.of<ScrabbleKeyboardState>(context);
 
     // Calculate the score based on typed text and letter modifiers
     int currentWordScore = 0;
     for (var char in scrabbleKeyboardState.typedText.split('')) {
-      currentWordScore += (letterScores[char] ?? 0);
+      currentWordScore += (letterScores[char]!);
     }
 
     return Align(
@@ -54,7 +54,7 @@ class _WritingZoneState extends State<WritingZone> {
               for (var char in scrabbleKeyboardState.typedText.split(''))
                 GestureDetector(
                   onTap: () {
-                    print("Letter $char tapped");
+                    print('Letter $char tapped');
                   },
                   child: ScrabbleLetterbox(
                     char,

@@ -3,7 +3,7 @@ import 'package:scrabble_scorer/display_zone.dart';
 import 'package:scrabble_scorer/writing_zone.dart';
 
 class ScorePage extends StatefulWidget {
-  const ScorePage({super.key, required this.title});
+  const ScorePage({required this.title, super.key});
   final String title;
 
   @override
@@ -16,7 +16,7 @@ class _ScorePageState extends State<ScorePage> {
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
+        children: [
           DisplayZone(),
           WritingZone(),
         ],
