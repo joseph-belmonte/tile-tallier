@@ -1,39 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:scrabble_scorer/scrabble_keyboard.dart';
 import 'package:scrabble_scorer/scrabble_letterbox.dart';
+import 'package:scrabble_scorer/scrabble_scorer.dart';
+
 import './data/letter_scores.dart';
 
 class WritingZone extends StatefulWidget {
   const WritingZone({super.key});
 
   @override
-  _WritingZoneState createState() => _WritingZoneState();
+  State<WritingZone> createState() => _WritingZoneState();
 }
 
 class _WritingZoneState extends State<WritingZone> {
-  // Current score variable
-  int score = 0;
+  String currentWord = '';
+  final _textController = TextEditingController();
 
-  Map<String, int> letterMultipliers = {
-    'DL': 2,
-    'TL': 3,
-  };
-
-  Map<String, int> wordMultipliers = {
-    'DW': 2,
-    'TW': 3,
-  };
+  int get currentWordScore {
+    int score = 0;
+    for (var char in currentWord.split('')) {
+      score += letterScores[char.toUpperCase()] ?? 0;
+    }
+    return score;
+  }
 
   @override
   Widget build(BuildContext context) {
-    var scrabbleKeyboardState = Provider.of<ScrabbleKeyboardState>(context);
-
     // Calculate the score based on typed text and letter modifiers
-    int currentWordScore = 0;
-    for (var char in scrabbleKeyboardState.typedText.split('')) {
-      currentWordScore += (letterScores[char]!);
-    }
 
     return Align(
       alignment: Alignment.bottomCenter,
@@ -51,13 +44,13 @@ class _WritingZoneState extends State<WritingZone> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              for (var char in scrabbleKeyboardState.typedText.split(''))
+              for (var char in currentWord.split(''))
                 GestureDetector(
                   onTap: () {
                     print('Letter $char tapped');
                   },
                   child: ScrabbleLetterbox(
-                    char,
+                    char.toUpperCase(),
                   ),
                 ),
             ],
@@ -66,37 +59,30 @@ class _WritingZoneState extends State<WritingZone> {
             color: Colors.pink,
             padding: EdgeInsets.all(5),
             width: double.infinity,
-            child: Text(
-              scrabbleKeyboardState.typedText,
-              style: const TextStyle(fontSize: 20),
+            child: Text(currentWord, style: const TextStyle(fontSize: 20)),
+          ),
+          TextField(
+            controller: _textController,
+            onChanged: (value) {
+              setState(() {
+                currentWord = value;
+              });
+            },
+            onSubmitted: (value) {
+              Provider.of<GameStateNotifier>(context, listen: false)
+                  .addWord(value);
+              setState(() {
+                currentWord = '';
+              });
+              _textController.clear();
+            },
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Enter a word',
             ),
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          ScrabbleKeyboard(),
-          SizedBox(
-            height: 25,
           ),
         ],
       ),
     );
   }
-
-  // void _toggleLetterModifier(String letter) {
-  //   if (letterModifiers[letter] == null) {
-  //     switch (letterModifiers[letter]) {
-  //       case 'DL':
-  //         letterModifiers[letter] = 'TL';
-  //         break;
-  //       case 'TL':
-  //         letterModifiers[letter] = 'DW';
-  //         break;
-  //       default:
-  //         letterModifiers[letter] = 'DL';
-  //     }
-  //   }
-
-  //   setState(() {});
-  // }
 }
