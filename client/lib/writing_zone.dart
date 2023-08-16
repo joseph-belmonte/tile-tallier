@@ -62,13 +62,11 @@ class WritingZoneState extends State<WritingZone> {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              for (var char in currentWord.toUpperCase().split(''))
-                GestureDetector(
-                  onTap: () => print('Letter $char tapped'),
-                  child: ScrabbleLetterbox(char),
-                ),
-            ],
+            children: currentWord
+                .toUpperCase()
+                .split('')
+                .map((c) => ScrabbleLetterbox(c))
+                .toList(),
           ),
           // Contains miscellaneous logic that helps us debug stuff.
           StupidPinkBar(this),
