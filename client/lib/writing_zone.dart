@@ -26,34 +26,88 @@ class _WritingZoneState extends State<WritingZone> {
 
   @override
   Widget build(BuildContext context) {
-    // Calculate the score based on typed text and letter modifiers
+    var notifier = Provider.of<GameStateNotifier>(context);
+    var players = notifier.gameState.players;
+    var activePlayerIndex = notifier.activePlayerIndex;
 
+    void onSubmitWord() {
+      /// Add the current word to the list of words for the active player
+      notifier.addWord(currentWord);
+      setState(() {
+        currentWord = '';
+      });
+      _textController.clear();
+    }
+
+    var turnActionButtons = [
+      FloatingActionButton.small(
+        // Add word button
+        onPressed: onSubmitWord,
+        child: Icon(Icons.add_circle_outline),
+      ),
+      FloatingActionButton.small(
+        // Switch player button
+        onPressed: () {
+          notifier.endTurn();
+          setState(() {
+            activePlayerIndex = notifier.activePlayerIndex;
+          });
+        },
+        child: Icon(Icons.switch_account_rounded),
+      ),
+    ];
+
+    var writingDisplayText = [
+      Text(
+        'Current Player: ${players[activePlayerIndex].name}',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
+          color: Colors.black87,
+        ),
+      ),
+      Text(
+        'Word Score: $currentWordScore',
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
+          color: Colors.black87,
+        ),
+      ),
+    ];
     return Align(
       alignment: Alignment.bottomCenter,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Word Score: $currentWordScore', // Display current word score
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-              color: Colors.black87,
-            ),
-          ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              for (var char in currentWord.split(''))
-                GestureDetector(
-                  onTap: () {
-                    print('Letter $char tapped');
-                  },
-                  child: ScrabbleLetterbox(
-                    char.toUpperCase(),
-                  ),
-                ),
+              Column(
+                children: writingDisplayText,
+              ),
+              Spacer(),
+              Column(
+                children: turnActionButtons,
+              ),
             ],
+          ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            clipBehavior: Clip.hardEdge,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (var char in currentWord.split(''))
+                  GestureDetector(
+                    onTap: () {
+                      print('Letter $char tapped');
+                    },
+                    child: ScrabbleLetterbox(
+                      char.toUpperCase(),
+                    ),
+                  ),
+              ],
+            ),
           ),
           Container(
             color: Colors.pink,
@@ -69,12 +123,7 @@ class _WritingZoneState extends State<WritingZone> {
               });
             },
             onSubmitted: (value) {
-              Provider.of<GameStateNotifier>(context, listen: false)
-                  .addWord(value);
-              setState(() {
-                currentWord = '';
-              });
-              _textController.clear();
+              onSubmitWord();
             },
             decoration: InputDecoration(
               border: OutlineInputBorder(),
