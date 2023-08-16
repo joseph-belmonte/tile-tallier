@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scrabble_scorer/scrabble_keyboard.dart';
 import 'package:scrabble_scorer/scrabble_letterbox.dart';
 import 'package:scrabble_scorer/scrabble_scorer.dart';
 
@@ -14,6 +15,7 @@ class WritingZone extends StatefulWidget {
 
 class _WritingZoneState extends State<WritingZone> {
   String currentWord = '';
+  bool useCustomKeyboard = true;
   final _textController = TextEditingController();
 
   int get currentWordScore {
@@ -22,6 +24,43 @@ class _WritingZoneState extends State<WritingZone> {
       score += letterScores[char.toUpperCase()] ?? 0;
     }
     return score;
+  }
+
+  void toggleKeyboard() {
+    setState(() {
+      useCustomKeyboard = !useCustomKeyboard;
+    });
+  }
+
+  Widget buildKeyboard() {
+    if (useCustomKeyboard) {
+      return ScrabbleKeyboard(
+          onTapCallback: (letter) => setState(() {
+                currentWord += letter;
+              }),
+          onSubmitCallback: (_) => setState(() {
+                Provider.of<GameStateNotifier>(context, listen: false)
+                    .addWord(currentWord);
+                currentWord = '';
+              }));
+    }
+    return TextField(
+      controller: _textController,
+      onChanged: (word) => setState(() {
+        currentWord = word;
+      }),
+      onSubmitted: (value) {
+        Provider.of<GameStateNotifier>(context, listen: false).addWord(value);
+        setState(() {
+          currentWord = '';
+        });
+        _textController.clear();
+      },
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: 'Enter a word',
+      ),
+    );
   }
 
   @override
@@ -55,32 +94,33 @@ class _WritingZoneState extends State<WritingZone> {
                 ),
             ],
           ),
-          Container(
-            color: Colors.pink,
-            padding: EdgeInsets.all(5),
-            width: double.infinity,
-            child: Text(currentWord, style: const TextStyle(fontSize: 20)),
+          Row(
+            children: [
+              Expanded(
+                flex: 3,
+                child: Container(
+                  color: Colors.pink,
+                  padding: EdgeInsets.all(5),
+                  child:
+                      Text(currentWord, style: const TextStyle(fontSize: 20)),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Checkbox(
+                      value: useCustomKeyboard,
+                      onChanged: (value) => toggleKeyboard(),
+                    ),
+                    Text('Toggle'),
+                  ],
+                ),
+              ),
+            ],
           ),
-          TextField(
-            controller: _textController,
-            onChanged: (value) {
-              setState(() {
-                currentWord = value;
-              });
-            },
-            onSubmitted: (value) {
-              Provider.of<GameStateNotifier>(context, listen: false)
-                  .addWord(value);
-              setState(() {
-                currentWord = '';
-              });
-              _textController.clear();
-            },
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Enter a word',
-            ),
-          ),
+          buildKeyboard(),
         ],
       ),
     );
