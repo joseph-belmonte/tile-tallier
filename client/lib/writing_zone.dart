@@ -182,7 +182,7 @@ class ScrabbleKey extends StatelessWidget {
   late final void Function() onTap;
   late final Widget icon;
 
-  ScrabbleKey(value, this.writingZoneState, {super.key}) {
+  ScrabbleKey(String value, this.writingZoneState, {super.key}) {
     if (value == '_') {
       icon = Icon(Icons.keyboard_return);
       onTap = writingZoneState.submitCurrentWord;
