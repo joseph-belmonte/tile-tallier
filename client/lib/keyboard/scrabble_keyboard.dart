@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../writing_zone.dart';
 
@@ -8,9 +9,8 @@ class ScrabbleKeyboard extends StatelessWidget {
     'ASDFGHJKL',
     '_ZXCVBNM<',
   ];
-  final WritingZoneState writingZoneState;
 
-  const ScrabbleKeyboard(this.writingZoneState, {super.key});
+  const ScrabbleKeyboard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +18,7 @@ class ScrabbleKeyboard extends StatelessWidget {
       children: keyboardRows.map((row) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: row
-              .split('')
-              .map((letter) => ScrabbleKey(letter, writingZoneState))
-              .toList(),
+          children: row.split('').map((letter) => ScrabbleKey(letter)).toList(),
         );
       }).toList(),
     );
@@ -29,27 +26,20 @@ class ScrabbleKeyboard extends StatelessWidget {
 }
 
 class ScrabbleKey extends StatelessWidget {
-  final WritingZoneState writingZoneState;
   late final void Function(BuildContext) onTap;
   late final Widget icon;
+  final String value;
 
-  ScrabbleKey(String value, this.writingZoneState, {super.key}) {
+  ScrabbleKey(this.value, {super.key}) {
     if (value == '_') {
       icon = Icon(Icons.keyboard_return);
-      onTap = writingZoneState.onSubmitWord;
+      onTap = enter;
     } else if (value == '<') {
       icon = Icon(Icons.backspace);
       onTap = backspace;
     } else {
       icon = Text(value, style: const TextStyle(fontSize: 20));
-      onTap = (_) => writingZoneState.currentWord += value;
-    }
-  }
-
-  void backspace(BuildContext context) {
-    if (writingZoneState.currentWord.isNotEmpty) {
-      writingZoneState.currentWord = writingZoneState.currentWord
-          .substring(0, writingZoneState.currentWord.length - 1);
+      onTap = type;
     }
   }
 
@@ -59,5 +49,26 @@ class ScrabbleKey extends StatelessWidget {
       onTap: () => onTap(context),
       child: Container(padding: const EdgeInsets.all(10), child: icon),
     );
+  }
+
+  void type(BuildContext context) {
+    var writingZoneState =
+        Provider.of<WritingZoneState>(context, listen: false);
+    writingZoneState.currentWord += value;
+  }
+
+  void backspace(BuildContext context) {
+    var writingZoneState =
+        Provider.of<WritingZoneState>(context, listen: false);
+    if (writingZoneState.currentWord.isNotEmpty) {
+      writingZoneState.currentWord = writingZoneState.currentWord
+          .substring(0, writingZoneState.currentWord.length - 1);
+    }
+  }
+
+  void enter(BuildContext context) {
+    var writingZoneState =
+        Provider.of<WritingZoneState>(context, listen: false);
+    writingZoneState.onSubmitWord(context);
   }
 }

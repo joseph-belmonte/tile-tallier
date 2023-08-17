@@ -6,18 +6,14 @@ import 'package:scrabble_scorer/scrabble_scorer.dart';
 import './data/letter_scores.dart';
 import 'keyboard/keyboard.dart';
 
-class WritingZone extends StatefulWidget {
-  const WritingZone({super.key});
-
-  @override
-  State<WritingZone> createState() => WritingZoneState();
-}
-
-class WritingZoneState extends State<WritingZone> {
+class WritingZoneState extends ChangeNotifier {
   String _currentWord = '';
 
   String get currentWord => _currentWord;
-  set currentWord(String word) => setState(() => _currentWord = word);
+  set currentWord(String word) {
+    _currentWord = word;
+    notifyListeners();
+  }
 
   int get currentWordScore {
     int score = 0;
@@ -32,18 +28,29 @@ class WritingZoneState extends State<WritingZone> {
     var gameState = Provider.of<GameStateNotifier>(context, listen: false);
     gameState.addWord(currentWord);
     currentWord = '';
+    notifyListeners();
   }
+}
 
+class WritingZone extends StatefulWidget {
+  const WritingZone({super.key});
+
+  @override
+  State<WritingZone> createState() => _WritingZoneState();
+}
+
+class _WritingZoneState extends State<WritingZone> {
   @override
   Widget build(BuildContext context) {
     var notifier = Provider.of<GameStateNotifier>(context);
+    var writingZoneState = Provider.of<WritingZoneState>(context);
     var players = notifier.gameState.players;
     var activePlayerIndex = notifier.activePlayerIndex;
 
     var turnActionButtons = [
       FloatingActionButton.small(
         // Add word button
-        onPressed: () => onSubmitWord(context),
+        onPressed: () => writingZoneState.onSubmitWord(context),
         child: Icon(Icons.add_circle_outline),
       ),
       FloatingActionButton.small(
@@ -68,7 +75,7 @@ class WritingZoneState extends State<WritingZone> {
         ),
       ),
       Text(
-        'Word Score: $currentWordScore',
+        'Word Score: ${writingZoneState.currentWordScore}',
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.w500,
@@ -97,14 +104,14 @@ class WritingZoneState extends State<WritingZone> {
             clipBehavior: Clip.hardEdge,
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: currentWord
+              children: writingZoneState.currentWord
                   .toUpperCase()
                   .split('')
                   .map((c) => ScrabbleLetterbox(c))
                   .toList(),
             ),
           ),
-          KeyboardWidget(this),
+          KeyboardWidget(),
         ],
       ),
     );

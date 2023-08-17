@@ -1,44 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../writing_zone.dart';
 import 'device_keyboard.dart';
 import 'keyboard_toggler.dart';
 import 'scrabble_keyboard.dart';
 
-class KeyboardWidget extends StatefulWidget {
-  final WritingZoneState writingZoneState;
-
-  const KeyboardWidget(this.writingZoneState, {super.key});
-
-  @override
-  State<KeyboardWidget> createState() => KeyboardWidgetState(writingZoneState);
-}
-
-class KeyboardWidgetState extends State<KeyboardWidget> {
-  late final ScrabbleKeyboard scrabbleKeyboard;
-  late final DeviceKeyboard deviceKeyboard;
-  late Widget keyboardWidget;
-
-  KeyboardWidgetState(WritingZoneState writingZoneState) {
-    scrabbleKeyboard = ScrabbleKeyboard(writingZoneState);
-    deviceKeyboard = DeviceKeyboard(writingZoneState);
-    keyboardWidget = scrabbleKeyboard;
-  }
+class KeyboardWidgetState extends ChangeNotifier {
+  static const ScrabbleKeyboard scrabbleKeyboard = ScrabbleKeyboard();
+  static const DeviceKeyboard deviceKeyboard = DeviceKeyboard();
+  Widget keyboardWidget = scrabbleKeyboard;
 
   void toggleKeyboard() {
-    setState(() => keyboardWidget =
-        keyboardWidget == scrabbleKeyboard ? deviceKeyboard : scrabbleKeyboard);
+    if (keyboardWidget == scrabbleKeyboard) {
+      keyboardWidget = deviceKeyboard;
+    } else {
+      keyboardWidget = scrabbleKeyboard;
+    }
+    notifyListeners();
   }
+}
+
+class KeyboardWidget extends StatefulWidget {
+  const KeyboardWidget({super.key});
 
   @override
+  State<KeyboardWidget> createState() => _KeyboardWidgetState();
+}
+
+class _KeyboardWidgetState extends State<KeyboardWidget> {
+  @override
   Widget build(BuildContext context) {
+    var keyboardWidgetState = Provider.of<KeyboardWidgetState>(context);
     return Align(
       alignment: Alignment.bottomCenter,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          KeyboardTogglerContainer(this),
-          keyboardWidget,
+          KeyboardToggler(),
+          keyboardWidgetState.keyboardWidget,
         ],
       ),
     );
