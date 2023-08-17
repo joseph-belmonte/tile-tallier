@@ -52,23 +52,20 @@ class ScrabbleKey extends StatelessWidget {
   }
 
   void type(BuildContext context) {
-    var writingZoneState =
-        Provider.of<WritingZoneState>(context, listen: false);
-    writingZoneState.currentWord += value;
+    var playedWordState = Provider.of<PlayedWordState>(context, listen: false);
+    playedWordState.currentWord += value;
   }
 
   void backspace(BuildContext context) {
-    var writingZoneState =
-        Provider.of<WritingZoneState>(context, listen: false);
-    if (writingZoneState.currentWord.isNotEmpty) {
-      writingZoneState.currentWord = writingZoneState.currentWord
-          .substring(0, writingZoneState.currentWord.length - 1);
+    var playedWordState = Provider.of<PlayedWordState>(context, listen: false);
+    if (playedWordState.currentWord.isNotEmpty) {
+      playedWordState.currentWord = playedWordState.currentWord
+          .substring(0, playedWordState.currentWord.length - 1);
     }
   }
 
   void enter(BuildContext context) {
-    var writingZoneState =
-        Provider.of<WritingZoneState>(context, listen: false);
-    writingZoneState.onSubmitWord(context);
+    var playedWordState = Provider.of<PlayedWordState>(context, listen: false);
+    playedWordState.playWord(context);
   }
 }

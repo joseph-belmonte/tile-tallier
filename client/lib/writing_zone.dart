@@ -6,7 +6,7 @@ import 'package:scrabble_scorer/scrabble_scorer.dart';
 import './data/letter_scores.dart';
 import 'keyboard/keyboard.dart';
 
-class WritingZoneState extends ChangeNotifier {
+class PlayedWordState extends ChangeNotifier {
   String _currentWord = '';
 
   String get currentWord => _currentWord;
@@ -23,7 +23,7 @@ class WritingZoneState extends ChangeNotifier {
     return score;
   }
 
-  void onSubmitWord(BuildContext context) {
+  void playWord(BuildContext context) {
     /// Add the current word to the list of words for the active player
     var gameState = Provider.of<GameStateNotifier>(context, listen: false);
     gameState.addWord(currentWord);
@@ -43,14 +43,14 @@ class _WritingZoneState extends State<WritingZone> {
   @override
   Widget build(BuildContext context) {
     var notifier = Provider.of<GameStateNotifier>(context);
-    var writingZoneState = Provider.of<WritingZoneState>(context);
+    var playedWordState = Provider.of<PlayedWordState>(context);
     var players = notifier.gameState.players;
     var activePlayerIndex = notifier.activePlayerIndex;
 
     var turnActionButtons = [
       FloatingActionButton.small(
         // Add word button
-        onPressed: () => writingZoneState.onSubmitWord(context),
+        onPressed: () => playedWordState.playWord(context),
         child: Icon(Icons.add_circle_outline),
       ),
       FloatingActionButton.small(
@@ -75,7 +75,7 @@ class _WritingZoneState extends State<WritingZone> {
         ),
       ),
       Text(
-        'Word Score: ${writingZoneState.currentWordScore}',
+        'Word Score: ${playedWordState.currentWordScore}',
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.w500,
@@ -104,7 +104,7 @@ class _WritingZoneState extends State<WritingZone> {
             clipBehavior: Clip.hardEdge,
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: writingZoneState.currentWord
+              children: playedWordState.currentWord
                   .toUpperCase()
                   .split('')
                   .map((c) => ScrabbleLetterbox(c))

@@ -10,13 +10,12 @@ class DeviceKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var writingZoneState =
-        Provider.of<WritingZoneState>(context, listen: false);
+    var playedWordState = Provider.of<PlayedWordState>(context, listen: false);
     return TextField(
       controller: _textController,
-      onChanged: (value) => writingZoneState.currentWord = value,
+      onChanged: (value) => playedWordState.currentWord = value,
       onSubmitted: (value) {
-        writingZoneState.onSubmitWord(context);
+        playedWordState.playWord(context);
         _textController.clear();
       },
       decoration: InputDecoration(

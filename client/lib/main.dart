@@ -11,8 +11,8 @@ void main() {
         ChangeNotifierProvider<GameStateNotifier>(
           create: (context) => GameStateNotifier(),
         ),
-        ChangeNotifierProvider<WritingZoneState>(
-          create: (context) => WritingZoneState(),
+        ChangeNotifierProvider<PlayedWordState>(
+          create: (context) => PlayedWordState(),
         ),
         ChangeNotifierProvider<KeyboardWidgetState>(
           create: (context) => KeyboardWidgetState(),
