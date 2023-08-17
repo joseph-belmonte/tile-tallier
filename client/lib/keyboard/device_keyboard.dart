@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../writing_zone.dart';
 
 class DeviceKeyboard extends StatelessWidget {
-  final _textController = TextEditingController();
-  final WritingZoneState writingZoneState;
+  static final _textController = TextEditingController();
 
-  DeviceKeyboard(this.writingZoneState, {super.key});
+  const DeviceKeyboard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var playedWordState = Provider.of<PlayedWordState>(context, listen: false);
     return TextField(
       controller: _textController,
-      onChanged: (value) => writingZoneState.currentWord = value,
+      onChanged: (value) => playedWordState.word = value,
       onSubmitted: (value) {
-        writingZoneState.onSubmitWord(context);
+        playedWordState.playWord(context);
         _textController.clear();
       },
       decoration: InputDecoration(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../writing_zone.dart';
 
@@ -8,9 +9,8 @@ class ScrabbleKeyboard extends StatelessWidget {
     'ASDFGHJKL',
     '_ZXCVBNM<',
   ];
-  final WritingZoneState writingZoneState;
 
-  const ScrabbleKeyboard(this.writingZoneState, {super.key});
+  const ScrabbleKeyboard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +18,7 @@ class ScrabbleKeyboard extends StatelessWidget {
       children: keyboardRows.map((row) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: row
-              .split('')
-              .map((letter) => ScrabbleKey(letter, writingZoneState))
-              .toList(),
+          children: row.split('').map((letter) => ScrabbleKey(letter)).toList(),
         );
       }).toList(),
     );
@@ -29,34 +26,27 @@ class ScrabbleKeyboard extends StatelessWidget {
 }
 
 class ScrabbleKey extends StatelessWidget {
-  final WritingZoneState writingZoneState;
-  late final void Function(BuildContext) onTap;
-  late final Widget icon;
+  final String value;
 
-  ScrabbleKey(String value, this.writingZoneState, {super.key}) {
-    if (value == '_') {
-      icon = Icon(Icons.keyboard_return);
-      onTap = writingZoneState.onSubmitWord;
-    } else if (value == '<') {
-      icon = Icon(Icons.backspace);
-      onTap = backspace;
-    } else {
-      icon = Text(value, style: const TextStyle(fontSize: 20));
-      onTap = (_) => writingZoneState.currentWord += value;
-    }
+  const ScrabbleKey(this.value, {super.key});
+
+  Widget get icon {
+    if (value == '_') return Icon(Icons.keyboard_return);
+    if (value == '<') return Icon(Icons.backspace);
+    return Text(value, style: const TextStyle(fontSize: 20));
   }
 
-  void backspace(BuildContext context) {
-    if (writingZoneState.currentWord.isNotEmpty) {
-      writingZoneState.currentWord = writingZoneState.currentWord
-          .substring(0, writingZoneState.currentWord.length - 1);
-    }
+  void Function() getOnTapBehavior(BuildContext context) {
+    var playedWordState = Provider.of<PlayedWordState>(context, listen: false);
+    if (value == '_') return () => playedWordState.playWord(context);
+    if (value == '<') return playedWordState.backspace;
+    return () => playedWordState.type(value);
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => onTap(context),
+      onTap: getOnTapBehavior(context),
       child: Container(padding: const EdgeInsets.all(10), child: icon),
     );
   }
