@@ -26,46 +26,28 @@ class ScrabbleKeyboard extends StatelessWidget {
 }
 
 class ScrabbleKey extends StatelessWidget {
-  late final void Function(BuildContext) onTap;
-  late final Widget icon;
   final String value;
 
-  ScrabbleKey(this.value, {super.key}) {
-    if (value == '_') {
-      icon = Icon(Icons.keyboard_return);
-      onTap = enter;
-    } else if (value == '<') {
-      icon = Icon(Icons.backspace);
-      onTap = backspace;
-    } else {
-      icon = Text(value, style: const TextStyle(fontSize: 20));
-      onTap = type;
-    }
+  const ScrabbleKey(this.value, {super.key});
+
+  Widget get icon {
+    if (value == '_') return Icon(Icons.keyboard_return);
+    if (value == '<') return Icon(Icons.backspace);
+    return Text(value, style: const TextStyle(fontSize: 20));
+  }
+
+  void Function() getOnTapBehavior(BuildContext context) {
+    var playedWordState = Provider.of<PlayedWordState>(context, listen: false);
+    if (value == '_') return () => playedWordState.playWord(context);
+    if (value == '<') return playedWordState.backspace;
+    return () => playedWordState.type(value);
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => onTap(context),
+      onTap: getOnTapBehavior(context),
       child: Container(padding: const EdgeInsets.all(10), child: icon),
     );
-  }
-
-  void type(BuildContext context) {
-    var playedWordState = Provider.of<PlayedWordState>(context, listen: false);
-    playedWordState.word += value;
-  }
-
-  void backspace(BuildContext context) {
-    var playedWordState = Provider.of<PlayedWordState>(context, listen: false);
-    if (playedWordState.word.isNotEmpty) {
-      playedWordState.word =
-          playedWordState.word.substring(0, playedWordState.word.length - 1);
-    }
-  }
-
-  void enter(BuildContext context) {
-    var playedWordState = Provider.of<PlayedWordState>(context, listen: false);
-    playedWordState.playWord(context);
   }
 }

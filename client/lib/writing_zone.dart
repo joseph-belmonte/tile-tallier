@@ -30,6 +30,12 @@ class PlayedWordState extends ChangeNotifier {
     word = '';
     notifyListeners();
   }
+
+  void backspace() {
+    if (word.isNotEmpty) word = word.substring(0, word.length - 1);
+  }
+
+  void type(String letter) => word += letter;
 }
 
 class WritingZone extends StatefulWidget {
