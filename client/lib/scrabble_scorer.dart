@@ -4,10 +4,12 @@ import 'models/game_state.dart';
 import 'score_page.dart';
 
 class GameStateNotifier extends ChangeNotifier {
-  GameState gameState = GameState(players: [
-    Player(name: 'Joe'),
-    Player(name: 'J.I.'),
-  ]);
+  GameState gameState = GameState(
+    players: [
+      Player(name: 'Joe'),
+      Player(name: 'J.I.'),
+    ],
+  );
 
   int activePlayerIndex = 0;
 

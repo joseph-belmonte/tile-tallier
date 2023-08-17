@@ -16,7 +16,7 @@ class _ScorePageState extends State<ScorePage> {
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
+        children: const [
           DisplayZone(),
           WritingZone(),
         ],

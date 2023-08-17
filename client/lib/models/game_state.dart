@@ -18,8 +18,11 @@ class Play {
 }
 
 class PlayedWord {
-  PlayedWord(
-      {required this.word, required this.isDouble, required this.isTriple});
+  PlayedWord({
+    required this.word,
+    required this.isDouble,
+    required this.isTriple,
+  });
 
   final List<PlayedLetter> word;
   final bool isDouble;
@@ -27,8 +30,11 @@ class PlayedWord {
 }
 
 class PlayedLetter {
-  PlayedLetter(
-      {required this.letter, required this.isDouble, required this.isTriple});
+  PlayedLetter({
+    required this.letter,
+    required this.isDouble,
+    required this.isTriple,
+  });
 
   final String letter;
   final bool isDouble;
