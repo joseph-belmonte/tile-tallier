@@ -53,14 +53,14 @@ class ScrabbleKey extends StatelessWidget {
 
   void type(BuildContext context) {
     var playedWordState = Provider.of<PlayedWordState>(context, listen: false);
-    playedWordState.currentWord += value;
+    playedWordState.word += value;
   }
 
   void backspace(BuildContext context) {
     var playedWordState = Provider.of<PlayedWordState>(context, listen: false);
-    if (playedWordState.currentWord.isNotEmpty) {
-      playedWordState.currentWord = playedWordState.currentWord
-          .substring(0, playedWordState.currentWord.length - 1);
+    if (playedWordState.word.isNotEmpty) {
+      playedWordState.word =
+          playedWordState.word.substring(0, playedWordState.word.length - 1);
     }
   }
 

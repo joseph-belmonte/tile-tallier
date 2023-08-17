@@ -7,27 +7,27 @@ import './data/letter_scores.dart';
 import 'keyboard/keyboard.dart';
 
 class PlayedWordState extends ChangeNotifier {
-  String _currentWord = '';
+  String _word = '';
 
-  String get currentWord => _currentWord;
-  set currentWord(String word) {
-    _currentWord = word;
+  String get word => _word;
+  set word(String newWord) {
+    _word = newWord;
     notifyListeners();
   }
 
-  int get currentWordScore {
-    int score = 0;
-    for (var char in currentWord.split('')) {
-      score += letterScores[char.toUpperCase()] ?? 0;
+  int get score {
+    int letterScoreSum = 0;
+    for (var letter in word.split('')) {
+      letterScoreSum += letterScores[letter.toUpperCase()] ?? 0;
     }
-    return score;
+    return letterScoreSum;
   }
 
   void playWord(BuildContext context) {
     /// Add the current word to the list of words for the active player
     var gameState = Provider.of<GameStateNotifier>(context, listen: false);
-    gameState.addWord(currentWord);
-    currentWord = '';
+    gameState.addWord(word);
+    word = '';
     notifyListeners();
   }
 }
@@ -75,7 +75,7 @@ class _WritingZoneState extends State<WritingZone> {
         ),
       ),
       Text(
-        'Word Score: ${playedWordState.currentWordScore}',
+        'Word Score: ${playedWordState.score}',
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.w500,
@@ -104,7 +104,7 @@ class _WritingZoneState extends State<WritingZone> {
             clipBehavior: Clip.hardEdge,
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: playedWordState.currentWord
+              children: playedWordState.word
                   .toUpperCase()
                   .split('')
                   .map((c) => ScrabbleLetterbox(c))
