@@ -6,8 +6,8 @@ import 'keyboard_toggler.dart';
 import 'scrabble_keyboard.dart';
 
 class KeyboardWidgetState extends ChangeNotifier {
-  static const ScrabbleKeyboard scrabbleKeyboard = ScrabbleKeyboard();
-  static const DeviceKeyboard deviceKeyboard = DeviceKeyboard();
+  static const scrabbleKeyboard = ScrabbleKeyboard();
+  static const deviceKeyboard = DeviceKeyboard();
   Widget keyboardWidget = scrabbleKeyboard;
 
   void toggleKeyboard() {
