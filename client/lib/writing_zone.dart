@@ -55,7 +55,6 @@ class WritingZoneState extends State<WritingZone> {
                 .map((c) => ScrabbleLetterbox(c))
                 .toList(),
           ),
-          // Contains miscellaneous logic that helps us debug stuff.
           KeyboardWidget(this),
         ],
       ),
