@@ -7,13 +7,13 @@ class Player {
   Player({required this.name});
 
   final String name;
-  List<Plays> plays = [];
+  List<Play> plays = [];
 }
 
-class Plays {
-  Plays({required this.playedWords, required this.isBingo});
+class Play {
+  Play({required this.playedWords, required this.isBingo});
 
-  final List<PlayedWord> playedWords;
+  List<PlayedWord> playedWords;
   final bool isBingo;
 }
 
