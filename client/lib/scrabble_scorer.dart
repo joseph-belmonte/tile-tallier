@@ -7,7 +7,7 @@ class GameStateNotifier extends ChangeNotifier {
   GameState gameState = GameState(players: [
     Player(name: 'Joe'),
     Player(name: 'J.I.'),
-  ]);
+  ],);
 
   int activePlayerIndex = 0;
 
