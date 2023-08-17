@@ -4,17 +4,20 @@ import 'package:scrabble_scorer/scrabble_letterbox.dart';
 import 'package:scrabble_scorer/scrabble_scorer.dart';
 
 import './data/letter_scores.dart';
+import 'keyboard/keyboard.dart';
 
 class WritingZone extends StatefulWidget {
   const WritingZone({super.key});
 
   @override
-  State<WritingZone> createState() => _WritingZoneState();
+  State<WritingZone> createState() => WritingZoneState();
 }
 
-class _WritingZoneState extends State<WritingZone> {
-  String currentWord = '';
-  final _textController = TextEditingController();
+class WritingZoneState extends State<WritingZone> {
+  String _currentWord = '';
+
+  String get currentWord => _currentWord;
+  set currentWord(String word) => setState(() => _currentWord = word);
 
   int get currentWordScore {
     int score = 0;
@@ -24,25 +27,23 @@ class _WritingZoneState extends State<WritingZone> {
     return score;
   }
 
+  void onSubmitWord(BuildContext context) {
+    /// Add the current word to the list of words for the active player
+    var gameState = Provider.of<GameStateNotifier>(context, listen: false);
+    gameState.addWord(currentWord);
+    currentWord = '';
+  }
+
   @override
   Widget build(BuildContext context) {
     var notifier = Provider.of<GameStateNotifier>(context);
     var players = notifier.gameState.players;
     var activePlayerIndex = notifier.activePlayerIndex;
 
-    void onSubmitWord() {
-      /// Add the current word to the list of words for the active player
-      notifier.addWord(currentWord);
-      setState(() {
-        currentWord = '';
-      });
-      _textController.clear();
-    }
-
     var turnActionButtons = [
       FloatingActionButton.small(
         // Add word button
-        onPressed: onSubmitWord,
+        onPressed: () => onSubmitWord(context),
         child: Icon(Icons.add_circle_outline),
       ),
       FloatingActionButton.small(
@@ -96,40 +97,14 @@ class _WritingZoneState extends State<WritingZone> {
             clipBehavior: Clip.hardEdge,
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: [
-                for (var char in currentWord.split(''))
-                  GestureDetector(
-                    onTap: () {
-                      print('Letter $char tapped');
-                    },
-                    child: ScrabbleLetterbox(
-                      char.toUpperCase(),
-                    ),
-                  ),
-              ],
+              children: currentWord
+                  .toUpperCase()
+                  .split('')
+                  .map((c) => ScrabbleLetterbox(c))
+                  .toList(),
             ),
           ),
-          Container(
-            color: Colors.pink,
-            padding: EdgeInsets.all(5),
-            width: double.infinity,
-            child: Text(currentWord, style: const TextStyle(fontSize: 20)),
-          ),
-          TextField(
-            controller: _textController,
-            onChanged: (value) {
-              setState(() {
-                currentWord = value;
-              });
-            },
-            onSubmitted: (value) {
-              onSubmitWord();
-            },
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Enter a word',
-            ),
-          ),
+          KeyboardWidget(this),
         ],
       ),
     );
