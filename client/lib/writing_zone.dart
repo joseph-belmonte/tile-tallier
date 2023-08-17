@@ -27,33 +27,82 @@ class WritingZoneState extends State<WritingZone> {
     return score;
   }
 
-  void submitCurrentWord() {
-    Provider.of<GameStateNotifier>(context, listen: false).addWord(currentWord);
+  void onSubmitWord(BuildContext context) {
+    /// Add the current word to the list of words for the active player
+    var gameState = Provider.of<GameStateNotifier>(context, listen: false);
+    gameState.addWord(currentWord);
     currentWord = '';
   }
 
   @override
   Widget build(BuildContext context) {
+    var notifier = Provider.of<GameStateNotifier>(context);
+    var players = notifier.gameState.players;
+    var activePlayerIndex = notifier.activePlayerIndex;
+
+    var turnActionButtons = [
+      FloatingActionButton.small(
+        // Add word button
+        onPressed: () => onSubmitWord(context),
+        child: Icon(Icons.add_circle_outline),
+      ),
+      FloatingActionButton.small(
+        // Switch player button
+        onPressed: () {
+          notifier.endTurn();
+          setState(() {
+            activePlayerIndex = notifier.activePlayerIndex;
+          });
+        },
+        child: Icon(Icons.switch_account_rounded),
+      ),
+    ];
+
+    var writingDisplayText = [
+      Text(
+        'Current Player: ${players[activePlayerIndex].name}',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
+          color: Colors.black87,
+        ),
+      ),
+      Text(
+        'Word Score: $currentWordScore',
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
+          color: Colors.black87,
+        ),
+      ),
+    ];
     return Align(
       alignment: Alignment.bottomCenter,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Word Score: $currentWordScore', // Display current word score
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-              color: Colors.black87,
-            ),
-          ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: currentWord
-                .toUpperCase()
-                .split('')
-                .map((c) => ScrabbleLetterbox(c))
-                .toList(),
+            children: [
+              Column(
+                children: writingDisplayText,
+              ),
+              Spacer(),
+              Column(
+                children: turnActionButtons,
+              ),
+            ],
+          ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            clipBehavior: Clip.hardEdge,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: currentWord
+                  .toUpperCase()
+                  .split('')
+                  .map((c) => ScrabbleLetterbox(c))
+                  .toList(),
+            ),
           ),
           KeyboardWidget(this),
         ],

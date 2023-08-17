@@ -4,14 +4,16 @@ import 'models/game_state.dart';
 import 'score_page.dart';
 
 class GameStateNotifier extends ChangeNotifier {
-  GameState gameState = GameState(players: [
-    Player(name: 'Joe'),
-    Player(name: 'J.I.'),
-  ]);
+  GameState gameState = GameState(
+    players: [
+      Player(name: 'Joe'),
+      Player(name: 'J.I.'),
+    ],
+  );
 
   int activePlayerIndex = 0;
 
-  void nextPlayer() {
+  void endTurn() {
     activePlayerIndex = (activePlayerIndex + 1) % gameState.players.length;
   }
 
@@ -19,7 +21,6 @@ class GameStateNotifier extends ChangeNotifier {
 
   void addWord(String word) {
     playedWords.add([word, gameState.players[activePlayerIndex].name]);
-    nextPlayer();
     notifyListeners();
   }
 }

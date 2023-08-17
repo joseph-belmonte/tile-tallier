@@ -30,23 +30,23 @@ class ScrabbleKeyboard extends StatelessWidget {
 
 class ScrabbleKey extends StatelessWidget {
   final WritingZoneState writingZoneState;
-  late final void Function() onTap;
+  late final void Function(BuildContext) onTap;
   late final Widget icon;
 
   ScrabbleKey(String value, this.writingZoneState, {super.key}) {
     if (value == '_') {
       icon = Icon(Icons.keyboard_return);
-      onTap = writingZoneState.submitCurrentWord;
+      onTap = writingZoneState.onSubmitWord;
     } else if (value == '<') {
       icon = Icon(Icons.backspace);
       onTap = backspace;
     } else {
       icon = Text(value, style: const TextStyle(fontSize: 20));
-      onTap = () => writingZoneState.currentWord += value;
+      onTap = (_) => writingZoneState.currentWord += value;
     }
   }
 
-  void backspace() {
+  void backspace(BuildContext context) {
     if (writingZoneState.currentWord.isNotEmpty) {
       writingZoneState.currentWord = writingZoneState.currentWord
           .substring(0, writingZoneState.currentWord.length - 1);
@@ -56,7 +56,7 @@ class ScrabbleKey extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () => onTap(context),
       child: Container(padding: const EdgeInsets.all(10), child: icon),
     );
   }

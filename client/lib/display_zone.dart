@@ -7,7 +7,9 @@ class DisplayZone extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final playedWords = Provider.of<GameStateNotifier>(context).playedWords;
+    var notifier = Provider.of<GameStateNotifier>(context);
+    final playedWords = notifier.playedWords;
+
     return Align(
       alignment: Alignment.topCenter,
       child: Column(
@@ -15,17 +17,17 @@ class DisplayZone extends StatelessWidget {
           SizedBox(
             height: 55,
           ),
+          Text(
+            'Played Words:',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+              color: Colors.black87,
+            ),
+          ),
           playedWords.isNotEmpty
               ? Column(
                   children: [
-                    Text(
-                      'Played Words:',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black87,
-                      ),
-                    ),
                     for (var wordPlayerPair in playedWords)
                       Row(
                         children: [
@@ -41,8 +43,13 @@ class DisplayZone extends StatelessWidget {
                       )
                   ],
                 )
-              : Placeholder(
-                  fallbackHeight: 40,
+              : Text(
+                  'No words yet...',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black38,
+                  ),
                 ),
         ],
       ),

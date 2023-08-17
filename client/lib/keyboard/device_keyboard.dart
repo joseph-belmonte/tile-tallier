@@ -14,7 +14,7 @@ class DeviceKeyboard extends StatelessWidget {
       controller: _textController,
       onChanged: (value) => writingZoneState.currentWord = value,
       onSubmitted: (value) {
-        writingZoneState.submitCurrentWord();
+        writingZoneState.onSubmitWord(context);
         _textController.clear();
       },
       decoration: InputDecoration(
