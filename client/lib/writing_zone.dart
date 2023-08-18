@@ -24,6 +24,7 @@ class PlayedWordState extends ChangeNotifier {
     return letterScoreSum;
   }
 
+  /// Add the current word to the list of words for the active player
   void playWord(BuildContext context) {
     var gameState = Provider.of<GameStateNotifier>(context, listen: false);
 
@@ -40,10 +41,12 @@ class PlayedWordState extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Removes the last letter from the current word
   void backspace() {
     if (word.isNotEmpty) word = word.substring(0, word.length - 1);
   }
 
+  /// Accepts a letter of type String and adds it to the current word
   void type(String letter) => word += letter;
 }
 
