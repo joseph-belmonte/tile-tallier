@@ -5,6 +5,7 @@ import 'package:scrabble_scorer/scrabble_scorer.dart';
 
 import './data/letter_scores.dart';
 import 'keyboard/keyboard.dart';
+import 'models/game_state.dart';
 
 class PlayedWordState extends ChangeNotifier {
   String _word = '';
@@ -24,9 +25,17 @@ class PlayedWordState extends ChangeNotifier {
   }
 
   void playWord(BuildContext context) {
-    /// Add the current word to the list of words for the active player
     var gameState = Provider.of<GameStateNotifier>(context, listen: false);
-    gameState.addWord(word);
+
+    var chars = word
+        .toUpperCase()
+        .split('')
+        .map((e) => PlayedLetter(letter: e, isDouble: false, isTriple: false))
+        .toList();
+
+    gameState.addWord(
+      PlayedWord(word: chars, isDouble: false, isTriple: false),
+    );
     word = '';
     notifyListeners();
   }
@@ -72,27 +81,56 @@ class _WritingZoneState extends State<WritingZone> {
     ];
 
     var writingDisplayText = [
-      Text(
-        'Current Player: ${players[activePlayerIndex].name}',
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w500,
-          color: Colors.black87,
-        ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            'Current Player:',
+            overflow: TextOverflow.clip,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.black54,
+            ),
+          ),
+          Text(
+            //TODO: long names will overflow and break app
+            players[activePlayerIndex].name,
+            overflow: TextOverflow.clip,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Colors.black87,
+            ),
+          ),
+        ],
       ),
-      Text(
-        'Word Score: ${playedWordState.score}',
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w500,
-          color: Colors.black87,
-        ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            'Word Score: ',
+            overflow: TextOverflow.clip,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.black54,
+            ),
+          ),
+          Text(
+            '${playedWordState.score}',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Colors.black87,
+            ),
+          ),
+        ],
       ),
     ];
     return Align(
       alignment: Alignment.bottomCenter,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
