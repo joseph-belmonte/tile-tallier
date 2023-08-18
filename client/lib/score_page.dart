@@ -14,12 +14,14 @@ class _ScorePageState extends State<ScorePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          DisplayZone(),
-          WritingZone(),
-        ],
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            DisplayZone(),
+            WritingZone(),
+          ],
+        ),
       ),
     );
   }
