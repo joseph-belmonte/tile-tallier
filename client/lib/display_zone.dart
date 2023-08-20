@@ -61,7 +61,9 @@ class DisplayZone extends StatelessWidget {
                       itemBuilder: (context, index) {
                         var play = player.plays[index];
                         for (var word in play.playedWords) {
-                          print(word.word.map((e) => e.letter).join(''));
+                          print(
+                            word.playedLetters.map((e) => e.letter).join(''),
+                          );
                         }
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -70,7 +72,7 @@ class DisplayZone extends StatelessWidget {
                             Text(
                               play.playedWords
                                   .map(
-                                    (e) => e.word.map((e) => e.letter),
+                                    (e) => e.playedLetters.map((e) => e.letter),
                                   )
                                   .join(''),
                               style: TextStyle(

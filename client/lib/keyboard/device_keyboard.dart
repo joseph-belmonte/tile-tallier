@@ -13,7 +13,7 @@ class DeviceKeyboard extends StatelessWidget {
     var playedWordState = Provider.of<PlayedWordState>(context, listen: false);
     return TextField(
       controller: _textController,
-      onChanged: (value) => playedWordState.word = value,
+      onChanged: (value) => playedWordState.setPlayedLetters(value),
       onSubmitted: (value) {
         playedWordState.playWord(context);
         _textController.clear();
