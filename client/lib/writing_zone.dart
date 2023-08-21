@@ -91,17 +91,21 @@ class _WritingZoneState extends State<WritingZone> {
       ),
     ];
 
-    var writingDisplayText = [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            'Current Player:',
-            overflow: TextOverflow.clip,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.black54,
+    var turnInfoText = [
+      Flexible(
+        fit: FlexFit.loose,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Current Player:',
+              overflow: TextOverflow.clip,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.black54,
+              ),
             ),
           ),
           Text(
