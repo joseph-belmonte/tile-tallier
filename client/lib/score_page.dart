@@ -15,8 +15,8 @@ class _ScorePageState extends State<ScorePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        maintainBottomViewPadding: true,
+        child: ListView(
           children: const [
             DisplayZone(),
             WritingZone(),
