@@ -81,6 +81,14 @@ class _WritingZoneState extends State<WritingZone> {
         },
         child: Icon(Icons.switch_account_rounded),
       ),
+      FloatingActionButton.small(
+        // Switch player button
+        onPressed: () {
+          // TODO: Implement settings page
+          print('Settings button pressed');
+        },
+        child: Icon(Icons.settings_suggest_rounded),
+      ),
     ];
 
     var writingDisplayText = [
