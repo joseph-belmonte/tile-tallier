@@ -163,11 +163,6 @@ class _WritingZoneState extends State<WritingZone> {
         ),
       ),
     ];
-    var typedWord = playedWordState.word
-        .toUpperCase()
-        .split('')
-        .map((c) => ScrabbleLetterbox(c))
-        .toList();
 
     return Align(
       alignment: Alignment.bottomCenter,
@@ -199,7 +194,6 @@ class _WritingZoneState extends State<WritingZone> {
             clipBehavior: Clip.hardEdge,
             child: Row(
               mainAxisSize: MainAxisSize.min,
-
               children: playedWordState.playedLetters
                   .map((c) => ScrabbleLetterbox(c))
                   .toList(),
