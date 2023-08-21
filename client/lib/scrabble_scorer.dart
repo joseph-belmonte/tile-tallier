@@ -9,7 +9,7 @@ class GameStateNotifier extends ChangeNotifier {
       Player(name: 'JB'),
       Player(name: 'RW'),
       Player(name: 'JC'),
-      Player(name: 'MAJ')
+      Player(name: 'MAJ'),
     ],
   );
 
