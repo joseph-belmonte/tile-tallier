@@ -11,16 +11,20 @@ class DeviceKeyboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var playedWordState = Provider.of<PlayedWordState>(context, listen: false);
-    return TextField(
-      controller: _textController,
-      onChanged: (value) => playedWordState.setPlayedLetters(value),
-      onSubmitted: (value) {
-        playedWordState.playWord(context);
-        _textController.clear();
-      },
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        labelText: 'Enter a word',
+
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: TextField(
+        controller: _textController,
+        onChanged: (value) => playedWordState.word = value,
+        onSubmitted: (value) {
+          playedWordState.playWord(context);
+          _textController.clear();
+        },
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          labelText: 'Play a word',
+        ),
       ),
     );
   }

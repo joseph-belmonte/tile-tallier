@@ -68,6 +68,7 @@ class _WritingZoneState extends State<WritingZone> {
     var playedWordState = Provider.of<PlayedWordState>(context);
     var players = notifier.gameState.players;
     var activePlayerIndex = notifier.activePlayerIndex;
+    const maxNameCharLength = 7;
 
     var turnActionButtons = [
       FloatingActionButton.small(
@@ -85,64 +86,107 @@ class _WritingZoneState extends State<WritingZone> {
         },
         child: Icon(Icons.switch_account_rounded),
       ),
+      FloatingActionButton.small(
+        // Switch player button
+        onPressed: () {
+          // TODO: Implement settings page
+          print('Settings button pressed');
+        },
+        child: Icon(Icons.settings_suggest_rounded),
+      ),
     ];
 
-    var writingDisplayText = [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            'Current Player:',
-            overflow: TextOverflow.clip,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.black54,
+    var turnInfoText = [
+      Flexible(
+        fit: FlexFit.loose,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Current Player:',
+              overflow: TextOverflow.clip,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.black54,
+              ),
             ),
-          ),
-          Text(
-            //TODO: long names will overflow and break app
-            players[activePlayerIndex].name,
-            overflow: TextOverflow.clip,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Colors.black87,
+            Text(
+              players[activePlayerIndex].name.substring(
+                    0,
+                    players[activePlayerIndex].name.length < maxNameCharLength
+                        ? players[activePlayerIndex].name.length
+                        : maxNameCharLength,
+                  ),
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            'Word Score: ',
-            overflow: TextOverflow.clip,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.black54,
-            ),
+      Container(
+        padding: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.black,
+            width: 1,
           ),
-          Text(
-            '${playedWordState.score}',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Colors.black87,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'Word Score: ',
+              overflow: TextOverflow.clip,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.black54,
+              ),
             ),
-          ),
-        ],
+            Text(
+              '${playedWordState.score}',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
+            ),
+          ],
+        ),
       ),
     ];
+    var typedWord = playedWordState.word
+        .toUpperCase()
+        .split('')
+        .map((c) => ScrabbleLetterbox(c))
+        .toList();
+
     return Align(
       alignment: Alignment.bottomCenter,
       child: Column(
         children: [
           Row(
             children: [
-              Column(
-                children: writingDisplayText,
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 1,
+                  ),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: turnInfoText,
+                ),
               ),
               Spacer(),
               Column(
@@ -155,6 +199,7 @@ class _WritingZoneState extends State<WritingZone> {
             clipBehavior: Clip.hardEdge,
             child: Row(
               mainAxisSize: MainAxisSize.min,
+
               children: playedWordState.playedLetters
                   .map((c) => ScrabbleLetterbox(c))
                   .toList(),
