@@ -21,7 +21,7 @@ class GameStateNotifier extends ChangeNotifier {
 
   void addWord(PlayedWord word) {
     gameState.players[activePlayerIndex].plays.add(
-      Play(playedWords: [word], isBingo: word.word.length == 7),
+      Play(playedWords: [word], isBingo: word.playedLetters.length == 7),
     );
     notifyListeners();
   }

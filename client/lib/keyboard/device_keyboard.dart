@@ -11,6 +11,7 @@ class DeviceKeyboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var playedWordState = Provider.of<PlayedWordState>(context, listen: false);
+
     return Align(
       alignment: Alignment.bottomCenter,
       child: TextField(

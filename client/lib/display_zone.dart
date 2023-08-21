@@ -34,21 +34,31 @@ class DisplayZone extends StatelessWidget {
                   children: [
                     SingleChildScrollView(
                       scrollDirection: Axis.vertical,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            player.name.substring(
-                              0,
-                              player.name.length < maxNameCharLength
-                                  ? player.name.length
-                                  : maxNameCharLength,
-                            ),
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black87,
+
+                      shrinkWrap: true,
+                      itemCount: player.plays.length,
+                      itemBuilder: (context, index) {
+                        var play = player.plays[index];
+                        for (var word in play.playedWords) {
+                          print(
+                            word.playedLetters.map((e) => e.letter).join(''),
+                          );
+                        }
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              play.playedWords
+                                  .map(
+                                    (e) => e.playedLetters.map((e) => e.letter),
+                                  )
+                                  .join(''),
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black87,
+                              ),
                             ),
                           ),
                         ],
