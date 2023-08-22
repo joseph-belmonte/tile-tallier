@@ -25,9 +25,14 @@ class GameStateNotifier extends ChangeNotifier {
   }
 
   void addWord(PlayedWord word) {
-    gameState.players[activePlayerIndex].plays.add(
-      Play(playedWords: [word], isBingo: word.playedLetters.length == 7),
-    );
+    if (gameState.players[activePlayerIndex].plays.isEmpty) {
+      gameState.players[activePlayerIndex].plays
+          .add(Play(playedWords: List.empty(growable: true)));
+    }
+    final currentPlay = gameState.players[activePlayerIndex].plays.last;
+    currentPlay.playedWords.add(word);
+    currentPlay.isBingo =
+        currentPlay.playedWords.last.playedLetters.length == 7;
     notifyListeners();
   }
 }
