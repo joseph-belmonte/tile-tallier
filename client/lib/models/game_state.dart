@@ -39,6 +39,8 @@ class Play {
   List<PlayedWord> playedWords;
   bool isBingo = false;
 
+  /// Returns the score for the play by summing the scores for each PlayedWord object.
+  /// If the play is a bingo, 50 points are added to the score.
   int get score {
     var score = 0;
     for (var word in playedWords) {
@@ -57,8 +59,10 @@ class PlayedWord {
   bool isDouble = false;
   bool isTriple = false;
 
+  /// Returns the word as a string by converting each PlayedLetter object to its letter property and joining them together.
   String get word => playedLetters.map((e) => e.letter).join();
 
+  /// Returns the score for the word by summing the scores for each PlayedLetter object.
   int get score {
     var score = 0;
     for (var letter in playedLetters) {
@@ -67,6 +71,7 @@ class PlayedWord {
     return score * scoreMultiplier;
   }
 
+  /// Returns the score multiplier for the word.
   int get scoreMultiplier {
     if (isDouble) return 2;
     if (isTriple) return 3;
@@ -83,6 +88,19 @@ class PlayedLetter {
   late final String letter;
   bool isDouble = false;
   bool isTriple = false;
+
+  /// Returns the score for the letter.
+  int get score {
+    return (letterScores[letter] ?? 0) * scoreMultiplier;
+  }
+
+  /// Returns the score multiplier for the letter.
+  int get scoreMultiplier {
+    if (isDouble) return 2;
+    if (isTriple) return 3;
+    return 1;
+  }
+
   static const Map<String, int> letterScores = {
     'A': 1,
     'B': 3,
@@ -112,14 +130,4 @@ class PlayedLetter {
     'Z': 10,
     ' ': 0,
   };
-
-  int get score {
-    return (letterScores[letter] ?? 0) * scoreMultiplier;
-  }
-
-  int get scoreMultiplier {
-    if (isDouble) return 2;
-    if (isTriple) return 3;
-    return 1;
-  }
 }
