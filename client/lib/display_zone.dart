@@ -2,14 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrabble_scorer/scrabble_scorer.dart';
 
+import 'models/game_state.dart';
+
 class DisplayZone extends StatelessWidget {
-  const DisplayZone({super.key});
+  const DisplayZone({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var notifier = Provider.of<GameStateNotifier>(context);
     var players = notifier.gameState.players;
-    const maxNameCharLength = 7;
+
+    // Create a map to track the turn count for each player
+    // TODO: make this a property on the Player class
+    final Map<Player, int> playerTurnCounts = {};
 
     return Align(
       alignment: Alignment.topCenter,
@@ -17,6 +22,9 @@ class DisplayZone extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         scrollDirection: Axis.vertical,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             for (var player in players)
               Container(
@@ -29,64 +37,65 @@ class DisplayZone extends StatelessWidget {
                 ),
                 margin: EdgeInsets.all(10),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  textDirection: TextDirection.ltr,
                   children: [
-                    SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-
-                      shrinkWrap: true,
-                      itemCount: player.plays.length,
-                      itemBuilder: (context, index) {
-                        var play = player.plays[index];
-                        for (var word in play.playedWords) {
-                          print(
-                            word.playedLetters.map((e) => e.letter).join(''),
-                          );
-                        }
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              play.playedWords
-                                  .map(
-                                    (e) => e.playedLetters.map((e) => e.letter),
-                                  )
-                                  .join(''),
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ),
-                        ],
+                    Text(
+                      '${player.name}: ${player.score}',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black54,
                       ),
                     ),
-                    Spacer(),
-                    Flexible(
-                      child: ListView.builder(
+                    Expanded(
+                      child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: player.plays.length,
-                        itemBuilder: (context, index) {
-                          var play = player.plays[index];
-                          return SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: player.plays.length,
+                          itemBuilder: (context, index) {
+                            var currentTurn = player.plays[index];
+                            // Retrieve the turn count for the current player
+                            final turnCount = playerTurnCounts[player] ?? 0;
+                            playerTurnCounts[player] = turnCount + 1;
+                            return Row(
                               mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                for (var playedWord in currentTurn.playedWords)
+                                  if (playedWord ==
+                                      currentTurn.playedWords.first)
+                                    Expanded(
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'Turn ${turnCount + 1}: ',
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.black87,
+                                            ),
+                                          ),
+                                          Text(
+                                            currentTurn.score.toString(),
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  else
+                                    Container(),
+                                // display each word, and its individual score
                                 Text(
-                                  play.playedWords
-                                      .map(
-                                        (e) => e.word
-                                            .map((e) => e.letter)
-                                            .join('')
-                                            .toUpperCase(),
-                                      )
-                                      .join(' '),
+                                  currentTurn.playedWords
+                                      .map((e) => '${e.word} - ${e.score}')
+                                      .join('\n'),
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w500,
@@ -94,9 +103,9 @@ class DisplayZone extends StatelessWidget {
                                   ),
                                 ),
                               ],
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ],
