@@ -16,7 +16,12 @@ class GameStateNotifier extends ChangeNotifier {
   int activePlayerIndex = 0;
 
   void endTurn() {
+    // increment the active player index
     activePlayerIndex = (activePlayerIndex + 1) % gameState.players.length;
+    // add a new play to the active player
+    gameState.players[activePlayerIndex].plays
+        .add(Play(playedWords: List.empty(growable: true)));
+    notifyListeners();
   }
 
   void addWord(PlayedWord word) {
