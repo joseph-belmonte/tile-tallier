@@ -43,8 +43,7 @@ class PlayedWordState extends ChangeNotifier {
   void playWord(BuildContext context) {
     Provider.of<GameStateNotifier>(context, listen: false)
         .addWordToCurrentPlay(playedWord);
-    playedWord.playedLetters.clear();
-    playedWord.wordMultiplier = WordMultiplier.none;
+    playedWord = PlayedWord([]);
     notifyListeners();
   }
 
