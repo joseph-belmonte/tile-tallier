@@ -16,7 +16,7 @@ class DeviceKeyboard extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       child: TextField(
         controller: _textController,
-        onChanged: (value) => playedWordState.setPlayedLetters(value),
+        onChanged: (value) => playedWordState.updatePlayedWord(value),
         onSubmitted: (value) {
           playedWordState.playWord(context);
           _textController.clear();

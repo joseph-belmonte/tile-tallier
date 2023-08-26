@@ -16,10 +16,26 @@ class PlayedWordState extends ChangeNotifier {
   String get wordAsString =>
       playedWord.playedLetters.map((e) => e.letter).join();
 
-  /// Sets playedLetters to the letters of a given string
-  void setPlayedLetters(String letters) {
-    playedWord.playedLetters =
-        letters.split('').map((e) => PlayedLetter(e)).toList();
+  void updatePlayedWord(String text) {
+    var i = 0;
+    if (text.isEmpty) {
+      playedWord.playedLetters.clear();
+      notifyListeners();
+      return;
+    }
+
+    while (i < playedWord.playedLetters.length &&
+        i < text.length &&
+        playedWord.playedLetters[i].letter == text[i]) {
+      i++;
+    }
+    if (i < playedWord.playedLetters.length) {
+      playedWord.playedLetters.removeRange(i, playedWord.playedLetters.length);
+    }
+    while (i < text.length) {
+      playedWord.playedLetters.add(PlayedLetter(text[i]));
+      i++;
+    }
     notifyListeners();
   }
 
