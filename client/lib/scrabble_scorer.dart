@@ -6,21 +6,33 @@ import 'score_page.dart';
 class GameStateNotifier extends ChangeNotifier {
   GameState gameState = GameState(
     players: [
-      Player(name: 'Joe'),
-      Player(name: 'J.I.'),
+      Player(name: 'JB'),
+      Player(name: 'RW'),
+      Player(name: 'JC'),
+      Player(name: 'MAJ'),
     ],
   );
 
   int activePlayerIndex = 0;
 
   void endTurn() {
+    // increment the active player index
     activePlayerIndex = (activePlayerIndex + 1) % gameState.players.length;
+    // add a new play to the active player
+    gameState.players[activePlayerIndex].plays
+        .add(Play(playedWords: List.empty(growable: true)));
+    notifyListeners();
   }
 
-  final List<List<String>> playedWords = [];
-
-  void addWord(String word) {
-    playedWords.add([word, gameState.players[activePlayerIndex].name]);
+  void addWord(PlayedWord word) {
+    if (gameState.players[activePlayerIndex].plays.isEmpty) {
+      gameState.players[activePlayerIndex].plays
+          .add(Play(playedWords: List.empty(growable: true)));
+    }
+    final currentPlay = gameState.players[activePlayerIndex].plays.last;
+    currentPlay.playedWords.add(word);
+    currentPlay.isBingo =
+        currentPlay.playedWords.last.playedLetters.length == 7;
     notifyListeners();
   }
 }

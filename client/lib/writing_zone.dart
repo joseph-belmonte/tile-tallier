@@ -3,39 +3,55 @@ import 'package:provider/provider.dart';
 import 'package:scrabble_scorer/scrabble_letterbox.dart';
 import 'package:scrabble_scorer/scrabble_scorer.dart';
 
-import './data/letter_scores.dart';
 import 'keyboard/keyboard.dart';
+import 'models/game_state.dart';
 
 class PlayedWordState extends ChangeNotifier {
-  String _word = '';
+  List<PlayedLetter> playedLetters = [];
 
-  String get word => _word;
-  set word(String newWord) {
-    _word = newWord;
-    notifyListeners();
-  }
+  // return word from playedLetters
+  String get wordAsString => playedLetters.map((e) => e.letter).join();
 
+  // return word as PlayedWord
+  PlayedWord get wordAsPlayedWord => PlayedWord(playedLetters);
+
+  /// returns the score of the current word
   int get score {
-    int letterScoreSum = 0;
-    for (var letter in word.split('')) {
-      letterScoreSum += letterScores[letter.toUpperCase()] ?? 0;
-    }
-    return letterScoreSum;
+    return wordAsPlayedWord.score;
   }
 
-  void playWord(BuildContext context) {
-    /// Add the current word to the list of words for the active player
-    var gameState = Provider.of<GameStateNotifier>(context, listen: false);
-    gameState.addWord(word);
-    word = '';
+  /// sets playedLetters to the letters of a given string
+  void setPlayedLetters(String letters) {
+    playedLetters = letters.split('').map((e) => PlayedLetter(e)).toList();
     notifyListeners();
   }
 
-  void backspace() {
-    if (word.isNotEmpty) word = word.substring(0, word.length - 1);
+  /// Add the current word to the list of words for the active player
+  void playWord(BuildContext context) {
+    var gameState = Provider.of<GameStateNotifier>(context, listen: false);
+    gameState.addWord(wordAsPlayedWord);
+    playedLetters = [];
+    notifyListeners();
   }
 
-  void type(String letter) => word += letter;
+  /// Removes the last letter from the current word
+  void removeLetter() {
+    if (playedLetters.isNotEmpty) {
+      playedLetters.removeLast();
+      notifyListeners();
+    }
+  }
+
+  /// Accepts a letter of type String and adds it as a PlayedLetter to the
+  /// current of list of playedLetters
+  void playLetter(String letter) {
+    playedLetters.add(PlayedLetter(letter));
+    notifyListeners();
+  }
+
+  void notify() {
+    notifyListeners();
+  }
 }
 
 class WritingZone extends StatefulWidget {
@@ -52,6 +68,7 @@ class _WritingZoneState extends State<WritingZone> {
     var playedWordState = Provider.of<PlayedWordState>(context);
     var players = notifier.gameState.players;
     var activePlayerIndex = notifier.activePlayerIndex;
+    const maxNameCharLength = 7;
 
     var turnActionButtons = [
       FloatingActionButton.small(
@@ -69,35 +86,102 @@ class _WritingZoneState extends State<WritingZone> {
         },
         child: Icon(Icons.switch_account_rounded),
       ),
+      FloatingActionButton.small(
+        // Switch player button
+        onPressed: () {
+          // TODO: Implement settings page
+          print('Settings button pressed');
+        },
+        child: Icon(Icons.settings_suggest_rounded),
+      ),
     ];
 
-    var writingDisplayText = [
-      Text(
-        'Current Player: ${players[activePlayerIndex].name}',
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w500,
-          color: Colors.black87,
+    var turnInfoText = [
+      Flexible(
+        fit: FlexFit.loose,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Current Player:',
+              overflow: TextOverflow.clip,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.black54,
+              ),
+            ),
+            Text(
+              players[activePlayerIndex].name.substring(
+                    0,
+                    players[activePlayerIndex].name.length < maxNameCharLength
+                        ? players[activePlayerIndex].name.length
+                        : maxNameCharLength,
+                  ),
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
+            ),
+          ],
         ),
       ),
-      Text(
-        'Word Score: ${playedWordState.score}',
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w500,
-          color: Colors.black87,
+      Container(
+        padding: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.black,
+            width: 1,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'Word Score: ',
+              overflow: TextOverflow.clip,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.black54,
+              ),
+            ),
+            Text(
+              '${playedWordState.score}',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
+            ),
+          ],
         ),
       ),
     ];
+
     return Align(
       alignment: Alignment.bottomCenter,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Column(
-                children: writingDisplayText,
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 1,
+                  ),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: turnInfoText,
+                ),
               ),
               Spacer(),
               Column(
@@ -110,9 +194,7 @@ class _WritingZoneState extends State<WritingZone> {
             clipBehavior: Clip.hardEdge,
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: playedWordState.word
-                  .toUpperCase()
-                  .split('')
+              children: playedWordState.playedLetters
                   .map((c) => ScrabbleLetterbox(c))
                   .toList(),
             ),

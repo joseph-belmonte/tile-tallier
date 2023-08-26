@@ -14,13 +14,17 @@ class ScrabbleKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: keyboardRows.map((row) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: row.split('').map((letter) => ScrabbleKey(letter)).toList(),
-        );
-      }).toList(),
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Column(
+        children: keyboardRows.map((row) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children:
+                row.split('').map((letter) => ScrabbleKey(letter)).toList(),
+          );
+        }).toList(),
+      ),
     );
   }
 }
@@ -39,8 +43,8 @@ class ScrabbleKey extends StatelessWidget {
   void Function() getOnTapBehavior(BuildContext context) {
     var playedWordState = Provider.of<PlayedWordState>(context, listen: false);
     if (value == '_') return () => playedWordState.playWord(context);
-    if (value == '<') return playedWordState.backspace;
-    return () => playedWordState.type(value);
+    if (value == '<') return () => playedWordState.removeLetter();
+    return () => playedWordState.playLetter(value);
   }
 
   @override
