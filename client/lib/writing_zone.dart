@@ -3,52 +3,80 @@ import 'package:provider/provider.dart';
 import 'package:scrabble_scorer/scrabble_letterbox.dart';
 import 'package:scrabble_scorer/scrabble_scorer.dart';
 
+import 'helpers/get_score_multiplier_label.dart';
 import 'keyboard/keyboard.dart';
 import 'models/game_state.dart';
 
 class PlayedWordState extends ChangeNotifier {
-  List<PlayedLetter> playedLetters = [];
+  PlayedWord playedWord = PlayedWord(
+    [],
+  );
 
-  // return word from playedLetters
-  String get wordAsString => playedLetters.map((e) => e.letter).join();
+  /// Return a string of the letters in the current word
+  String get wordAsString =>
+      playedWord.playedLetters.map((e) => e.letter).join();
 
-  // return word as PlayedWord
-  PlayedWord get wordAsPlayedWord => PlayedWord(playedLetters);
+  void updatePlayedWord(String text) {
+    var i = 0;
+    if (text.isEmpty) {
+      playedWord.playedLetters.clear();
+      notifyListeners();
+      return;
+    }
 
-  /// returns the score of the current word
-  int get score {
-    return wordAsPlayedWord.score;
-  }
-
-  /// sets playedLetters to the letters of a given string
-  void setPlayedLetters(String letters) {
-    playedLetters = letters.split('').map((e) => PlayedLetter(e)).toList();
+    while (i < playedWord.playedLetters.length &&
+        i < text.length &&
+        playedWord.playedLetters[i].letter == text[i]) {
+      i++;
+    }
+    if (i < playedWord.playedLetters.length) {
+      playedWord.playedLetters.removeRange(i, playedWord.playedLetters.length);
+    }
+    while (i < text.length) {
+      playedWord.playedLetters.add(PlayedLetter(text[i]));
+      i++;
+    }
     notifyListeners();
   }
 
   /// Add the current word to the list of words for the active player
   void playWord(BuildContext context) {
-    var gameState = Provider.of<GameStateNotifier>(context, listen: false);
-    gameState.addWord(wordAsPlayedWord);
-    playedLetters = [];
+    Provider.of<GameStateNotifier>(context, listen: false)
+        .addWordToCurrentPlay(playedWord);
+    playedWord = PlayedWord([]);
     notifyListeners();
   }
 
   /// Removes the last letter from the current word
   void removeLetter() {
-    if (playedLetters.isNotEmpty) {
-      playedLetters.removeLast();
-      notifyListeners();
+    if (playedWord.playedLetters.isNotEmpty) {
+      playedWord.playedLetters.removeLast();
     }
+    notifyListeners();
   }
 
   /// Accepts a letter of type String and adds it as a PlayedLetter to the
   /// current of list of playedLetters
   void playLetter(String letter) {
-    playedLetters.add(PlayedLetter(letter));
+    playedWord.playedLetters.add(PlayedLetter(letter));
     notifyListeners();
   }
 
+  /// Toggles the word multiplier for the current word
+  void toggleWordMultiplier() {
+    switch (playedWord.wordMultiplier) {
+      case WordMultiplier.none:
+        playedWord.wordMultiplier = WordMultiplier.doubleWord;
+      case WordMultiplier.doubleWord:
+        playedWord.wordMultiplier = WordMultiplier.tripleWord;
+      case WordMultiplier.tripleWord:
+        playedWord.wordMultiplier = WordMultiplier.none;
+    }
+    notifyListeners();
+  }
+
+  /// TODO: find alternative to this method
+  /// we are only using this to pass the state up from the letterbox widget
   void notify() {
     notifyListeners();
   }
@@ -64,20 +92,25 @@ class WritingZone extends StatefulWidget {
 class _WritingZoneState extends State<WritingZone> {
   @override
   Widget build(BuildContext context) {
-    var notifier = Provider.of<GameStateNotifier>(context);
-    var playedWordState = Provider.of<PlayedWordState>(context);
-    var players = notifier.gameState.players;
+    var notifier = Provider.of<GameStateNotifier>(context, listen: true);
     var activePlayerIndex = notifier.activePlayerIndex;
-    const maxNameCharLength = 7;
+
+    var playedWordState = Provider.of<PlayedWordState>(context, listen: true);
+
+    var wordMultiplierText = Text(
+      getScoreMultiplierLabel(playedWordState.playedWord.wordMultiplier),
+    );
 
     var turnActionButtons = [
-      FloatingActionButton.small(
+      FloatingActionButton(
         // Add word button
+        mini: true,
         onPressed: () => playedWordState.playWord(context),
         child: Icon(Icons.add_circle_outline),
       ),
-      FloatingActionButton.small(
+      FloatingActionButton(
         // Switch player button
+        mini: true,
         onPressed: () {
           notifier.endTurn();
           setState(() {
@@ -86,81 +119,85 @@ class _WritingZoneState extends State<WritingZone> {
         },
         child: Icon(Icons.switch_account_rounded),
       ),
-      FloatingActionButton.small(
-        // Switch player button
+      FloatingActionButton(
+        // Settings button
+        mini: true,
         onPressed: () {
           // TODO: Implement settings page
-          print('Settings button pressed');
+          print('Redirect to settings page not implemented');
         },
         child: Icon(Icons.settings_suggest_rounded),
       ),
     ];
 
     var turnInfoText = [
-      Flexible(
-        fit: FlexFit.loose,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Current Player:',
-              overflow: TextOverflow.clip,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Colors.black54,
-              ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Current Player:',
+            overflow: TextOverflow.clip,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.black54,
             ),
-            Text(
-              players[activePlayerIndex].name.substring(
-                    0,
-                    players[activePlayerIndex].name.length < maxNameCharLength
-                        ? players[activePlayerIndex].name.length
-                        : maxNameCharLength,
-                  ),
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: Colors.black87,
-              ),
-            ),
-          ],
-        ),
-      ),
-      Container(
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.black,
-            width: 1,
           ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              'Word Score: ',
-              overflow: TextOverflow.clip,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Colors.black54,
-              ),
+          Icon(Icons.person_rounded),
+          Consumer<GameStateNotifier>(
+            builder: (context, gameStateNotifier, child) {
+              return Text(
+                gameStateNotifier.gameState.players[activePlayerIndex].name,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black87,
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            'Word Score: ',
+            overflow: TextOverflow.clip,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.black54,
             ),
-            Text(
-              '${playedWordState.score}',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: Colors.black87,
-              ),
-            ),
-          ],
-        ),
+          ),
+          Consumer<PlayedWordState>(
+            builder: (context, playedWordState, child) {
+              return Text(
+                '${playedWordState.playedWord.score}',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black87,
+                ),
+              );
+            },
+          ),
+          Consumer<PlayedWordState>(
+            builder: (context, playedWordState, child) {
+              return OutlinedButton.icon(
+                icon: Icon(Icons.multiple_stop_rounded),
+                onPressed: () {
+                  playedWordState.toggleWordMultiplier();
+                },
+                label: wordMultiplierText,
+              );
+            },
+          ),
+        ],
       ),
     ];
 
@@ -194,7 +231,7 @@ class _WritingZoneState extends State<WritingZone> {
             clipBehavior: Clip.hardEdge,
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: playedWordState.playedLetters
+              children: playedWordState.playedWord.playedLetters
                   .map((c) => ScrabbleLetterbox(c))
                   .toList(),
             ),

@@ -18,16 +18,15 @@ class _ScrabbleLetterboxState extends State<ScrabbleLetterbox> {
   _ScrabbleLetterboxState(this.letter);
 
   void toggleLetterMultiplier() {
-    if (letter.isDouble) {
-      letter.isDouble = false;
-      letter.isTriple = true;
-    } else if (letter.isTriple) {
-      letter.isTriple = false;
+    final letterState = Provider.of<PlayedWordState>(context, listen: false);
+    if (letter.letterMultiplier == LetterMultiplier.doubleLetter) {
+      letter.letterMultiplier = LetterMultiplier.tripleLetter;
+    } else if (letter.letterMultiplier == LetterMultiplier.tripleLetter) {
+      letter.letterMultiplier = LetterMultiplier.none;
     } else {
-      letter.isDouble = true;
+      letter.letterMultiplier = LetterMultiplier.doubleLetter;
     }
-    setState(() {});
-    Provider.of<PlayedWordState>(context, listen: false).notify();
+    letterState.notify();
   }
 
   @override
@@ -35,10 +34,10 @@ class _ScrabbleLetterboxState extends State<ScrabbleLetterbox> {
     // pick box color according to score multiplier
     Color boxColor;
     Color textColor;
-    if (letter.isDouble) {
+    if (letter.letterMultiplier == LetterMultiplier.doubleLetter) {
       boxColor = Color.fromARGB(255, 167, 217, 240);
       textColor = Colors.white;
-    } else if (letter.isTriple) {
+    } else if (letter.letterMultiplier == LetterMultiplier.tripleLetter) {
       boxColor = Color.fromARGB(255, 0, 112, 192);
       textColor = Colors.white;
     } else {
