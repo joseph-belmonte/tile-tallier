@@ -5,15 +5,12 @@ import 'package:scrabble_scorer/scrabble_scorer.dart';
 import 'models/game_state.dart';
 
 class DisplayZone extends StatelessWidget {
-  const DisplayZone({Key? key}) : super(key: key);
+  const DisplayZone({super.key});
 
   @override
   Widget build(BuildContext context) {
     var notifier = Provider.of<GameStateNotifier>(context);
     var players = notifier.gameState.players;
-
-    // Create a map to track the turn count for each player
-    final Map<Player, int> playerTurnCounts = {};
 
     return Align(
       alignment: Alignment.topCenter,
@@ -40,60 +37,17 @@ class DisplayZone extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '${player.name}: ${player.score}',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black54,
-                        ),
-                      ),
+                      PlayerNameDisplay(player: player),
+                      PlayerScoreDisplay(player: player),
                       Expanded(
                         child: ListView.builder(
+                          key: ValueKey(player.name),
                           shrinkWrap: true,
                           itemCount: player.plays.length,
                           itemBuilder: (context, index) {
-                            var currentTurn = player.plays[index];
-                            // Retrieve the turn count for the current player
-                            final turnCount = playerTurnCounts[player] ?? 0;
-                            playerTurnCounts[player] = turnCount + 1;
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Turn ${turnCount + 1}: ',
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                    Text(
-                                      currentTurn.score.toString(),
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Text(
-                                  currentTurn.playedWords
-                                      .map((e) => '${e.word} - ${e.score}')
-                                      .join('\n'),
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ],
+                            return TurnSummary(
+                              player: player,
+                              turnIndex: index,
                             );
                           },
                         ),
@@ -105,6 +59,111 @@ class DisplayZone extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class TurnSummary extends StatelessWidget {
+  const TurnSummary({
+    required this.player,
+    required this.turnIndex,
+    super.key,
+  });
+
+  final Player player;
+  final int turnIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    var currentTurn = player.plays[turnIndex];
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Turn ${turnIndex + 1}: ',
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
+            ),
+            Text(
+              currentTurn.score.toString(),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Colors.red,
+              ),
+            ),
+          ],
+        ),
+        Text(
+          currentTurn.playedWords
+              .map((e) => '${e.word} - ${e.score}')
+              .join('\n'),
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: Colors.black87,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class PlayerScoreDisplay extends StatelessWidget {
+  const PlayerScoreDisplay({
+    required this.player,
+    super.key,
+  });
+
+  final Player player;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          '${player.score}',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Colors.black54,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class PlayerNameDisplay extends StatelessWidget {
+  const PlayerNameDisplay({
+    required this.player,
+    super.key,
+  });
+
+  final Player player;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          '${player.name}: ',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Colors.black54,
+          ),
+        ),
+      ],
     );
   }
 }

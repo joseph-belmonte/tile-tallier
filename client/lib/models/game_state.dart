@@ -12,6 +12,8 @@ class GameState {
     }
     return winner;
   }
+
+  final Map<Player, int> playerTurnCounts = {};
 }
 
 class Player {
@@ -19,7 +21,7 @@ class Player {
   Player({required this.name});
 
   final String name;
-  List<Play> plays = [];
+  List<Play> plays = [Play(playedWords: [])];
 
   int get score {
     var score = 0;
@@ -36,7 +38,7 @@ class Play {
   /// A bingo is when a player uses all 7 letters in their rack in a single turn.
   Play({required this.playedWords, this.isBingo = false});
 
-  List<PlayedWord> playedWords;
+  List<PlayedWord> playedWords = [];
   bool isBingo = false;
 
   /// Returns the score for the play by summing the scores for each PlayedWord object.
@@ -51,13 +53,14 @@ class Play {
   }
 }
 
+enum WordMultiplier { doubleWord, tripleWord, none }
+
 class PlayedWord {
   /// Accepts a word (list of PlayedLetter objects) and a boolean value for whether or not the word is a double or triple word.
   PlayedWord(this.playedLetters);
 
-  final List<PlayedLetter> playedLetters;
-  bool isDouble = false;
-  bool isTriple = false;
+  List<PlayedLetter> playedLetters;
+  WordMultiplier wordMultiplier = WordMultiplier.none;
 
   /// Returns the word as a string by converting each PlayedLetter object to its letter property and joining them together.
   String get word => playedLetters.map((e) => e.letter).join();
@@ -73,11 +76,18 @@ class PlayedWord {
 
   /// Returns the score multiplier for the word.
   int get scoreMultiplier {
-    if (isDouble) return 2;
-    if (isTriple) return 3;
-    return 1;
+    switch (wordMultiplier) {
+      case WordMultiplier.doubleWord:
+        return 2;
+      case WordMultiplier.tripleWord:
+        return 3;
+      default:
+        return 1;
+    }
   }
 }
+
+enum LetterMultiplier { doubleLetter, tripleLetter, none }
 
 class PlayedLetter {
   /// Accepts a letter (String) and a boolean value for whether or not the letter is a double or triple letter.
@@ -86,8 +96,7 @@ class PlayedLetter {
   }
 
   late final String letter;
-  bool isDouble = false;
-  bool isTriple = false;
+  LetterMultiplier letterMultiplier = LetterMultiplier.none;
 
   /// Returns the score for the letter.
   int get score {
@@ -96,9 +105,14 @@ class PlayedLetter {
 
   /// Returns the score multiplier for the letter.
   int get scoreMultiplier {
-    if (isDouble) return 2;
-    if (isTriple) return 3;
-    return 1;
+    switch (letterMultiplier) {
+      case LetterMultiplier.doubleLetter:
+        return 2;
+      case LetterMultiplier.tripleLetter:
+        return 3;
+      default:
+        return 1;
+    }
   }
 
   static const Map<String, int> letterScores = {
