@@ -8,9 +8,7 @@ import 'keyboard/keyboard.dart';
 import 'models/game_state.dart';
 
 class PlayedWordState extends ChangeNotifier {
-  PlayedWord playedWord = PlayedWord(
-    [],
-  );
+  PlayedWord playedWord = PlayedWord();
 
   /// Return a string of the letters in the current word
   String get wordAsString =>
@@ -43,7 +41,7 @@ class PlayedWordState extends ChangeNotifier {
   void playWord(BuildContext context) {
     Provider.of<GameStateNotifier>(context, listen: false)
         .addWordToCurrentPlay(playedWord);
-    playedWord = PlayedWord([]);
+    playedWord = PlayedWord();
     notifyListeners();
   }
 

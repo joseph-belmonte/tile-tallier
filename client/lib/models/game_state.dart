@@ -56,10 +56,7 @@ class Play {
 enum WordMultiplier { doubleWord, tripleWord, none }
 
 class PlayedWord {
-  /// Accepts a word (list of PlayedLetter objects) and a boolean value for whether or not the word is a double or triple word.
-  PlayedWord(this.playedLetters);
-
-  List<PlayedLetter> playedLetters;
+  List<PlayedLetter> playedLetters = [];
   WordMultiplier wordMultiplier = WordMultiplier.none;
 
   /// Returns the word as a string by converting each PlayedLetter object to its letter property and joining them together.
