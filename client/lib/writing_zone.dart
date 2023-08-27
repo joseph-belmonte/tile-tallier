@@ -15,19 +15,22 @@ class PlayedWordState extends ChangeNotifier {
       playedWord.playedLetters.map((e) => e.letter).join();
 
   void updatePlayedWord(String text) {
-    var i = 0;
     if (text.isEmpty) {
       playedWord.playedLetters.clear();
       notifyListeners();
       return;
     }
+    String word = playedWord.word;
+    int i = 0;
 
-    while (i < playedWord.playedLetters.length &&
-        i < text.length &&
-        playedWord.playedLetters[i].letter == text[i]) {
+    // set text and word to uppercase for comparison
+    text = text.toUpperCase();
+    word = word.toUpperCase();
+
+    while (i < word.length && i < text.length && word[i] == text[i]) {
       i++;
     }
-    if (i < playedWord.playedLetters.length) {
+    if (i < word.length) {
       playedWord.playedLetters.removeRange(i, playedWord.playedLetters.length);
     }
     while (i < text.length) {
