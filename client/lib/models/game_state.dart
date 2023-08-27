@@ -7,6 +7,8 @@ class GameState {
 
   GameState({required this.players});
 
+  Player get activePlayer => players[activePlayerIndex];
+
   /// Returns all the plays in the game in reverse chronological order.
   List<Play> get plays {
     int playerIndexStart = max(activePlayerIndex - 1, 0);
@@ -25,6 +27,17 @@ class GameState {
       }
     }
     return playList;
+  }
+
+  /// Changes the active player to the next player in the list of players
+  /// and adds a new play to the active player
+  void endTurn() {
+    // save the current play in the list of plays
+    plays.add(players[activePlayerIndex].plays.last);
+
+    activePlayerIndex = (activePlayerIndex + 1) % players.length;
+    // add a new play to the active player
+    players[activePlayerIndex].startTurn();
   }
 
   Player getWinner() {

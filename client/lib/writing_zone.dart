@@ -81,7 +81,7 @@ class _WritingZoneState extends State<WritingZone> {
   @override
   Widget build(BuildContext context) {
     var notifier = Provider.of<CurrentGameState>(context, listen: true);
-    var activePlayerIndex = notifier.activePlayerIndex;
+    var activePlayerIndex = notifier.gameState.activePlayerIndex;
 
     var playedWordState = Provider.of<PlayedWordState>(context, listen: true);
 
@@ -102,7 +102,7 @@ class _WritingZoneState extends State<WritingZone> {
         onPressed: () {
           notifier.endTurn();
           setState(() {
-            activePlayerIndex = notifier.activePlayerIndex;
+            activePlayerIndex = notifier.gameState.activePlayerIndex;
           });
         },
         child: Icon(Icons.switch_account_rounded),
