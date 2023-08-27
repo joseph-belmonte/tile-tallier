@@ -24,6 +24,9 @@ class CurrentGameState extends ChangeNotifier {
   /// Accepts a word of type PlayedWord and adds it to the list of played words
   /// for the current Play
   void addWordToCurrentPlay(PlayedWord word) {
+    if (gameState.activePlayer.plays.isEmpty) {
+      gameState.activePlayer.startTurn();
+    }
     final currentPlay = gameState.activePlayer.plays.last;
 
     currentPlay.playedWords.add(word);
