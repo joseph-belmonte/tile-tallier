@@ -4,21 +4,11 @@ import 'package:scrabble_scorer/writing_zone.dart';
 
 import 'models/game_state.dart';
 
-class ScrabbleLetterbox extends StatefulWidget {
+class ScrabbleLetterbox extends StatelessWidget {
   final PlayedLetter letter;
   const ScrabbleLetterbox(this.letter, {super.key});
 
-  @override
-  State<ScrabbleLetterbox> createState() => _ScrabbleLetterboxState(letter);
-}
-
-class _ScrabbleLetterboxState extends State<ScrabbleLetterbox> {
-  final PlayedLetter letter;
-
-  _ScrabbleLetterboxState(this.letter);
-
-  void toggleLetterMultiplier() {
-    final letterState = Provider.of<PlayedWordState>(context, listen: false);
+  void toggleLetterMultiplier(BuildContext context) {
     if (letter.letterMultiplier == LetterMultiplier.doubleLetter) {
       letter.letterMultiplier = LetterMultiplier.tripleLetter;
     } else if (letter.letterMultiplier == LetterMultiplier.tripleLetter) {
@@ -26,7 +16,7 @@ class _ScrabbleLetterboxState extends State<ScrabbleLetterbox> {
     } else {
       letter.letterMultiplier = LetterMultiplier.doubleLetter;
     }
-    letterState.notify();
+    Provider.of<PlayedWordState>(context, listen: false).notifyListeners();
   }
 
   @override
@@ -45,7 +35,7 @@ class _ScrabbleLetterboxState extends State<ScrabbleLetterbox> {
       textColor = Colors.black87;
     }
     return GestureDetector(
-      onTap: () => toggleLetterMultiplier(),
+      onTap: () => toggleLetterMultiplier(context),
       child: Container(
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.all(5),
