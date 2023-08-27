@@ -16,7 +16,7 @@ class GameState {
     int playIndex = players[playerIndex].plays.length - 1;
     List<Play> playList = [];
 
-    while (playIndex >= 0) {
+    while (playIndex >= 0 && players[playerIndex].plays.length > playIndex) {
       playList.add(players[playerIndex].plays[playIndex]);
       playerIndex--;
       if (playerIndex < 0) {
