@@ -1,7 +1,31 @@
+import 'dart:math';
+
 class GameState {
   /// Creates a new game state with the given players.
-  GameState({required this.players});
   final List<Player> players;
+  int activePlayerIndex = 0;
+
+  GameState({required this.players});
+
+  /// Returns all the plays in the game in reverse chronological order.
+  List<Play> get plays {
+    int playerIndexStart = max(activePlayerIndex - 1, 0);
+    int playerIndex = playerIndexStart;
+    int playIndex = players[playerIndex].plays.length - 1;
+    List<Play> playList = [];
+
+    while (playIndex >= 0) {
+      playList.add(players[playerIndex].plays[playIndex]);
+      playerIndex--;
+      if (playerIndex < 0) {
+        playerIndex = players.length - 1;
+      }
+      if (playerIndex == playerIndexStart) {
+        playIndex--;
+      }
+    }
+    return playList;
+  }
 
   Player getWinner() {
     Player winner = players[0];
@@ -19,7 +43,7 @@ class Player {
   Player({required this.name});
 
   final String name;
-  List<Play> plays = [Play(playedWords: [])];
+  List<Play> plays = [];
 
   int get score {
     var score = 0;
@@ -28,15 +52,20 @@ class Player {
     }
     return score;
   }
+
+  void startTurn() {
+    plays.add(Play([], this));
+  }
 }
 
 class Play {
   /// Accepts a list of PlayedWord objects and a boolean value for whether or not the play is a bingo.
   /// A word is a list of PlayedLetter objects.
   /// A bingo is when a player uses all 7 letters in their rack in a single turn.
-  Play({required this.playedWords, this.isBingo = false});
+  Play(this.playedWords, this.player, {this.isBingo = false});
 
   List<PlayedWord> playedWords = [];
+  Player player;
   bool isBingo = false;
 
   /// Returns the score for the play by summing the scores for each PlayedWord object.
@@ -139,4 +168,14 @@ class PlayedLetter {
     'Z': 10,
     ' ': 0,
   };
+
+  void toggleLetterMultiplier() {
+    if (letterMultiplier == LetterMultiplier.doubleLetter) {
+      letterMultiplier = LetterMultiplier.tripleLetter;
+    } else if (letterMultiplier == LetterMultiplier.tripleLetter) {
+      letterMultiplier = LetterMultiplier.none;
+    } else {
+      letterMultiplier = LetterMultiplier.doubleLetter;
+    }
+  }
 }

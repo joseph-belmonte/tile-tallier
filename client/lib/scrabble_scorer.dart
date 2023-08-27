@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'play_history_page.dart';
 import 'score_page.dart';
 
 class ScrabbleScorer extends StatelessWidget {
@@ -14,7 +15,26 @@ class ScrabbleScorer extends StatelessWidget {
             ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 189, 25, 25)),
         useMaterial3: true,
       ),
-      home: const ScorePage(title: 'Scrabble Score Keeper'),
+      home: const SafeArea(
+        maintainBottomViewPadding: true,
+        child: DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            appBar: TabBar(
+              tabs: [
+                Tab(text: 'Scores'),
+                Tab(text: 'Play History'),
+              ],
+            ),
+            body: TabBarView(
+              children: [
+                ScorePage(),
+                PlayHistoryPage(),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
