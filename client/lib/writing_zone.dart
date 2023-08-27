@@ -10,16 +10,7 @@ import 'models/game_state.dart';
 class PlayedWordState extends ChangeNotifier {
   PlayedWord playedWord = PlayedWord();
 
-  /// Return a string of the letters in the current word
-  String get wordAsString =>
-      playedWord.playedLetters.map((e) => e.letter).join();
-
   void updatePlayedWord(String text) {
-    if (text.isEmpty) {
-      playedWord.playedLetters.clear();
-      notifyListeners();
-      return;
-    }
     String word = playedWord.word;
     int i = 0;
 
@@ -30,7 +21,9 @@ class PlayedWordState extends ChangeNotifier {
     while (i < word.length && i < text.length && word[i] == text[i]) {
       i++;
     }
-    if (i < word.length) {
+    if (i == 0) {
+      playedWord.playedLetters.clear();
+    } else if (i < word.length) {
       playedWord.playedLetters.removeRange(i, playedWord.playedLetters.length);
     }
     while (i < text.length) {
@@ -42,7 +35,7 @@ class PlayedWordState extends ChangeNotifier {
 
   /// Add the current word to the list of words for the active player
   void playWord(BuildContext context) {
-    Provider.of<GameStateNotifier>(context, listen: false)
+    Provider.of<CurrentGameState>(context, listen: false)
         .addWordToCurrentPlay(playedWord);
     playedWord = PlayedWord();
     notifyListeners();
@@ -75,12 +68,6 @@ class PlayedWordState extends ChangeNotifier {
     }
     notifyListeners();
   }
-
-  /// TODO: find alternative to this method
-  /// we are only using this to pass the state up from the letterbox widget
-  void notify() {
-    notifyListeners();
-  }
 }
 
 class WritingZone extends StatefulWidget {
@@ -93,7 +80,7 @@ class WritingZone extends StatefulWidget {
 class _WritingZoneState extends State<WritingZone> {
   @override
   Widget build(BuildContext context) {
-    var notifier = Provider.of<GameStateNotifier>(context, listen: true);
+    var notifier = Provider.of<CurrentGameState>(context, listen: true);
     var activePlayerIndex = notifier.activePlayerIndex;
 
     var playedWordState = Provider.of<PlayedWordState>(context, listen: true);
@@ -146,7 +133,7 @@ class _WritingZoneState extends State<WritingZone> {
             ),
           ),
           Icon(Icons.person_rounded),
-          Consumer<GameStateNotifier>(
+          Consumer<CurrentGameState>(
             builder: (context, gameStateNotifier, child) {
               return Text(
                 gameStateNotifier.gameState.players[activePlayerIndex].name,

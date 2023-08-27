@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:scrabble_scorer/scrabble_scorer.dart';
 
+import 'game_state.dart';
 import 'models/game_state.dart';
 
 class DisplayZone extends StatelessWidget {
@@ -9,8 +9,7 @@ class DisplayZone extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var notifier = Provider.of<GameStateNotifier>(context);
-    var players = notifier.gameState.players;
+    var players = Provider.of<CurrentGameState>(context).gameState.players;
 
     return Align(
       alignment: Alignment.topCenter,
