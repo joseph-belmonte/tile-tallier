@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'game_state.dart';
+import 'current_game_state.dart';
 import 'helpers/get_score_multiplier_label.dart';
 import 'keyboard/keyboard.dart';
 import 'models/game_state.dart';

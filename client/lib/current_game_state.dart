@@ -30,8 +30,16 @@ class CurrentGameState extends ChangeNotifier {
     final currentPlay = gameState.activePlayer.plays.last;
 
     currentPlay.playedWords.add(word);
-    currentPlay.isBingo =
-        currentPlay.playedWords.last.playedLetters.length == 7;
+    notifyListeners();
+  }
+
+  /// Toggles the isBingo property for the current word
+  void toggleBingo() {
+    if (gameState.activePlayer.plays.isEmpty) {
+      gameState.activePlayer.startTurn();
+    }
+    final currentPlay = gameState.activePlayer.plays.last;
+    currentPlay.isBingo = !currentPlay.isBingo;
     notifyListeners();
   }
 }

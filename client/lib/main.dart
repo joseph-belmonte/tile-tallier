@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'game_state.dart';
+import 'current_game_state.dart';
 import 'keyboard/keyboard.dart';
 import 'scrabble_scorer.dart';
 import 'writing_zone.dart';
