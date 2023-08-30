@@ -40,6 +40,7 @@ class CurrentPlayState extends ChangeNotifier {
     Provider.of<CurrentGameState>(context, listen: false)
         .addWordToCurrentPlay(playedWord);
     playedWord = PlayedWord();
+
     notifyListeners();
   }
 
@@ -80,6 +81,16 @@ class WritingZone extends StatefulWidget {
 }
 
 class _WritingZoneState extends State<WritingZone> {
+  bool isChecked = false;
+
+  void onChanged(bool? newValue) {
+    setState(() {
+      print('Bingo toggled');
+      Provider.of<CurrentGameState>(context, listen: false).toggleBingo();
+      isChecked = !isChecked;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var notifier = Provider.of<CurrentGameState>(context, listen: true);
@@ -87,133 +98,66 @@ class _WritingZoneState extends State<WritingZone> {
 
     var currentPlayState = Provider.of<CurrentPlayState>(context, listen: true);
 
-    var wordMultiplierText = Text(
-      getScoreMultiplierLabel(playedWordState.playedWord.wordMultiplier),
+    void onAddWord(context) {
+      currentPlayState.playWord(context);
+    }
+
+    void onSwitchPlayer(context) {
+      notifier.endTurn();
+      setState(() {
+        activePlayerIndex = notifier.gameState.activePlayerIndex;
+        isChecked = false;
+      });
+    }
+
+    var turnActions = Column(
+      children: <Widget>[
+        FloatingActionButton(
+          // Add word button
+          mini: true,
+          onPressed: () => onAddWord(context),
+          child: Icon(Icons.add_circle_outline),
+        ),
+        FloatingActionButton(
+          // Switch player button
+          mini: true,
+          onPressed: () => onSwitchPlayer(context),
+          child: Icon(Icons.switch_account_rounded),
+        ),
+        FloatingActionButton(
+          // Settings button
+          mini: true,
+          onPressed: () {
+            print('Redirect to settings page not implemented');
+          },
+          child: Icon(Icons.settings_suggest_rounded),
+        ),
+      ],
     );
-
-    var turnActionButtons = [
-      FloatingActionButton(
-        // Add word button
-        mini: true,
-        onPressed: () => playedWordState.playWord(context),
-        child: Icon(Icons.add_circle_outline),
-      ),
-      FloatingActionButton(
-        // Switch player button
-        mini: true,
-        onPressed: () {
-          notifier.endTurn();
-          setState(() {
-            activePlayerIndex = notifier.gameState.activePlayerIndex;
-          });
-        },
-        child: Icon(Icons.switch_account_rounded),
-      ),
-      FloatingActionButton(
-        // Settings button
-        mini: true,
-        onPressed: () {
-          // TODO: Implement settings page
-          print('Redirect to settings page not implemented');
-        },
-        child: Icon(Icons.settings_suggest_rounded),
-      ),
-    ];
-
-    var turnInfoText = [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Current Player:',
-            overflow: TextOverflow.clip,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.black54,
-            ),
-          ),
-          Icon(Icons.person_rounded),
-          Consumer<CurrentGameState>(
-            builder: (context, gameStateNotifier, child) {
-              return Text(
-                gameStateNotifier.gameState.players[activePlayerIndex].name,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            'Word Score: ',
-            overflow: TextOverflow.clip,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.black54,
-            ),
-          ),
-          Consumer<PlayedWordState>(
-            builder: (context, playedWordState, child) {
-              return Text(
-                '${playedWordState.playedWord.score}',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
-                ),
-              );
-            },
-          ),
-          Consumer<PlayedWordState>(
-            builder: (context, playedWordState, child) {
-              return OutlinedButton.icon(
-                icon: Icon(Icons.multiple_stop_rounded),
-                onPressed: () {
-                  playedWordState.toggleWordMultiplier();
-                },
-                label: wordMultiplierText,
-              );
-            },
-          ),
-        ],
-      ),
-    ];
 
     return Align(
       alignment: Alignment.bottomCenter,
       child: Column(
-        children: [
+        children: <Widget>[
           Row(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 1,
+            children: <Widget>[
+              TurnDisplay(
+                player: notifier.gameState.players[activePlayerIndex],
+              ),
+              Row(
+                children: <Widget>[
+                  SizedBox(
+                    height: 50,
+                    width: 200,
+                    child: CheckboxListTile(
+                      title: Text('Bingo'),
+                      value: isChecked,
+                      onChanged: onChanged,
+                    ),
                   ),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: turnInfoText,
-                ),
+                ],
               ),
-              Spacer(),
-              Column(
-                children: turnActionButtons,
-              ),
+              turnActions,
             ],
           ),
           SingleChildScrollView(
@@ -225,6 +169,105 @@ class _WritingZoneState extends State<WritingZone> {
             ),
           ),
           KeyboardWidget(),
+        ],
+      ),
+    );
+  }
+}
+
+class TurnDisplay extends StatefulWidget {
+  final Player player;
+
+  const TurnDisplay({required this.player, super.key});
+  @override
+  State<StatefulWidget> createState() {
+    return _TurnDisplayState();
+  }
+}
+
+class _TurnDisplayState extends State<TurnDisplay> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.black,
+          width: 1,
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Text(
+                'Current Player:',
+                overflow: TextOverflow.clip,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black54,
+                ),
+              ),
+              Icon(Icons.person_rounded),
+              Consumer<CurrentGameState>(
+                builder: (context, gameStateNotifier, child) {
+                  return Text(
+                    gameStateNotifier.gameState.activePlayer.name,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black87,
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                'Word Score: ',
+                overflow: TextOverflow.clip,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black54,
+                ),
+              ),
+              Consumer<CurrentPlayState>(
+                builder: (context, currentPlayState, child) {
+                  return Text(
+                    '${currentPlayState.playedWord.score}',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black87,
+                    ),
+                  );
+                },
+              ),
+              Consumer<CurrentPlayState>(
+                builder: (context, currentPlayState, child) {
+                  return OutlinedButton.icon(
+                    icon: Icon(Icons.multiple_stop_rounded),
+                    onPressed: () {
+                      currentPlayState.toggleWordMultiplier();
+                    },
+                    label: Text(
+                      getScoreMultiplierLabel(
+                        currentPlayState.playedWord.wordMultiplier,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         ],
       ),
     );

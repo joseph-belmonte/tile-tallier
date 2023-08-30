@@ -20,11 +20,10 @@ class DisplayZone extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               for (var player in players)
                 Container(
+                  height: 80,
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     border: Border.all(
@@ -84,9 +83,16 @@ class TurnSummary extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Turn ${turnIndex + 1}: ',
+              '${currentTurn.isBingo ? '⭐' : ''} Turn ${turnIndex + 1}: ',
               textAlign: TextAlign.left,
               style: TextStyle(
+                decoration: turnIndex == player.plays.length - 1 &&
+                        Provider.of<CurrentGameState>(context)
+                                .gameState
+                                .activePlayer ==
+                            player
+                    ? TextDecoration.underline
+                    : TextDecoration.none,
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
                 color: Colors.black87,
