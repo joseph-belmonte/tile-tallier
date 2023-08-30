@@ -7,7 +7,7 @@ import 'keyboard/keyboard.dart';
 import 'models/game_state.dart';
 import 'scrabble_letterbox.dart';
 
-class PlayedWordState extends ChangeNotifier {
+class CurrentPlayState extends ChangeNotifier {
   PlayedWord playedWord = PlayedWord();
 
   void updatePlayedWord(String text) {
@@ -83,7 +83,7 @@ class _WritingZoneState extends State<WritingZone> {
     var notifier = Provider.of<CurrentGameState>(context, listen: true);
     var activePlayerIndex = notifier.gameState.activePlayerIndex;
 
-    var playedWordState = Provider.of<PlayedWordState>(context, listen: true);
+    var currentPlayState = Provider.of<CurrentPlayState>(context, listen: true);
 
     var wordMultiplierText = Text(
       getScoreMultiplierLabel(playedWordState.playedWord.wordMultiplier),
@@ -218,7 +218,7 @@ class _WritingZoneState extends State<WritingZone> {
             scrollDirection: Axis.horizontal,
             clipBehavior: Clip.hardEdge,
             child: ScrabbleWordWidget(
-              playedWordState.playedWord,
+              currentPlayState.playedWord,
               interactive: true,
             ),
           ),

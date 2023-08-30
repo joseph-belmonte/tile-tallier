@@ -13,8 +13,8 @@ void main() {
         ChangeNotifierProvider<CurrentGameState>(
           create: (context) => CurrentGameState(),
         ),
-        ChangeNotifierProvider<PlayedWordState>(
-          create: (context) => PlayedWordState(),
+        ChangeNotifierProvider<CurrentPlayState>(
+          create: (context) => CurrentPlayState(),
         ),
         ChangeNotifierProvider<KeyboardWidgetState>(
           create: (context) => KeyboardWidgetState(),

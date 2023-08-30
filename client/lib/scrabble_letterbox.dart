@@ -95,7 +95,7 @@ class ScrabbleLetterbox extends StatelessWidget {
       onTap: () {
         letter.toggleLetterMultiplier();
         // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-        Provider.of<PlayedWordState>(context, listen: false).notifyListeners();
+        Provider.of<CurrentPlayState>(context, listen: false).notifyListeners();
       },
       child: letterbox,
     );
