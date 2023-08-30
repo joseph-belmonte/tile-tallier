@@ -36,6 +36,7 @@ class ScrabbleWordWidget extends StatelessWidget {
   }
 }
 
+/// A widget that displays a single letter as a ScrabbleLetterbox widget.
 class ScrabbleLetterbox extends StatelessWidget {
   final PlayedLetter letter;
   final bool interactive;

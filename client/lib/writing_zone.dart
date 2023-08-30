@@ -10,6 +10,8 @@ import 'scrabble_letterbox.dart';
 class CurrentPlayState extends ChangeNotifier {
   PlayedWord playedWord = PlayedWord();
 
+  /// Sets the displayed text to the given text and updates the list of
+  /// played letters to match the text
   void updatePlayedWord(String text) {
     String word = playedWord.word;
     int i = 0;
