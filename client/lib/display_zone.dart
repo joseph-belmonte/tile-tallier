@@ -86,19 +86,11 @@ class TurnSummary extends StatelessWidget {
             Text(
               'Turn ${turnIndex + 1}: ',
               textAlign: TextAlign.left,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.black87,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
             Text(
               currentTurn.score.toString(),
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.red,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
         ),
@@ -106,11 +98,7 @@ class TurnSummary extends StatelessWidget {
           currentTurn.playedWords
               .map((e) => '${e.word} - ${e.score}')
               .join('\n'),
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: Colors.black87,
-          ),
+          style: Theme.of(context).textTheme.bodySmall,
         ),
       ],
     );
@@ -131,11 +119,7 @@ class PlayerScoreDisplay extends StatelessWidget {
       children: [
         Text(
           '${player.score}',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Colors.black54,
-          ),
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
       ],
     );
@@ -156,11 +140,7 @@ class PlayerNameDisplay extends StatelessWidget {
       children: [
         Text(
           '${player.name}: ',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Colors.black54,
-          ),
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
       ],
     );

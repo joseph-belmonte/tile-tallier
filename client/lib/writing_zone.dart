@@ -89,6 +89,13 @@ class _WritingZoneState extends State<WritingZone> {
       getScoreMultiplierLabel(playedWordState.playedWord.wordMultiplier),
     );
 
+    void onEndTurn() {
+      notifier.endTurn();
+      setState(() {
+        activePlayerIndex = notifier.gameState.activePlayerIndex;
+      });
+    }
+
     var turnActionButtons = [
       FloatingActionButton(
         // Add word button
@@ -99,26 +106,12 @@ class _WritingZoneState extends State<WritingZone> {
       FloatingActionButton(
         // Switch player button
         mini: true,
-        onPressed: () {
-          notifier.endTurn();
-          setState(() {
-            activePlayerIndex = notifier.gameState.activePlayerIndex;
-          });
-        },
+        onPressed: () => onEndTurn(),
         child: Icon(Icons.switch_account_rounded),
-      ),
-      FloatingActionButton(
-        // Settings button
-        mini: true,
-        onPressed: () {
-          // TODO: Implement settings page
-          print('Redirect to settings page not implemented');
-        },
-        child: Icon(Icons.settings_suggest_rounded),
       ),
     ];
 
-    var turnInfoText = [
+    var turnInfoText = <Widget>[
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -126,11 +119,7 @@ class _WritingZoneState extends State<WritingZone> {
           Text(
             'Current Player:',
             overflow: TextOverflow.clip,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.black54,
-            ),
+            style: Theme.of(context).textTheme.bodySmall,
           ),
           Icon(Icons.person_rounded),
           Consumer<CurrentGameState>(
@@ -140,11 +129,7 @@ class _WritingZoneState extends State<WritingZone> {
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 maxLines: 1,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
-                ),
+                style: Theme.of(context).textTheme.bodyMedium,
               );
             },
           ),
@@ -156,21 +141,13 @@ class _WritingZoneState extends State<WritingZone> {
           Text(
             'Word Score: ',
             overflow: TextOverflow.clip,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.black54,
-            ),
+            style: Theme.of(context).textTheme.bodySmall,
           ),
           Consumer<PlayedWordState>(
             builder: (context, playedWordState, child) {
               return Text(
                 '${playedWordState.playedWord.score}',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
-                ),
+                style: Theme.of(context).textTheme.bodyMedium,
               );
             },
           ),
@@ -178,9 +155,7 @@ class _WritingZoneState extends State<WritingZone> {
             builder: (context, playedWordState, child) {
               return OutlinedButton.icon(
                 icon: Icon(Icons.multiple_stop_rounded),
-                onPressed: () {
-                  playedWordState.toggleWordMultiplier();
-                },
+                onPressed: () => playedWordState.toggleWordMultiplier(),
                 label: wordMultiplierText,
               );
             },
