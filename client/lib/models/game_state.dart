@@ -12,8 +12,6 @@ class GameState {
     }
     return winner;
   }
-
-  final Map<Player, int> playerTurnCounts = {};
 }
 
 class Player {
