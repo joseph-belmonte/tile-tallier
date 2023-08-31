@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'game_state.dart';
+import 'current_game_state.dart';
 import 'models/game_state.dart';
 import 'scrabble_letterbox.dart';
 
@@ -29,15 +29,19 @@ class SinglePlayHistoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var display = play.playedWords
+        .map((word) => ScrabbleWordWidget(word, interactive: false))
+        .toList();
+
     return Container(
       padding: const EdgeInsets.all(5),
       decoration:
           BoxDecoration(border: Border.all(color: Colors.black, width: 1)),
       margin: const EdgeInsets.all(10),
       child: Column(
-        children: play.playedWords
-            .map((word) => ScrabbleWordWidget(word, interactive: false))
-            .toList(),
+        // check a conditional here and if the play is a bingo, add a star
+        // if the play is empty, display a greyscale "skipped"
+        children: display,
       ),
     );
   }

@@ -8,7 +8,7 @@ class DeviceKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var playedWordState = Provider.of<PlayedWordState>(context, listen: false);
+    var playedWordState = Provider.of<CurrentPlayState>(context, listen: false);
     final textController = TextEditingController(
       text: playedWordState.playedWord.word,
     );

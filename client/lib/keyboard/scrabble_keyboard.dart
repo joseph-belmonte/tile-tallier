@@ -41,7 +41,7 @@ class ScrabbleKey extends StatelessWidget {
   }
 
   void Function() getOnTapBehavior(BuildContext context) {
-    var playedWordState = Provider.of<PlayedWordState>(context, listen: false);
+    var playedWordState = Provider.of<CurrentPlayState>(context, listen: false);
     if (value == '_') return () => playedWordState.playWord(context);
     if (value == '<') return () => playedWordState.removeLetter();
     return () => playedWordState.playLetter(value);
