@@ -21,10 +21,35 @@ class SettingsPage extends StatelessWidget {
             SettingsTile.navigation(
               leading: Icon(Icons.color_lens),
               title: Text('Scrabble Edition'),
+              // onPressed: () {
+              //   // Navigate to the second screen when tapped
+              //
+              // },
             ),
           ],
         ),
       ],
+    );
+  }
+}
+
+class SecondRoute extends StatelessWidget {
+  const SecondRoute({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Second Route'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            // Navigate back to first route when tapped.
+          },
+          child: const Text('Go back!'),
+        ),
+      ),
     );
   }
 }
