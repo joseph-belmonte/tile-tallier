@@ -29,6 +29,10 @@ class SettingsPage extends StatelessWidget {
             SettingsTile.navigation(
               leading: Icon(Icons.color_lens),
               title: Text('Scrabble Edition'),
+              // onPressed: () {
+              //   // Navigate to the second screen when tapped
+              //
+              // },
             ),
           ],
         ),

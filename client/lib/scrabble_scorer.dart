@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'pages/play_history_page.dart';
-import 'pages/score_page.dart';
-import 'pages/settings_page.dart';
+import 'routes/play_history_page.dart';
+import 'routes/score_page.dart';
+import 'routes/settings_page.dart';
 
 var kColorScheme = ColorScheme.fromSeed(
   seedColor: Color.fromARGB(255, 189, 25, 25),
