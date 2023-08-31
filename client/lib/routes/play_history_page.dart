@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'current_game_state.dart';
-import 'models/game_state.dart';
-import 'scrabble_letterbox.dart';
+import '../current_game_state.dart';
+import '../models/game_state.dart';
+import '../scrabble_letterbox.dart';
 
 class PlayHistoryPage extends StatelessWidget {
   const PlayHistoryPage({Key? key}) : super(key: key);

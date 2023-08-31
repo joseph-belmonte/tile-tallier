@@ -19,8 +19,11 @@ void main() {
         ChangeNotifierProvider<KeyboardWidgetState>(
           create: (context) => KeyboardWidgetState(),
         ),
+        ChangeNotifierProvider<AppState>(
+          create: (context) => AppState(),
+        ),
       ],
-      child: const ScrabbleScorer(),
+      child: ScrabbleScorer(),
     ),
   );
 }
