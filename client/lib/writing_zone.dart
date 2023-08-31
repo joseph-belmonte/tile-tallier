@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:scrabble_scorer/scrabble_letterbox.dart';
-import 'package:scrabble_scorer/scrabble_scorer.dart';
 
+import 'game_state.dart';
 import 'helpers/get_score_multiplier_label.dart';
 import 'keyboard/keyboard.dart';
 import 'models/game_state.dart';
+import 'scrabble_letterbox.dart';
 
 class PlayedWordState extends ChangeNotifier {
   PlayedWord playedWord = PlayedWord();
@@ -81,7 +81,7 @@ class _WritingZoneState extends State<WritingZone> {
   @override
   Widget build(BuildContext context) {
     var notifier = Provider.of<CurrentGameState>(context, listen: true);
-    var activePlayerIndex = notifier.activePlayerIndex;
+    var activePlayerIndex = notifier.gameState.activePlayerIndex;
 
     var playedWordState = Provider.of<PlayedWordState>(context, listen: true);
 
@@ -102,7 +102,7 @@ class _WritingZoneState extends State<WritingZone> {
         onPressed: () {
           notifier.endTurn();
           setState(() {
-            activePlayerIndex = notifier.activePlayerIndex;
+            activePlayerIndex = notifier.gameState.activePlayerIndex;
           });
         },
         child: Icon(Icons.switch_account_rounded),
@@ -217,11 +217,9 @@ class _WritingZoneState extends State<WritingZone> {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             clipBehavior: Clip.hardEdge,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: playedWordState.playedWord.playedLetters
-                  .map((c) => ScrabbleLetterbox(c))
-                  .toList(),
+            child: ScrabbleWordWidget(
+              playedWordState.playedWord,
+              interactive: true,
             ),
           ),
           KeyboardWidget(),

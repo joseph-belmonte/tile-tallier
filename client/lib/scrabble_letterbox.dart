@@ -4,20 +4,43 @@ import 'package:scrabble_scorer/writing_zone.dart';
 
 import 'models/game_state.dart';
 
+/// A widget that displays a word as a list of ScrabbleLetterbox widgets.
+class ScrabbleWordWidget extends StatelessWidget {
+  final PlayedWord word;
+  final bool interactive;
+
+  const ScrabbleWordWidget(this.word, {required this.interactive, Key? key})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Color boxColor;
+
+    if (word.wordMultiplier == WordMultiplier.doubleWord) {
+      boxColor = Color.fromARGB(255, 240, 167, 167);
+    } else if (word.wordMultiplier == WordMultiplier.tripleWord) {
+      boxColor = Color.fromARGB(255, 255, 0, 0);
+    } else {
+      boxColor = Colors.white;
+    }
+    return Container(
+      color: boxColor,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: word.playedLetters
+            .map((l) => ScrabbleLetterbox(l, interactive: interactive))
+            .toList(),
+      ),
+    );
+  }
+}
+
 class ScrabbleLetterbox extends StatelessWidget {
   final PlayedLetter letter;
-  const ScrabbleLetterbox(this.letter, {super.key});
+  final bool interactive;
 
-  void toggleLetterMultiplier(BuildContext context) {
-    if (letter.letterMultiplier == LetterMultiplier.doubleLetter) {
-      letter.letterMultiplier = LetterMultiplier.tripleLetter;
-    } else if (letter.letterMultiplier == LetterMultiplier.tripleLetter) {
-      letter.letterMultiplier = LetterMultiplier.none;
-    } else {
-      letter.letterMultiplier = LetterMultiplier.doubleLetter;
-    }
-    Provider.of<PlayedWordState>(context, listen: false).notifyListeners();
-  }
+  const ScrabbleLetterbox(this.letter, {required this.interactive, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,37 +57,47 @@ class ScrabbleLetterbox extends StatelessWidget {
       boxColor = Colors.amber.shade300;
       textColor = Colors.black87;
     }
-    return GestureDetector(
-      onTap: () => toggleLetterMultiplier(context),
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black, width: 2),
-          color: boxColor,
-        ),
-        child: Column(
-          children: [
-            Text(
-              letter.score.toString(),
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                fontSize: 8,
-                fontWeight: FontWeight.w500,
-                color: textColor,
-              ),
-            ),
-            Text(
-              letter.letter,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-                color: textColor,
-              ),
-            ),
-          ],
-        ),
+    Widget letterbox = Container(
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black, width: 2),
+        color: boxColor,
       ),
+      child: Column(
+        children: [
+          Text(
+            letter.score.toString(),
+            textAlign: TextAlign.right,
+            style: TextStyle(
+              fontSize: 8,
+              fontWeight: FontWeight.w500,
+              color: textColor,
+            ),
+          ),
+          Text(
+            letter.letter,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+              color: textColor,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (!interactive) {
+      return letterbox;
+    }
+
+    return GestureDetector(
+      onTap: () {
+        letter.toggleLetterMultiplier();
+        // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+        Provider.of<PlayedWordState>(context, listen: false).notifyListeners();
+      },
+      child: letterbox,
     );
   }
 }

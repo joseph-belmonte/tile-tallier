@@ -13,28 +13,21 @@ class CurrentGameState extends ChangeNotifier {
   );
   List<Play> plays = [];
 
-  int activePlayerIndex = 0;
-
   /// Changes the active player to the next player in the list of players
   /// and adds a new play to the active player
   void endTurn() {
-    var players = gameState.players;
-
     // save the current play in the list of plays
-    plays.add(players[activePlayerIndex].plays.last);
-
-    activePlayerIndex = (activePlayerIndex + 1) % players.length;
-    // add a new play to the active player
-    players[activePlayerIndex].startTurn();
-
+    gameState.endTurn();
     notifyListeners();
   }
 
   /// Accepts a word of type PlayedWord and adds it to the list of played words
   /// for the current Play
   void addWordToCurrentPlay(PlayedWord word) {
-    final activePlayer = gameState.players[activePlayerIndex];
-    final currentPlay = activePlayer.plays.last;
+    if (gameState.activePlayer.plays.isEmpty) {
+      gameState.activePlayer.startTurn();
+    }
+    final currentPlay = gameState.activePlayer.plays.last;
 
     currentPlay.playedWords.add(word);
     currentPlay.isBingo =

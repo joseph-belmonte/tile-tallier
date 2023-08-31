@@ -1,7 +1,47 @@
+import 'dart:math';
+
+/// Accepts a list of players and creates a new game state.
 class GameState {
-  /// Creates a new game state with the given players.
-  GameState({required this.players});
   final List<Player> players;
+  int activePlayerIndex = 0;
+
+  GameState({required this.players});
+
+  Player get activePlayer => players[activePlayerIndex];
+
+  /// Returns all the plays in the game in reverse chronological order.
+  List<Play> get plays {
+    int playerIndexStart = max(activePlayerIndex - 1, 0);
+    int playerIndex = playerIndexStart;
+    int playIndex = players[playerIndex].plays.length - 1;
+    List<Play> playList = [];
+
+    while (playIndex >= 0 && players[playerIndex].plays.length > playIndex) {
+      playList.add(players[playerIndex].plays[playIndex]);
+      playerIndex--;
+      if (playerIndex < 0) {
+        playerIndex = players.length - 1;
+      }
+      if (playerIndex == playerIndexStart) {
+        playIndex--;
+      }
+    }
+    return playList;
+  }
+
+  /// Changes the active player to the next player in the list of players
+  /// and adds a new play to the active player
+  void endTurn() {
+    // save the current play in the list of plays
+    if (players[activePlayerIndex].plays.isEmpty) {
+      players[activePlayerIndex].startTurn();
+    }
+    plays.add(players[activePlayerIndex].plays.last);
+    // change the active player to the next player in the list
+    activePlayerIndex = (activePlayerIndex + 1) % players.length;
+    // add a new play to the active player
+    players[activePlayerIndex].startTurn();
+  }
 
   Player getWinner() {
     Player winner = players[0];
@@ -14,13 +54,15 @@ class GameState {
   }
 }
 
+/// Accepts a name (String) and creates a new player with the given name and
+/// an empty list of plays.
 class Player {
-  /// Creates a new player with the given name and an empty list of plays.
   Player({required this.name});
 
   final String name;
-  List<Play> plays = [Play(playedWords: [])];
+  List<Play> plays = [];
 
+  /// Returns the score for the player by summing the scores for each play.
   int get score {
     var score = 0;
     for (var play in plays) {
@@ -28,18 +70,26 @@ class Player {
     }
     return score;
   }
+
+  /// Adds a new play to the list of plays.
+  void startTurn() {
+    plays.add(Play([], this));
+  }
 }
 
+/// Accepts a list of PlayedWord objects and a boolean value for whether or not
+/// the play is a bingo.
+/// A word is a list of PlayedLetter objects.
+/// A bingo is when a player uses all 7 letters in their rack in a single turn.
 class Play {
-  /// Accepts a list of PlayedWord objects and a boolean value for whether or not the play is a bingo.
-  /// A word is a list of PlayedLetter objects.
-  /// A bingo is when a player uses all 7 letters in their rack in a single turn.
-  Play({required this.playedWords, this.isBingo = false});
+  Play(this.playedWords, this.player, {this.isBingo = false});
 
   List<PlayedWord> playedWords = [];
+  Player player;
   bool isBingo = false;
 
-  /// Returns the score for the play by summing the scores for each PlayedWord object.
+  /// Returns the score for the play by summing the scores for each PlayedWord
+  /// object.
   /// If the play is a bingo, 50 points are added to the score.
   int get score {
     var score = 0;
@@ -53,14 +103,18 @@ class Play {
 
 enum WordMultiplier { doubleWord, tripleWord, none }
 
+/// Accepts a list of PlayedLetter objects and an enum value for the word
+/// multiplier.
 class PlayedWord {
   List<PlayedLetter> playedLetters = [];
   WordMultiplier wordMultiplier = WordMultiplier.none;
 
-  /// Returns the word as a string by converting each PlayedLetter object to its letter property and joining them together.
+  /// Returns the word as a string by converting each PlayedLetter object to its
+  /// letter property and joining them together.
   String get word => playedLetters.map((e) => e.letter).join();
 
-  /// Returns the score for the word by summing the scores for each PlayedLetter object.
+  /// Returns the score for the word by summing the scores for each PlayedLetter
+  /// object.
   int get score {
     var score = 0;
     for (var letter in playedLetters) {
@@ -84,8 +138,8 @@ class PlayedWord {
 
 enum LetterMultiplier { doubleLetter, tripleLetter, none }
 
+/// Accepts a letter (String) and an enum value for the letter multiplier.
 class PlayedLetter {
-  /// Accepts a letter (String) and a boolean value for whether or not the letter is a double or triple letter.
   PlayedLetter(String letter) {
     this.letter = letter.toUpperCase();
   }
@@ -139,4 +193,14 @@ class PlayedLetter {
     'Z': 10,
     ' ': 0,
   };
+
+  void toggleLetterMultiplier() {
+    if (letterMultiplier == LetterMultiplier.doubleLetter) {
+      letterMultiplier = LetterMultiplier.tripleLetter;
+    } else if (letterMultiplier == LetterMultiplier.tripleLetter) {
+      letterMultiplier = LetterMultiplier.none;
+    } else {
+      letterMultiplier = LetterMultiplier.doubleLetter;
+    }
+  }
 }
