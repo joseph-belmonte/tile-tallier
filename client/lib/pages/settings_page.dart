@@ -14,6 +14,9 @@ class SettingsPage extends StatelessWidget {
             SettingsTile.navigation(
               leading: Icon(Icons.nightlight),
               title: Text('Dark Mode'),
+              onPressed: (BuildContext context) {
+                print('navigate to dark mode settings');
+              },
             ),
             SettingsTile.navigation(
               leading: Icon(Icons.color_lens),
