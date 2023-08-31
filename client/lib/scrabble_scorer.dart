@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'play_history_page.dart';
-import 'score_page.dart';
+import 'pages/play_history_page.dart';
+import 'pages/score_page.dart';
+import 'pages/settings_page.dart';
 
 class ScrabbleScorer extends StatelessWidget {
   const ScrabbleScorer({super.key});

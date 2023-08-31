@@ -20,7 +20,7 @@ void main() {
           create: (context) => KeyboardWidgetState(),
         ),
       ],
-      child: const ScrabbleScorer(),
+      child: ScrabbleScorer(),
     ),
   );
 }
