@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'scrabble_scorer.dart';
@@ -55,11 +56,18 @@ class DeviceKeyboard extends StatelessWidget {
           playedWordState.playWord(context);
           textController.clear();
         },
-        // textCapitalization: TextCapitalization.characters,
         decoration: InputDecoration(
           border: OutlineInputBorder(),
           labelText: 'Play a word',
         ),
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.allow(
+            RegExp(r'[a-zA-Z ]'),
+          ),
+          FilteringTextInputFormatter.deny(
+            RegExp(r'[0-9!@#\$%\^&*(),.?":{}|<>]'),
+          ),
+        ],
       ),
     );
   }
