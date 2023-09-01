@@ -5,11 +5,6 @@ import 'package:provider/provider.dart';
 import 'scrabble_scorer.dart';
 import 'writing_zone.dart';
 
-class KeyboardWidgetState extends ChangeNotifier {
-  var buttonKeyboard = ButtonKeyboard();
-  var deviceKeyboard = DeviceKeyboard();
-}
-
 class Keyboard extends StatelessWidget {
   const Keyboard({super.key});
 
