@@ -35,8 +35,7 @@ class DisplayZone extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      PlayerNameDisplay(player: player),
-                      PlayerScoreDisplay(player: player),
+                      PlayerHeading(player: player),
                       Expanded(
                         child: ListView.builder(
                           key: ValueKey(player.name),
@@ -115,8 +114,8 @@ class TurnSummary extends StatelessWidget {
   }
 }
 
-class PlayerScoreDisplay extends StatelessWidget {
-  const PlayerScoreDisplay({
+class PlayerHeading extends StatelessWidget {
+  const PlayerHeading({
     required this.player,
     super.key,
   });
@@ -125,32 +124,24 @@ class PlayerScoreDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
-        Text(
-          '${player.score}',
-          style: Theme.of(context).textTheme.bodyLarge,
+        Column(
+          children: [
+            Text(
+              '${player.name}: ',
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ],
         ),
-      ],
-    );
-  }
-}
-
-class PlayerNameDisplay extends StatelessWidget {
-  const PlayerNameDisplay({
-    required this.player,
-    super.key,
-  });
-
-  final Player player;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          '${player.name}: ',
-          style: Theme.of(context).textTheme.bodyLarge,
+        SizedBox(width: 10),
+        Column(
+          children: [
+            Text(
+              '${player.score}',
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ],
         ),
       ],
     );
