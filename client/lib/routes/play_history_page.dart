@@ -19,21 +19,36 @@ class PlayHistoryPageState extends State<PlayHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        ...getPlayHistoryEditButtonWidgets(),
-        ...getPlayHistoryWidgets(context),
-      ],
+    Widget toggle = interactive ? getLockButton() : getEditButton();
+    return ListView(children: [toggle, ...getPlayHistoryWidgets(context)]);
+  }
+
+  Widget getLockButton() {
+    return ElevatedButton(
+      onPressed: () => setState(() => interactive = false),
+      style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          Icon(Icons.lock, color: Colors.white),
+          Text('Lock Play History', style: TextStyle(color: Colors.white)),
+        ],
+      ),
     );
   }
 
-  List<Widget> getPlayHistoryEditButtonWidgets() {
-    return [
-      ElevatedButton(
-        onPressed: () => setState(() => interactive = !interactive),
-        child: Text(interactive ? 'Done' : 'Edit History'),
-      )
-    ];
+  Widget getEditButton() {
+    return ElevatedButton(
+      onPressed: () => setState(() => interactive = true),
+      style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          Icon(Icons.edit, color: Colors.white),
+          Text('Edit Play History', style: TextStyle(color: Colors.white)),
+        ],
+      ),
+    );
   }
 
   List<SinglePlayHistoryWidget> getPlayHistoryWidgets(BuildContext context) {
@@ -65,20 +80,24 @@ class SinglePlayHistoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var display = play.playedWords
-        .map((word) => ScrabbleWordWidget(word, interactive: interactive))
-        .toList();
+    List<Widget> children = [];
+
+    for (var word in play.playedWords) {
+      children.add(ScrabbleWordWidget(word, interactive: interactive));
+    }
+
+    if (children.isEmpty) {
+      children.add(Text('Skipped'));
+    } else if (play.isBingo) {
+      children.add(Icon(Icons.star));
+    }
 
     return Container(
       padding: const EdgeInsets.all(5),
       decoration:
           BoxDecoration(border: Border.all(color: Colors.black, width: 1)),
       margin: const EdgeInsets.all(10),
-      child: Column(
-        // check a conditional here and if the play is a bingo, add a star
-        // if the play is empty, display a greyscale "skipped"
-        children: display,
-      ),
+      child: Column(children: children),
     );
   }
 }
