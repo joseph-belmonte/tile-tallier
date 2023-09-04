@@ -17,14 +17,20 @@ class SettingsPage extends StatelessWidget {
             SettingsTile.navigation(
               leading: Icon(Icons.nightlight),
               title: Text('Dark Mode'),
-              onPressed: (context) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const DarkModeSettingsPage(),
+              trailing: Row(
+                children: [
+                  Text(
+                    Provider.of<AppState>(context).themeMode.toString(),
                   ),
-                );
-              },
+                  Icon(Icons.navigate_next),
+                ],
+              ),
+              onPressed: (context) => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const DarkModeSettingsPage(),
+                ),
+              ),
             ),
             SettingsTile.navigation(
               leading: Icon(Icons.color_lens),
@@ -33,6 +39,24 @@ class SettingsPage extends StatelessWidget {
               //   // Navigate to the second screen when tapped
               //
               // },
+            ),
+            SettingsTile.navigation(
+              leading: Icon(Icons.keyboard),
+              title: Text('Keyboard'),
+              trailing: Row(
+                children: [
+                  Text(
+                    Provider.of<AppState>(context).keyboardType.toString(),
+                  ),
+                  Icon(Icons.navigate_next),
+                ],
+              ),
+              onPressed: (context) => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const KeyboardSettingsPage(),
+                ),
+              ),
             ),
           ],
         ),
@@ -46,6 +70,7 @@ class DarkModeSettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var appState = Provider.of<AppState>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text('Appearance'),
@@ -56,25 +81,48 @@ class DarkModeSettingsPage extends StatelessWidget {
             tiles: [
               SettingsTile(
                 title: Text('Dark Mode'),
-                onPressed: (context) {
-                  Provider.of<AppState>(context, listen: false).themeMode =
-                      ThemeMode.dark;
-                },
+                onPressed: (context) => appState.themeMode = ThemeMode.dark,
               ),
               SettingsTile(
                 title: Text('Light Mode'),
-                onPressed: (context) {
-                  Provider.of<AppState>(context, listen: false).themeMode =
-                      ThemeMode.light;
-                },
+                onPressed: (context) => appState.themeMode = ThemeMode.light,
               ),
               SettingsTile(
                 title: Text('System Default'),
                 enabled: true,
-                onPressed: (context) {
-                  Provider.of<AppState>(context, listen: false).themeMode =
-                      ThemeMode.system;
-                },
+                onPressed: (context) => appState.themeMode = ThemeMode.system,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class KeyboardSettingsPage extends StatelessWidget {
+  const KeyboardSettingsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    var appState = Provider.of<AppState>(context, listen: false);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Keyboard Settings'),
+      ),
+      body: SettingsList(
+        sections: [
+          SettingsSection(
+            tiles: [
+              SettingsTile(
+                title: Text('Button Keyboard'),
+                onPressed: (context) =>
+                    appState.keyboardType = KeyboardType.button,
+              ),
+              SettingsTile(
+                title: Text('Device Keyboard'),
+                onPressed: (context) =>
+                    appState.keyboardType = KeyboardType.device,
               ),
             ],
           ),
