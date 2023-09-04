@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'current_game_state.dart';
 import 'keyboard.dart';
 import 'models/game_state.dart';
-import 'scrabble_letterbox.dart';
+import 'scrabble_tile.dart';
 
 class CurrentPlayState extends ChangeNotifier {
   PlayedWord playedWord = PlayedWord();

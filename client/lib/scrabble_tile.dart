@@ -5,7 +5,7 @@ import 'package:scrabble_scorer/writing_zone.dart';
 import 'models/game_state.dart';
 import 'scrabble_scorer.dart';
 
-/// A widget that displays a word as a list of ScrabbleLetterbox widgets.
+/// A widget that displays a word as a list of ScrabbleTile widgets.
 class ScrabbleWordWidget extends StatefulWidget {
   final PlayedWord word;
   final bool interactive;
@@ -40,8 +40,7 @@ class ScrabbleWordWidgetState extends State<ScrabbleWordWidget> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: widget.word.playedLetters
-                .map((l) =>
-                    ScrabbleLetterbox(l, interactive: widget.interactive))
+                .map((l) => ScrabbleTile(l, interactive: widget.interactive))
                 .toList(),
           ),
         );
@@ -50,18 +49,18 @@ class ScrabbleWordWidgetState extends State<ScrabbleWordWidget> {
   }
 }
 
-/// A widget that displays a single letter as a ScrabbleLetterbox widget.
-class ScrabbleLetterbox extends StatefulWidget {
+/// A widget that displays a single letter as a ScrabbleTile widget.
+class ScrabbleTile extends StatefulWidget {
   final PlayedLetter letter;
   final bool interactive;
 
-  const ScrabbleLetterbox(this.letter, {required this.interactive, super.key});
+  const ScrabbleTile(this.letter, {required this.interactive, super.key});
 
   @override
-  ScrabbleLetterboxState createState() => ScrabbleLetterboxState();
+  ScrabbleTileState createState() => ScrabbleTileState();
 }
 
-class ScrabbleLetterboxState extends State<ScrabbleLetterbox> {
+class ScrabbleTileState extends State<ScrabbleTile> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
