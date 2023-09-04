@@ -23,9 +23,7 @@ class ScrabbleWordWidgetState extends State<ScrabbleWordWidget> {
     toggleWordScoreColor();
     return GestureDetector(
       onTap: () {
-        if (!widget.interactive) {
-          return;
-        }
+        if (!widget.interactive) return;
         widget.word.toggleWordMultiplier();
         toggleWordScoreColor();
         // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
