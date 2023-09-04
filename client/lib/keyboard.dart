@@ -7,19 +7,19 @@ import 'writing_zone.dart';
 
 class Keyboard extends StatelessWidget {
   const Keyboard({super.key});
-  static const Map<KeyboardType, StatelessWidget> keyboards = {
-    KeyboardType.device: DeviceKeyboard(),
-    KeyboardType.button: ButtonKeyboard(),
-  };
 
-  Consumer<AppState> get keyboardWidget {
+  Widget get keyboardWidget {
     return Consumer<AppState>(
       builder: (_, appState, __) {
         return Align(
           alignment: Alignment.bottomCenter,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [keyboards[appState.keyboardType]!],
+            children: [
+              appState.keyboardType == KeyboardType.button
+                  ? ButtonKeyboard()
+                  : DeviceKeyboard()
+            ],
           ),
         );
       },
