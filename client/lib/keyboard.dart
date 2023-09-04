@@ -8,9 +8,9 @@ import 'writing_zone.dart';
 class Keyboard extends StatelessWidget {
   const Keyboard({super.key});
 
-  Widget get keyboardWidget {
+  Consumer<AppState> get keyboardWidget {
     return Consumer<AppState>(
-      builder: (_, appState, __) {
+      builder: (context, appState, child) {
         return Align(
           alignment: Alignment.bottomCenter,
           child: Column(
