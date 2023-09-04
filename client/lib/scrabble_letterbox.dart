@@ -9,8 +9,7 @@ class ScrabbleWordWidget extends StatefulWidget {
   final PlayedWord word;
   final bool interactive;
 
-  const ScrabbleWordWidget(this.word, {required this.interactive, Key? key})
-      : super(key: key);
+  const ScrabbleWordWidget(this.word, {required this.interactive, super.key});
 
   @override
   ScrabbleWordWidgetState createState() => ScrabbleWordWidgetState();
@@ -62,8 +61,7 @@ class ScrabbleLetterbox extends StatefulWidget {
   final PlayedLetter letter;
   final bool interactive;
 
-  const ScrabbleLetterbox(this.letter, {required this.interactive, Key? key})
-      : super(key: key);
+  const ScrabbleLetterbox(this.letter, {required this.interactive, super.key});
 
   @override
   ScrabbleLetterboxState createState() => ScrabbleLetterboxState();
@@ -78,9 +76,7 @@ class ScrabbleLetterboxState extends State<ScrabbleLetterbox> {
     toggleLetterBoxDisplay();
     return GestureDetector(
       onTap: () {
-        if (!widget.interactive) {
-          return;
-        }
+        if (!widget.interactive) return;
         widget.letter.toggleLetterMultiplier();
         toggleLetterBoxDisplay();
         // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
