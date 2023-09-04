@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:scrabble_scorer/writing_zone.dart';
 
 import 'models/game_state.dart';
+import 'scrabble_scorer.dart';
 
 /// A widget that displays a word as a list of ScrabbleLetterbox widgets.
 class ScrabbleWordWidget extends StatefulWidget {
@@ -16,41 +17,36 @@ class ScrabbleWordWidget extends StatefulWidget {
 }
 
 class ScrabbleWordWidgetState extends State<ScrabbleWordWidget> {
-  Color boxColor = Colors.white;
-
   @override
   Widget build(BuildContext context) {
-    toggleWordScoreColor();
     return GestureDetector(
       onTap: () {
         if (!widget.interactive) return;
         widget.word.toggleWordMultiplier();
-        toggleWordScoreColor();
         // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
         Provider.of<CurrentPlayState>(context, listen: false).notifyListeners();
+        setState(() {});
       },
-      child: Container(
-        color: boxColor,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: widget.word.playedLetters
-              .map((l) => ScrabbleLetterbox(l, interactive: widget.interactive))
-              .toList(),
-        ),
-      ),
+      child: _buildTileWrapperWidget(),
     );
   }
 
-  void toggleWordScoreColor() {
-    if (widget.word.wordMultiplier == WordMultiplier.doubleWord) {
-      boxColor = Color.fromARGB(255, 240, 167, 167);
-    } else if (widget.word.wordMultiplier == WordMultiplier.tripleWord) {
-      boxColor = Color.fromARGB(255, 255, 0, 0);
-    } else {
-      boxColor = Colors.white;
-    }
-    setState(() {});
+  Widget _buildTileWrapperWidget() {
+    return Consumer<AppState>(
+      builder: (_, appState, __) {
+        return Container(
+          color: widget.word.wordMultiplier.editionColor(appState.edition),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: widget.word.playedLetters
+                .map((l) =>
+                    ScrabbleLetterbox(l, interactive: widget.interactive))
+                .toList(),
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -66,67 +62,50 @@ class ScrabbleLetterbox extends StatefulWidget {
 }
 
 class ScrabbleLetterboxState extends State<ScrabbleLetterbox> {
-  Color boxColor = Colors.amber.shade300;
-  Color textColor = Colors.black87;
-
   @override
   Widget build(BuildContext context) {
-    toggleLetterBoxDisplay();
     return GestureDetector(
       onTap: () {
         if (!widget.interactive) return;
         widget.letter.toggleLetterMultiplier();
-        toggleLetterBoxDisplay();
+        setState(() {});
         // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
         Provider.of<CurrentPlayState>(context, listen: false).notifyListeners();
       },
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black, width: 2),
-          color: boxColor,
-        ),
-        child: Column(
-          children: [
-            Text(
-              widget.letter.score.toString(),
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                fontSize: 8,
-                fontWeight: FontWeight.w500,
-                color: textColor,
-              ),
+      child: Consumer<AppState>(
+        builder: (_, appState, __) {
+          return Container(
+            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black, width: 2),
+              color:
+                  widget.letter.letterMultiplier.editionColor(appState.edition),
             ),
-            Text(
-              widget.letter.letter,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-                color: textColor,
-              ),
+            child: Column(
+              children: [
+                Text(
+                  widget.letter.score.toString(),
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    fontSize: 8,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  widget.letter.letter,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
-  }
-
-  void toggleLetterBoxDisplay() {
-    switch (widget.letter.letterMultiplier) {
-      case LetterMultiplier.doubleLetter:
-        boxColor = Color.fromARGB(255, 167, 217, 240);
-        textColor = Colors.white;
-        break;
-      case LetterMultiplier.tripleLetter:
-        boxColor = Color.fromARGB(255, 0, 112, 192);
-        textColor = Colors.white;
-        break;
-      default:
-        boxColor = Colors.amber.shade300;
-        textColor = Colors.black87;
-        break;
-    }
-    setState(() {});
   }
 }

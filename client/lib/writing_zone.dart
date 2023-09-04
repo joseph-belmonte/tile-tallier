@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'current_game_state.dart';
-import 'helpers/get_score_multiplier_label.dart';
 import 'keyboard.dart';
 import 'models/game_state.dart';
 import 'scrabble_letterbox.dart';
@@ -227,9 +226,7 @@ class TurnDisplay extends StatelessWidget {
                     icon: Icon(Icons.multiple_stop_rounded),
                     onPressed: () => currentPlayState.toggleWordMultiplier(),
                     label: Text(
-                      getScoreMultiplierLabel(
-                        currentPlayState.playedWord.wordMultiplier,
-                      ),
+                      currentPlayState.playedWord.wordMultiplier.label,
                     ),
                   );
                 },
