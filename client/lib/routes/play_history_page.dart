@@ -55,32 +55,24 @@ class PlayHistoryPageState extends State<PlayHistoryPage> {
     return Provider.of<CurrentGameState>(context)
         .gameState
         .plays
-        .map(
-          (play) => SinglePlayHistoryWidget(
-            play,
-            play.player,
-            interactive: interactive,
-          ),
-        )
+        .map((play) => SinglePlayHistoryWidget(play, interactive))
         .toList();
   }
 }
 
 class SinglePlayHistoryWidget extends StatelessWidget {
   final Play play;
-  final Player player;
   final bool interactive;
 
-  const SinglePlayHistoryWidget(
-    this.play,
-    this.player, {
-    this.interactive = false,
-    Key? key,
-  }) : super(key: key);
+  const SinglePlayHistoryWidget(this.play, this.interactive, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> children = [];
+    List<Widget> children = [Text(play.player.name)];
+
+    if (!interactive) {
+      children.add(Text('Score: ${play.score}'));
+    }
 
     for (var word in play.playedWords) {
       children.add(ScrabbleWordWidget(word, interactive: interactive));
