@@ -159,7 +159,7 @@ class _WritingZoneState extends State<WritingZone> {
               interactive: true,
             ),
           ),
-          Keyboard(),
+          const Keyboard(),
         ],
       ),
     );
