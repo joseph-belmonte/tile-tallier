@@ -42,6 +42,14 @@ class DeviceKeyboard extends StatelessWidget {
       text: playedWordState.playedWord.word,
     );
 
+    // make sure the cursor is always at the end of the text field (to avoid
+    // weird behavior when the user edits the middle of the word)
+    textController.addListener(() {
+      textController.selection = TextSelection.collapsed(
+        offset: textController.text.length,
+      );
+    });
+
     return Align(
       alignment: Alignment.bottomCenter,
       child: TextField(
