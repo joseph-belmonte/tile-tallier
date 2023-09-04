@@ -18,7 +18,7 @@ class Keyboard extends StatelessWidget {
             children: [
               appState.keyboardType == KeyboardType.button
                   ? ButtonKeyboard()
-                  : DeviceKeyboard()
+                  : DeviceKeyboard(),
             ],
           ),
         );
