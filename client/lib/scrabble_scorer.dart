@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'keyboard.dart';
+import 'models/game_state.dart';
 import 'routes/play_history_page.dart';
 import 'routes/score_page.dart';
 import 'routes/settings_page.dart';
@@ -17,6 +18,15 @@ class AppState extends ChangeNotifier {
   /// Sets the theme mode and notifies listeners.
   set themeMode(ThemeMode value) {
     _themeMode = value;
+    notifyListeners();
+  }
+
+  ScrabbleEdition _edition = ScrabbleEdition.classic;
+  ScrabbleEdition get edition => _edition;
+
+  /// Sets the edition and notifies listeners.
+  set edition(ScrabbleEdition value) {
+    _edition = value;
     notifyListeners();
   }
 

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../keyboard.dart';
+import '../models/game_state.dart';
 import '../scrabble_scorer.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -36,10 +37,15 @@ class SettingsPage extends StatelessWidget {
             SettingsTile.navigation(
               leading: Icon(Icons.color_lens),
               title: Text('Scrabble Edition'),
-              // onPressed: () {
-              //   // Navigate to the second screen when tapped
-              //
-              // },
+              onPressed: (context) {
+                // Navigate to the second screen when tapped
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ScrabbleEditionSettingsPage(),
+                  ),
+                );
+              },
             ),
             SettingsTile.navigation(
               leading: Icon(Icons.keyboard),
@@ -92,6 +98,39 @@ class DarkModeSettingsPage extends StatelessWidget {
                 title: Text('System Default'),
                 enabled: true,
                 onPressed: (context) => appState.themeMode = ThemeMode.system,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ScrabbleEditionSettingsPage extends StatelessWidget {
+  const ScrabbleEditionSettingsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    var appState = Provider.of<AppState>(context, listen: false);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Scrabble Edition'),
+      ),
+      body: SettingsList(
+        sections: [
+          SettingsSection(
+            tiles: [
+              SettingsTile(
+                title: Text('Classic'),
+                enabled: true,
+                onPressed: (context) =>
+                    appState.edition = ScrabbleEdition.classic,
+              ),
+              SettingsTile(
+                title: Text('25th Anniversary'),
+                onPressed: (context) =>
+                    appState.edition = ScrabbleEdition.twentyFifthAnniversary,
               ),
             ],
           ),
