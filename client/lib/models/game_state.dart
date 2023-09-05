@@ -134,6 +134,17 @@ class PlayedWord {
         return 1;
     }
   }
+
+  void toggleWordMultiplier() {
+    switch (wordMultiplier) {
+      case WordMultiplier.none:
+        wordMultiplier = WordMultiplier.doubleWord;
+      case WordMultiplier.doubleWord:
+        wordMultiplier = WordMultiplier.tripleWord;
+      case WordMultiplier.tripleWord:
+        wordMultiplier = WordMultiplier.none;
+    }
+  }
 }
 
 enum LetterMultiplier { doubleLetter, tripleLetter, none }
