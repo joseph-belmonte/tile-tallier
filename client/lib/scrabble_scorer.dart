@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'keyboard.dart';
 import 'models/game_state.dart';
 import 'routes/play_history_page.dart';
 import 'routes/score_page.dart';
@@ -9,8 +10,6 @@ import 'routes/settings_page.dart';
 var kColorScheme = ColorScheme.fromSeed(
   seedColor: Color.fromARGB(255, 189, 25, 25),
 );
-
-enum KeyboardType { button, device }
 
 class AppState extends ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.system;
@@ -49,7 +48,6 @@ class ScrabbleScorer extends StatelessWidget {
     return Consumer<AppState>(
       builder: (context, appState, _) {
         return MaterialApp(
-          locale: const Locale('en'), // Set your desired locale here
           title: 'Scrabble Score Keeper',
           theme: ThemeData().copyWith(
             useMaterial3: true,

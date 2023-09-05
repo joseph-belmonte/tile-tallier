@@ -5,12 +5,14 @@ import 'package:provider/provider.dart';
 import 'scrabble_scorer.dart';
 import 'writing_zone.dart';
 
+enum KeyboardType { button, device }
+
 class Keyboard extends StatelessWidget {
   const Keyboard({super.key});
 
   Consumer<AppState> get keyboardWidget {
     return Consumer<AppState>(
-      builder: (context, appState, child) {
+      builder: (_, appState, child) {
         return Align(
           alignment: Alignment.bottomCenter,
           child: Column(
@@ -65,9 +67,6 @@ class DeviceKeyboard extends StatelessWidget {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(
             RegExp(r'[a-zA-Z ]'),
-          ),
-          FilteringTextInputFormatter.deny(
-            RegExp(r'[0-9!@#\$%\^&*(),.?":{}|<>]'),
           ),
         ],
       ),
