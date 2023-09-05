@@ -61,14 +61,7 @@ class CurrentPlayState extends ChangeNotifier {
 
   /// Toggles the word multiplier for the current word
   void toggleWordMultiplier() {
-    switch (playedWord.wordMultiplier) {
-      case WordMultiplier.none:
-        playedWord.wordMultiplier = WordMultiplier.doubleWord;
-      case WordMultiplier.doubleWord:
-        playedWord.wordMultiplier = WordMultiplier.tripleWord;
-      case WordMultiplier.tripleWord:
-        playedWord.wordMultiplier = WordMultiplier.none;
-    }
+    playedWord.toggleWordMultiplier();
     notifyListeners();
   }
 }
