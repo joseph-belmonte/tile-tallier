@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
+
 /// Accepts a list of players and creates a new game state.
 class GameState {
   final List<Player> players;
@@ -101,13 +103,50 @@ class Play {
   }
 }
 
-enum WordMultiplier { doubleWord, tripleWord, none }
+enum ScrabbleEdition {
+  classic,
+  twentyFifthAnniversary,
+}
+
+enum ScoreMultiplier {
+  singleWord(1, '1X'),
+  singleLetter(1, '1X'),
+  doubleLetter(2, '2X'),
+  doubleWord(2, '2X'),
+  tripleLetter(3, '3X'),
+  tripleWord(3, '3X');
+
+  const ScoreMultiplier(this.value, this.label);
+
+  final int value;
+  final String label;
+  static const Map<ScrabbleEdition, Map<ScoreMultiplier, Color>> colors = {
+    ScrabbleEdition.classic: {
+      ScoreMultiplier.singleLetter: Colors.amber,
+      ScoreMultiplier.singleWord: Color.fromRGBO(255, 255, 255, 1),
+      ScoreMultiplier.doubleWord: Color.fromARGB(255, 243, 125, 125),
+      ScoreMultiplier.tripleWord: Color.fromARGB(255, 255, 0, 0),
+      ScoreMultiplier.doubleLetter: Color.fromARGB(255, 123, 213, 241),
+      ScoreMultiplier.tripleLetter: Color.fromARGB(255, 50, 56, 240),
+    },
+    ScrabbleEdition.twentyFifthAnniversary: {
+      ScoreMultiplier.singleLetter: Colors.amber,
+      ScoreMultiplier.singleWord: Color.fromRGBO(255, 255, 255, 1),
+      ScoreMultiplier.doubleWord: Color.fromARGB(255, 114, 11, 0),
+      ScoreMultiplier.tripleWord: Color.fromARGB(255, 67, 13, 0),
+      ScoreMultiplier.doubleLetter: Color.fromARGB(255, 184, 240, 0),
+      ScoreMultiplier.tripleLetter: Color.fromARGB(255, 5, 158, 0),
+    },
+  };
+
+  Color editionColor(ScrabbleEdition edition) => colors[edition]![this]!;
+}
 
 /// Accepts a list of PlayedLetter objects and an enum value for the word
 /// multiplier.
 class PlayedWord {
   List<PlayedLetter> playedLetters = [];
-  WordMultiplier wordMultiplier = WordMultiplier.none;
+  ScoreMultiplier wordMultiplier = ScoreMultiplier.singleWord;
 
   /// Returns the word as a string by converting each PlayedLetter object to its
   /// letter property and joining them together.
@@ -120,23 +159,22 @@ class PlayedWord {
     for (var letter in playedLetters) {
       score += letter.score;
     }
-    return score * scoreMultiplier;
+    return score * wordMultiplier.value;
   }
 
-  /// Returns the score multiplier for the word.
-  int get scoreMultiplier {
+  void toggleWordMultiplier() {
     switch (wordMultiplier) {
-      case WordMultiplier.doubleWord:
-        return 2;
-      case WordMultiplier.tripleWord:
-        return 3;
+      case ScoreMultiplier.singleWord:
+        wordMultiplier = ScoreMultiplier.doubleWord;
+      case ScoreMultiplier.doubleWord:
+        wordMultiplier = ScoreMultiplier.tripleWord;
+      case ScoreMultiplier.tripleWord:
+        wordMultiplier = ScoreMultiplier.singleWord;
       default:
-        return 1;
+        throw Exception('Invalid word multiplier');
     }
   }
 }
-
-enum LetterMultiplier { doubleLetter, tripleLetter, none }
 
 /// Accepts a letter (String) and an enum value for the letter multiplier.
 class PlayedLetter {
@@ -145,24 +183,10 @@ class PlayedLetter {
   }
 
   late final String letter;
-  LetterMultiplier letterMultiplier = LetterMultiplier.none;
+  ScoreMultiplier letterMultiplier = ScoreMultiplier.singleLetter;
 
   /// Returns the score for the letter.
-  int get score {
-    return (letterScores[letter] ?? 0) * scoreMultiplier;
-  }
-
-  /// Returns the score multiplier for the letter.
-  int get scoreMultiplier {
-    switch (letterMultiplier) {
-      case LetterMultiplier.doubleLetter:
-        return 2;
-      case LetterMultiplier.tripleLetter:
-        return 3;
-      default:
-        return 1;
-    }
-  }
+  int get score => (letterScores[letter] ?? 0) * letterMultiplier.value;
 
   static const Map<String, int> letterScores = {
     'A': 1,
@@ -195,12 +219,15 @@ class PlayedLetter {
   };
 
   void toggleLetterMultiplier() {
-    if (letterMultiplier == LetterMultiplier.doubleLetter) {
-      letterMultiplier = LetterMultiplier.tripleLetter;
-    } else if (letterMultiplier == LetterMultiplier.tripleLetter) {
-      letterMultiplier = LetterMultiplier.none;
-    } else {
-      letterMultiplier = LetterMultiplier.doubleLetter;
+    switch (letterMultiplier) {
+      case ScoreMultiplier.singleLetter:
+        letterMultiplier = ScoreMultiplier.doubleLetter;
+      case ScoreMultiplier.doubleLetter:
+        letterMultiplier = ScoreMultiplier.tripleLetter;
+      case ScoreMultiplier.tripleLetter:
+        letterMultiplier = ScoreMultiplier.singleLetter;
+      default:
+        throw Exception('Invalid letter multiplier');
     }
   }
 }
