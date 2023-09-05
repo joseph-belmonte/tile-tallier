@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../current_game_state.dart';
 import '../models/game_state.dart';
-import '../scrabble_letterbox.dart';
+import '../scrabble_tile.dart';
 
 class PlayHistoryPage extends StatefulWidget {
   const PlayHistoryPage({Key? key}) : super(key: key);
