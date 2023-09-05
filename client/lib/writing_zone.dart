@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'current_game_state.dart';
-import 'helpers/get_score_multiplier_label.dart';
-import 'keyboard/keyboard.dart';
+import 'keyboard.dart';
 import 'models/game_state.dart';
-import 'scrabble_letterbox.dart';
+import 'scrabble_tile.dart';
 
 class CurrentPlayState extends ChangeNotifier {
   PlayedWord playedWord = PlayedWord();
@@ -61,14 +60,7 @@ class CurrentPlayState extends ChangeNotifier {
 
   /// Toggles the word multiplier for the current word
   void toggleWordMultiplier() {
-    switch (playedWord.wordMultiplier) {
-      case WordMultiplier.none:
-        playedWord.wordMultiplier = WordMultiplier.doubleWord;
-      case WordMultiplier.doubleWord:
-        playedWord.wordMultiplier = WordMultiplier.tripleWord;
-      case WordMultiplier.tripleWord:
-        playedWord.wordMultiplier = WordMultiplier.none;
-    }
+    playedWord.toggleWordMultiplier();
     notifyListeners();
   }
 }
@@ -85,7 +77,6 @@ class _WritingZoneState extends State<WritingZone> {
 
   void onChanged(bool? newValue) {
     setState(() {
-      print('Bingo toggled');
       Provider.of<CurrentGameState>(context, listen: false).toggleBingo();
       isChecked = !isChecked;
     });
@@ -168,24 +159,18 @@ class _WritingZoneState extends State<WritingZone> {
               interactive: true,
             ),
           ),
-          KeyboardWidget(),
+          const Keyboard(),
         ],
       ),
     );
   }
 }
 
-class TurnDisplay extends StatefulWidget {
+class TurnDisplay extends StatelessWidget {
   final Player player;
 
   const TurnDisplay({required this.player, super.key});
-  @override
-  State<StatefulWidget> createState() {
-    return _TurnDisplayState();
-  }
-}
 
-class _TurnDisplayState extends State<TurnDisplay> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -204,11 +189,7 @@ class _TurnDisplayState extends State<TurnDisplay> {
               Text(
                 'Current Player:',
                 overflow: TextOverflow.clip,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black54,
-                ),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
               Icon(Icons.person_rounded),
               Consumer<CurrentGameState>(
@@ -218,11 +199,7 @@ class _TurnDisplayState extends State<TurnDisplay> {
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     maxLines: 1,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black87,
-                    ),
+                    style: Theme.of(context).textTheme.bodyMedium,
                   );
                 },
               ),
@@ -233,21 +210,13 @@ class _TurnDisplayState extends State<TurnDisplay> {
               Text(
                 'Word Score: ',
                 overflow: TextOverflow.clip,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black54,
-                ),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
               Consumer<CurrentPlayState>(
                 builder: (context, currentPlayState, child) {
                   return Text(
                     '${currentPlayState.playedWord.score}',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black87,
-                    ),
+                    style: Theme.of(context).textTheme.bodyMedium,
                   );
                 },
               ),
@@ -255,13 +224,9 @@ class _TurnDisplayState extends State<TurnDisplay> {
                 builder: (context, currentPlayState, child) {
                   return OutlinedButton.icon(
                     icon: Icon(Icons.multiple_stop_rounded),
-                    onPressed: () {
-                      currentPlayState.toggleWordMultiplier();
-                    },
+                    onPressed: () => currentPlayState.toggleWordMultiplier(),
                     label: Text(
-                      getScoreMultiplierLabel(
-                        currentPlayState.playedWord.wordMultiplier,
-                      ),
+                      currentPlayState.playedWord.wordMultiplier.label,
                     ),
                   );
                 },
