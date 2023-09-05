@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 
+import '../keyboard.dart';
 import '../scrabble_scorer.dart';
 
 class SettingsPage extends StatelessWidget {
