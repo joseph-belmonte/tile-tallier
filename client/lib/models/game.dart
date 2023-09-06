@@ -70,6 +70,33 @@ class Player {
   final String name;
   List<Play> plays = [];
 
+  /// Returns the longest word played by the player.
+  String get longestWord => plays
+      .map((play) => play.playedWords.map((word) => word.word))
+      .reduce((a, b) => a.length > b.length ? a : b)
+      .toString();
+
+  /// Returns the highest scoring word played by the player.
+  PlayedWord get highestScoringWord => plays
+      .map(
+        (play) =>
+            // if play has no playedWords, consider it a 0 score
+            play.playedWords.isEmpty
+                ? PlayedWord()
+                : play.playedWords.reduce((a, b) => a.score > b.score ? a : b),
+      )
+      .reduce((a, b) => a.score > b.score ? a : b);
+
+  /// Returns the highest scoring turn played by the player.
+  Play get highestScoringTurn =>
+      plays.reduce((a, b) => a.score > b.score ? a : b);
+
+  /// Returns the shortest word played by the player.
+  String get shortestWord => plays
+      .map((play) => play.playedWords.map((word) => word.word))
+      .reduce((a, b) => a.length < b.length ? a : b)
+      .toString();
+
   /// Returns the score for the player by summing the scores for each play.
   int get score {
     var score = 0;
