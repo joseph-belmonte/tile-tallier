@@ -15,7 +15,7 @@ class DisplayZone extends StatelessWidget {
     /// Calculates the winner and navigates to the end game page.
     void onEndGame() {
       // first, call the getWinner method to determine the winner
-      final winner = activeGame.getWinner();
+      final winner = activeGame.leader;
       final playerPositions = activeGame.getSortedPlayers();
       // then, navigate to the end game page
       Navigator.of(context).push(
@@ -29,7 +29,7 @@ class DisplayZone extends StatelessWidget {
       );
     }
 
-    var players = activeGame.players;
+    var players = activeGame.list;
 
     return Align(
       alignment: Alignment.topCenter,
@@ -111,7 +111,7 @@ class TurnSummary extends StatelessWidget {
               textAlign: TextAlign.left,
               style: TextStyle(
                 decoration: turnIndex == player.plays.length - 1 &&
-                        Provider.of<ActiveGame>(context).activeGame.activePlayer == player
+                        Provider.of<ActiveGame>(context).activeGame.currentPlayer == player
                     ? TextDecoration.underline
                     : TextDecoration.none,
                 fontSize: 16,
