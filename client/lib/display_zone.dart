@@ -40,7 +40,7 @@ class DisplayZone extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               ElevatedButton.icon(
-                onPressed: () => onEndGame(),
+                onPressed: onEndGame,
                 icon: Icon(Icons.assistant_photo_rounded),
                 label: Text('End Game'),
               ),
