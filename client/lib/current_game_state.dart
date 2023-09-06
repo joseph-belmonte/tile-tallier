@@ -24,22 +24,13 @@ class CurrentGameState extends ChangeNotifier {
   /// Accepts a word of type PlayedWord and adds it to the list of played words
   /// for the current Play
   void addWordToCurrentPlay(PlayedWord word) {
-    if (gameState.activePlayer.plays.isEmpty) {
-      gameState.activePlayer.startTurn();
-    }
-    final currentPlay = gameState.activePlayer.plays.last;
-
-    currentPlay.playedWords.add(word);
+    gameState.currentPlay.addWord(word);
     notifyListeners();
   }
 
   /// Toggles the isBingo property for the current word
   void toggleBingo() {
-    if (gameState.activePlayer.plays.isEmpty) {
-      gameState.activePlayer.startTurn();
-    }
-    final currentPlay = gameState.activePlayer.plays.last;
-    currentPlay.isBingo = !currentPlay.isBingo;
+    gameState.currentPlay.isBingo = !gameState.currentPlay.isBingo;
     notifyListeners();
   }
 }

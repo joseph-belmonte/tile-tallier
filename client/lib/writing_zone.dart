@@ -85,8 +85,6 @@ class _WritingZoneState extends State<WritingZone> {
   @override
   Widget build(BuildContext context) {
     var notifier = Provider.of<CurrentGameState>(context, listen: true);
-    var activePlayerIndex = notifier.gameState.activePlayerIndex;
-
     var currentPlayState = Provider.of<CurrentPlayState>(context, listen: true);
 
     void onAddWord(context) {
@@ -95,10 +93,7 @@ class _WritingZoneState extends State<WritingZone> {
 
     void onSwitchPlayer(context) {
       notifier.endTurn();
-      setState(() {
-        activePlayerIndex = notifier.gameState.activePlayerIndex;
-        isChecked = false;
-      });
+      setState(() => isChecked = false);
     }
 
     var turnActions = Column(
@@ -132,9 +127,7 @@ class _WritingZoneState extends State<WritingZone> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              TurnDisplay(
-                player: notifier.gameState.players[activePlayerIndex],
-              ),
+              TurnDisplay(player: notifier.gameState.currentPlayer),
               Row(
                 children: <Widget>[
                   SizedBox(
@@ -195,7 +188,7 @@ class TurnDisplay extends StatelessWidget {
               Consumer<CurrentGameState>(
                 builder: (context, gameStateNotifier, child) {
                   return Text(
-                    gameStateNotifier.gameState.activePlayer.name,
+                    gameStateNotifier.gameState.currentPlayer.name,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     maxLines: 1,
