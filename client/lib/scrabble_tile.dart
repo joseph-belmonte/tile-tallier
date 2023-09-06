@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrabble_scorer/writing_zone.dart';
 
-import 'material_wrapper.dart';
+import 'app_state.dart';
 import 'models/game.dart';
 
 /// A widget that displays a word as a list of ScrabbleTile widgets.

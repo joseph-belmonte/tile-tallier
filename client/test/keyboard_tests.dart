@@ -9,10 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:scrabble_scorer/active_game.dart';
-import 'package:scrabble_scorer/material_wrapper.dart';
+import 'package:scrabble_scorer/app_state.dart';
+import 'package:scrabble_scorer/keyboard.dart';
 import 'package:scrabble_scorer/routes/tabs.dart';
 import 'package:scrabble_scorer/scrabble_tile.dart';
-import 'package:scrabble_scorer/keyboard.dart';
 import 'package:scrabble_scorer/writing_zone.dart';
 import 'package:settings_ui/settings_ui.dart';
 
