@@ -3,13 +3,31 @@ import 'package:provider/provider.dart';
 
 import 'active_game.dart';
 import 'models/game.dart';
+import 'routes/end_game_page.dart';
 
 class DisplayZone extends StatelessWidget {
   const DisplayZone({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var players = Provider.of<ActiveGame>(context).activeGame.players;
+    var activeGame = Provider.of<ActiveGame>(context, listen: false).activeGame;
+    
+    void onEndGame() {
+      // first, call the getWinner method to determine the winner
+      final winner = activeGame.getWinner();
+      final playerPositions = activeGame.getSortedPlayers();
+      // then, navigate to the end game page
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => EndGamePage(
+            winner: winner,
+            rankedPlayers: playerPositions,
+          ),
+        ),
+      );
+    }
+
+    var players = activeGame.players;
 
     return Align(
       alignment: Alignment.topCenter,
@@ -21,6 +39,11 @@ class DisplayZone extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
+              ElevatedButton.icon(
+                onPressed: () => onEndGame(),
+                icon: Icon(Icons.assistant_photo_rounded),
+                label: Text('End Game'),
+              ),
               for (var player in players)
                 Container(
                   height: 80,

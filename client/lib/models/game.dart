@@ -54,6 +54,12 @@ class Game {
     }
     return winner;
   }
+
+  List<Player> getSortedPlayers() {
+    var sortedPlayers = players;
+    sortedPlayers.sort((a, b) => b.score.compareTo(a.score));
+    return sortedPlayers;
+  }
 }
 
 /// Accepts a name (String) and creates a new player with the given name and
