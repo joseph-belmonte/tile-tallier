@@ -111,11 +111,7 @@ class TurnSummary extends StatelessWidget {
               textAlign: TextAlign.left,
               style: TextStyle(
                 decoration: turnIndex == player.plays.length - 1 &&
-                        Provider.of<ActiveGame>(context)
-                                .activeGame
-                                .activePlayer ==
-                            player
-
+                        Provider.of<CurrentGameState>(context).gameState.currentPlayer == player
                     ? TextDecoration.underline
                     : TextDecoration.none,
                 fontSize: 16,

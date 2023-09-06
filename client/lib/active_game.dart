@@ -24,22 +24,13 @@ class ActiveGame extends ChangeNotifier {
   /// Accepts a word of type PlayedWord and adds it to the list of played words
   /// for the current Play
   void addWordToCurrentPlay(PlayedWord word) {
-    if (activeGame.activePlayer.plays.isEmpty) {
-      activeGame.activePlayer.startTurn();
-    }
-    final currentPlay = activeGame.activePlayer.plays.last;
-
-    currentPlay.playedWords.add(word);
+    activeGame.currentPlay.playedWords.add(word);
     notifyListeners();
   }
 
   /// Toggles the isBingo property for the current word
   void toggleBingo() {
-    if (activeGame.activePlayer.plays.isEmpty) {
-      activeGame.activePlayer.startTurn();
-    }
-    final currentPlay = activeGame.activePlayer.plays.last;
-    currentPlay.isBingo = !currentPlay.isBingo;
+    activeGame.currentPlay.isBingo = !activeGame.currentPlay.isBingo;
     notifyListeners();
   }
 }

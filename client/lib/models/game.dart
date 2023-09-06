@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 /// Accepts a list of players and creates a new game state.
@@ -7,26 +5,38 @@ class Game {
   Game({required this.players});
 
   final List<Player> players;
-  int activePlayerIndex = 0;
+  int _currentPlayerIndex = 0;
 
-  Player get activePlayer => players[activePlayerIndex];
+  Player get activePlayer => players[_currentPlayerIndex];
+  
+
+  int get _previousPlayerIndex {
+    if (_currentPlayerIndex == 0) return players.length - 1;
+    return _currentPlayerIndex - 1;
+  }
+
+  Player get currentPlayer => players[_currentPlayerIndex];
+  Player get previousPlayer => players[_previousPlayerIndex];
+
+  Play get currentPlay {
+    // current player should have one more play than the previous player
+    if (currentPlayer.plays.length == previousPlayer.plays.length) {
+      currentPlayer.startTurn();
+    }
+    return currentPlayer.plays.last;
+  }
 
   /// Returns all the plays in the game in reverse chronological order.
   List<Play> get plays {
-    int playerIndexStart = max(activePlayerIndex - 1, 0);
-    int playerIndex = playerIndexStart;
+    int playerIndex = _previousPlayerIndex;
     int playIndex = players[playerIndex].plays.length - 1;
     List<Play> playList = [];
 
-    while (playIndex >= 0 && players[playerIndex].plays.length > playIndex) {
+    while (playIndex >= 0) {
       playList.add(players[playerIndex].plays[playIndex]);
-      playerIndex--;
-      if (playerIndex < 0) {
-        playerIndex = players.length - 1;
-      }
-      if (playerIndex == playerIndexStart) {
-        playIndex--;
-      }
+      playIndex--;
+      if (playerIndex < 0) playerIndex = players.length - 1;
+      if (playerIndex == _previousPlayerIndex) playIndex--;
     }
     return playList;
   }
@@ -34,15 +44,7 @@ class Game {
   /// Changes the active player to the next player in the list of players
   /// and adds a new play to the active player
   void endTurn() {
-    // save the current play in the list of plays
-    if (players[activePlayerIndex].plays.isEmpty) {
-      players[activePlayerIndex].startTurn();
-    }
-    plays.add(players[activePlayerIndex].plays.last);
-    // change the active player to the next player in the list
-    activePlayerIndex = (activePlayerIndex + 1) % players.length;
-    // add a new play to the active player
-    players[activePlayerIndex].startTurn();
+    _currentPlayerIndex = (_currentPlayerIndex + 1) % players.length;
   }
 
   Player getWinner() {
