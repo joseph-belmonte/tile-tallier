@@ -26,15 +26,12 @@ class CyclicList<T> {
 
 /// Accepts a list of players and creates a new game state.
 class GameState extends CyclicList<Player> {
-  GameState({required List<Player> players}) : super(players);
+  GameState({required List<Player> players}) : super(players) {
+    current.startTurn();
+  }
 
   Player get currentPlayer => current;
-
-  Play get currentPlay {
-    // current player should have one more play than the previous player
-    if (currentPlayer.plays.length == previous.plays.length) currentPlayer.startTurn();
-    return currentPlayer.plays.last;
-  }
+  Play get currentPlay => currentPlayer.plays.last;
 
   /// Returns all the plays in the game in reverse chronological order.
   List<Play> get plays {
@@ -58,10 +55,13 @@ class GameState extends CyclicList<Player> {
     return winner;
   }
 
-  void endTurn() {
-    nextItem();
-    current.startTurn();
+  @override
+  void nextItem() {
+    super.nextItem();
+    currentPlayer.startTurn();
   }
+
+  void endTurn() => nextItem();
 }
 
 /// Accepts a name (String) and creates a new player with the given name and
