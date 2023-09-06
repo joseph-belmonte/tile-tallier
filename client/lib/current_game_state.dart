@@ -24,7 +24,7 @@ class CurrentGameState extends ChangeNotifier {
   /// Accepts a word of type PlayedWord and adds it to the list of played words
   /// for the current Play
   void addWordToCurrentPlay(PlayedWord word) {
-    gameState.currentPlay.addWord(word);
+    gameState.currentPlay.playedWords.add(word);
     notifyListeners();
   }
 

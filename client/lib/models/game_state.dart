@@ -100,8 +100,6 @@ class Play {
     if (isBingo) score += 50;
     return score;
   }
-
-  void addWord(PlayedWord word) => playedWords.add(word);
 }
 
 enum ScrabbleEdition {
