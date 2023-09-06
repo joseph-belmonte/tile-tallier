@@ -10,15 +10,9 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<ActiveGame>(
-          create: (context) => ActiveGame(),
-        ),
-        ChangeNotifierProvider<CurrentPlayState>(
-          create: (context) => CurrentPlayState(),
-        ),
-        ChangeNotifierProvider<AppState>(
-          create: (context) => AppState(),
-        ),
+        ChangeNotifierProvider<CurrentGameState>(create: (_) => CurrentGameState()),
+        ChangeNotifierProvider<CurrentPlayState>(create: (_) => CurrentPlayState()),
+        ChangeNotifierProvider<AppState>(create: (_) => AppState()),
       ],
       child: MaterialWrapper(),
     ),
