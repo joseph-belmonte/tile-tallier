@@ -32,7 +32,7 @@ void main() {
             create: (context) => AppState(),
           ),
         ],
-        child: const BottomNavBar(),
+        child: const GameView(),
       ),
     );
 
@@ -62,7 +62,7 @@ void main() {
             create: (context) => AppState(),
           ),
         ],
-        child: const BottomNavBar(),
+        child: const GameView(),
       ),
     );
 

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:scrabble_scorer/display_zone.dart';
 import 'package:scrabble_scorer/writing_zone.dart';
 
-class GamePage extends StatelessWidget {
-  const GamePage({super.key});
+class PlayInputPage extends StatelessWidget {
+  const PlayInputPage({super.key});
 
   @override
   Widget build(BuildContext context) {

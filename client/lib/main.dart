@@ -10,7 +10,7 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<CurrentGameState>(create: (_) => CurrentGameState()),
+        ChangeNotifierProvider<ActiveGame>(create: (_) => ActiveGame()),
         ChangeNotifierProvider<CurrentPlayState>(create: (_) => CurrentPlayState()),
         ChangeNotifierProvider<AppState>(create: (_) => AppState()),
       ],

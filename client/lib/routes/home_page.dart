@@ -10,6 +10,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('HOME SCREEN'),
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Column(
@@ -21,7 +22,7 @@ class HomePage extends StatelessWidget {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const BottomNavBar(),
+                  builder: (context) => const GameView(),
                 ),
               ),
               icon: const Icon(Icons.play_arrow_rounded),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scrabble_scorer/routes/home_page.dart';
 
 import '../models/game.dart';
 
@@ -15,26 +16,6 @@ class EndGamePage extends StatelessWidget {
   final List<Player> rankedPlayers;
 
   showStatsDialog(BuildContext context) {
-    String shortestWord = rankedPlayers[0].shortestWord;
-    String longestWord = rankedPlayers[0].longestWord;
-    PlayedWord highestScoringWord = rankedPlayers[0].highestScoringWord;
-    Play highestScoringTurn = rankedPlayers[0].highestScoringTurn;
-
-    for (final player in rankedPlayers) {
-      if (player.longestWord.length > longestWord.length) {
-        longestWord = player.longestWord;
-      }
-      if (player.highestScoringWord.score > highestScoringWord.score) {
-        highestScoringWord = player.highestScoringWord;
-      }
-      if (player.highestScoringTurn.score > highestScoringTurn.score) {
-        highestScoringTurn = player.highestScoringTurn;
-      }
-      if (player.shortestWord.length < shortestWord.length) {
-        shortestWord = player.shortestWord;
-      }
-    }
-
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -52,15 +33,23 @@ class EndGamePage extends StatelessWidget {
               children: <Widget>[
                 Text('Total Plays: ${game.plays.length}'),
                 SizedBox(height: 20),
-                Text('Longest Word: $longestWord'),
-                SizedBox(height: 20),
-                Text('Highest Scoring Word: ${highestScoringWord.word}'),
+                Text('Longest Word: ${game.longestWord}'),
                 SizedBox(height: 20),
                 Text(
-                  'Highest Scoring Turn: ${highestScoringTurn.score} - ${highestScoringTurn.playedWords.map((word) => word.word)}',
+                  'Highest Scoring Word: ${game.highestScoringWord.word} - ${game.highestScoringWord.score}',
                 ),
                 SizedBox(height: 20),
-                Text('Shortest Word: $shortestWord'),
+                Text('Highest Scoring Turn:'),
+                SizedBox(height: 20),
+                Text('Score: ${game.highestScoringTurn.score}'),
+                SizedBox(height: 20),
+                ...game.highestScoringTurn.playedWords.map(
+                  (word) => Text(
+                    '${word.word} ',
+                  ),
+                ),
+                SizedBox(height: 20),
+                Text('Shortest Word: ${game.shortestWord}'),
               ],
             ),
           ),
@@ -94,10 +83,18 @@ class EndGamePage extends StatelessWidget {
                   )
                   .toList(),
               ElevatedButton.icon(
-                // display a pop up with some stats
                 onPressed: () => showStatsDialog(context),
                 icon: Icon(Icons.format_list_numbered),
                 label: Text('Stats'),
+              ),
+              ElevatedButton.icon(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ),
+                ),
+                icon: Icon(Icons.home),
+                label: Text('Home'),
               ),
             ],
           ),

@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+enum SortOrder {
+  asc,
+  desc,
+}
+
 class CyclicList<T> {
   late List<T> _list;
   late int _i;
@@ -30,7 +35,10 @@ class Game extends CyclicList<Player> {
     current.startTurn();
   }
 
+  /// Returns the current player.
   Player get currentPlayer => current;
+
+  /// Returns the current player's current play.
   Play get currentPlay => currentPlayer.plays.last;
 
   /// Returns all the plays in the game in reverse chronological order.
@@ -47,6 +55,7 @@ class Game extends CyclicList<Player> {
     return playList;
   }
 
+  /// Returns the game's current leader.
   Player get leader {
     Player winner = _list[0];
     for (var player in _list) {
@@ -55,11 +64,95 @@ class Game extends CyclicList<Player> {
     return winner;
   }
 
-  List<Player> getSortedPlayers() {
+  /// Returns the game's players in a list.
+  List<Player> getPlayers() => _list.toList();
+
+  /// Accepts an optional parameter "order" which defaults to "desc". Returns the game's players
+  /// sorted by score in the specified order.
+  List<Player> getPlayersSortedByScore({order = SortOrder.desc}) {
     var sortedPlayers = _list.toList();
-    sortedPlayers.sort((a, b) => b.score.compareTo(a.score));
+    if (order == SortOrder.asc) {
+      sortedPlayers.sort((a, b) => a.score.compareTo(b.score));
+    } else {
+      sortedPlayers.sort((a, b) => b.score.compareTo(a.score));
+    }
     return sortedPlayers;
   }
+
+  /// Returns the longest word played in the game.
+  String get longestWord {
+    if (plays.isEmpty) return '';
+
+    String longest = plays.first.playedWords.first.word;
+    int maxLength = longest.length;
+
+    for (var play in plays) {
+      for (var word in play.playedWords) {
+        if (word.word.length > maxLength) {
+          maxLength = word.word.length;
+          longest = word.word;
+        }
+      }
+    }
+    return longest;
+  }
+
+  /// Returns the shortest word played in the game.
+  String get shortestWord {
+    if (plays.isEmpty) return '';
+
+    String shortest = plays.first.playedWords.first.word;
+    int minLength = shortest.length;
+
+    for (var play in plays) {
+      for (var word in play.playedWords) {
+        if (word.word.length < minLength) {
+          minLength = word.word.length;
+          shortest = word.word;
+        }
+      }
+    }
+    return shortest;
+  }
+
+  /// Returns the highest scoring word played in the game.
+  PlayedWord get highestScoringWord {
+    if (plays.isEmpty) return PlayedWord();
+
+    PlayedWord highestScoring = PlayedWord();
+    int maxScore = 0;
+
+    for (var play in plays) {
+      for (var word in play.playedWords) {
+        if (word.score > maxScore) {
+          maxScore = word.score;
+          highestScoring = word;
+        }
+      }
+    }
+    return highestScoring;
+  }
+
+  /// Returns the highest scoring turn played in the game.
+  Play get highestScoringTurn {
+    if (plays.isEmpty) ; // Handle empty list
+
+    // Initialize variables to keep track of the highest-scoring turn and its score
+    Play highestScoring = plays.first;
+    int maxScore = highestScoring.score;
+
+    // Iterate through plays to find the highest-scoring turn
+    for (var play in plays) {
+      print(play.score);
+      if (play.score > maxScore) {
+        maxScore = play.score;
+        highestScoring = play;
+      }
+    }
+
+    return highestScoring;
+  }
+
   @override
   void nextItem() {
     super.nextItem();
@@ -78,31 +171,76 @@ class Player {
   List<Play> plays = [];
 
   /// Returns the longest word played by the player.
-  String get longestWord => plays
-      .map((play) => play.playedWords.map((word) => word.word))
-      .reduce((a, b) => a.length > b.length ? a : b)
-      .toString();
+  String get longestWord {
+    if (plays.isEmpty) return '';
+
+    String longest = plays.first.playedWords.first.word;
+    int maxLength = longest.length;
+
+    for (var play in plays) {
+      for (var word in play.playedWords) {
+        if (word.word.length > maxLength) {
+          maxLength = word.word.length;
+          longest = word.word;
+        }
+      }
+    }
+    return longest;
+  }
 
   /// Returns the highest scoring word played by the player.
-  PlayedWord get highestScoringWord => plays
-      .map(
-        (play) =>
-            // if play has no playedWords, consider it a 0 score
-            play.playedWords.isEmpty
-                ? PlayedWord()
-                : play.playedWords.reduce((a, b) => a.score > b.score ? a : b),
-      )
-      .reduce((a, b) => a.score > b.score ? a : b);
+  PlayedWord get highestScoringWord {
+    if (plays.isEmpty) return PlayedWord();
+
+    PlayedWord highestScoring = PlayedWord();
+    int maxScore = 0;
+
+    for (var play in plays) {
+      for (var word in play.playedWords) {
+        if (word.score > maxScore) {
+          maxScore = word.score;
+          highestScoring = word;
+        }
+      }
+    }
+    return highestScoring;
+  }
 
   /// Returns the highest scoring turn played by the player.
-  Play get highestScoringTurn =>
-      plays.reduce((a, b) => a.score > b.score ? a : b);
+  Play get highestScoringTurn {
+    if (plays.isEmpty) ; // Handle empty list
+
+    // Initialize variables to keep track of the highest-scoring turn and its score
+    Play highestScoring = plays.first;
+    int maxScore = highestScoring.score;
+
+    // Iterate through plays to find the highest-scoring turn
+    for (var play in plays) {
+      if (play.score > maxScore) {
+        maxScore = play.score;
+        highestScoring = play;
+      }
+    }
+    return highestScoring;
+  }
 
   /// Returns the shortest word played by the player.
-  String get shortestWord => plays
-      .map((play) => play.playedWords.map((word) => word.word))
-      .reduce((a, b) => a.length < b.length ? a : b)
-      .toString();
+  String get shortestWord {
+    if (plays.isEmpty) return '';
+
+    String shortest = plays.first.playedWords.first.word;
+    int minLength = shortest.length;
+
+    for (var play in plays) {
+      for (var word in play.playedWords) {
+        if (word.word.length < minLength) {
+          minLength = word.word.length;
+          shortest = word.word;
+        }
+      }
+    }
+    return shortest;
+  }
 
   /// Returns the score for the player by summing the scores for each play.
   int get score {

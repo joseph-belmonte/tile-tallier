@@ -14,10 +14,8 @@ class DisplayZone extends StatelessWidget {
 
     /// Calculates the winner and navigates to the end game page.
     void onEndGame() {
-      // first, call the getWinner method to determine the winner
       final winner = activeGame.leader;
-      final playerPositions = activeGame.getSortedPlayers();
-      // then, navigate to the end game page
+      final playerPositions = activeGame.getPlayersSortedByScore();
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => EndGamePage(
@@ -29,7 +27,7 @@ class DisplayZone extends StatelessWidget {
       );
     }
 
-    var players = activeGame.list;
+    var players = activeGame.getPlayers();
 
     return Align(
       alignment: Alignment.topCenter,
