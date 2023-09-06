@@ -8,7 +8,7 @@ class GameState {
   GameState({required this.players});
 
   int get _previousPlayerIndex {
-    if (_currentPlayerIndex - 1 < 0) return players.length - 1;
+    if (_currentPlayerIndex == 0) return players.length - 1;
     return _currentPlayerIndex - 1;
   }
 
