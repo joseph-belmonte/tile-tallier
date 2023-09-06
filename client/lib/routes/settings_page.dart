@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 
+import '../app_state.dart';
 import '../keyboard.dart';
-import '../material_wrapper.dart';
 import '../models/game.dart';
 
 class SettingsPage extends StatelessWidget {

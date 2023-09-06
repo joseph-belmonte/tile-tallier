@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'active_game.dart';
+import 'app_state.dart';
 import 'material_wrapper.dart';
 import 'writing_zone.dart';
 
