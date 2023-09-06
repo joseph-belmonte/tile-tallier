@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ScrabbleScorer(),
+                  builder: (context) => const BottomNavBar(),
                 ),
               ),
               icon: const Icon(Icons.play_arrow_rounded),
