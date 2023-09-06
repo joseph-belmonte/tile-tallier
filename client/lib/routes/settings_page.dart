@@ -124,13 +124,11 @@ class ScrabbleEditionSettingsPage extends StatelessWidget {
               SettingsTile(
                 title: Text('Classic'),
                 enabled: true,
-                onPressed: (context) =>
-                    appState.edition = ScrabbleEdition.classic,
+                onPressed: (context) => appState.edition = ScrabbleEdition.classic,
               ),
               SettingsTile(
                 title: Text('25th Anniversary'),
-                onPressed: (context) =>
-                    appState.edition = ScrabbleEdition.twentyFifthAnniversary,
+                onPressed: (context) => appState.edition = ScrabbleEdition.twentyFifthAnniversary,
               ),
             ],
           ),
@@ -156,13 +154,11 @@ class KeyboardSettingsPage extends StatelessWidget {
             tiles: [
               SettingsTile(
                 title: Text('Button Keyboard'),
-                onPressed: (context) =>
-                    appState.keyboardType = KeyboardType.button,
+                onPressed: (context) => appState.keyboardType = KeyboardType.button,
               ),
               SettingsTile(
                 title: Text('Device Keyboard'),
-                onPressed: (context) =>
-                    appState.keyboardType = KeyboardType.device,
+                onPressed: (context) => appState.keyboardType = KeyboardType.device,
               ),
             ],
           ),

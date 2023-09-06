@@ -86,10 +86,7 @@ class TurnSummary extends StatelessWidget {
               textAlign: TextAlign.left,
               style: TextStyle(
                 decoration: turnIndex == player.plays.length - 1 &&
-                        Provider.of<CurrentGameState>(context)
-                                .gameState
-                                .currentPlayer ==
-                            player
+                        Provider.of<CurrentGameState>(context).gameState.currentPlayer == player
                     ? TextDecoration.underline
                     : TextDecoration.none,
                 fontSize: 16,
@@ -104,9 +101,7 @@ class TurnSummary extends StatelessWidget {
           ],
         ),
         Text(
-          currentTurn.playedWords
-              .map((e) => '${e.word} - ${e.score}')
-              .join('\n'),
+          currentTurn.playedWords.map((e) => '${e.word} - ${e.score}').join('\n'),
           style: Theme.of(context).textTheme.bodySmall,
         ),
       ],
