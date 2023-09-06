@@ -1,58 +1,67 @@
 import 'package:flutter/material.dart';
 
+class CyclicList<T> {
+  late List<T> _list;
+  late int _i;
+
+  CyclicList(List<T> list, {int startIndex = 0}) {
+    _list = List.from(list);
+    _i = startIndex;
+  }
+
+  T operator [](int index) => _list[index % _list.length];
+  List<T> get list => _list.toList();
+  int get length => _list.length;
+  int get currentIndex => _i;
+  T get current => _list[_i];
+  T get next => this[_i + 1];
+  T get previous => this[_i - 1];
+
+  int _indexBefore(int index) => (index - 1) % _list.length;
+  int _indexAfter(int index) => (index + 1) % _list.length;
+
+  void nextItem() => _i = _indexAfter(_i);
+  void previousItem() => _i = _indexBefore(_i);
+}
+
 /// Accepts a list of players and creates a new game state.
-class GameState {
-  final List<Player> players;
-  int _currentPlayerIndex = 0;
-
-  GameState({required this.players});
-
-  int get _previousPlayerIndex {
-    if (_currentPlayerIndex == 0) return players.length - 1;
-    return _currentPlayerIndex - 1;
+class GameState extends CyclicList<Player> {
+  GameState({required List<Player> players}) : super(players) {
+    current.startTurn();
   }
 
-  Player get currentPlayer => players[_currentPlayerIndex];
-  Player get previousPlayer => players[_previousPlayerIndex];
-
-  Play get currentPlay {
-    // current player should have one more play than the previous player
-    if (currentPlayer.plays.length == previousPlayer.plays.length) {
-      currentPlayer.startTurn();
-    }
-    return currentPlayer.plays.last;
-  }
+  Player get currentPlayer => current;
+  Play get currentPlay => currentPlayer.plays.last;
 
   /// Returns all the plays in the game in reverse chronological order.
   List<Play> get plays {
-    int playerIndex = _previousPlayerIndex;
-    int playIndex = players[playerIndex].plays.length - 1;
+    int playerIndex = _indexBefore(_i);
+    int playIndex = previous.plays.length - 1;
     List<Play> playList = [];
 
     while (playIndex >= 0) {
-      playList.add(players[playerIndex].plays[playIndex]);
-      playIndex--;
-      if (playerIndex < 0) playerIndex = players.length - 1;
-      if (playerIndex == _previousPlayerIndex) playIndex--;
+      playList.add(_list[playerIndex].plays[playIndex]);
+      playerIndex = _indexBefore(playerIndex);
+      if (_list[playerIndex] == previous) playIndex--;
     }
     return playList;
   }
 
-  /// Changes the active player to the next player in the list of players
-  /// and adds a new play to the active player
-  void endTurn() {
-    _currentPlayerIndex = (_currentPlayerIndex + 1) % players.length;
-  }
-
-  Player getWinner() {
-    Player winner = players[0];
-    for (var player in players) {
-      if (player.score > winner.score) {
-        winner = player;
-      }
+  Player get leader {
+    Player winner = _list[0];
+    for (var player in _list) {
+      if (player.score > winner.score) winner = player;
     }
     return winner;
   }
+
+  @override
+  void nextItem() {
+    super.nextItem();
+    currentPlayer.startTurn();
+  }
+
+  void endTurn() => nextItem();
 }
 
 /// Accepts a name (String) and creates a new player with the given name and
