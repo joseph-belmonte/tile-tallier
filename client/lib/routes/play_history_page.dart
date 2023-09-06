@@ -86,8 +86,7 @@ class SinglePlayHistoryWidget extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(5),
-      decoration:
-          BoxDecoration(border: Border.all(color: Colors.black, width: 1)),
+      decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 1)),
       margin: const EdgeInsets.all(10),
       child: Column(children: children),
     );

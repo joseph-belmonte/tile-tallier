@@ -115,6 +115,7 @@ class TurnSummary extends StatelessWidget {
                                 .activeGame
                                 .activePlayer ==
                             player
+
                     ? TextDecoration.underline
                     : TextDecoration.none,
                 fontSize: 16,
@@ -129,9 +130,7 @@ class TurnSummary extends StatelessWidget {
           ],
         ),
         Text(
-          currentTurn.playedWords
-              .map((e) => '${e.word} - ${e.score}')
-              .join('\n'),
+          currentTurn.playedWords.map((e) => '${e.word} - ${e.score}').join('\n'),
           style: Theme.of(context).textTheme.bodySmall,
         ),
       ],

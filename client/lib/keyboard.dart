@@ -18,9 +18,7 @@ class Keyboard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              appState.keyboardType == KeyboardType.button
-                  ? ButtonKeyboard()
-                  : DeviceKeyboard(),
+              appState.keyboardType == KeyboardType.button ? ButtonKeyboard() : DeviceKeyboard(),
             ],
           ),
         );
@@ -91,8 +89,7 @@ class ButtonKeyboard extends StatelessWidget {
         children: keyboardRows.map((row) {
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children:
-                row.split('').map((letter) => KeyboardKey(letter)).toList(),
+            children: row.split('').map((letter) => KeyboardKey(letter)).toList(),
           );
         }).toList(),
       ),

@@ -78,8 +78,7 @@ class ScrabbleTileState extends State<ScrabbleTile> {
             margin: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.black, width: 2),
-              color:
-                  widget.letter.letterMultiplier.editionColor(appState.edition),
+              color: widget.letter.letterMultiplier.editionColor(appState.edition),
             ),
             child: Column(
               children: [

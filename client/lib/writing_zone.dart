@@ -36,10 +36,11 @@ class CurrentPlayState extends ChangeNotifier {
 
   /// Add the current word to the list of words for the active player
   void playWord(BuildContext context) {
+
     Provider.of<ActiveGame>(context, listen: false)
         .addWordToCurrentPlay(playedWord);
-    playedWord = PlayedWord();
 
+    playedWord = PlayedWord();
     notifyListeners();
   }
 
