@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:scrabble_scorer/routes/home_page.dart';
 
 import 'active_game.dart';
-import 'scrabble_scorer.dart';
+import 'material_wrapper.dart';
 import 'writing_zone.dart';
 
 void main() {
@@ -20,9 +19,7 @@ void main() {
           create: (context) => AppState(),
         ),
       ],
-      child: MaterialApp(
-        home: const HomePage(),
-      ),
+      child: MaterialWrapper(),
     ),
   );
 }

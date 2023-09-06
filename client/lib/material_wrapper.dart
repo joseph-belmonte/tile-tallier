@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'keyboard.dart';
 import 'models/game.dart';
-import 'routes/play_history_page.dart';
-import 'routes/score_page.dart';
-import 'routes/settings_page.dart';
+import 'routes/home_page.dart';
 
 var kColorScheme = ColorScheme.fromSeed(
   seedColor: Color.fromARGB(255, 189, 25, 25),
 );
-
 var kLightTheme = ThemeData().copyWith(
   useMaterial3: true,
   colorScheme: kColorScheme,
@@ -121,59 +117,17 @@ class AppState extends ChangeNotifier {
   }
 }
 
-/// Displays the active game page, play history page, and settings page in a tab
-///  view.
-class ScrabbleScorer extends StatelessWidget {
-  const ScrabbleScorer({super.key});
+class MaterialWrapper extends StatelessWidget {
+  const MaterialWrapper({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppState>(
-      builder: (context, appState, _) {
-        return MaterialApp(
-          title: 'Scrabble Score Keeper',
-          theme: kLightTheme,
-          darkTheme: kDarkTheme,
-          themeMode: appState.themeMode,
-          home: SafeArea(
-            maintainBottomViewPadding: true,
-            child: DefaultTabController(
-              length: 3,
-              child: Scaffold(
-                appBar: TabBar(
-                  tabs: [
-                    Tab(
-                      child: Text(
-                        'Scores',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                    ),
-                    Tab(
-                      child: Text(
-                        'Play History',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                    ),
-                    Tab(
-                      child: Text(
-                        'Settings',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                    ),
-                  ],
-                ),
-                body: TabBarView(
-                  children: [
-                    ScorePage(),
-                    PlayHistoryPage(),
-                    SettingsPage(),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
+    return MaterialApp(
+      title: 'Scrabble Score Keeper',
+      themeMode: ThemeMode.system,
+      theme: kLightTheme,
+      darkTheme: kDarkTheme,
+      home: const HomePage(),
     );
   }
 }
