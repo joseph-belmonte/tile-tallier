@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'current_game_state.dart';
+import 'active_game.dart';
 import 'keyboard.dart';
-import 'models/game_state.dart';
+import 'models/game.dart';
 import 'scrabble_tile.dart';
 
 class CurrentPlayState extends ChangeNotifier {
@@ -36,7 +36,7 @@ class CurrentPlayState extends ChangeNotifier {
 
   /// Add the current word to the list of words for the active player
   void playWord(BuildContext context) {
-    Provider.of<CurrentGameState>(context, listen: false)
+    Provider.of<ActiveGame>(context, listen: false)
         .addWordToCurrentPlay(playedWord);
     playedWord = PlayedWord();
 
@@ -77,15 +77,15 @@ class _WritingZoneState extends State<WritingZone> {
 
   void onChanged(bool? newValue) {
     setState(() {
-      Provider.of<CurrentGameState>(context, listen: false).toggleBingo();
+      Provider.of<ActiveGame>(context, listen: false).toggleBingo();
       isChecked = !isChecked;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    var notifier = Provider.of<CurrentGameState>(context, listen: true);
-    var activePlayerIndex = notifier.gameState.activePlayerIndex;
+    var notifier = Provider.of<ActiveGame>(context, listen: true);
+    var activePlayerIndex = notifier.activeGame.activePlayerIndex;
 
     var currentPlayState = Provider.of<CurrentPlayState>(context, listen: true);
 
@@ -96,27 +96,30 @@ class _WritingZoneState extends State<WritingZone> {
     void onSwitchPlayer(context) {
       notifier.endTurn();
       setState(() {
-        activePlayerIndex = notifier.gameState.activePlayerIndex;
+        activePlayerIndex = notifier.activeGame.activePlayerIndex;
         isChecked = false;
       });
     }
 
     var turnActions = Column(
       children: <Widget>[
+        // Add word button
         FloatingActionButton(
-          // Add word button
+          heroTag: null,
           mini: true,
           onPressed: () => onAddWord(context),
           child: Icon(Icons.add_circle_outline),
         ),
+        // Switch player button
         FloatingActionButton(
-          // Switch player button
+          heroTag: null,
           mini: true,
           onPressed: () => onSwitchPlayer(context),
           child: Icon(Icons.switch_account_rounded),
         ),
+        // Settings button
         FloatingActionButton(
-          // Settings button
+          heroTag: null,
           mini: true,
           onPressed: () {
             print('Redirect to settings page not implemented');
@@ -133,7 +136,7 @@ class _WritingZoneState extends State<WritingZone> {
           Row(
             children: <Widget>[
               TurnDisplay(
-                player: notifier.gameState.players[activePlayerIndex],
+                player: notifier.activeGame.players[activePlayerIndex],
               ),
               Row(
                 children: <Widget>[
@@ -192,10 +195,10 @@ class TurnDisplay extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               Icon(Icons.person_rounded),
-              Consumer<CurrentGameState>(
+              Consumer<ActiveGame>(
                 builder: (context, gameStateNotifier, child) {
                   return Text(
-                    gameStateNotifier.gameState.activePlayer.name,
+                    gameStateNotifier.activeGame.activePlayer.name,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     maxLines: 1,

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'current_game_state.dart';
-import 'models/game_state.dart';
+import 'active_game.dart';
+import 'models/game.dart';
 
 class DisplayZone extends StatelessWidget {
   const DisplayZone({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var players = Provider.of<CurrentGameState>(context).gameState.players;
+    var players = Provider.of<ActiveGame>(context).activeGame.players;
 
     return Align(
       alignment: Alignment.topCenter,
@@ -86,8 +86,8 @@ class TurnSummary extends StatelessWidget {
               textAlign: TextAlign.left,
               style: TextStyle(
                 decoration: turnIndex == player.plays.length - 1 &&
-                        Provider.of<CurrentGameState>(context)
-                                .gameState
+                        Provider.of<ActiveGame>(context)
+                                .activeGame
                                 .activePlayer ==
                             player
                     ? TextDecoration.underline

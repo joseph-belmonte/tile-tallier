@@ -3,11 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 /// Accepts a list of players and creates a new game state.
-class GameState {
+class Game {
+  Game({required this.players});
+
   final List<Player> players;
   int activePlayerIndex = 0;
-
-  GameState({required this.players});
 
   Player get activePlayer => players[activePlayerIndex];
 

@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../keyboard.dart';
-import '../models/game_state.dart';
+import '../models/game.dart';
 import '../scrabble_scorer.dart';
 
 class SettingsPage extends StatelessWidget {

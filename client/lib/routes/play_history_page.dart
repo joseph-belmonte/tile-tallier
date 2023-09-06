@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../current_game_state.dart';
-import '../models/game_state.dart';
+import '../active_game.dart';
+import '../models/game.dart';
 import '../scrabble_tile.dart';
 
 class PlayHistoryPage extends StatefulWidget {
@@ -52,8 +52,8 @@ class PlayHistoryPageState extends State<PlayHistoryPage> {
   }
 
   List<SinglePlayHistoryWidget> getPlayHistoryWidgets(BuildContext context) {
-    return Provider.of<CurrentGameState>(context)
-        .gameState
+    return Provider.of<ActiveGame>(context)
+        .activeGame
         .plays
         .map((play) => SinglePlayHistoryWidget(play, interactive))
         .toList();

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scrabble_scorer/routes/home_page.dart';
 
-import 'current_game_state.dart';
+import 'active_game.dart';
 import 'scrabble_scorer.dart';
 import 'writing_zone.dart';
 
@@ -9,8 +10,8 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<CurrentGameState>(
-          create: (context) => CurrentGameState(),
+        ChangeNotifierProvider<ActiveGame>(
+          create: (context) => ActiveGame(),
         ),
         ChangeNotifierProvider<CurrentPlayState>(
           create: (context) => CurrentPlayState(),
@@ -19,7 +20,9 @@ void main() {
           create: (context) => AppState(),
         ),
       ],
-      child: ScrabbleScorer(),
+      child: MaterialApp(
+        home: const HomePage(),
+      ),
     ),
   );
 }

@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:scrabble_scorer/current_game_state.dart';
+import 'package:scrabble_scorer/active_game.dart';
 import 'package:scrabble_scorer/scrabble_scorer.dart';
 import 'package:scrabble_scorer/scrabble_tile.dart';
 import 'package:scrabble_scorer/keyboard.dart';
@@ -21,8 +21,8 @@ void main() {
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider<CurrentGameState>(
-            create: (context) => CurrentGameState(),
+          ChangeNotifierProvider<ActiveGame>(
+            create: (context) => ActiveGame(),
           ),
           ChangeNotifierProvider<CurrentPlayState>(
             create: (context) => CurrentPlayState(),
@@ -51,8 +51,8 @@ void main() {
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider<CurrentGameState>(
-            create: (context) => CurrentGameState(),
+          ChangeNotifierProvider<ActiveGame>(
+            create: (context) => ActiveGame(),
           ),
           ChangeNotifierProvider<CurrentPlayState>(
             create: (context) => CurrentPlayState(),

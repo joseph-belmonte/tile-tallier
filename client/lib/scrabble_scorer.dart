@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'keyboard.dart';
-import 'models/game_state.dart';
+import 'models/game.dart';
 import 'routes/play_history_page.dart';
 import 'routes/score_page.dart';
 import 'routes/settings_page.dart';
@@ -121,6 +121,8 @@ class AppState extends ChangeNotifier {
   }
 }
 
+/// Displays the active game page, play history page, and settings page in a tab
+///  view.
 class ScrabbleScorer extends StatelessWidget {
   const ScrabbleScorer({super.key});
 
