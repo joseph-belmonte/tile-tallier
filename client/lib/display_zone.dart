@@ -10,8 +10,9 @@ class DisplayZone extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var activeGame = Provider.of<ActiveGame>(context, listen: false).activeGame;
-    
+    var activeGame = Provider.of<ActiveGame>(context, listen: true).activeGame;
+
+    /// Calculates the winner and navigates to the end game page.
     void onEndGame() {
       // first, call the getWinner method to determine the winner
       final winner = activeGame.getWinner();
@@ -22,6 +23,7 @@ class DisplayZone extends StatelessWidget {
           builder: (context) => EndGamePage(
             winner: winner,
             rankedPlayers: playerPositions,
+            game: activeGame,
           ),
         ),
       );

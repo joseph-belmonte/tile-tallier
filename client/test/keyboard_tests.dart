@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:scrabble_scorer/active_game.dart';
-import 'package:scrabble_scorer/scrabble_scorer.dart';
+import 'package:scrabble_scorer/material_wrapper.dart';
+import 'package:scrabble_scorer/routes/tabs.dart';
 import 'package:scrabble_scorer/scrabble_tile.dart';
 import 'package:scrabble_scorer/keyboard.dart';
 import 'package:scrabble_scorer/writing_zone.dart';
@@ -31,7 +32,7 @@ void main() {
             create: (context) => AppState(),
           ),
         ],
-        child: const ScrabbleScorer(),
+        child: const BottomNavBar(),
       ),
     );
 
@@ -61,7 +62,7 @@ void main() {
             create: (context) => AppState(),
           ),
         ],
-        child: const ScrabbleScorer(),
+        child: const BottomNavBar(),
       ),
     );
 
