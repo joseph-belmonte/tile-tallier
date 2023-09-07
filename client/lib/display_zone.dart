@@ -1,15 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'current_game_state.dart';
-import 'models/game_state.dart';
+import 'active_game.dart';
+import 'models/game.dart';
+import 'routes/end_game_page.dart';
 
 class DisplayZone extends StatelessWidget {
   const DisplayZone({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var players = Provider.of<CurrentGameState>(context).gameState.players;
+    var activeGame = Provider.of<ActiveGame>(context, listen: true).activeGame;
+
+    /// Calculates the winner and navigates to the end game page.
+    void onEndGame() {
+      final winner = activeGame.leader;
+      final playerPositions = activeGame.getPlayersSortedByScore();
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => EndGamePage(
+            winner: winner,
+            rankedPlayers: playerPositions,
+            game: activeGame,
+          ),
+        ),
+      );
+    }
+
+    var players = activeGame.getPlayers();
 
     return Align(
       alignment: Alignment.topCenter,
@@ -21,6 +39,11 @@ class DisplayZone extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
+              ElevatedButton.icon(
+                onPressed: onEndGame,
+                icon: Icon(Icons.assistant_photo_rounded),
+                label: Text('End Game'),
+              ),
               for (var player in players)
                 Container(
                   height: 80,
@@ -86,7 +109,7 @@ class TurnSummary extends StatelessWidget {
               textAlign: TextAlign.left,
               style: TextStyle(
                 decoration: turnIndex == player.plays.length - 1 &&
-                        Provider.of<CurrentGameState>(context).gameState.currentPlayer == player
+                        Provider.of<ActiveGame>(context).activeGame.currentPlayer == player
                     ? TextDecoration.underline
                     : TextDecoration.none,
                 fontSize: 16,
