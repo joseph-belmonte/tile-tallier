@@ -143,7 +143,6 @@ class Game extends CyclicList<Player> {
 
     // Iterate through plays to find the highest-scoring turn
     for (var play in plays) {
-      print(play.score);
       if (play.score > maxScore) {
         maxScore = play.score;
         highestScoring = play;

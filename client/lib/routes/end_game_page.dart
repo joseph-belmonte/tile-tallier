@@ -20,40 +20,51 @@ class EndGamePage extends StatelessWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: Text('Game Statistics'),
-        content: Container(
-          decoration: ShapeDecoration(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-          child: SingleChildScrollView(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              children: <Widget>[
-                Text('Total Plays: ${game.plays.length}'),
-                SizedBox(height: 20),
-                Text('Longest Word: ${game.longestWord}'),
-                SizedBox(height: 20),
-                Text(
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Text('Total Plays: ${game.plays.length}'),
+              ),
+              Divider(),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Text('Longest Word: ${game.longestWord}'),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Text(
                   'Highest Scoring Word: ${game.highestScoringWord.word} - ${game.highestScoringWord.score}',
                 ),
-                SizedBox(height: 20),
-                Text('Highest Scoring Turn:'),
-                SizedBox(height: 20),
-                Text('Score: ${game.highestScoringTurn.score}'),
-                SizedBox(height: 20),
-                ...game.highestScoringTurn.playedWords.map(
-                  (word) => Text(
-                    '${word.word} ',
-                  ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Text('Highest Scoring Turn:'),
+              ),
+              ...game.highestScoringTurn.playedWords.map(
+                (word) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Text('${word.word} - ${word.score}'),
                 ),
-                SizedBox(height: 20),
-                Text('Shortest Word: ${game.shortestWord}'),
-              ],
-            ),
+              ),
+              Divider(),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Text('Shortest Word: ${game.shortestWord}'),
+              ),
+            ],
           ),
         ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Close'),
+          ),
+        ],
       ),
     );
   }
