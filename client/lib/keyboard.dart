@@ -3,32 +3,30 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'app_state.dart';
+import 'models/game.dart';
 import 'writing_zone.dart';
 
 enum KeyboardType { button, device }
 
 class Keyboard extends StatelessWidget {
+  static const deviceKeyboard = DeviceKeyboard();
+  static const buttonKeyboard = ButtonKeyboard();
   const Keyboard({super.key});
 
-  Consumer<AppState> get keyboardWidget {
-    return Consumer<AppState>(
-      builder: (_, appState, child) {
+  @override
+  Widget build(BuildContext context) {
+    return Selector<AppState, KeyboardType>(
+      selector: (_, appState) => appState.keyboardType,
+      builder: (_, keyboardType, __) {
         return Align(
           alignment: Alignment.bottomCenter,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              appState.keyboardType == KeyboardType.button ? ButtonKeyboard() : DeviceKeyboard(),
-            ],
+            children: [keyboardType == KeyboardType.button ? buttonKeyboard : deviceKeyboard],
           ),
         );
       },
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return keyboardWidget;
   }
 }
 
@@ -37,25 +35,30 @@ class DeviceKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var playedWordState = Provider.of<CurrentPlayState>(context, listen: false);
-    final textController = TextEditingController(
-      text: playedWordState.playedWord.word,
+    // ensure the text field is rebuilt when the played word changes
+    return Selector<CurrentPlayState, PlayedWord>(
+      selector: (_, playedWordState) => playedWordState.playedWord,
+      builder: (context, __, ___) => _buildTextField(context),
     );
+  }
+
+  Widget _buildTextField(BuildContext context) {
+    final playState = Provider.of<CurrentPlayState>(context, listen: false);
+    final textController = TextEditingController(text: playState.playedWord.word);
 
     // make sure the cursor is always at the end of the text field (to avoid
     // weird behavior when the user edits the middle of the word)
     textController.addListener(() {
-      int offset = textController.text.length;
-      textController.selection = TextSelection.collapsed(offset: offset);
+      textController.selection = TextSelection.collapsed(offset: textController.text.length);
     });
 
     return Align(
       alignment: Alignment.bottomCenter,
       child: TextField(
         controller: textController,
-        onChanged: (value) => playedWordState.updatePlayedWord(value),
+        onChanged: (value) => playState.updatePlayedWord(value),
         onSubmitted: (value) {
-          playedWordState.playWord(context);
+          playState.playWord(context);
           textController.clear();
         },
         decoration: InputDecoration(
@@ -63,9 +66,7 @@ class DeviceKeyboard extends StatelessWidget {
           labelText: 'Play a word',
         ),
         inputFormatters: <TextInputFormatter>[
-          FilteringTextInputFormatter.allow(
-            RegExp(r'[a-zA-Z ]'),
-          ),
+          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]')),
         ],
       ),
     );

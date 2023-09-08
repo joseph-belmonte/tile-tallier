@@ -22,11 +22,11 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Enum _keyboardType = KeyboardType.button;
-  Enum get keyboardType => _keyboardType;
+  KeyboardType _keyboardType = KeyboardType.button;
+  KeyboardType get keyboardType => _keyboardType;
 
   /// Sets the keyboard type and notifies listeners.
-  set keyboardType(Enum value) {
+  set keyboardType(KeyboardType value) {
     _keyboardType = value;
     notifyListeners();
   }
