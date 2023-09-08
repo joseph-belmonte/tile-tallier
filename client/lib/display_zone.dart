@@ -27,8 +27,6 @@ class DisplayZone extends StatelessWidget {
       );
     }
 
-    var players = activeGame.getPlayers();
-
     return Align(
       alignment: Alignment.topCenter,
       child: SingleChildScrollView(
@@ -44,7 +42,7 @@ class DisplayZone extends StatelessWidget {
                 icon: Icon(Icons.assistant_photo_rounded),
                 label: Text('End Game'),
               ),
-              for (var player in players)
+              for (var player in activeGame.players)
                 Container(
                   height: 80,
                   padding: EdgeInsets.all(5),

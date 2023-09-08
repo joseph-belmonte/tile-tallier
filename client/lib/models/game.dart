@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 
-enum SortOrder {
-  asc,
-  desc,
-}
-
 class CyclicList<T> {
   late List<T> _list;
   late int _i;
@@ -65,13 +60,13 @@ class Game extends CyclicList<Player> {
   }
 
   /// Returns the game's players in a list.
-  List<Player> getPlayers() => _list.toList();
+  List<Player> get players => _list.toList();
 
   /// Accepts an optional parameter "order" which defaults to "desc". Returns the game's players
   /// sorted by score in the specified order.
-  List<Player> getPlayersSortedByScore({order = SortOrder.desc}) {
+  List<Player> getPlayersSortedByScore({bool ascending = false}) {
     var sortedPlayers = _list.toList();
-    if (order == SortOrder.asc) {
+    if (ascending) {
       sortedPlayers.sort((a, b) => a.score.compareTo(b.score));
     } else {
       sortedPlayers.sort((a, b) => b.score.compareTo(a.score));

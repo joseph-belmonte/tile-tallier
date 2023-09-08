@@ -14,7 +14,7 @@ class ActiveGame extends ChangeNotifier {
   List<Play> plays = [];
 
   /// Gets the list of players from the active game
-  List<Player> get players => activeGame.getPlayers();
+  List<Player> get players => activeGame.players;
 
   /// Changes the active player to the next player in the list of players
   /// and adds a new play to the active player
