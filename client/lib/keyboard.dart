@@ -76,7 +76,9 @@ class ButtonKeyboard extends StatelessWidget {
   static const List<String> keyboardRows = [
     'QWERTYUIOP',
     'ASDFGHJKL',
-    '_ZXCVBNM<',
+    // The '_' is a placeholder for the return key
+    // The '<' is a placeholder for the backspace key
+    '_ ZXCVBNM<',
   ];
 
   const ButtonKeyboard({super.key});
@@ -105,6 +107,7 @@ class KeyboardKey extends StatelessWidget {
   Widget get icon {
     if (value == '_') return Icon(Icons.keyboard_return);
     if (value == '<') return Icon(Icons.backspace);
+    if (value == ' ') return Icon(Icons.space_bar);
     return Text(value, style: const TextStyle(fontSize: 20));
   }
 
