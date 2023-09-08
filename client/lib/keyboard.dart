@@ -76,7 +76,9 @@ class ButtonKeyboard extends StatelessWidget {
   static const List<String> keyboardRows = [
     'QWERTYUIOP',
     'ASDFGHJKL',
-    '_ZXCVBNM<',
+    // The '/' is a placeholder for the return key
+    // The '<' is a placeholder for the backspace key
+    '/ ZXCVBNM<',
   ];
 
   const ButtonKeyboard({super.key});
@@ -103,14 +105,15 @@ class KeyboardKey extends StatelessWidget {
   const KeyboardKey(this.value, {super.key});
 
   Widget get icon {
-    if (value == '_') return Icon(Icons.keyboard_return);
+    if (value == '/') return Icon(Icons.keyboard_return);
     if (value == '<') return Icon(Icons.backspace);
+    if (value == ' ') return Icon(Icons.space_bar);
     return Text(value, style: const TextStyle(fontSize: 20));
   }
 
   void Function() getOnTapBehavior(BuildContext context) {
     var playedWordState = Provider.of<CurrentPlayState>(context, listen: false);
-    if (value == '_') return () => playedWordState.playWord(context);
+    if (value == '/') return () => playedWordState.playWord(context);
     if (value == '<') return () => playedWordState.removeLetter();
     return () => playedWordState.playLetter(value);
   }

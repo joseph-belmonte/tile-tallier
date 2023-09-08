@@ -393,6 +393,7 @@ class PlayedLetter {
     'Y': 4,
     'Z': 10,
     ' ': 0,
+    '_': 0,
   };
 
   void toggleLetterMultiplier() {
