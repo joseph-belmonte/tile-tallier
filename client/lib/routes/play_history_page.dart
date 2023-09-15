@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../active_game.dart';
+import '../providers/active_game.dart';
 import '../models/game.dart';
 import '../scrabble_tile.dart';
 
@@ -72,6 +72,7 @@ class SinglePlayHistoryWidget extends StatelessWidget {
 
     if (!interactive) {
       children.add(Text('Score: ${play.score}'));
+      children.add(play.isBingo ? Icon(Icons.star) : Icon(Icons.star_border));
     }
 
     for (var word in play.playedWords) {
@@ -80,8 +81,6 @@ class SinglePlayHistoryWidget extends StatelessWidget {
 
     if (children.isEmpty) {
       children.add(Text('Skipped'));
-    } else if (play.isBingo) {
-      children.add(Icon(Icons.star));
     }
 
     return Container(

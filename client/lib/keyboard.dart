@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import 'app_state.dart';
-import 'models/game.dart';
-import 'writing_zone.dart';
+import 'providers/app_state.dart';
+import 'providers/active_play.dart';
 
 enum KeyboardType { button, device }
 
@@ -35,15 +34,7 @@ class DeviceKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ensure the text field is rebuilt when the played word changes
-    return Selector<CurrentPlayState, PlayedWord>(
-      selector: (_, playedWordState) => playedWordState.playedWord,
-      builder: (context, __, ___) => _buildTextField(context),
-    );
-  }
-
-  Widget _buildTextField(BuildContext context) {
-    final playState = Provider.of<CurrentPlayState>(context, listen: false);
+    final playState = Provider.of<ActivePlay>(context, listen: false);
     final textController = TextEditingController(text: playState.playedWord.word);
 
     // make sure the cursor is always at the end of the text field (to avoid
@@ -113,7 +104,7 @@ class KeyboardKey extends StatelessWidget {
   }
 
   void Function() getOnTapBehavior(BuildContext context) {
-    var playedWordState = Provider.of<CurrentPlayState>(context, listen: false);
+    var playedWordState = Provider.of<ActivePlay>(context, listen: false);
     if (value == '_') return () => playedWordState.playWord(context);
     if (value == '<') return () => playedWordState.removeLetter();
     return () => playedWordState.playLetter(value);

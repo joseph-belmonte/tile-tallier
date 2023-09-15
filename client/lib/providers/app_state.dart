@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'keyboard.dart';
-import 'models/game.dart';
+import '../keyboard.dart';
+import '../models/game.dart';
 
 class AppState extends ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.system;

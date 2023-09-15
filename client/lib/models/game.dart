@@ -257,7 +257,7 @@ class Player {
 /// A bingo is when a player uses all 7 letters in their rack in a single turn.
 class Play {
   Play(this.playedWords, this.player, {this.isBingo = false});
-
+  
   List<PlayedWord> playedWords = [];
   Player player;
   bool isBingo = false;

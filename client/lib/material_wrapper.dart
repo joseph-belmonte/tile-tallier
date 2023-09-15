@@ -1,102 +1,78 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import './providers/app_state.dart';
 import 'routes/home_page.dart';
-
-var kColorScheme = ColorScheme.fromSeed(
-  seedColor: Color.fromARGB(255, 189, 25, 25),
-);
-var kLightTheme = ThemeData().copyWith(
-  useMaterial3: true,
-  colorScheme: kColorScheme,
-  appBarTheme: AppBarTheme().copyWith(
-    foregroundColor: kColorScheme.onPrimaryContainer,
-    backgroundColor: kColorScheme.primaryContainer,
-  ),
-  textTheme: ThemeData().textTheme.copyWith(
-        titleLarge: ThemeData().textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.normal,
-              color: kColorScheme.onPrimary,
-              fontSize: 36,
-            ),
-        titleMedium: ThemeData().textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.normal,
-              color: kColorScheme.onPrimary,
-              fontSize: 24,
-            ),
-        titleSmall: ThemeData().textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.normal,
-              color: kColorScheme.onPrimary,
-              fontSize: 18,
-            ),
-        bodyLarge: ThemeData().textTheme.bodyLarge?.copyWith(
-              fontWeight: FontWeight.normal,
-              color: kColorScheme.onPrimary,
-              fontSize: 24,
-            ),
-        bodyMedium: ThemeData().textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.normal,
-              color: kColorScheme.onPrimary,
-              fontSize: 18,
-            ),
-        bodySmall: ThemeData().textTheme.bodySmall?.copyWith(
-              fontWeight: FontWeight.normal,
-              color: kColorScheme.onPrimary,
-              fontSize: 14,
-            ),
-      ),
-);
-var kDarkTheme = ThemeData.dark().copyWith(
-  useMaterial3: true,
-  colorScheme: kColorScheme,
-  appBarTheme: AppBarTheme().copyWith(
-    foregroundColor: kColorScheme.onPrimaryContainer,
-    backgroundColor: kColorScheme.primaryContainer,
-  ),
-  textTheme: ThemeData.dark().textTheme.copyWith(
-        titleLarge: ThemeData.dark().textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.normal,
-              color: kColorScheme.onPrimary,
-              fontSize: 36,
-            ),
-        titleMedium: ThemeData.dark().textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.normal,
-              color: kColorScheme.onPrimary,
-              fontSize: 24,
-            ),
-        titleSmall: ThemeData.dark().textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.normal,
-              color: kColorScheme.onPrimary,
-              fontSize: 18,
-            ),
-        bodyLarge: ThemeData.dark().textTheme.bodyLarge?.copyWith(
-              fontWeight: FontWeight.normal,
-              color: kColorScheme.onPrimary,
-              fontSize: 24,
-            ),
-        bodyMedium: ThemeData.dark().textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.normal,
-              color: kColorScheme.onPrimary,
-              fontSize: 18,
-            ),
-        bodySmall: ThemeData.dark().textTheme.bodySmall?.copyWith(
-              fontWeight: FontWeight.normal,
-              color: kColorScheme.onPrimary,
-              fontSize: 14,
-            ),
-      ),
-);
 
 class MaterialWrapper extends StatelessWidget {
   const MaterialWrapper({super.key});
 
   @override
   Widget build(BuildContext context) {
+    return Consumer<AppState>(builder: (_, appState, __) => buildAppWrapper(appState));
+  }
+
+  Widget buildAppWrapper(AppState appState) {
+    var ThemeBuilder(:lightTheme, :darkTheme) = ThemeBuilder(appState.colorScheme);
     return MaterialApp(
+      locale: const Locale('en'),
       title: 'Scrabble Score Keeper',
-      themeMode: ThemeMode.system,
-      theme: kLightTheme,
-      darkTheme: kDarkTheme,
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: appState.themeMode,
       home: const HomePage(),
+    );
+  }
+}
+
+class ThemeBuilder {
+  final ColorScheme colorScheme;
+  late final ThemeData lightTheme;
+  late final ThemeData darkTheme;
+
+  ThemeBuilder(this.colorScheme) {
+    darkTheme = _buildDarkTheme();
+    lightTheme = _buildLightTheme();
+  }
+
+  ThemeData _buildDarkTheme() {
+    ThemeData theme = ThemeData.dark().copyWith(
+      useMaterial3: true,
+      colorScheme: colorScheme,
+    );
+    return theme.copyWith(
+      textTheme: theme.textTheme.copyWith(
+        titleLarge: _standardizeTextStyle(baseStyle: theme.textTheme.titleLarge!, fontSize: 36),
+        titleMedium: _standardizeTextStyle(baseStyle: theme.textTheme.titleMedium!, fontSize: 24),
+        titleSmall: _standardizeTextStyle(baseStyle: theme.textTheme.titleSmall!, fontSize: 18),
+        bodyLarge: _standardizeTextStyle(baseStyle: theme.textTheme.bodyLarge!, fontSize: 24),
+        bodyMedium: _standardizeTextStyle(baseStyle: theme.textTheme.bodyMedium!, fontSize: 18),
+        bodySmall: _standardizeTextStyle(baseStyle: theme.textTheme.bodySmall!, fontSize: 14),
+      ),
+    );
+  }
+
+  ThemeData _buildLightTheme() {
+    ThemeData theme = ThemeData(
+      useMaterial3: true,
+      colorScheme: colorScheme,
+    );
+    return theme.copyWith(
+      textTheme: theme.textTheme.copyWith(
+        titleLarge: _standardizeTextStyle(baseStyle: theme.textTheme.titleLarge!, fontSize: 36),
+        titleMedium: _standardizeTextStyle(baseStyle: theme.textTheme.titleMedium!, fontSize: 24),
+        titleSmall: _standardizeTextStyle(baseStyle: theme.textTheme.titleSmall!, fontSize: 18),
+        bodyLarge: _standardizeTextStyle(baseStyle: theme.textTheme.bodyLarge!, fontSize: 24),
+        bodyMedium: _standardizeTextStyle(baseStyle: theme.textTheme.bodyMedium!, fontSize: 18),
+        bodySmall: _standardizeTextStyle(baseStyle: theme.textTheme.bodySmall!, fontSize: 14),
+      ),
+    );
+  }
+
+  TextStyle _standardizeTextStyle({required TextStyle baseStyle, required double fontSize}) {
+    return baseStyle.copyWith(
+      fontWeight: FontWeight.normal,
+      fontSize: fontSize,
     );
   }
 }

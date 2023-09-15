@@ -19,11 +19,7 @@ class _GameViewState extends State<GameView> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
+        onDestinationSelected: (int index) => setState(() => currentPageIndex = index),
         indicatorColor: Theme.of(context).colorScheme.primary,
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[

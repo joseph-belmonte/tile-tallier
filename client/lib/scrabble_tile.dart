@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:scrabble_scorer/writing_zone.dart';
 
-import 'app_state.dart';
+import 'providers/app_state.dart';
 import 'models/game.dart';
+import 'providers/active_play.dart';
 
 /// A widget that displays a word as a list of ScrabbleTile widgets.
 class ScrabbleWordWidget extends StatefulWidget {
@@ -17,6 +17,13 @@ class ScrabbleWordWidget extends StatefulWidget {
 }
 
 class ScrabbleWordWidgetState extends State<ScrabbleWordWidget> {
+  bool isBingo = false;
+
+  void onToggleBingo() {
+    setState(() => isBingo = !isBingo);
+    Provider.of<ActivePlay>(context, listen: false).toggleBingo();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -24,7 +31,7 @@ class ScrabbleWordWidgetState extends State<ScrabbleWordWidget> {
         if (!widget.interactive) return;
         widget.word.toggleWordMultiplier();
         // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-        Provider.of<CurrentPlayState>(context, listen: false).notifyListeners();
+        Provider.of<ActivePlay>(context, listen: false).notifyListeners();
         setState(() {});
       },
       child: _buildTileWrapperWidget(),
@@ -32,20 +39,58 @@ class ScrabbleWordWidgetState extends State<ScrabbleWordWidget> {
   }
 
   Widget _buildTileWrapperWidget() {
-    return Consumer<AppState>(
-      builder: (_, appState, __) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      clipBehavior: Clip.hardEdge,
+      child: Consumer<AppState>(builder: (_, appState, __) => _buildTileWidget(appState.edition)),
+    );
+  }
+
+  Widget _buildTileWidget(ScrabbleEdition edition) {
+    return Consumer<ActivePlay>(
+      builder: (context, activePlay, child) {
         return Container(
-          color: widget.word.wordMultiplier.editionColor(appState.edition),
+          color: widget.word.wordMultiplier.editionColor(edition),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: widget.word.playedLetters
-                .map((l) => ScrabbleTile(l, interactive: widget.interactive))
-                .toList(),
+            children: <Widget>[
+              Row(
+                children: [
+                  ...widget.word.playedLetters
+                      .map((l) => ScrabbleTile(l, interactive: widget.interactive))
+                      .toList(),
+                  Text(
+                    widget.word.score.toString(),
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  ..._buildActionButtons(activePlay),
+                ],
+              ),
+            ],
           ),
         );
       },
     );
+  }
+
+  List<Widget> _buildActionButtons(ActivePlay activePlay) {
+    if (!widget.interactive) return [];
+    var bingoToggle = IconButton(
+      onPressed: () => onToggleBingo(),
+      icon: isBingo ? Icon(Icons.star) : Icon(Icons.star_border),
+    );
+    var wordMultiplierToggle = OutlinedButton.icon(
+      icon: Icon(Icons.multiple_stop_rounded),
+      onPressed: () {
+        activePlay.toggleWordMultiplier();
+        setState(() {});
+      },
+      label: Text(
+        activePlay.playedWord.wordMultiplier.label,
+      ),
+    );
+    return [bingoToggle, wordMultiplierToggle];
   }
 }
 
@@ -69,35 +114,35 @@ class ScrabbleTileState extends State<ScrabbleTile> {
         widget.letter.toggleLetterMultiplier();
         setState(() {});
         // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-        Provider.of<CurrentPlayState>(context, listen: false).notifyListeners();
+        Provider.of<ActivePlay>(context, listen: false).notifyListeners();
       },
       child: Consumer<AppState>(
-        builder: (_, appState, __) {
+        builder: (context, appState, __) {
+          Color boxColor = widget.letter.letterMultiplier.editionColor(appState.edition);
+          Color textColor = boxColor.computeLuminance() > 0.5 ? Colors.black87 : Colors.white;
+          TextTheme textTheme = Theme.of(context).textTheme;
           return Container(
-            padding: const EdgeInsets.all(10),
-            margin: const EdgeInsets.all(5),
+            padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+            margin: const EdgeInsets.symmetric(horizontal: 1, vertical: 5),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.black, width: 2),
-              color: widget.letter.letterMultiplier.editionColor(appState.edition),
+              color: boxColor,
             ),
             child: Column(
               children: [
                 Text(
                   widget.letter.score.toString(),
                   textAlign: TextAlign.right,
-                  style: TextStyle(
+                  style: textTheme.labelSmall!.copyWith(
                     fontSize: 8,
                     fontWeight: FontWeight.w500,
-                    color: Colors.white,
+                    color: textColor,
                   ),
                 ),
                 Text(
                   widget.letter.letter,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                  ),
+                  style:
+                      textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500, color: textColor),
                 ),
               ],
             ),
