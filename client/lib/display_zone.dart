@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:scrabble_scorer/providers/active_play.dart';
 
 import 'models/game.dart';
 import 'providers/active_game.dart';
+import 'providers/active_play.dart';
+
 
 class PlayerScoreCards extends StatelessWidget {
   static const List<Color> playerColors = [

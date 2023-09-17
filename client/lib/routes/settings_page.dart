@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-import '../providers/app_state.dart';
 import '../keyboard.dart';
 import '../models/game.dart';
+import '../providers/app_state.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});

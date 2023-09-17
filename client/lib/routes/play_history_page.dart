@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/active_game.dart';
 import '../models/game.dart';
+import '../providers/active_game.dart';
 import '../scrabble_tile.dart';
 
 class PlayHistoryPage extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:scrabble_scorer/routes/home_page.dart';
 
 import '../models/game.dart';
+import 'home_page.dart';
 
 class EndGamePage extends StatelessWidget {
   const EndGamePage({

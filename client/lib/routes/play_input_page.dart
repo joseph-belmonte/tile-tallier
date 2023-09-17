@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:scrabble_scorer/display_zone.dart';
-import 'package:scrabble_scorer/writing_zone.dart';
 
+
+import '../display_zone.dart';
 import '../models/game.dart';
 import '../providers/active_game.dart';
+import '../writing_zone.dart';
+
 import 'end_game_page.dart';
 
 class PlayInputPage extends StatelessWidget {

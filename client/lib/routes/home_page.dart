@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:scrabble_scorer/routes/game_history_page.dart';
-import 'package:scrabble_scorer/routes/tabs.dart';
+
+import 'game_history_page.dart';
+import 'tabs.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
