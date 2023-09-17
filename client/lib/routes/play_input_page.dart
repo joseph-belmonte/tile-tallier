@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:scrabble_scorer/display_zone.dart';
 import 'package:scrabble_scorer/writing_zone.dart';
 
-import '../providers/active_game.dart';
 import '../models/game.dart';
+import '../providers/active_game.dart';
 import 'end_game_page.dart';
 
 class PlayInputPage extends StatelessWidget {

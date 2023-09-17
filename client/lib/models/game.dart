@@ -45,7 +45,7 @@ class Game extends CyclicList<Player> {
     while (playIndex >= 0) {
       playList.add(_list[playerIndex].plays[playIndex]);
       playerIndex = _indexBefore(playerIndex);
-      if (_list[playerIndex] == previous) playIndex--;
+      if (_list[playerIndex] == players.last) playIndex--;
     }
     return playList;
   }
@@ -295,7 +295,7 @@ enum ScoreMultiplier {
   static const Map<ScrabbleEdition, Map<ScoreMultiplier, Color>> colors = {
     ScrabbleEdition.classic: {
       ScoreMultiplier.singleLetter: Colors.amber,
-      ScoreMultiplier.singleWord: Color.fromRGBO(255, 255, 255, 1),
+      ScoreMultiplier.singleWord: Color.fromRGBO(255, 255, 255, 0),
       ScoreMultiplier.doubleWord: Color.fromARGB(255, 243, 125, 125),
       ScoreMultiplier.tripleWord: Color.fromARGB(255, 255, 0, 0),
       ScoreMultiplier.doubleLetter: Color.fromARGB(255, 123, 213, 241),
@@ -303,7 +303,7 @@ enum ScoreMultiplier {
     },
     ScrabbleEdition.twentyFifthAnniversary: {
       ScoreMultiplier.singleLetter: Colors.amber,
-      ScoreMultiplier.singleWord: Color.fromRGBO(255, 255, 255, 1),
+      ScoreMultiplier.singleWord: Color.fromRGBO(255, 255, 255, 0),
       ScoreMultiplier.doubleWord: Color.fromARGB(255, 114, 11, 0),
       ScoreMultiplier.tripleWord: Color.fromARGB(255, 67, 13, 0),
       ScoreMultiplier.doubleLetter: Color.fromARGB(255, 184, 240, 0),

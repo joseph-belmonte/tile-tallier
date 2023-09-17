@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import 'providers/app_state.dart';
+import 'models/game.dart';
 import 'providers/active_play.dart';
+import 'providers/app_state.dart';
 
 enum KeyboardType { button, device }
 
@@ -34,6 +35,14 @@ class DeviceKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ensure the text field is rebuilt when the played word changes
+    return Selector<ActivePlay, PlayedWord>(
+      selector: (_, activePlay) => activePlay.playedWord,
+      builder: (context, __, ___) => _buildTextField(context),
+    );
+  }
+
+  Widget _buildTextField(BuildContext context) {
     final playState = Provider.of<ActivePlay>(context, listen: false);
     final textController = TextEditingController(text: playState.playedWord.word);
 
