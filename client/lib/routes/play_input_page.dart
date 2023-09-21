@@ -15,14 +15,24 @@ class PlayInputPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<ActiveGame, List<Player>>(
-      selector: (_, activeGame) => activeGame.players,
-      builder: (_, players, __) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [endGameButton, PlayerScoreCards(players), writingZone],
-        );
-      },
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('PLAY INPUT'),
+        automaticallyImplyLeading: false,
+      ),
+      body: Selector<ActiveGame, List<Player>>(
+        selector: (_, activeGame) => activeGame.players,
+        builder: (_, players, __) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              endGameButton,
+              PlayerScoreCards(players),
+              writingZone,
+            ],
+          );
+        },
+      ),
     );
   }
 }
