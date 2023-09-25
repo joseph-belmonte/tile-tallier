@@ -23,7 +23,7 @@ Any additional context or information that might be helpful in understanding the
 **Attachments**
 If applicable, add any relevant documents, diagrams, or mockups to help illustrate your request.
 
-**Priority**
+**Priority (select one)**
 - Low
 - Medium
 - High
