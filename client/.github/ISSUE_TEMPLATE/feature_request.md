@@ -24,13 +24,13 @@ Any additional context or information that might be helpful in understanding the
 If applicable, add any relevant documents, diagrams, or mockups to help illustrate your request.
 
 **Priority**
-- [ ] Low
-- [ ] Medium
-- [ ] High
-- [ ] Critical
+- Low
+- Medium
+- High
+- Critical
 
 **Estimate**
-Provide an estimate of the effort required to implement this feature (e.g., small, medium, large).
+Provide an estimate of the effort required to implement this feature. It can be a time commitment (e.g. hours) or level of effort (e.g., small, medium, large).
 
 **Definition of Done**
 - [ ] Code is written and tested.
@@ -44,10 +44,5 @@ List any related issues, if applicable.
 **Dependencies**
 List any dependencies or prerequisites for implementing this feature.
 
-**Notify**
-Tag specific team members or stakeholders who should be notified about this feature request.
-
-**Feedback**
-Please leave any feedback or comments related to this feature request.
 
 ---
