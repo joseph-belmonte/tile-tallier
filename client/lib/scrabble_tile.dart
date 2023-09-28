@@ -34,63 +34,52 @@ class ScrabbleWordWidgetState extends State<ScrabbleWordWidget> {
         Provider.of<ActivePlay>(context, listen: false).notifyListeners();
         setState(() {});
       },
-      child: _buildTileWrapperWidget(),
-    );
-  }
-
-  Widget _buildTileWrapperWidget() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      clipBehavior: Clip.hardEdge,
-      child: Consumer<AppState>(builder: (_, appState, __) => _buildTileWidget(appState.edition)),
-    );
-  }
-
-  Widget _buildTileWidget(ScrabbleEdition edition) {
-    return Consumer<ActivePlay>(
-      builder: (context, activePlay, child) {
-        return Container(
-          color: widget.word.wordMultiplier.editionColor(edition),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                children: [
-                  ...widget.word.playedLetters
-                      .map((l) => ScrabbleTile(l, interactive: widget.interactive))
-                      .toList(),
-                  Text(
-                    widget.word.score.toString(),
-                    style: Theme.of(context).textTheme.titleLarge,
+      child: Consumer<AppState>(
+        builder: (_, appState, __) {
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            clipBehavior: Clip.hardEdge,
+            child: Container(
+              color: widget.word.wordMultiplier.editionColor(appState.edition),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: [
+                      ...widget.word.playedLetters
+                          .map((l) => ScrabbleTile(l, interactive: widget.interactive))
+                          .toList(),
+                      Text(
+                        widget.word.score.toString(),
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      IconButton(
+                        onPressed: () => onToggleBingo(),
+                        icon: isBingo ? Icon(Icons.star) : Icon(Icons.star_border),
+                      ),
+                      OutlinedButton.icon(
+                        icon: Icon(Icons.multiple_stop_rounded),
+                        onPressed: () {
+                          Provider.of<ActivePlay>(context, listen: false).toggleWordMultiplier();
+                          setState(() {});
+                        },
+                        label: Text(
+                          Provider.of<ActivePlay>(context, listen: false)
+                              .playedWord
+                              .wordMultiplier
+                              .label,
+                        ),
+                      ),
+                    ],
                   ),
-                  ..._buildActionButtons(activePlay),
                 ],
               ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  List<Widget> _buildActionButtons(ActivePlay activePlay) {
-    if (!widget.interactive) return [];
-    var bingoToggle = IconButton(
-      onPressed: () => onToggleBingo(),
-      icon: isBingo ? Icon(Icons.star) : Icon(Icons.star_border),
-    );
-    var wordMultiplierToggle = OutlinedButton.icon(
-      icon: Icon(Icons.multiple_stop_rounded),
-      onPressed: () {
-        activePlay.toggleWordMultiplier();
-        setState(() {});
-      },
-      label: Text(
-        activePlay.playedWord.wordMultiplier.label,
+            ),
+          );
+        },
       ),
     );
-    return [bingoToggle, wordMultiplierToggle];
   }
 }
 

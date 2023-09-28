@@ -59,9 +59,7 @@ class EndGamePage extends StatelessWidget {
         ),
         actions: <Widget>[
           TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+            onPressed: () => Navigator.of(context).pop(),
             child: Text('Close'),
           ),
         ],
@@ -72,9 +70,7 @@ class EndGamePage extends StatelessWidget {
   @override
   build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('GAME OVER'),
-      ),
+      appBar: AppBar(title: Text('GAME OVER')),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -100,9 +96,7 @@ class EndGamePage extends StatelessWidget {
               ),
               ElevatedButton.icon(
                 onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(),
-                  ),
+                  MaterialPageRoute(builder: (context) => HomePage()),
                 ),
                 icon: Icon(Icons.home),
                 label: Text('Home'),

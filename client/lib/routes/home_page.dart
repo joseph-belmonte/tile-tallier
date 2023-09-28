@@ -22,9 +22,7 @@ class HomePage extends StatelessWidget {
             ElevatedButton.icon(
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const GameView(),
-                ),
+                MaterialPageRoute(builder: (context) => const GameView()),
               ),
               icon: const Icon(Icons.play_arrow_rounded),
               label: const Text('Start Game'),
@@ -33,9 +31,7 @@ class HomePage extends StatelessWidget {
             ElevatedButton.icon(
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const GameHistoryPage(),
-                ),
+                MaterialPageRoute(builder: (context) => const GameHistoryPage()),
               ),
               icon: const Icon(Icons.history_edu),
               label: const Text('View History'),

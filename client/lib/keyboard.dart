@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-
 import 'models/game.dart';
 
 import 'providers/active_play.dart';
@@ -37,31 +36,15 @@ class DeviceKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ensure the text field is rebuilt when the played word changes
+    final activePlay = Provider.of<ActivePlay>(context, listen: false);
     return Selector<ActivePlay, PlayedWord>(
       selector: (_, activePlay) => activePlay.playedWord,
-      builder: (context, __, ___) => _buildTextField(context),
-    );
-  }
-
-  Widget _buildTextField(BuildContext context) {
-    final playState = Provider.of<ActivePlay>(context, listen: false);
-    final textController = TextEditingController(text: playState.playedWord.word);
-
-    // make sure the cursor is always at the end of the text field (to avoid
-    // weird behavior when the user edits the middle of the word)
-    textController.addListener(() {
-      textController.selection = TextSelection.collapsed(offset: textController.text.length);
-    });
-
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: TextField(
-        controller: textController,
-        onChanged: (value) => playState.updatePlayedWord(value),
+      builder: (context, _, __) => TextField(
+        controller: TextEditingController(text: activePlay.playedWord.word),
+        onChanged: activePlay.updatePlayedWord,
         onSubmitted: (value) {
-          playState.playWord(context);
-          textController.clear();
+          activePlay.playWord(context);
+          TextEditingController().clear();
         },
         decoration: InputDecoration(
           border: OutlineInputBorder(),
@@ -76,49 +59,47 @@ class DeviceKeyboard extends StatelessWidget {
 }
 
 class ButtonKeyboard extends StatelessWidget {
+  const ButtonKeyboard({super.key});
   static const List<String> keyboardRows = [
     'QWERTYUIOP',
     'ASDFGHJKL',
-    // The '_' is a placeholder for the return key
-    // The '<' is a placeholder for the backspace key
-    '_ ZXCVBNM<',
+    '_ ZXCVBNM<', // The '_' = return key, '<' = backspace key
   ];
-
-  const ButtonKeyboard({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Column(
-        children: keyboardRows.map((row) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: row.split('').map((letter) => KeyboardKey(letter)).toList(),
-          );
-        }).toList(),
+        children: keyboardRows
+            .map(
+              (row) => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: row.split('').map((letter) => KeyboardKey(letter)).toList(),
+              ),
+            )
+            .toList(),
       ),
     );
   }
 }
 
 class KeyboardKey extends StatelessWidget {
-  final String value;
-
-  const KeyboardKey(this.value, {super.key});
+  const KeyboardKey(this.character, {super.key});
+  final String character;
 
   Widget get icon {
-    if (value == '_') return Icon(Icons.keyboard_return);
-    if (value == '<') return Icon(Icons.backspace);
-    if (value == ' ') return Icon(Icons.space_bar);
-    return Text(value, style: const TextStyle(fontSize: 20));
+    if (character == '_') return Icon(Icons.keyboard_return);
+    if (character == '<') return Icon(Icons.backspace);
+    if (character == ' ') return Icon(Icons.space_bar);
+    return Text(character, style: const TextStyle(fontSize: 20));
   }
 
   void Function() getOnTapBehavior(BuildContext context) {
     var playedWordState = Provider.of<ActivePlay>(context, listen: false);
-    if (value == '_') return () => playedWordState.playWord(context);
-    if (value == '<') return () => playedWordState.removeLetter();
-    return () => playedWordState.playLetter(value);
+    if (character == '_') return () => playedWordState.playWord(context);
+    if (character == '<') return () => playedWordState.removeLetter();
+    return () => playedWordState.playLetter(character);
   }
 
   @override
