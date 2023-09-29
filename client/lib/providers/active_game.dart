@@ -3,15 +3,14 @@ import 'package:flutter/material.dart';
 import '../models/game.dart';
 
 class ActiveGame extends ChangeNotifier {
-  Game activeGame = Game(
-    players: [
-      Player(name: 'JB'),
-      Player(name: 'RW'),
-      Player(name: 'JC'),
-      Player(name: 'MJ'),
-    ],
-  );
+  late Game activeGame;
   List<Play> plays = [];
+
+  ActiveGame({required List<String> playerNames}) {
+    activeGame = Game(
+      players: playerNames.map((name) => Player(name: name)).toList(),
+    );
+  }
 
   /// Gets the list of players from the active game
   List<Player> get players => activeGame.players;

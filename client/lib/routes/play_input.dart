@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../display_zone.dart';
-import '../writing_zone.dart';
 
-import '../providers/active_game.dart';
 import '../models/game.dart';
+import '../providers/active_game.dart';
+import '../widgets/display_zone.dart';
+import '../widgets/writing_zone.dart';
+
 import 'end_game.dart';
 
 class PlayInputPage extends StatefulWidget {
@@ -24,7 +25,8 @@ class _PlayInputPageState extends State<PlayInputPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Play Input'),
+        title: const Text('PLAY INPUT'),
+        automaticallyImplyLeading: false,
       ),
       body: Selector<ActiveGame, List<Player>>(
         selector: (_, activeGame) => activeGame.players,

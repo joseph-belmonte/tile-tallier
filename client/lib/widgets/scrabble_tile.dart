@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'models/game.dart';
-import 'providers/active_play.dart';
-import 'providers/app_state.dart';
+import '../models/game.dart';
+import '../providers/active_play.dart';
+import '../providers/app_state.dart';
 
 /// A widget that displays a word as a list of ScrabbleTile widgets.
 class ScrabbleWordWidget extends StatefulWidget {

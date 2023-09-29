@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import './providers/app_state.dart';
-import 'routes/home.dart';
+import '../providers/app_state.dart';
+import '../routes/home.dart';
 
 class MaterialWrapper extends StatelessWidget {
   const MaterialWrapper({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import './providers/active_play.dart';
+import '../providers/active_play.dart';
 import 'keyboard.dart';
 import 'scrabble_tile.dart';
 

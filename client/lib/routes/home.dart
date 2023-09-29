@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'game_history.dart';
-import 'tabs.dart';
+import 'game_start/number_input.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -21,10 +22,10 @@ class HomePage extends StatelessWidget {
             ElevatedButton.icon(
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const GameView()),
+                MaterialPageRoute(builder: (context) => const PlayerCountInput()),
               ),
               icon: const Icon(Icons.play_arrow_rounded),
-              label: const Text('Start Game'),
+              label: const Text('Play Game'),
             ),
             SizedBox(height: 20),
             ElevatedButton.icon(
