@@ -7,10 +7,10 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:scrabble_scorer/app_state.dart';
 import 'package:scrabble_scorer/keyboard.dart';
 import 'package:scrabble_scorer/providers/active_game.dart';
 import 'package:scrabble_scorer/providers/active_play.dart';
+import 'package:scrabble_scorer/providers/app_state.dart';
 import 'package:scrabble_scorer/routes/tabs.dart';
 import 'package:scrabble_scorer/scrabble_tile.dart';
 

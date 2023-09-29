@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'game_history_page.dart';
+import 'game_history.dart';
 import 'tabs.dart';
 
 class HomePage extends StatelessWidget {

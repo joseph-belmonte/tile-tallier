@@ -13,7 +13,9 @@ class PlayerScoreCards extends StatelessWidget {
     Color.fromARGB(255, 255, 234, 0),
     Color.fromARGB(255, 221, 150, 218),
   ];
-  const PlayerScoreCards(this.players, {super.key});
+
+  final bool displayScores;
+  const PlayerScoreCards(this.players, {this.displayScores = true, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,7 @@ class PlayerScoreCards extends StatelessWidget {
                     player: players[i],
                     color: colors[i],
                     isActive: players[i] == game.currentPlayer,
+                    displayScores: displayScores,
                   ),
               ],
             ),
@@ -44,13 +47,16 @@ class PlayerScoreCard extends StatelessWidget {
   final Player player;
   final Color color;
   final bool isActive;
+  final bool displayScores;
 
   const PlayerScoreCard({
     required this.player,
     required this.color,
     required this.isActive,
+    required this.displayScores,
     super.key,
   });
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -66,7 +72,10 @@ class PlayerScoreCard extends StatelessWidget {
           children: <Widget>[
             Icon(isActive ? Icons.person : Icons.person_outline, color: Colors.white),
             Text(player.name, style: Theme.of(context).textTheme.titleLarge),
-            Text(player.score.toString(), style: Theme.of(context).textTheme.bodyLarge),
+            if (displayScores)
+              Text(player.score.toString(), style: Theme.of(context).textTheme.bodyLarge)
+            else
+              Text(''),
             if (player.plays.isNotEmpty) MostRecentTurnDisplay(player),
           ],
         ),
@@ -89,17 +98,24 @@ class MostRecentTurnDisplay extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           Text(
             'Last Turn ${lastTurn.isBingo ? '⭐️' : ''}',
             style: Theme.of(context).textTheme.titleSmall!,
             textAlign: TextAlign.center,
           ),
-          Text(
-            lastTurn.playedWords.map((e) => '${e.word} - ${e.score}').join('\n'),
-            style: Theme.of(context).textTheme.bodySmall!,
-            textAlign: TextAlign.start,
-          ),
+          if (lastTurn.playedWords.isNotEmpty)
+            Text(
+              lastTurn.playedWords.map((e) => '${e.word} - ${e.score}').join('\n'),
+              style: Theme.of(context).textTheme.bodySmall!,
+              textAlign: TextAlign.start,
+            )
+          else
+            Text(
+              'Skipped',
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.white70),
+              textAlign: TextAlign.start,
+            ),
         ],
       ),
     );

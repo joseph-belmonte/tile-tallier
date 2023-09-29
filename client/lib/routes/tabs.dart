@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'play_history_page.dart';
-import 'play_input_page.dart';
-import 'settings_page.dart';
+import 'play_history.dart';
+import 'play_input.dart';
+import 'settings.dart';
 
 /// Displays the active game page, play history page, and settings page in a tab
 /// view.

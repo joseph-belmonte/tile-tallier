@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'home.dart';
 
 import '../models/game.dart';
-import 'home_page.dart';
 
 class EndGamePage extends StatelessWidget {
   const EndGamePage({

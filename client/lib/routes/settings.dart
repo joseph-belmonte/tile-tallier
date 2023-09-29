@@ -11,63 +11,68 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SettingsList(
-      sections: [
-        SettingsSection(
-          title: Text('Appearance'),
-          tiles: <SettingsTile>[
-            SettingsTile.navigation(
-              leading: Icon(Icons.nightlight),
-              title: Text('Dark Mode'),
-              trailing: Row(
-                children: [
-                  Text(
-                    Provider.of<AppState>(context).themeMode.toString(),
-                  ),
-                  Icon(Icons.navigate_next),
-                ],
-              ),
-              onPressed: (context) => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const DarkModeSettingsPage(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Settings'),
+      ),
+      body: SettingsList(
+        sections: [
+          SettingsSection(
+            title: Text('Appearance'),
+            tiles: <SettingsTile>[
+              SettingsTile.navigation(
+                leading: Icon(Icons.nightlight),
+                title: Text('Dark Mode'),
+                trailing: Row(
+                  children: [
+                    Text(
+                      Provider.of<AppState>(context).themeMode.toString(),
+                    ),
+                    Icon(Icons.navigate_next),
+                  ],
                 ),
-              ),
-            ),
-            SettingsTile.navigation(
-              leading: Icon(Icons.color_lens),
-              title: Text('Scrabble Edition'),
-              onPressed: (context) {
-                // Navigate to the second screen when tapped
-                Navigator.push(
+                onPressed: (context) => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ScrabbleEditionSettingsPage(),
+                    builder: (context) => const DarkModeSettingsPage(),
                   ),
-                );
-              },
-            ),
-            SettingsTile.navigation(
-              leading: Icon(Icons.keyboard),
-              title: Text('Keyboard'),
-              trailing: Row(
-                children: [
-                  Text(
-                    Provider.of<AppState>(context).keyboardType.toString(),
-                  ),
-                  Icon(Icons.navigate_next),
-                ],
-              ),
-              onPressed: (context) => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const KeyboardSettingsPage(),
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
+              SettingsTile.navigation(
+                leading: Icon(Icons.color_lens),
+                title: Text('Scrabble Edition'),
+                onPressed: (context) {
+                  // Navigate to the second screen when tapped
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ScrabbleEditionSettingsPage(),
+                    ),
+                  );
+                },
+              ),
+              SettingsTile.navigation(
+                leading: Icon(Icons.keyboard),
+                title: Text('Keyboard'),
+                trailing: Row(
+                  children: [
+                    Text(
+                      Provider.of<AppState>(context).keyboardType.toString(),
+                    ),
+                    Icon(Icons.navigate_next),
+                  ],
+                ),
+                onPressed: (context) => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const KeyboardSettingsPage(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

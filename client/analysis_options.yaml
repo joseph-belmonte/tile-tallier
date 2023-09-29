@@ -27,6 +27,7 @@ linter:
     no_logic_in_create_state: false # 
     empty_statements: false # Avoid empty statements.
     prefer_const_constructors: false
+    prefer_relative_imports: true
     always_put_required_named_parameters_first: true
     annotate_overrides: true
     eol_at_end_of_file: true
