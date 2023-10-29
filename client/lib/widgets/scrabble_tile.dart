@@ -5,6 +5,8 @@ import '../models/game.dart';
 import '../providers/active_play.dart';
 import '../providers/app_state.dart';
 
+// TODO: refactor the word widget to accept a plain string and display it as a word, no tap, no multiplier, provider
+
 /// A widget that displays a word as a list of ScrabbleTile widgets.
 class ScrabbleWordWidget extends StatefulWidget {
   final PlayedWord word;

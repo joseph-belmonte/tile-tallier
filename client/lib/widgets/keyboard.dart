@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-
 import '../models/game.dart';
 
 import '../providers/active_play.dart';
@@ -42,6 +41,7 @@ class DeviceKeyboard extends StatelessWidget {
       selector: (_, activePlay) => activePlay.playedWord,
       builder: (context, _, __) => TextField(
         controller: TextEditingController(text: activePlay.playedWord.word),
+        // TODO: fix this hack
         onChanged: activePlay.updatePlayedWord,
         onSubmitted: (value) {
           activePlay.playWord(context);
