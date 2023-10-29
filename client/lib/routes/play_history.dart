@@ -20,7 +20,19 @@ class PlayHistoryPageState extends State<PlayHistoryPage> {
   @override
   Widget build(BuildContext context) {
     Widget toggle = interactive ? getLockButton() : getEditButton();
-    return ListView(children: [toggle, ...getPlayHistoryWidgets(context)]);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Play History'),
+        automaticallyImplyLeading: false,
+      ),
+      body: ListView(
+        children: [
+          toggle,
+          SizedBox(height: 10), // Add spacing
+          PlayHistoryList(interactive: interactive),
+        ],
+      ),
+    );
   }
 
   Widget getLockButton() {
@@ -50,13 +62,26 @@ class PlayHistoryPageState extends State<PlayHistoryPage> {
       ),
     );
   }
+}
 
-  List<SinglePlayHistoryWidget> getPlayHistoryWidgets(BuildContext context) {
-    return Provider.of<ActiveGame>(context)
-        .activeGame
-        .plays
-        .map((play) => SinglePlayHistoryWidget(play, interactive))
-        .toList();
+class PlayHistoryList extends StatelessWidget {
+  final bool interactive;
+
+  const PlayHistoryList({required this.interactive, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final plays = Provider.of<ActiveGame>(context).activeGame.plays;
+
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: ClampingScrollPhysics(),
+      itemCount: plays.length,
+      itemBuilder: (context, index) {
+        final play = plays[index];
+        return SinglePlayHistoryWidget(play, interactive);
+      },
+    );
   }
 }
 

@@ -75,10 +75,9 @@ class _PlayerCountInputState extends State<PlayerCountInput> {
           ),
           SizedBox(height: 20),
           ElevatedButton.icon(
-            // replace the modal with the name input modal
             onPressed: () => onSubmitCount(),
             icon: const Icon(Icons.supervised_user_circle),
-            label: const Text('Names'),
+            label: const Text('Enter Names'),
           ),
         ],
       ),

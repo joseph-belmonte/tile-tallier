@@ -6,7 +6,7 @@ import '../providers/active_game.dart';
 import '../widgets/display_zone.dart';
 import '../widgets/writing_zone.dart';
 
-import 'end_game.dart';
+import 'game_end/end_game.dart';
 
 class PlayInputPage extends StatefulWidget {
   static const endGameButton = EndGameButton();

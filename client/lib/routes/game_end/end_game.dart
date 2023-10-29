@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'home.dart';
 
-import '../models/game.dart';
+import '../../models/game.dart';
+import '../home.dart';
 
 class EndGamePage extends StatelessWidget {
   const EndGamePage({
@@ -70,11 +70,13 @@ class EndGamePage extends StatelessWidget {
   @override
   build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('GAME OVER')),
+      appBar: AppBar(
+        title: Text('GAME OVER'),
+      ),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
-            children: [
+            children: <Widget>[
               Text('Winner: ${winner.name} with a score of ${winner.score}!'),
               SizedBox(height: 20),
               Text('Rankings:'),
@@ -96,7 +98,9 @@ class EndGamePage extends StatelessWidget {
               ),
               ElevatedButton.icon(
                 onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => HomePage()),
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ),
                 ),
                 icon: Icon(Icons.home),
                 label: Text('Home'),

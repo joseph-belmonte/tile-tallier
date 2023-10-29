@@ -46,10 +46,12 @@ class NameInputsState extends State<NameInput> {
       }
 
       if (validPlayerNames.isEmpty) {
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please enter at least one player name')),
+          const SnackBar(content: Text('Please enter the player names')),
         );
       } else {
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -61,8 +63,9 @@ class NameInputsState extends State<NameInput> {
         );
       }
     } else {
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter at least one valid name')),
+        const SnackBar(content: Text('Please check all fields')),
       );
     }
   }

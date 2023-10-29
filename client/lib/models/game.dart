@@ -82,6 +82,7 @@ class Game extends CyclicList<Player> {
     int maxLength = longest.length;
 
     for (var play in plays) {
+      if (play.playedWords.isEmpty) continue;
       for (var word in play.playedWords) {
         if (word.word.length > maxLength) {
           maxLength = word.word.length;
@@ -164,6 +165,8 @@ class Player {
   final String name;
   List<Play> plays = [];
 
+  String endRack = '';
+
   /// Returns the longest word played by the player.
   String get longestWord {
     if (plays.isEmpty) return '';
@@ -242,6 +245,10 @@ class Player {
     for (var play in plays) {
       score += play.score;
     }
+    for (var letter in endRack.characters) {
+      score -= PlayedLetter(letter).score;
+    }
+
     return score;
   }
 
