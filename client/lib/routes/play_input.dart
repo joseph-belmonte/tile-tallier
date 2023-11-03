@@ -5,21 +5,12 @@ import '../models/game.dart';
 import '../providers/active_game.dart';
 import '../widgets/display_zone.dart';
 import '../widgets/writing_zone.dart';
+import 'game_end/subtract.dart';
 
-import 'game_end/end_game.dart';
-
-class PlayInputPage extends StatefulWidget {
+class PlayInputPage extends StatelessWidget {
   static const endGameButton = EndGameButton();
-
   static const writingZone = WritingZone();
   const PlayInputPage({super.key});
-
-  @override
-  State<PlayInputPage> createState() => _PlayInputPageState();
-}
-
-class _PlayInputPageState extends State<PlayInputPage> {
-  bool displayScores = true;
 
   @override
   Widget build(BuildContext context) {
@@ -33,22 +24,10 @@ class _PlayInputPageState extends State<PlayInputPage> {
         builder: (_, players, __) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  PlayInputPage.endGameButton,
-                  ElevatedButton.icon(
-                    icon: displayScores ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
-                    label: Text('Scores'),
-                    onPressed: () => setState(() {
-                      displayScores = !displayScores;
-                    }),
-                  ),
-                ],
-              ),
-              PlayerScoreCards(players, displayScores: displayScores),
-              PlayInputPage.writingZone,
+            children: [
+              endGameButton,
+              PlayerScoreCards(players),
+              writingZone,
             ],
           );
         },
@@ -67,20 +46,10 @@ class EndGameButton extends StatelessWidget {
       builder: (context, activeGame, __) {
         return ElevatedButton.icon(
           label: Text('End Game'),
-          icon: Icon(Icons.assistant_photo_rounded),
-
-          /// Calculates the winner and navigates to the end game page.
+          icon: Icon(Icons.file_download_off_rounded),
           onPressed: () {
-            final winner = activeGame.leader;
-            final playerPositions = activeGame.getPlayersSortedByScore();
             Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => EndGamePage(
-                  winner: winner,
-                  rankedPlayers: playerPositions,
-                  game: activeGame,
-                ),
-              ),
+              MaterialPageRoute(builder: (_) => SubtractPage(game: activeGame)),
             );
           },
         );
