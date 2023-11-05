@@ -26,14 +26,11 @@ class _SubtractPageState extends State<SubtractPage> {
 
   void onUpdateRack() {
     _rackInput = _rackInputController.text;
-    print('Rack: $_rackInput');
   }
 
   void onSubmitRack() {
-    print('${widget.game.players[_playerIndex].name}\'s Rack');
     var players = widget.game.players;
     players[_playerIndex].endRack = _rackInput;
-    print('Rack: ${players[_playerIndex].endRack}');
 
     if (_playerIndex == widget.game.players.length - 1) {
       final winner = widget.game.leader;
@@ -48,7 +45,6 @@ class _SubtractPageState extends State<SubtractPage> {
         ),
       );
     } else if (_playerIndex > widget.game.players.length - 1) {
-      print('_playerIndex: $_playerIndex');
       throw ('Error: _playerIndex is out of bounds');
     }
     _rackInputController.clear();
