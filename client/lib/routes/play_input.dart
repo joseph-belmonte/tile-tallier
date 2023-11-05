@@ -6,7 +6,7 @@ import '../widgets/writing_zone.dart';
 
 import '../providers/active_game.dart';
 import '../models/game.dart';
-import './game_end/end_game.dart';
+import './game_end/subtract.dart';
 
 class PlayInputPage extends StatefulWidget {
   static const endGameButton = EndGameButton();
@@ -66,20 +66,10 @@ class EndGameButton extends StatelessWidget {
       builder: (context, activeGame, __) {
         return ElevatedButton.icon(
           label: Text('End Game'),
-          icon: Icon(Icons.assistant_photo_rounded),
-
-          /// Calculates the winner and navigates to the end game page.
+          icon: Icon(Icons.file_download_off_rounded),
           onPressed: () {
-            final winner = activeGame.leader;
-            final playerPositions = activeGame.getPlayersSortedByScore();
             Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => EndGamePage(
-                  winner: winner,
-                  rankedPlayers: playerPositions,
-                  game: activeGame,
-                ),
-              ),
+              MaterialPageRoute(builder: (_) => SubtractPage(game: activeGame)),
             );
           },
         );
