@@ -1,12 +1,5 @@
 # Scrabble Scoring App Development Milestones
 
-## Backend Setup with Firebase
-- [ ] Set up Firebase for authentication, database, and cloud functions.
-- [ ] Configure user authentication and user profiles storage.
-- [ ] For now, we can store the game history in the database?
-- [ ] Define the database schema for storing game state, scores, and user data.
-
-
 ## Frontend Development
 - [x] Implement navigation between screens (scorekeeping, settings, main menu).
 - [ ] Ensure responsive and consistent design across devices and orientations.
