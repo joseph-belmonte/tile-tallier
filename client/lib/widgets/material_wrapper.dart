@@ -37,7 +37,6 @@ class ThemeBuilder {
 
   ThemeData _buildDarkTheme() {
     ThemeData theme = ThemeData.dark().copyWith(
-      useMaterial3: true,
       colorScheme: colorScheme,
     );
     return theme.copyWith(
