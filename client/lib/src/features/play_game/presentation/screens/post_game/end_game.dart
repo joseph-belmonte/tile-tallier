@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/models/game.dart';
+import '../../../domain/models/game.dart';
 
 import '../home.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../application/providers/active_game.dart';
-import '../../domain/models/game.dart';
+import '../../../application/providers/active_game.dart';
+import '../../../domain/models/game.dart';
 import '../during_game/game_navigator.dart';
 
 /// A page that allows the user to input the names of the players.

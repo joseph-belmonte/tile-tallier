@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../application/providers/active_game.dart';
-import '../../presentation/widgets/display_zone.dart';
+import '../../../application/providers/active_game.dart';
+import '../../widgets/display_zone.dart';
 
-import '../../presentation/widgets/writing_zone.dart';
+import '../../widgets/writing_zone.dart';
 import '../post_game/end_game.dart';
 
 /// A page that allows the user to input the scores of the players.

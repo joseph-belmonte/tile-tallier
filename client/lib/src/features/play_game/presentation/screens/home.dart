@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'game_history.dart';
+import '../../../view_past_games/presentation/screens/game_history.dart';
 import 'pre_game/number_input.dart';
-import 'settings/settings.dart';
+import '../../../edit_settings/presentation/screens/settings.dart';
 
 /// The home page for the Scrabble app.
 class HomePage extends StatelessWidget {
