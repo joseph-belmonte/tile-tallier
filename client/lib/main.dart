@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'widgets/material_wrapper.dart';
-import 'providers/app_state.dart';
+import 'src/features/play_game/screens/home.dart';
 
 void main() {
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider<AppState>(create: (_) => AppState()),
-      ],
-      child: MaterialWrapper(),
+    ProviderScope(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Scrabble Score Keeper',
+        home: const HomePage(),
+      ),
     ),
   );
 }
