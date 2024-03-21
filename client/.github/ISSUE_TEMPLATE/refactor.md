@@ -19,12 +19,6 @@ Any additional context or information that might be helpful in understanding the
 **Attachments**
 If applicable, add any relevant documents, diagrams, or code samples that can assist in explaining the request.
 
-**Priority (select one)**
-- Low
-- Medium
-- High
-- Critical
-
 **Estimate**
 Provide an estimate of the effort required for the code refactoring (e.g., small, medium, large).
 
