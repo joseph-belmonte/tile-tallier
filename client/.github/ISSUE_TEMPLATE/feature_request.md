@@ -14,20 +14,14 @@ As a [type of user], I want [an action/feature] so that [benefit or reason].
 A clear and concise description of the new feature or enhancement you are requesting.
 
 **Acceptance Criteria**
-- [ ] Clearly defined criteria that must be met for this feature to be considered complete.
-- [ ] Use specific and measurable language to describe the desired functionality.
+- Clearly defined criteria that must be met for this feature to be considered complete.
+- Use specific and measurable language to describe the desired functionality.
 
 **Additional Details**
 Any additional context or information that might be helpful in understanding the feature request.
 
 **Attachments**
 If applicable, add any relevant documents, diagrams, or mockups to help illustrate your request.
-
-**Priority (select one)**
-- Low
-- Medium
-- High
-- Critical
 
 **Estimate**
 Provide an estimate of the effort required to implement this feature. It can be a time commitment (e.g. hours) or level of effort (e.g., small, medium, large).
@@ -40,9 +34,5 @@ Provide an estimate of the effort required to implement this feature. It can be 
 
 **Related Issues**
 List any related issues, if applicable.
-
-**Dependencies**
-List any dependencies or prerequisites for implementing this feature.
-
 
 ---

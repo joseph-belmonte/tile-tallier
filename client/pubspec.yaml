@@ -40,6 +40,8 @@ dependencies:
   flex_color_scheme: ^7.3.1
   uuid: ^4.3.3
   logger: ^2.1.0
+  freezed: ^2.4.7
+  freezed_annotation: ^2.4.1
 
 dev_dependencies:
   flutter_test:

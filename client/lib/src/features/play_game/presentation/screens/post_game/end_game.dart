@@ -50,10 +50,6 @@ class EndGamePage extends StatelessWidget {
                   ),
                 ),
               Divider(),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Text('Shortest Word: ${_game.shortestWord}'),
-              ),
             ],
           ),
         ),
@@ -77,7 +73,10 @@ class EndGamePage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Text('Winner: ${_game.winner.name} with a score of ${_game.winner.score}!'),
+              Text(
+                'Winner: ${_game.sortedPlayers[0].name} with a score of ${_game.sortedPlayers[0].score}!',
+              ),
+
               SizedBox(height: 20),
               Text('Rankings:'),
               SizedBox(height: 20),
@@ -86,7 +85,7 @@ class EndGamePage extends StatelessWidget {
                     (player) => Text(
                       '${player.name}: ${player.score}',
                       style: TextStyle(
-                        color: player == _game.winner ? Colors.green : Colors.black,
+                        color: player == _game.sortedPlayers[0] ? Colors.green : Colors.black,
                       ),
                     ),
                   )

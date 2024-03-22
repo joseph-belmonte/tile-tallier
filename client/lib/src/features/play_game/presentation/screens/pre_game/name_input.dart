@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:uuid/uuid.dart';
 import '../../../application/providers/active_game.dart';
 import '../../../domain/models/game.dart';
 import '../during_game/game_navigator.dart';
@@ -48,8 +48,9 @@ class _NameInputsState extends State<NameInput> {
       }
 
       if (_validPlayerNames.isNotEmpty) {
-        final game = Game()..addPlayers(_validPlayerNames);
-        final activeGameNotifier = ActiveGameNotifier(game);
+        final activeGameNotifier = ActiveGameNotifier(Game(id: Uuid().v4()));
+        activeGameNotifier.setPlayers(_validPlayerNames);
+
         Navigator.push(
           context,
           MaterialPageRoute(

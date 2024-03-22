@@ -22,5 +22,4 @@ If applicable, add any relevant documents, diagrams, or code samples that can as
 **Estimate**
 Provide an estimate of the effort required for the code refactoring (e.g., small, medium, large).
 
-
 ---

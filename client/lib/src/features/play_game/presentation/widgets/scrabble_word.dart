@@ -25,14 +25,8 @@ class _ScrabbleWordWidgetState extends State<ScrabbleWordWidget> {
       child: Container(
         color: widget.word.wordMultiplier.editionColor(ScrabbleEdition.classic),
         child: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                ...widget.word.playedLetters.map((l) => ScrabbleTile(l)).toList(),
-              ],
-            ),
+            ...widget.word.playedLetters.map((l) => ScrabbleTile(l)).toList(),
           ],
         ),
       ),

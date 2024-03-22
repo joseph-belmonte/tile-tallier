@@ -24,27 +24,28 @@ class PlayerScoreCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.all(5),
-        margin: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: color,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            Icon(isActive ? Icons.person : Icons.person_outline, color: Colors.white),
-            Text(player.name, style: Theme.of(context).textTheme.titleLarge),
-            // read from the provider
-            // if (displayScores)
-            Text(player.score.toString(), style: Theme.of(context).textTheme.bodyLarge),
-            // else
-            //   Text(''),
-            if (player.plays.isNotEmpty) MostRecentTurnDisplay(player),
-          ],
-        ),
+    return Container(
+      padding: EdgeInsets.all(5),
+      margin: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: color,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Icon(isActive ? Icons.person : Icons.person_outline, color: Colors.white),
+          Text(player.name, style: Theme.of(context).textTheme.titleLarge),
+          // read from the provider
+          // if (displayScores)
+          Text(
+            player.score.toString(),
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          // else
+          //   Text(''),
+          if (player.plays.isNotEmpty) MostRecentTurnDisplay(player),
+        ],
       ),
     );
   }

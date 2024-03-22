@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logger/logger.dart';
+import 'package:logger/web.dart';
 
 import '../../../../utils/helpers.dart';
 import '../../application/providers/active_game.dart';
@@ -19,20 +20,37 @@ class WritingZone extends ConsumerStatefulWidget {
   ConsumerState<WritingZone> createState() => _WritingZoneState();
 }
 
-// TODO: have UI update on state change. currently manually refreshing
 class _WritingZoneState extends ConsumerState<WritingZone> {
+  final _textController = TextEditingController();
+
+  /// Updates the current word in the active game to the value of the input field.
   void _handleWordUpdate(String value) {
+    _logger.i('Current word is now: $value');
     ref.read(activeGameProvider.notifier).updateCurrentWord(value);
   }
 
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
+  /// Submits the word in the input field to the active play.
   void _handleWordSubmit(String value) {
     ref.read(activeGameProvider.notifier).addWordToCurrentPlay(value);
-    TextEditingController().clear();
+    _textController.clear();
+  }
+
+  /// Clears the word in the input field and ends the current turn.
+  void _handleEndTurn() {
+    _textController.clear();
+    ref.read(activeGameProvider.notifier).endTurn();
   }
 
   @override
   Widget build(BuildContext context) {
     final gameNotifier = ref.read(activeGameProvider.notifier);
+    final game = ref.watch(activeGameProvider);
     return Column(
       children: <Widget>[
         Row(
@@ -41,7 +59,13 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
             Column(
               children: <Widget>[
                 Text('Play Score:'),
-                Text(ref.read(activeGameProvider).currentPlay.score.toString()),
+                Text(game.currentPlay.score.toString()),
+              ],
+            ),
+            Column(
+              children: <Widget>[
+                Text('Played Words:'),
+                Text(game.currentPlay.playedWords.map((word) => word.word).join(', ')),
               ],
             ),
             Column(
@@ -49,9 +73,7 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
                 Text('Bingo:'),
                 IconButton(
                   onPressed: () => gameNotifier.toggleBingo(),
-                  icon: ref.read(activeGameProvider).currentPlay.isBingo
-                      ? Icon(Icons.star)
-                      : Icon(Icons.star_border),
+                  icon: game.currentPlay.isBingo ? Icon(Icons.star) : Icon(Icons.star_border),
                 ),
               ],
             ),
@@ -59,10 +81,10 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
               children: <Widget>[
                 Text('Multiplier:'),
                 OutlinedButton.icon(
-                  onPressed: () => gameNotifier.toggleWordMultiplier(),
+                  onPressed: () => gameNotifier.toggleCurrentWordMultiplier(),
                   icon: Icon(Icons.multiple_stop_rounded),
                   label: Text(
-                    getMultiplierText(ref.read(activeGameProvider).currentWord.wordMultiplier),
+                    getMultiplierText(game.currentWord.wordMultiplier),
                   ),
                 ),
               ],
@@ -71,12 +93,16 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 IconButton.filled(
+                  onPressed: () => gameNotifier.undoTurn(),
+                  icon: Icon(Icons.undo),
+                ),
+                IconButton.filled(
                   onPressed: () => _handleWordSubmit(ref.read(activeGameProvider).currentWord.word),
                   icon: Icon(Icons.playlist_add),
                 ),
                 IconButton.filled(
-                  onPressed: () => gameNotifier.endTurn(),
-                  icon: Icon(Icons.playlist_add_check),
+                  onPressed: () => _handleEndTurn(),
+                  icon: Icon(Icons.redo),
                 ),
               ],
             ),
@@ -88,17 +114,15 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
             Column(
               children: <Widget>[
                 Text('Current Word: '),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  clipBehavior: Clip.hardEdge,
-                  child: ScrabbleWordWidget(ref.read(activeGameProvider).currentWord),
+                ScrabbleWordWidget(
+                  game.currentWord,
                 ),
               ],
             ),
             Column(
               children: <Widget>[
                 Text('Word Score: '),
-                Text(ref.read(activeGameProvider).currentWord.score.toString()),
+                Text(game.currentWord.score.toString()),
               ],
             ),
           ],
@@ -107,7 +131,7 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
           children: <Widget>[
             Expanded(
               child: TextField(
-                controller: TextEditingController(text: ''),
+                controller: _textController,
                 onChanged: (value) => _handleWordUpdate(value),
                 onSubmitted: (value) => _handleWordSubmit(value),
                 decoration: InputDecoration(
@@ -119,6 +143,8 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
                     RegExp(r'[a-zA-Z ]'),
                   ),
                 ],
+                textCapitalization: TextCapitalization.characters,
+                autocorrect: false,
               ),
             ),
           ],

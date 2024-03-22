@@ -21,10 +21,7 @@ class _ScrabbleTileState extends State<ScrabbleTile> {
     var textColor = boxColor.computeLuminance() > 0.5 ? Colors.black87 : Colors.white;
     var textTheme = Theme.of(context).textTheme;
     return GestureDetector(
-      onTap: () {
-        widget.letter.toggleLetterMultiplier();
-        setState(() {});
-      },
+      onTap: () {},
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
         margin: const EdgeInsets.symmetric(horizontal: 1, vertical: 5),
@@ -44,7 +41,7 @@ class _ScrabbleTileState extends State<ScrabbleTile> {
               ),
             ),
             Text(
-              widget.letter.letter,
+              widget.letter.letter.toUpperCase(),
               style: textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500, color: textColor),
             ),
           ],
