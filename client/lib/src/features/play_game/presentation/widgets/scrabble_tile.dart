@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../enums/scrabble_edition.dart';
+import '../../../../utils/helpers.dart';
 import '../../domain/models/letter.dart';
 
 /// A widget that displays a single letter as a ScrabbleTile widget.
@@ -20,7 +21,7 @@ class ScrabbleTile extends StatefulWidget {
 class _ScrabbleTileState extends State<ScrabbleTile> {
   @override
   Widget build(BuildContext context) {
-    final boxColor = widget.letter.letterMultiplier.editionColor(ScrabbleEdition.classic);
+    final boxColor = getTileColor(widget.letter, ScrabbleEdition.classic);
     final textColor = boxColor.computeLuminance() > 0.5 ? Colors.black87 : Colors.white;
     final textTheme = Theme.of(context).textTheme;
     return GestureDetector(

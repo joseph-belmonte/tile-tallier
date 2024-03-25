@@ -58,12 +58,12 @@ class ActiveGameNotifier extends StateNotifier<Game> {
 
   /// Converts the input string to a [Word] and adds it to the current play
   void addWordToCurrentPlay(String input) {
-    var newWord = Word(wordMultiplier: state.currentWord.wordMultiplier);
+    var newWord = Word();
     for (var char in input.split('')) {
       final letter = Letter(
         letter: char,
-        letterMultiplier:
-            state.currentWord.playedLetters[newWord.playedLetters.length].letterMultiplier,
+        scoreMultiplier:
+            state.currentWord.playedLetters[newWord.playedLetters.length].scoreMultiplier,
       );
       newWord = newWord.copyWith(playedLetters: [...newWord.playedLetters, letter]);
     }
@@ -86,30 +86,19 @@ class ActiveGameNotifier extends StateNotifier<Game> {
   }
 
   /// Given a word and index of a letter, toggles the letter's multiplier
-  void toggleLetterMultiplier(Word word, int index) {
+  void toggleScoreMultiplier(Word word, int index) {
     final letter = word.playedLetters[index];
-    final currentMultiplier = letter.letterMultiplier;
-    final newMultiplier = LetterScoreMultiplier
-        .values[(currentMultiplier.index + 1) % LetterScoreMultiplier.values.length];
+    final currentMultiplier = letter.scoreMultiplier;
+    final newMultiplier =
+        ScoreMultiplier.values[(currentMultiplier.index + 1) % ScoreMultiplier.values.length];
     final updatedLetter = letter.copyWith(
-      letterMultiplier: newMultiplier,
+      scoreMultiplier: newMultiplier,
     );
 
     final updatedWord = word.copyWith(
       playedLetters: List<Letter>.from(word.playedLetters)..[index] = updatedLetter,
     );
 
-    state = state.copyWith(currentWord: updatedWord);
-  }
-
-  /// Toggles the current word multiplier
-  void toggleCurrentWordMultiplier() {
-    final index = WordScoreMultiplier.values.indexOf(state.currentWord.wordMultiplier);
-    final nextIndex = (index + 1) % WordScoreMultiplier.values.length;
-    final updatedWord = Word(
-      playedLetters: state.currentWord.playedLetters,
-      wordMultiplier: WordScoreMultiplier.values[nextIndex],
-    );
     state = state.copyWith(currentWord: updatedWord);
   }
 
@@ -131,16 +120,16 @@ final activeGameProvider = StateNotifierProvider<ActiveGameNotifier, Game>(
 
 
   /// Toggles the letter multiplier between single, double, and triple letter.
-  // void toggleLetterMultiplier() {
-  //   switch (letterMultiplier) {
+  // void togglescoreMultiplier() {
+  //   switch (scoreMultiplier) {
   //     case LetterScoreMultiplier.singleLetter:
-  //       letterMultiplier = LetterScoreMultiplier.doubleLetter;
+  //       scoreMultiplier = LetterScoreMultiplier.doubleLetter;
   //       break;
   //     case LetterScoreMultiplier.doubleLetter:
-  //       letterMultiplier = LetterScoreMultiplier.tripleLetter;
+  //       scoreMultiplier = LetterScoreMultiplier.tripleLetter;
   //       break;
   //     case LetterScoreMultiplier.tripleLetter:
-  //       letterMultiplier = LetterScoreMultiplier.singleLetter;
+  //       scoreMultiplier = LetterScoreMultiplier.singleLetter;
   //       break;
   //     default:
   //       throw Exception('Invalid letter multiplier');

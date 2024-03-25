@@ -58,7 +58,7 @@ class AppearanceSettingsPage extends StatelessWidget {
           ),
           ListTile(
             title: const Text('25th Anniversary'),
-            leading: const Icon(Icons.color_lens),
+            leading: const Icon(Icons.format_color_text),
             onTap: () {},
           ),
           Divider(),

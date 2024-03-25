@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../utils/helpers.dart';
 import '../../application/providers/active_game.dart';
 
 import 'scrabble_word.dart';
@@ -69,18 +68,6 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
               ],
             ),
             Column(
-              children: <Widget>[
-                Text('Multiplier:'),
-                OutlinedButton.icon(
-                  onPressed: gameNotifier.toggleCurrentWordMultiplier,
-                  icon: Icon(Icons.multiple_stop_rounded),
-                  label: Text(
-                    getMultiplierText(game.currentWord.wordMultiplier),
-                  ),
-                ),
-              ],
-            ),
-            Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 IconButton.filled(
@@ -107,7 +94,7 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
                 Text('Current Word: '),
                 ScrabbleWordWidget(
                   game.currentWord,
-                  (index) => gameNotifier.toggleLetterMultiplier(game.currentWord, index),
+                  (index) => gameNotifier.toggleScoreMultiplier(game.currentWord, index),
                 ),
               ],
             ),

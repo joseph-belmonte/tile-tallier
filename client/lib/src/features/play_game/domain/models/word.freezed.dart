@@ -17,7 +17,6 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$Word {
   List<Letter> get playedLetters => throw _privateConstructorUsedError;
-  WordScoreMultiplier get wordMultiplier => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $WordCopyWith<Word> get copyWith => throw _privateConstructorUsedError;
@@ -28,7 +27,7 @@ abstract class $WordCopyWith<$Res> {
   factory $WordCopyWith(Word value, $Res Function(Word) then) =
       _$WordCopyWithImpl<$Res, Word>;
   @useResult
-  $Res call({List<Letter> playedLetters, WordScoreMultiplier wordMultiplier});
+  $Res call({List<Letter> playedLetters});
 }
 
 /// @nodoc
@@ -45,17 +44,12 @@ class _$WordCopyWithImpl<$Res, $Val extends Word>
   @override
   $Res call({
     Object? playedLetters = null,
-    Object? wordMultiplier = null,
   }) {
     return _then(_value.copyWith(
       playedLetters: null == playedLetters
           ? _value.playedLetters
           : playedLetters // ignore: cast_nullable_to_non_nullable
               as List<Letter>,
-      wordMultiplier: null == wordMultiplier
-          ? _value.wordMultiplier
-          : wordMultiplier // ignore: cast_nullable_to_non_nullable
-              as WordScoreMultiplier,
     ) as $Val);
   }
 }
@@ -67,7 +61,7 @@ abstract class _$$WordImplCopyWith<$Res> implements $WordCopyWith<$Res> {
       __$$WordImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<Letter> playedLetters, WordScoreMultiplier wordMultiplier});
+  $Res call({List<Letter> playedLetters});
 }
 
 /// @nodoc
@@ -81,17 +75,12 @@ class __$$WordImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? playedLetters = null,
-    Object? wordMultiplier = null,
   }) {
     return _then(_$WordImpl(
       playedLetters: null == playedLetters
           ? _value._playedLetters
           : playedLetters // ignore: cast_nullable_to_non_nullable
               as List<Letter>,
-      wordMultiplier: null == wordMultiplier
-          ? _value.wordMultiplier
-          : wordMultiplier // ignore: cast_nullable_to_non_nullable
-              as WordScoreMultiplier,
     ));
   }
 }
@@ -99,9 +88,7 @@ class __$$WordImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$WordImpl extends _Word {
-  const _$WordImpl(
-      {final List<Letter> playedLetters = const [],
-      this.wordMultiplier = WordScoreMultiplier.singleWord})
+  const _$WordImpl({final List<Letter> playedLetters = const []})
       : _playedLetters = playedLetters,
         super._();
 
@@ -115,12 +102,8 @@ class _$WordImpl extends _Word {
   }
 
   @override
-  @JsonKey()
-  final WordScoreMultiplier wordMultiplier;
-
-  @override
   String toString() {
-    return 'Word(playedLetters: $playedLetters, wordMultiplier: $wordMultiplier)';
+    return 'Word(playedLetters: $playedLetters)';
   }
 
   @override
@@ -129,14 +112,12 @@ class _$WordImpl extends _Word {
         (other.runtimeType == runtimeType &&
             other is _$WordImpl &&
             const DeepCollectionEquality()
-                .equals(other._playedLetters, _playedLetters) &&
-            (identical(other.wordMultiplier, wordMultiplier) ||
-                other.wordMultiplier == wordMultiplier));
+                .equals(other._playedLetters, _playedLetters));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_playedLetters), wordMultiplier);
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_playedLetters));
 
   @JsonKey(ignore: true)
   @override
@@ -146,15 +127,11 @@ class _$WordImpl extends _Word {
 }
 
 abstract class _Word extends Word {
-  const factory _Word(
-      {final List<Letter> playedLetters,
-      final WordScoreMultiplier wordMultiplier}) = _$WordImpl;
+  const factory _Word({final List<Letter> playedLetters}) = _$WordImpl;
   const _Word._() : super._();
 
   @override
   List<Letter> get playedLetters;
-  @override
-  WordScoreMultiplier get wordMultiplier;
   @override
   @JsonKey(ignore: true)
   _$$WordImplCopyWith<_$WordImpl> get copyWith =>

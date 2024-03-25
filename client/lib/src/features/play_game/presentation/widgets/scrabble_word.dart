@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../enums/scrabble_edition.dart';
-
 import '../../domain/models/word.dart';
 import 'scrabble_tile.dart';
 
@@ -26,20 +24,17 @@ class _ScrabbleWordWidgetState extends State<ScrabbleWordWidget> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       clipBehavior: Clip.hardEdge,
-      child: Container(
-        color: widget.word.wordMultiplier.editionColor(ScrabbleEdition.classic),
-        child: Row(
-          children: <Widget>[
-            ...widget.word.playedLetters.asMap().entries.map((entry) {
-              final idx = entry.key;
-              final letter = entry.value;
-              return ScrabbleTile(
-                letter,
-                () => widget.onLetterTap(idx),
-              );
-            }).toList(),
-          ],
-        ),
+      child: Row(
+        children: <Widget>[
+          ...widget.word.playedLetters.asMap().entries.map((entry) {
+            final idx = entry.key;
+            final letter = entry.value;
+            return ScrabbleTile(
+              letter,
+              () => widget.onLetterTap(idx),
+            );
+          }).toList(),
+        ],
       ),
     );
   }

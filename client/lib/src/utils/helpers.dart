@@ -1,21 +1,28 @@
-import '../../enums/score_multipliers.dart';
+import 'dart:ui';
 
-/// Accepts a [LetterScoreMultiplier] or [WordScoreMultiplier] and returns the text to display.
-String getMultiplierText(dynamic multiplier) {
+import 'package:flutter/material.dart';
+
+import '../../enums/score_multipliers.dart';
+import '../../enums/scrabble_edition.dart';
+import '../features/play_game/domain/models/letter.dart';
+
+import '../theme/theming.dart';
+
+/// Accepts a [ScoreMultiplier] and returns the text to display.
+String getMultiplierText(ScoreMultiplier multiplier) {
   switch (multiplier) {
-    case LetterScoreMultiplier.singleLetter:
+    case ScoreMultiplier.none:
       return '1x';
-    case WordScoreMultiplier.singleWord:
-      return '1x';
-    case LetterScoreMultiplier.doubleLetter:
+    case ScoreMultiplier.doubleLetter:
       return '2x';
-    case WordScoreMultiplier.doubleWord:
-      return '2x';
-    case LetterScoreMultiplier.tripleLetter:
-      return '3x';
-    case WordScoreMultiplier.tripleWord:
+    case ScoreMultiplier.tripleLetter:
       return '3x';
     default:
       throw Exception('Invalid multiplier: $multiplier');
   }
+}
+
+/// Returns the color to use for the tile.
+Color getTileColor(Letter letter, ScrabbleEdition edition) {
+  return colors[edition]![letter.scoreMultiplier]!;
 }

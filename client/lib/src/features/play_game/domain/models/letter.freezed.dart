@@ -17,8 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$Letter {
   String get letter => throw _privateConstructorUsedError;
-  LetterScoreMultiplier get letterMultiplier =>
-      throw _privateConstructorUsedError;
+  ScoreMultiplier get scoreMultiplier => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $LetterCopyWith<Letter> get copyWith => throw _privateConstructorUsedError;
@@ -29,7 +28,7 @@ abstract class $LetterCopyWith<$Res> {
   factory $LetterCopyWith(Letter value, $Res Function(Letter) then) =
       _$LetterCopyWithImpl<$Res, Letter>;
   @useResult
-  $Res call({String letter, LetterScoreMultiplier letterMultiplier});
+  $Res call({String letter, ScoreMultiplier scoreMultiplier});
 }
 
 /// @nodoc
@@ -46,17 +45,17 @@ class _$LetterCopyWithImpl<$Res, $Val extends Letter>
   @override
   $Res call({
     Object? letter = null,
-    Object? letterMultiplier = null,
+    Object? scoreMultiplier = null,
   }) {
     return _then(_value.copyWith(
       letter: null == letter
           ? _value.letter
           : letter // ignore: cast_nullable_to_non_nullable
               as String,
-      letterMultiplier: null == letterMultiplier
-          ? _value.letterMultiplier
-          : letterMultiplier // ignore: cast_nullable_to_non_nullable
-              as LetterScoreMultiplier,
+      scoreMultiplier: null == scoreMultiplier
+          ? _value.scoreMultiplier
+          : scoreMultiplier // ignore: cast_nullable_to_non_nullable
+              as ScoreMultiplier,
     ) as $Val);
   }
 }
@@ -68,7 +67,7 @@ abstract class _$$LetterImplCopyWith<$Res> implements $LetterCopyWith<$Res> {
       __$$LetterImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String letter, LetterScoreMultiplier letterMultiplier});
+  $Res call({String letter, ScoreMultiplier scoreMultiplier});
 }
 
 /// @nodoc
@@ -83,17 +82,17 @@ class __$$LetterImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? letter = null,
-    Object? letterMultiplier = null,
+    Object? scoreMultiplier = null,
   }) {
     return _then(_$LetterImpl(
       letter: null == letter
           ? _value.letter
           : letter // ignore: cast_nullable_to_non_nullable
               as String,
-      letterMultiplier: null == letterMultiplier
-          ? _value.letterMultiplier
-          : letterMultiplier // ignore: cast_nullable_to_non_nullable
-              as LetterScoreMultiplier,
+      scoreMultiplier: null == scoreMultiplier
+          ? _value.scoreMultiplier
+          : scoreMultiplier // ignore: cast_nullable_to_non_nullable
+              as ScoreMultiplier,
     ));
   }
 }
@@ -102,19 +101,18 @@ class __$$LetterImplCopyWithImpl<$Res>
 
 class _$LetterImpl extends _Letter {
   const _$LetterImpl(
-      {required this.letter,
-      this.letterMultiplier = LetterScoreMultiplier.singleLetter})
+      {required this.letter, this.scoreMultiplier = ScoreMultiplier.none})
       : super._();
 
   @override
   final String letter;
   @override
   @JsonKey()
-  final LetterScoreMultiplier letterMultiplier;
+  final ScoreMultiplier scoreMultiplier;
 
   @override
   String toString() {
-    return 'Letter(letter: $letter, letterMultiplier: $letterMultiplier)';
+    return 'Letter(letter: $letter, scoreMultiplier: $scoreMultiplier)';
   }
 
   @override
@@ -123,12 +121,12 @@ class _$LetterImpl extends _Letter {
         (other.runtimeType == runtimeType &&
             other is _$LetterImpl &&
             (identical(other.letter, letter) || other.letter == letter) &&
-            (identical(other.letterMultiplier, letterMultiplier) ||
-                other.letterMultiplier == letterMultiplier));
+            (identical(other.scoreMultiplier, scoreMultiplier) ||
+                other.scoreMultiplier == scoreMultiplier));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, letter, letterMultiplier);
+  int get hashCode => Object.hash(runtimeType, letter, scoreMultiplier);
 
   @JsonKey(ignore: true)
   @override
@@ -140,13 +138,13 @@ class _$LetterImpl extends _Letter {
 abstract class _Letter extends Letter {
   const factory _Letter(
       {required final String letter,
-      final LetterScoreMultiplier letterMultiplier}) = _$LetterImpl;
+      final ScoreMultiplier scoreMultiplier}) = _$LetterImpl;
   const _Letter._() : super._();
 
   @override
   String get letter;
   @override
-  LetterScoreMultiplier get letterMultiplier;
+  ScoreMultiplier get scoreMultiplier;
   @override
   @JsonKey(ignore: true)
   _$$LetterImplCopyWith<_$LetterImpl> get copyWith =>

@@ -10,7 +10,6 @@ class Word with _$Word {
   /// Creates a new [Word] instance.
   const factory Word({
     @Default([]) List<Letter> playedLetters,
-    @Default(WordScoreMultiplier.singleWord) WordScoreMultiplier wordMultiplier,
   }) = _Word;
   const Word._();
 
@@ -18,6 +17,20 @@ class Word with _$Word {
   String get word => playedLetters.map((e) => e.letter).join();
 
   /// Returns the total score of the word.
-  int get score =>
-      playedLetters.fold(0, (total, letter) => total + letter.score) * wordMultiplier.value;
+  int get score {
+    final baseScore = playedLetters.fold(0, (total, letter) => total + letter.score);
+    var wordMultiplier = 1;
+
+    // Check if any letters have word multipliers and apply the highest one.
+    for (var letter in playedLetters) {
+      if (letter.scoreMultiplier == ScoreMultiplier.doubleWord && wordMultiplier < 2) {
+        wordMultiplier = 2;
+      } else if (letter.scoreMultiplier == ScoreMultiplier.tripleWord) {
+        wordMultiplier = 3;
+        break;
+      }
+    }
+
+    return baseScore * wordMultiplier;
+  }
 }

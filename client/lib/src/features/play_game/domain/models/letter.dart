@@ -11,10 +11,17 @@ class Letter with _$Letter {
   /// Creates a new [Letter] instance.
   const factory Letter({
     required String letter,
-    @Default(LetterScoreMultiplier.singleLetter) LetterScoreMultiplier letterMultiplier,
+    @Default(ScoreMultiplier.none) ScoreMultiplier scoreMultiplier,
   }) = _Letter;
+
   const Letter._();
 
   /// Returns the score of the letter.
-  int get score => (letterScores[letter.toUpperCase()] ?? 0).toInt() * letterMultiplier.value;
+  int get score =>
+      (letterScores[letter.toUpperCase()] ?? 0).toInt() *
+      (scoreMultiplier == ScoreMultiplier.doubleLetter
+          ? 2
+          : scoreMultiplier == ScoreMultiplier.tripleLetter
+              ? 3
+              : 1);
 }
