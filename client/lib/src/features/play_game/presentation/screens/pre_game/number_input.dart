@@ -58,7 +58,7 @@ class _PlayerCountInputState extends State<PlayerCountInput> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               IconButton.filled(
-                onPressed: remove ? () => removePlayer() : null,
+                onPressed: remove ? removePlayer : null,
                 icon: remove
                     ? const Icon(Icons.remove)
                     : const Icon(Icons.remove, color: Colors.grey),
@@ -70,14 +70,14 @@ class _PlayerCountInputState extends State<PlayerCountInput> {
               ),
               SizedBox(width: 50),
               IconButton.filled(
-                onPressed: add ? () => addPlayer() : null,
+                onPressed: add ? addPlayer : null,
                 icon: add ? const Icon(Icons.add) : const Icon(Icons.add, color: Colors.grey),
               ),
             ],
           ),
           SizedBox(height: 20),
           ElevatedButton.icon(
-            onPressed: () => onSubmitCount(),
+            onPressed: onSubmitCount,
             icon: const Icon(Icons.supervised_user_circle),
             label: const Text('Enter Names'),
           ),

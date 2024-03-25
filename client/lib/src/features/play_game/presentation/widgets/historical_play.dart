@@ -16,7 +16,7 @@ class HistoricalPlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var children = <Widget>[Text(play.playedWords.toString())];
+    final children = <Widget>[Text(play.playedWords.toString())];
 
     if (!interactive) {
       children.add(Text('Score: ${play.score}'));
@@ -24,7 +24,8 @@ class HistoricalPlay extends StatelessWidget {
     }
 
     for (var word in play.playedWords) {
-      children.add(ScrabbleWordWidget(word));
+      // TODO: clean this up for the letter tap functionality when editing
+      children.add(ScrabbleWordWidget(word, (value) {}));
     }
 
     if (children.isEmpty) {

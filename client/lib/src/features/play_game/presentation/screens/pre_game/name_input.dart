@@ -91,7 +91,7 @@ class _NameInputsState extends State<NameInput> {
               children: <Widget>[
                 ...playerNameInputs,
                 ElevatedButton.icon(
-                  onPressed: () => _startGame(),
+                  onPressed: _startGame,
                   icon: Icon(Icons.play_arrow_rounded),
                   label: Text('Start Game'),
                 ),

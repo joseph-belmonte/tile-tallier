@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../data/letter_scores.dart';
+
 import '../../../../../enums/score_multipliers.dart';
+import '../../data/letter_scores.dart';
 
 part 'letter.freezed.dart';
 

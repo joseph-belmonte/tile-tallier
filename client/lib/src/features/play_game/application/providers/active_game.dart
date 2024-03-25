@@ -6,7 +6,7 @@
 // and updating the current word. You should also move the methods for toggling the word multiplier and bingo status to the ActiveGameNotifier class.
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logger/logger.dart';
+
 import 'package:uuid/uuid.dart';
 import '../../../../../enums/score_multipliers.dart';
 import '../../domain/models/game.dart';
@@ -16,8 +16,6 @@ import '../../domain/models/play.dart';
 import '../../domain/models/player.dart';
 import '../../domain/models/word.dart';
 
-final _logger = Logger();
-
 /// A [StateNotifier] that manages the state of the active game.
 class ActiveGameNotifier extends StateNotifier<Game> {
   /// Creates a new [ActiveGameNotifier] with a new game
@@ -25,24 +23,24 @@ class ActiveGameNotifier extends StateNotifier<Game> {
 
   /// Adds players to the game, based on a list of names
   void setPlayers(List<String> playerNames) {
-    var players = playerNames.map((name) => Player(name: name, id: Uuid().v4())).toList();
+    final players = playerNames.map((name) => Player(name: name, id: Uuid().v4())).toList();
     state = state.copyWith(players: players);
   }
 
   /// * Adds the current play to the active player's list of plays.
   /// * Advances the game to the next player's turn
   void endTurn() {
-    var currentPlayer = state.players[state.currentPlayerIndex];
+    final currentPlayer = state.players[state.currentPlayerIndex];
 
-    var updatedPlayer = currentPlayer.copyWith(
+    final updatedPlayer = currentPlayer.copyWith(
       plays: [...currentPlayer.plays, state.currentPlay],
     );
 
-    var updatedPlayers = List<Player>.from(state.players);
+    final updatedPlayers = List<Player>.from(state.players);
 
     updatedPlayers[state.currentPlayerIndex] = updatedPlayer;
 
-    var nextIndex = (state.currentPlayerIndex + 1) % state.players.length;
+    final nextIndex = (state.currentPlayerIndex + 1) % state.players.length;
 
     state = state.copyWith(
       currentPlay: Play(),
@@ -54,20 +52,23 @@ class ActiveGameNotifier extends StateNotifier<Game> {
 
   /// * Sets the current player to the previous player
   void undoTurn() {
-    var previousIndex = (state.currentPlayerIndex - 1) % state.players.length;
+    final previousIndex = (state.currentPlayerIndex - 1) % state.players.length;
     state = state.copyWith(currentPlayerIndex: previousIndex);
   }
 
   /// Converts the input string to a [Word] and adds it to the current play
   void addWordToCurrentPlay(String input) {
-    _logger.i('Current word being added: ${state.currentWord.word}');
-    var newWord = Word();
+    var newWord = Word(wordMultiplier: state.currentWord.wordMultiplier);
     for (var char in input.split('')) {
-      var letter = Letter(letter: char);
+      final letter = Letter(
+        letter: char,
+        letterMultiplier:
+            state.currentWord.playedLetters[newWord.playedLetters.length].letterMultiplier,
+      );
       newWord = newWord.copyWith(playedLetters: [...newWord.playedLetters, letter]);
     }
 
-    var updatedPlay = state.currentPlay.copyWith(
+    final updatedPlay = state.currentPlay.copyWith(
       playedWords: [...state.currentPlay.playedWords, newWord],
     );
 
@@ -78,10 +79,27 @@ class ActiveGameNotifier extends StateNotifier<Game> {
   void updateCurrentWord(String input) {
     var newWord = Word();
     for (var char in input.split('')) {
-      var letter = Letter(letter: char);
+      final letter = Letter(letter: char);
       newWord = newWord.copyWith(playedLetters: [...newWord.playedLetters, letter]);
     }
     state = state.copyWith(currentWord: newWord);
+  }
+
+  /// Given a word and index of a letter, toggles the letter's multiplier
+  void toggleLetterMultiplier(Word word, int index) {
+    final letter = word.playedLetters[index];
+    final currentMultiplier = letter.letterMultiplier;
+    final newMultiplier = LetterScoreMultiplier
+        .values[(currentMultiplier.index + 1) % LetterScoreMultiplier.values.length];
+    final updatedLetter = letter.copyWith(
+      letterMultiplier: newMultiplier,
+    );
+
+    final updatedWord = word.copyWith(
+      playedLetters: List<Letter>.from(word.playedLetters)..[index] = updatedLetter,
+    );
+
+    state = state.copyWith(currentWord: updatedWord);
   }
 
   /// Toggles the current word multiplier
@@ -97,7 +115,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
 
   /// Toggles the current play's bingo status
   void toggleBingo() {
-    var updatedPlay = state.currentPlay.copyWith(isBingo: !state.currentPlay.isBingo);
+    final updatedPlay = state.currentPlay.copyWith(isBingo: !state.currentPlay.isBingo);
     state = state.copyWith(currentPlay: updatedPlay);
   }
 }

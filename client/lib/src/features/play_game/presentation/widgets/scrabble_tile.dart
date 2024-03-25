@@ -7,8 +7,11 @@ class ScrabbleTile extends StatefulWidget {
   /// The letter to display.
   final Letter letter;
 
+  /// The callback to call when the tile is tapped.
+  final VoidCallback onTap;
+
   /// Creates a new [ScrabbleTile] instance.
-  const ScrabbleTile(this.letter, {super.key});
+  const ScrabbleTile(this.letter, this.onTap, {super.key});
 
   @override
   State<ScrabbleTile> createState() => _ScrabbleTileState();
@@ -17,11 +20,11 @@ class ScrabbleTile extends StatefulWidget {
 class _ScrabbleTileState extends State<ScrabbleTile> {
   @override
   Widget build(BuildContext context) {
-    var boxColor = widget.letter.letterMultiplier.editionColor(ScrabbleEdition.classic);
-    var textColor = boxColor.computeLuminance() > 0.5 ? Colors.black87 : Colors.white;
-    var textTheme = Theme.of(context).textTheme;
+    final boxColor = widget.letter.letterMultiplier.editionColor(ScrabbleEdition.classic);
+    final textColor = boxColor.computeLuminance() > 0.5 ? Colors.black87 : Colors.white;
+    final textTheme = Theme.of(context).textTheme;
     return GestureDetector(
-      onTap: () {},
+      onTap: widget.onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
         margin: const EdgeInsets.symmetric(horizontal: 1, vertical: 5),

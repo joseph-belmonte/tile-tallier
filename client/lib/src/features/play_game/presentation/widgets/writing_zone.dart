@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logger/web.dart';
 
 import '../../../../utils/helpers.dart';
 import '../../application/providers/active_game.dart';
 
 import 'scrabble_word.dart';
-
-final _logger = Logger();
 
 /// A widget that allows the user to play a word.
 class WritingZone extends ConsumerStatefulWidget {
@@ -22,12 +19,6 @@ class WritingZone extends ConsumerStatefulWidget {
 
 class _WritingZoneState extends ConsumerState<WritingZone> {
   final _textController = TextEditingController();
-
-  /// Updates the current word in the active game to the value of the input field.
-  void _handleWordUpdate(String value) {
-    _logger.i('Current word is now: $value');
-    ref.read(activeGameProvider.notifier).updateCurrentWord(value);
-  }
 
   @override
   void dispose() {
@@ -72,7 +63,7 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
               children: <Widget>[
                 Text('Bingo:'),
                 IconButton(
-                  onPressed: () => gameNotifier.toggleBingo(),
+                  onPressed: gameNotifier.toggleBingo,
                   icon: game.currentPlay.isBingo ? Icon(Icons.star) : Icon(Icons.star_border),
                 ),
               ],
@@ -81,7 +72,7 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
               children: <Widget>[
                 Text('Multiplier:'),
                 OutlinedButton.icon(
-                  onPressed: () => gameNotifier.toggleCurrentWordMultiplier(),
+                  onPressed: gameNotifier.toggleCurrentWordMultiplier,
                   icon: Icon(Icons.multiple_stop_rounded),
                   label: Text(
                     getMultiplierText(game.currentWord.wordMultiplier),
@@ -93,7 +84,7 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 IconButton.filled(
-                  onPressed: () => gameNotifier.undoTurn(),
+                  onPressed: gameNotifier.undoTurn,
                   icon: Icon(Icons.undo),
                 ),
                 IconButton.filled(
@@ -101,7 +92,7 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
                   icon: Icon(Icons.playlist_add),
                 ),
                 IconButton.filled(
-                  onPressed: () => _handleEndTurn(),
+                  onPressed: _handleEndTurn,
                   icon: Icon(Icons.redo),
                 ),
               ],
@@ -116,6 +107,7 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
                 Text('Current Word: '),
                 ScrabbleWordWidget(
                   game.currentWord,
+                  (index) => gameNotifier.toggleLetterMultiplier(game.currentWord, index),
                 ),
               ],
             ),
@@ -132,8 +124,9 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
             Expanded(
               child: TextField(
                 controller: _textController,
-                onChanged: (value) => _handleWordUpdate(value),
-                onSubmitted: (value) => _handleWordSubmit(value),
+                onChanged: (value) =>
+                    ref.read(activeGameProvider.notifier).updateCurrentWord(value),
+                onSubmitted: _handleWordSubmit,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Play a word',
