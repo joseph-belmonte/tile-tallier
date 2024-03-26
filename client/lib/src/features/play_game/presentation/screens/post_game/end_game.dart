@@ -65,6 +65,8 @@ class EndGamePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDraw = _game.sortedPlayers.length > 1 &&
+        _game.sortedPlayers[0].score == _game.sortedPlayers[1].score;
     return Scaffold(
       appBar: AppBar(
         title: Text('GAME OVER'),
@@ -73,10 +75,19 @@ class EndGamePage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Text(
-                'Winner: ${_game.sortedPlayers[0].name} with a score of ${_game.sortedPlayers[0].score}!',
-              ),
-
+              if (isDraw)
+                Text(
+                  'It\'s a draw!',
+                  style: TextStyle(color: Colors.red),
+                ),
+              if (isDraw)
+                Text(
+                  '${_game.sortedPlayers[0].name} and  ${_game.sortedPlayers[1].name} tied with a score of ${_game.sortedPlayers[0].score}!',
+                ),
+              if (!isDraw)
+                Text(
+                  'Winner: ${_game.sortedPlayers[0].name} with a score of ${_game.sortedPlayers[0].score}!',
+                ),
               SizedBox(height: 20),
               Text('Rankings:'),
               SizedBox(height: 20),

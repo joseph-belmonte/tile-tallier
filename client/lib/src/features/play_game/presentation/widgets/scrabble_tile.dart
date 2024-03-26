@@ -36,7 +36,7 @@ class _ScrabbleTileState extends State<ScrabbleTile> {
         child: Column(
           children: [
             Text(
-              widget.letter.score.toString(),
+              widget.letter.score == 0 ? '' : widget.letter.score.toString(),
               textAlign: TextAlign.right,
               style: textTheme.labelSmall!.copyWith(
                 fontSize: 8,
