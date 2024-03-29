@@ -33,7 +33,7 @@ class _ScrabbleWordWidgetState extends State<ScrabbleWordWidget> {
               letter,
               () => widget.onLetterTap(idx),
             );
-          }).toList(),
+          }),
         ],
       ),
     );

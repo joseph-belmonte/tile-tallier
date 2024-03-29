@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import '../../../application/providers/active_game.dart';
 import '../../../domain/models/game.dart';
-import '../during_game/game_navigator.dart';
+import '../../../domain/models/play.dart';
+import '../during_game/play_input.dart';
 
 /// A page that allows the user to input the names of the players.
 class NameInput extends StatefulWidget {
@@ -48,7 +49,14 @@ class _NameInputsState extends State<NameInput> {
       }
 
       if (_validPlayerNames.isNotEmpty) {
-        final activeGameNotifier = ActiveGameNotifier(Game(id: Uuid().v4()));
+        final activeGameNotifier = ActiveGameNotifier(
+          Game(
+            id: Uuid().v4(),
+            currentPlay: Play(
+              timestamp: DateTime.now(),
+            ),
+          ),
+        );
         activeGameNotifier.setPlayers(_validPlayerNames);
 
         Navigator.push(
@@ -58,7 +66,7 @@ class _NameInputsState extends State<NameInput> {
               overrides: [
                 activeGameProvider.overrideWith((_) => activeGameNotifier),
               ],
-              child: const GameNavigator(),
+              child: PlayInputPage(),
             ),
           ),
         );

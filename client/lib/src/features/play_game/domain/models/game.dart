@@ -28,8 +28,9 @@ class Game with _$Game {
   /// Returns the current player.
   Player get currentPlayer => players[currentPlayerIndex];
 
-  /// Returns all the plays made by all players.
-  List<Play> get plays => players.expand((player) => player.plays).toList();
+  /// Returns all the plays made by all players, sorted by timestamp.
+  List<Play> get plays => players.expand((player) => player.plays).toList()
+    ..sort((a, b) => a.timestamp!.compareTo(b.timestamp!));
 
   /// Returns the highest scoring play.
   Play? get highestScoringPlay =>

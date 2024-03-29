@@ -91,18 +91,27 @@ class EndGamePage extends StatelessWidget {
               SizedBox(height: 20),
               Text('Rankings:'),
               SizedBox(height: 20),
-              ..._game.sortedPlayers
-                  .map(
-                    (player) => Text(
-                      '${player.name}: ${player.score}',
-                      style: TextStyle(
-                        color: player == _game.sortedPlayers[0] ? Colors.green : Colors.black,
-                      ),
-                    ),
-                  )
-                  .toList(),
+              ..._game.sortedPlayers.map(
+                (player) => Text(
+                  '${player.name}: ${player.score}',
+                  style: TextStyle(
+                    color: player == _game.sortedPlayers[0] ? Colors.green : Colors.black,
+                  ),
+                ),
+              ),
               ElevatedButton.icon(
-                onPressed: () => _showStatsDialog(context),
+                onPressed: () {
+                  if (_game.plays.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('No plays were made in this game.'),
+                      ),
+                    );
+                    return;
+                  } else {
+                    _showStatsDialog(context);
+                  }
+                },
                 icon: Icon(Icons.format_list_numbered),
                 label: Text('Stats'),
               ),

@@ -17,11 +17,18 @@ class Letter with _$Letter {
   const Letter._();
 
   /// Returns the score of the letter.
-  int get score =>
-      (letterScores[letter.toUpperCase()] ?? 0).toInt() *
-      (scoreMultiplier == ScoreMultiplier.doubleLetter
-          ? 2
-          : scoreMultiplier == ScoreMultiplier.tripleLetter
-              ? 3
-              : 1);
+  int get score {
+    int multiplier;
+    switch (scoreMultiplier) {
+      case ScoreMultiplier.doubleLetter:
+        multiplier = 2;
+        break;
+      case ScoreMultiplier.tripleLetter:
+        multiplier = 3;
+        break;
+      default:
+        multiplier = 1;
+    }
+    return (letterScores[letter.toUpperCase()] ?? 0).toInt() * multiplier;
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/models/play.dart';
+import '../../domain/models/player.dart';
 import 'scrabble_word.dart';
 
 /// A widget to display a historical play.
@@ -8,35 +9,38 @@ class HistoricalPlay extends StatelessWidget {
   /// The play to display.
   final Play play;
 
-  /// Whether the play is interactive.
-  final bool interactive;
+  /// Index of the play in the game.
+  final int index;
+
+  /// The player who made the play.
+  final Player player;
 
   /// Creates a new [HistoricalPlay] instance.
-  const HistoricalPlay(this.play, this.interactive, {super.key});
+  const HistoricalPlay(this.index, {required this.player, required this.play, super.key});
 
   @override
   Widget build(BuildContext context) {
-    final children = <Widget>[Text(play.playedWords.toString())];
-
-    if (!interactive) {
-      children.add(Text('Score: ${play.score}'));
-      children.add(play.isBingo ? Icon(Icons.star) : Icon(Icons.star_border));
-    }
-
-    for (var word in play.playedWords) {
-      // TODO: clean this up for the letter tap functionality when editing
-      children.add(ScrabbleWordWidget(word, (value) {}));
-    }
-
-    if (children.isEmpty) {
-      children.add(Text('Skipped'));
-    }
-
     return Container(
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 1)),
       margin: const EdgeInsets.all(10),
-      child: Column(children: children),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text('Turn: ${index + 1}'),
+          Text('Player: ${player.name}'),
+          Row(
+            children: <Widget>[
+              play.isBingo ? Icon(Icons.star) : Icon(Icons.star_border),
+              const SizedBox(width: 8),
+              Text('Score: ${play.score}'),
+            ],
+          ),
+          for (var word in play.playedWords) Center(child: ScrabbleWordWidget(word, (value) {})),
+          if (play.playedWords.isEmpty) Center(child: Text('Skipped')),
+        ],
+      ),
     );
   }
 }

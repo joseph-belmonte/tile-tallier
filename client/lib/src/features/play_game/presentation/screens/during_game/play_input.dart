@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../application/providers/active_game.dart';
-import '../../widgets/display_zone.dart';
 
+import '../../widgets/historical_play.dart';
 import '../../widgets/writing_zone.dart';
 import '../home.dart';
 import '../post_game/end_game.dart';
@@ -18,8 +19,6 @@ class PlayInputPage extends ConsumerStatefulWidget {
 }
 
 class _PlayInputPageState extends ConsumerState<PlayInputPage> {
-  bool displayScores = true;
-
   Future<bool?> showQuitDialog(BuildContext context) async {
     return showDialog<bool>(
       context: context,
@@ -62,38 +61,52 @@ class _PlayInputPageState extends ConsumerState<PlayInputPage> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Play Input'),
-        ),
+        appBar: _buildAppBar(context),
         body: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  IconButton.filled(
-                    onPressed: () => setState(() => displayScores = !displayScores),
-                    icon: displayScores ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
-                  ),
-                  IconButton.filled(
-                    icon: Icon(Icons.trending_flat),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => EndGamePage(game: ref.read(activeGameProvider)),
-                        ),
-                      );
-                    },
-                  ),
-                ],
+              Expanded(
+                child: ListView.builder(
+                  itemCount: ref.watch(activeGameProvider).plays.length,
+                  itemBuilder: (_, int i) {
+                    final player = ref.watch(activeGameProvider).players.firstWhere(
+                          (player) => player.id == ref.watch(activeGameProvider).plays[i].playerId,
+                        );
+                    return HistoricalPlay(
+                      key: ValueKey(ref.read(activeGameProvider).plays[i]),
+                      player: player,
+                      play: ref.watch(activeGameProvider).plays[i],
+                      i,
+                    );
+                  },
+                ),
               ),
-              PlayerScoreCards(),
+              Divider(),
+              SizedBox(height: 8),
               WritingZone(),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      title: const Text('Game View'),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.flag_rounded),
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => EndGamePage(game: ref.read(activeGameProvider)),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }

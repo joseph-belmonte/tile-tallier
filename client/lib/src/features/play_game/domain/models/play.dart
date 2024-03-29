@@ -13,6 +13,8 @@ class Play with _$Play {
   const factory Play({
     @Default([]) List<Word> playedWords,
     @Default(false) bool isBingo,
+    @Default('') String playerId,
+    DateTime? timestamp,
   }) = _Play;
   const Play._();
 

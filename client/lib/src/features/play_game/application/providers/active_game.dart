@@ -19,7 +19,7 @@ import '../../domain/models/word.dart';
 /// A [StateNotifier] that manages the state of the active game.
 class ActiveGameNotifier extends StateNotifier<Game> {
   /// Creates a new [ActiveGameNotifier] with a new game
-  ActiveGameNotifier(Game game) : super(game);
+  ActiveGameNotifier(super.game);
 
   /// Adds players to the game, based on a list of names
   void setPlayers(List<String> playerNames) {
@@ -31,29 +31,65 @@ class ActiveGameNotifier extends StateNotifier<Game> {
   /// * Advances the game to the next player's turn
   void endTurn() {
     final currentPlayer = state.players[state.currentPlayerIndex];
+    // Ensure currentPlay has all necessary data before copying.
+    final completedPlay = state.currentPlay.copyWith(playerId: currentPlayer.id);
 
+    // Update the current player with the new play.
     final updatedPlayer = currentPlayer.copyWith(
-      plays: [...currentPlayer.plays, state.currentPlay],
+      plays: [...currentPlayer.plays, completedPlay],
     );
 
-    final updatedPlayers = List<Player>.from(state.players);
-
-    updatedPlayers[state.currentPlayerIndex] = updatedPlayer;
-
+    // Prepare for next player's turn.
     final nextIndex = (state.currentPlayerIndex + 1) % state.players.length;
+    final nextPlayerId = state.players[nextIndex].id;
 
+    final newPlay = Play(playerId: nextPlayerId, timestamp: DateTime.now());
+    final newWord = Word();
+    final newPlayers = List<Player>.from(state.players)..[state.currentPlayerIndex] = updatedPlayer;
+
+    // Update state with changes for the next turn.
     state = state.copyWith(
-      currentPlay: Play(),
-      currentWord: Word(),
+      // Assuming the Play constructor sets up a new play correctly for the next player.
+      currentPlay: newPlay,
+      currentWord: newWord,
       currentPlayerIndex: nextIndex,
-      players: updatedPlayers,
+      players: newPlayers,
     );
   }
 
-  /// * Sets the current player to the previous player
+  /// Reverts the last turn and make the previous player the current player
   void undoTurn() {
-    final previousIndex = (state.currentPlayerIndex - 1) % state.players.length;
-    state = state.copyWith(currentPlayerIndex: previousIndex);
+    // Handle the case where the current player is the first player.
+    if (state.plays.isEmpty) {
+      return;
+    } else {
+      // First, clear any current words before undoing the turn.
+      if (state.currentPlay.playedWords.isNotEmpty) {
+        state = state.copyWith(
+          currentPlay: state.currentPlay.copyWith(
+            playedWords: [],
+          ),
+        );
+        return;
+      } else {
+        // Make the previous player the current player.
+        final newPlayerIndex = (state.currentPlayerIndex - 1) % state.players.length;
+        final newPlayer = state.players[newPlayerIndex];
+
+        // Remove the last play from this player.
+        final updatedPlayer = newPlayer.copyWith(
+          plays: newPlayer.plays.sublist(0, newPlayer.plays.length - 1),
+        );
+
+        // Update the state with the changes:
+        state = state.copyWith(
+          players: List<Player>.from(state.players)..[newPlayerIndex] = updatedPlayer,
+          currentPlayerIndex: newPlayerIndex,
+          currentPlay: Play(playerId: newPlayer.id, timestamp: DateTime.now()),
+          currentWord: Word(),
+        );
+      }
+    }
   }
 
   /// Converts the input string to a [Word] and adds it to the current play
@@ -117,22 +153,3 @@ final activeGameProvider = StateNotifierProvider<ActiveGameNotifier, Game>(
     ),
   ),
 );
-
-
-  /// Toggles the letter multiplier between single, double, and triple letter.
-  // void togglescoreMultiplier() {
-  //   switch (scoreMultiplier) {
-  //     case LetterScoreMultiplier.singleLetter:
-  //       scoreMultiplier = LetterScoreMultiplier.doubleLetter;
-  //       break;
-  //     case LetterScoreMultiplier.doubleLetter:
-  //       scoreMultiplier = LetterScoreMultiplier.tripleLetter;
-  //       break;
-  //     case LetterScoreMultiplier.tripleLetter:
-  //       scoreMultiplier = LetterScoreMultiplier.singleLetter;
-  //       break;
-  //     default:
-  //       throw Exception('Invalid letter multiplier');
-  //   }
-  // }
-  
