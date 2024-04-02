@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../src/theme/theming.dart';
+import '../theme/constants/theming.dart';
 import 'scrabble_edition.dart';
 
 /// An enum representing the letter score multipliers in Scrabble.
