@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../edit_settings/presentation/screens/settings.dart';
-import '../../../play_game/presentation/screens/pre_game/number_input.dart';
+import '../../../play_game/presentation/screens/pre_game/pre_game.dart';
 import '../../../view_past_games/presentation/screens/game_history.dart';
 
 /// The home page for the Scrabble app.
@@ -27,7 +27,7 @@ class HomePage extends StatelessWidget {
             ElevatedButton.icon(
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const PlayerCountInput()),
+                MaterialPageRoute(builder: (context) => const PreGamePage()),
               ),
               icon: Icon(Icons.play_arrow_rounded),
               label: Text('Play Game'),
