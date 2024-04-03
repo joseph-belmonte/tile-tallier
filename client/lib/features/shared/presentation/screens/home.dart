@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../edit_settings/presentation/screens/settings.dart';
+import '../../../play_game/presentation/screens/pre_game/number_input.dart';
 import '../../../view_past_games/presentation/screens/game_history.dart';
-import 'pre_game/number_input.dart';
 
 /// The home page for the Scrabble app.
 class HomePage extends StatelessWidget {
@@ -13,22 +13,24 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('HOME SCREEN'),
+        title: Text(
+          'Scrabble Scorer',
+          style: Theme.of(context).textTheme.titleLarge!,
+        ),
         automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text('Welcome to Scrabble'),
             SizedBox(height: 20),
             ElevatedButton.icon(
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const PlayerCountInput()),
               ),
-              icon: const Icon(Icons.play_arrow_rounded),
-              label: const Text('Play Game'),
+              icon: Icon(Icons.play_arrow_rounded),
+              label: Text('Play Game'),
             ),
             SizedBox(height: 24),
             ElevatedButton.icon(
@@ -36,8 +38,8 @@ class HomePage extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (context) => const GameHistoryPage()),
               ),
-              icon: const Icon(Icons.history_edu),
-              label: const Text('View History'),
+              icon: Icon(Icons.history_edu),
+              label: Text('View History'),
             ),
             SizedBox(height: 24),
             ElevatedButton.icon(
@@ -45,8 +47,8 @@ class HomePage extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (context) => const SettingsPage()),
               ),
-              icon: const Icon(Icons.settings),
-              label: const Text('Settings'),
+              icon: Icon(Icons.settings),
+              label: Text('Settings'),
             ),
           ],
         ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../../shared/presentation/screens/home.dart';
 import '../../../domain/models/game.dart';
-
-import '../home.dart';
+import '../../widgets/stats_dialogue.dart';
 
 /// A page that displays the game statistics and the winner of the game.
 class EndGamePage extends StatelessWidget {
@@ -17,49 +17,7 @@ class EndGamePage extends StatelessWidget {
   Future<void> _showStatsDialog(BuildContext context) {
     return showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Game Statistics'),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Text('Total Plays: ${_game.plays.length}'),
-              ),
-              Divider(),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Text('Longest Word: ${_game.longestWord}'),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Text(
-                  'Highest Scoring Word: ${_game.highestScoringWord.word} - ${_game.highestScoringWord.score}',
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Text('Highest Scoring Turn:'),
-              ),
-              if (_game.highestScoringPlay != null)
-                ..._game.highestScoringPlay!.playedWords.map(
-                  (word) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: Text('${word.word} - ${word.score}'),
-                  ),
-                ),
-              Divider(),
-            ],
-          ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text('Close'),
-          ),
-        ],
-      ),
+      builder: (context) => StatsDialog(game: _game),
     );
   }
 
@@ -82,29 +40,45 @@ class EndGamePage extends StatelessWidget {
                 ),
               if (isDraw)
                 Text(
-                  '${_game.sortedPlayers[0].name} and  ${_game.sortedPlayers[1].name} tied with a score of ${_game.sortedPlayers[0].score}!',
+                  '${_game.sortedPlayers[0].name} and ${_game.sortedPlayers[1].name} tied with a score of ${_game.sortedPlayers[0].score}!',
                 ),
               if (!isDraw)
                 Text(
                   'Winner: ${_game.sortedPlayers[0].name} with a score of ${_game.sortedPlayers[0].score}!',
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
                 ),
               SizedBox(height: 20),
-              Text('Rankings:'),
-              SizedBox(height: 20),
+              Text(
+                'Rankings:',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .copyWith(color: Theme.of(context).colorScheme.onBackground),
+              ),
+              SizedBox(height: 24),
               ..._game.sortedPlayers.map(
                 (player) => Text(
                   '${player.name}: ${player.score}',
-                  style: TextStyle(
-                    color: player == _game.sortedPlayers[0] ? Colors.green : Colors.black,
-                  ),
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
                 ),
               ),
+              SizedBox(height: 36),
               ElevatedButton.icon(
                 onPressed: () {
                   if (_game.plays.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('No plays were made in this game.'),
+                        backgroundColor: Theme.of(context).colorScheme.error,
+                        content: Text(
+                          'No plays were made in this game.',
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                color: Theme.of(context).colorScheme.onError,
+                              ),
+                        ),
                       ),
                     );
                     return;
@@ -112,17 +86,34 @@ class EndGamePage extends StatelessWidget {
                     _showStatsDialog(context);
                   }
                 },
-                icon: Icon(Icons.format_list_numbered),
-                label: Text('Stats'),
+                icon: Icon(
+                  Icons.format_list_numbered,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                label: Text(
+                  'Stats',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
               ),
+              SizedBox(height: 12),
               ElevatedButton.icon(
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => HomePage(),
                   ),
                 ),
-                icon: Icon(Icons.home),
-                label: Text('Home'),
+                icon: Icon(
+                  Icons.home,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                label: Text(
+                  'Home',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
               ),
             ],
           ),

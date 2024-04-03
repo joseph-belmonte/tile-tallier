@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../shared/presentation/screens/home.dart';
 import '../../../application/providers/active_game.dart';
-
 import '../../widgets/historical_play.dart';
 import '../../widgets/writing_zone.dart';
-import '../home.dart';
 import '../post_game/end_game.dart';
 
 /// A page that allows the user to input the scores of the players.
@@ -97,14 +95,12 @@ class _PlayInputPageState extends ConsumerState<PlayInputPage> {
       title: const Text('Game View'),
       actions: [
         IconButton(
-          icon: const Icon(Icons.flag_rounded),
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => EndGamePage(game: ref.read(activeGameProvider)),
-              ),
-            );
-          },
+          icon: const Icon(Icons.flag_rounded, semanticLabel: 'End Game'),
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => EndGamePage(game: ref.read(activeGameProvider)),
+            ),
+          ),
         ),
       ],
     );

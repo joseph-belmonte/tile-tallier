@@ -60,8 +60,15 @@ class _PlayerCountInputState extends State<PlayerCountInput> {
               IconButton.filled(
                 onPressed: remove ? removePlayer : null,
                 icon: remove
-                    ? const Icon(Icons.remove)
-                    : const Icon(Icons.remove, color: Colors.grey),
+                    ? const Icon(
+                        Icons.remove,
+                        semanticLabel: 'Remove a player',
+                      )
+                    : const Icon(
+                        Icons.remove,
+                        color: Colors.grey,
+                        semanticLabel: 'No more players to remove',
+                      ),
               ),
               SizedBox(width: 50),
               Text(
@@ -71,7 +78,16 @@ class _PlayerCountInputState extends State<PlayerCountInput> {
               SizedBox(width: 50),
               IconButton.filled(
                 onPressed: add ? addPlayer : null,
-                icon: add ? const Icon(Icons.add) : const Icon(Icons.add, color: Colors.grey),
+                icon: add
+                    ? const Icon(
+                        Icons.add,
+                        semanticLabel: 'Add a player',
+                      )
+                    : const Icon(
+                        Icons.add,
+                        color: Colors.grey,
+                        semanticLabel: 'No more players allowed',
+                      ),
               ),
             ],
           ),

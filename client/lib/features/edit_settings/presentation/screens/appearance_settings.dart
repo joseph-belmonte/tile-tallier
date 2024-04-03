@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../controllers/settings.dart';
 import '../screens/color_screen.dart';
-import '../widgets/theme_mode_toggle_buttons.dart';
+import '../widgets/app_about_tile.dart';
 
 /// A page that displays the dark mode settings for the app
 class AppearanceSettingsPage extends ConsumerWidget {
@@ -11,17 +12,35 @@ class AppearanceSettingsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(Settings.themeModeProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text('Appearance'),
       ),
       body: ListView(
-        children: [
+        children: <Widget>[
+          ListTile(
+            title: const Text('Brightness'),
+            leading: const Icon(Icons.brightness_4),
+            subtitle: const Text('Edit display brightness settings'),
+          ),
+          ListTile(
+            title: const Text('System Mode'),
+            leading: const Icon(Icons.phone_android),
+            trailing: themeMode.index == 0 ? const Icon(Icons.check) : null,
+            onTap: () => ref.read(Settings.themeModeProvider.notifier).set(ThemeMode.system),
+          ),
+          ListTile(
+            title: const Text('Light Mode'),
+            leading: const Icon(Icons.light_mode),
+            trailing: themeMode.index == 1 ? const Icon(Icons.check) : null,
+            onTap: () => ref.read(Settings.themeModeProvider.notifier).set(ThemeMode.light),
+          ),
           ListTile(
             title: const Text('Dark Mode'),
             leading: const Icon(Icons.dark_mode),
-            subtitle: const Text('Edit Dark Mode'),
-            trailing: ThemeModeToggleButtons(),
+            trailing: themeMode.index == 2 ? const Icon(Icons.check) : null,
+            onTap: () => ref.read(Settings.themeModeProvider.notifier).set(ThemeMode.dark),
           ),
           Divider(),
           ListTile(
@@ -54,19 +73,7 @@ class AppearanceSettingsPage extends ConsumerWidget {
             onTap: () {},
           ),
           Divider(),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: AboutListTile(
-              icon: const Icon(Icons.info),
-              applicationName: 'Scrabble Score Keeper',
-              applicationVersion: '1.0.0',
-              applicationLegalese: '© 2024',
-              aboutBoxChildren: const <Widget>[
-                SizedBox(height: 24),
-                Text('made with ❤️ in pgh'),
-              ],
-            ),
-          ),
+          AppAboutTile(),
         ],
       ),
     );

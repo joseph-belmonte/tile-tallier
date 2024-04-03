@@ -131,17 +131,17 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
           children: <Widget>[
             IconButton(
               onPressed: canUndo ? _handleUndoTurn : null,
-              icon: Icon(Icons.undo),
+              icon: Icon(Icons.undo, semanticLabel: 'Undo last turn'),
             ),
             IconButton(
               onPressed: canSubmit ? () => _handleWordSubmit(_textController.text) : null,
-              icon: Icon(Icons.playlist_add),
+              icon: Icon(Icons.playlist_add, semanticLabel: 'Submit word'),
             ),
             IconButton(
               onPressed: _handleEndTurn,
               icon: (_textController.text.isEmpty && game.currentPlay.playedWords.isEmpty)
-                  ? Icon(Icons.skip_next)
-                  : Icon(Icons.redo),
+                  ? Icon(Icons.skip_next, semanticLabel: 'Skip turn')
+                  : Icon(Icons.redo, semanticLabel: 'End turn and submit word'),
             ),
           ],
         ),

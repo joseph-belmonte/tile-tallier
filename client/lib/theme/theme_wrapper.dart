@@ -1,9 +1,10 @@
+import 'package:accessibility_tools/accessibility_tools.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../features/edit_settings/application/providers/drawer_width_provider.dart';
 import '../features/edit_settings/presentation/controllers/settings.dart';
-import '../features/play_game/presentation/screens/home.dart';
+import '../features/shared/presentation/screens/home.dart';
 import '../utils/drawer_width.dart';
 import 'controllers/theme_providers.dart';
 
@@ -42,6 +43,10 @@ class _ThemingAppState extends ConsumerState<ThemeWrapper> with WidgetsBindingOb
       darkTheme: ref.watch(darkThemeProvider),
       themeMode: ref.watch(Settings.themeModeProvider),
       title: 'Scrabble Score Keeper',
+      builder: (context, child) => AccessibilityTools(
+        checkFontOverflows: true,
+        child: child,
+      ),
       home: const HomePage(),
     );
   }

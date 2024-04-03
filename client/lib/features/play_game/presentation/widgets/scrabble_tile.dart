@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../enums/scrabble_edition.dart';
 import '../../../../utils/helpers.dart';
 import '../../domain/models/letter.dart';
@@ -21,32 +22,37 @@ class ScrabbleTile extends StatefulWidget {
 class _ScrabbleTileState extends State<ScrabbleTile> {
   @override
   Widget build(BuildContext context) {
-    final boxColor = getTileColor(widget.letter, ScrabbleEdition.classic);
-    final textColor = boxColor.computeLuminance() > 0.5 ? Colors.black87 : Colors.white;
-    final textTheme = Theme.of(context).textTheme;
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-        margin: const EdgeInsets.symmetric(horizontal: 1, vertical: 5),
+        height: 48,
+        width: 48,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 2),
-          color: boxColor,
+          color: getTileColor(widget.letter, ScrabbleEdition.classic),
         ),
-        child: Column(
-          children: [
-            Text(
-              widget.letter.score == 0 ? '' : widget.letter.score.toString(),
-              textAlign: TextAlign.right,
-              style: textTheme.labelSmall!.copyWith(
-                fontSize: 8,
-                fontWeight: FontWeight.w500,
-                color: textColor,
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+              bottom: 3,
+              right: 3,
+              child: Text(
+                widget.letter.score == 0 ? '' : widget.letter.score.toString(),
+                textAlign: TextAlign.right,
+                style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
               ),
             ),
-            Text(
-              widget.letter.letter.toUpperCase(),
-              style: textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500, color: textColor),
+            Center(
+              child: Text(
+                widget.letter.letter.toUpperCase(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.normal,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+              ),
             ),
           ],
         ),

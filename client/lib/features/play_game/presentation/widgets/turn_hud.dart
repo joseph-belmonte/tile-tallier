@@ -30,7 +30,9 @@ class TurnHUD extends StatelessWidget {
           Text('Word Score: ${game.currentWord.score}'),
           IconButton(
             onPressed: gameNotifier.toggleBingo,
-            icon: game.currentPlay.isBingo ? Icon(Icons.star) : Icon(Icons.star_border),
+            icon: game.currentPlay.isBingo
+                ? Icon(Icons.star, semanticLabel: 'Play is bingo')
+                : Icon(Icons.star_border, semanticLabel: 'Play is not bingo'),
             iconSize: 32.0,
           ),
           Text(
