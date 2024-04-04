@@ -4,14 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'features/edit_settings/application/providers/key_value_db_listener.dart';
 import 'features/edit_settings/application/providers/key_value_db_provider.dart';
 import 'theme/theme_wrapper.dart';
-import 'utils/app_provider_observer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final container = ProviderContainer(
-    // This observer is used for logging changes in all Riverpod providers.
-    observers: <ProviderObserver>[AppProviderObserver()],
-  );
+  final container = ProviderContainer();
 
   // Get default keyValueDb implementation and initialize it for use.
   await container.read(keyValueDbProvider).init();
@@ -23,7 +19,9 @@ Future<void> main() async {
   runApp(
     UncontrolledProviderScope(
       container: container,
-      child: ThemeWrapper(),
+      child: ProviderScope(
+        child: ThemeWrapper(),
+      ),
     ),
   );
 }

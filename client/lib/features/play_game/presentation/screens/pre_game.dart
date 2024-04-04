@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../application/providers/active_game.dart';
-import '../../../domain/models/game.dart';
-import '../../../domain/models/play.dart';
-import '../during_game/play_input.dart';
+import '../../application/providers/active_game.dart';
+import '../../domain/models/game.dart';
+import '../../domain/models/play.dart';
+import 'play_input.dart';
 
 /// A page that allows the user to input the number of players
 class PreGamePage extends StatefulWidget {
@@ -35,6 +35,7 @@ class _PreGamePageState extends State<PreGamePage> {
     }
   }
 
+  /// Validates the form and starts the game
   void startGame() {
     if (_formKey.currentState!.validate()) {
       final playerNames = _controllers
@@ -94,7 +95,7 @@ class _PreGamePageState extends State<PreGamePage> {
         child: Form(
           key: _formKey,
           child: Column(
-            children: [
+            children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(

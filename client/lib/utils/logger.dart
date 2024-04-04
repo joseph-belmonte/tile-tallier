@@ -4,7 +4,7 @@ import 'package:logger/logger.dart';
 // A configuration is held in this file.
 final logger = Logger(
   printer: PrettyPrinter(
-    methodCount: 2,
+    methodCount: 1,
     errorMethodCount: 8,
     lineLength: 80,
     colors: true,

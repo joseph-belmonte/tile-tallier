@@ -56,6 +56,5 @@ class Player with _$Player {
   /// The total score of the player.
   int get score =>
       plays.fold(0, (total, play) => total + play.score) -
-      endRack.runes
-          .fold(0, (total, rune) => total - Letter(letter: String.fromCharCode(rune)).score);
+      endRack.split('').fold(0, (total, letter) => total + Letter(letter: letter).score);
 }

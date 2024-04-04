@@ -10,7 +10,7 @@ import 'key_value_db_provider.dart';
 // The handy part is that if it gets in the way in debugging, it is an easy
 // toggle to turn it off here for just this feature. You can leave it true
 // below to see this feature's logs in debug mode.
-const bool _debug = !kReleaseMode && true;
+const bool _debug = !kReleaseMode && false;
 
 /// A listener that listens to changes in the [keyValueDbProvider].
 ///

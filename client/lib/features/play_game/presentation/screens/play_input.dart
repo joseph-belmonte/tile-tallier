@@ -1,56 +1,33 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../shared/presentation/screens/home.dart';
-import '../../../application/providers/active_game.dart';
-import '../../widgets/historical_play.dart';
-import '../../widgets/writing_zone.dart';
-import '../post_game/end_game.dart';
+import '../../application/providers/active_game.dart';
+import '../widgets/historical_play.dart';
+import '../widgets/quit_alert_dialogue.dart';
+import '../widgets/score_subtraction_modal.dart';
+import '../widgets/writing_zone.dart';
 
 /// A page that allows the user to input the scores of the players.
-class PlayInputPage extends ConsumerStatefulWidget {
+class PlayInputPage extends ConsumerWidget {
   /// Creates a new [PlayInputPage] instance.
   const PlayInputPage({super.key});
 
-  @override
-  ConsumerState<PlayInputPage> createState() => _PlayInputPageState();
-}
-
-class _PlayInputPageState extends ConsumerState<PlayInputPage> {
-  Future<bool?> showQuitDialog(BuildContext context) async {
+  Future<bool?> _showQuitDialog(BuildContext context) async {
     return showDialog<bool>(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Quit Game'),
-          content: const Text('Are you sure you want to quit the game?'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('No'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pushReplacement<void, void>(
-                  MaterialPageRoute(builder: (context) => const HomePage()),
-                );
-              },
-              child: const Text('Yes'),
-            ),
-          ],
-        );
-      },
+      builder: (context) => QuitGameAlert(),
     );
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return PopScope(
       canPop: false,
       onPopInvoked: (bool willPop) async {
         if (willPop) return;
         final navigator = Navigator.of(context);
-        final shouldPop = await showQuitDialog(context);
+        final shouldPop = await _showQuitDialog(context);
         if (shouldPop != null) {
           if (shouldPop && navigator.canPop()) navigator.pop();
         } else {
@@ -59,7 +36,26 @@ class _PlayInputPageState extends ConsumerState<PlayInputPage> {
         }
       },
       child: Scaffold(
-        appBar: _buildAppBar(context),
+        appBar: AppBar(
+          title: const Text('Game View'),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.flag_rounded, semanticLabel: 'End Game'),
+              onPressed: () {
+                showModalBottomSheet<void>(
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (_) => ProviderScope(
+                    overrides: [
+                      activeGameProvider.overrideWith((_) => ref.read(activeGameProvider.notifier)),
+                    ],
+                    child: ScoreSubtractionModal(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
         body: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,22 +83,6 @@ class _PlayInputPageState extends ConsumerState<PlayInputPage> {
           ),
         ),
       ),
-    );
-  }
-
-  AppBar _buildAppBar(BuildContext context) {
-    return AppBar(
-      title: const Text('Game View'),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.flag_rounded, semanticLabel: 'End Game'),
-          onPressed: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => EndGamePage(game: ref.read(activeGameProvider)),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

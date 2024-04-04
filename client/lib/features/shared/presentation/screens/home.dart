@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../edit_settings/presentation/screens/settings.dart';
-import '../../../play_game/presentation/screens/pre_game/pre_game.dart';
+import '../../../play_game/presentation/screens/pre_game.dart';
 import '../../../view_past_games/presentation/screens/game_history.dart';
 
 /// The home page for the Scrabble app.

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../../../../shared/presentation/screens/home.dart';
-import '../../../domain/models/game.dart';
-import '../../widgets/stats_dialogue.dart';
+import '../../../shared/presentation/screens/home.dart';
+import '../../domain/models/game.dart';
+import '../widgets/stats_dialogue.dart';
 
 /// A page that displays the game statistics and the winner of the game.
-class EndGamePage extends StatelessWidget {
-  /// Creates a new [EndGamePage] instance.
-  const EndGamePage({
+class ResultsPage extends StatelessWidget {
+  /// Creates a new [ResultsPage] instance.
+  const ResultsPage({
     required Game game,
     super.key,
   }) : _game = game;

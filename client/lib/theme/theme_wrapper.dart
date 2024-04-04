@@ -2,10 +2,9 @@ import 'package:accessibility_tools/accessibility_tools.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../features/edit_settings/application/providers/drawer_width_provider.dart';
 import '../features/edit_settings/presentation/controllers/settings.dart';
 import '../features/shared/presentation/screens/home.dart';
-import '../utils/drawer_width.dart';
+
 import 'controllers/theme_providers.dart';
 
 /// A theming wrapper for the app.
@@ -22,11 +21,6 @@ class _ThemingAppState extends ConsumerState<ThemeWrapper> with WidgetsBindingOb
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void didChangeMetrics() {
-    ref.read(drawerWidthProvider.notifier).state = drawerWidth();
   }
 
   @override
