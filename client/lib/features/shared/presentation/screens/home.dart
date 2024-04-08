@@ -25,8 +25,7 @@ class HomePage extends StatelessWidget {
           children: <Widget>[
             SizedBox(height: 20),
             ElevatedButton.icon(
-              onPressed: () => Navigator.push(
-                context,
+              onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const PreGamePage()),
               ),
               icon: Icon(Icons.play_arrow_rounded),
@@ -34,8 +33,7 @@ class HomePage extends StatelessWidget {
             ),
             SizedBox(height: 24),
             ElevatedButton.icon(
-              onPressed: () => Navigator.push(
-                context,
+              onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const GameHistoryPage()),
               ),
               icon: Icon(Icons.history_edu),
@@ -43,8 +41,7 @@ class HomePage extends StatelessWidget {
             ),
             SizedBox(height: 24),
             ElevatedButton.icon(
-              onPressed: () => Navigator.push(
-                context,
+              onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const SettingsPage()),
               ),
               icon: Icon(Icons.settings),

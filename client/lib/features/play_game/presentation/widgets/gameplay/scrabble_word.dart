@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/models/word.dart';
+import '../../../domain/models/word.dart';
 import 'scrabble_tile.dart';
 
 /// A widget that displays a word as a list of ScrabbleTile widgets.

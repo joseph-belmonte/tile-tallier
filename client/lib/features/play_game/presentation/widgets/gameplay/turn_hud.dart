@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../application/providers/active_game.dart';
-import '../../domain/models/game.dart';
+import '../../../application/providers/active_game.dart';
 
 /// A widget to display the current turn information.
-class TurnHUD extends StatelessWidget {
+class TurnHUD extends ConsumerStatefulWidget {
   /// Creates a new [TurnHUD] instance.
   const TurnHUD({
-    required this.game,
-    required this.gameNotifier,
     super.key,
   });
 
-  /// The game to display the turn information for.
-  final Game game;
+  @override
+  ConsumerState<TurnHUD> createState() => _TurnHUDState();
+}
 
-  /// The notifier for the game, used to interact with the game.
-  final ActiveGameNotifier gameNotifier;
-
+class _TurnHUDState extends ConsumerState<TurnHUD> {
   @override
   Widget build(BuildContext context) {
+    final game = ref.watch(activeGameProvider);
+    final notifier = ref.read(activeGameProvider.notifier);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -29,7 +28,7 @@ class TurnHUD extends StatelessWidget {
           Text('Play Score: ${game.currentPlay.score}'),
           Text('Word Score: ${game.currentWord.score}'),
           IconButton(
-            onPressed: gameNotifier.toggleBingo,
+            onPressed: notifier.toggleBingo,
             icon: game.currentPlay.isBingo
                 ? Icon(Icons.star, semanticLabel: 'Play is bingo')
                 : Icon(Icons.star_border, semanticLabel: 'Play is not bingo'),

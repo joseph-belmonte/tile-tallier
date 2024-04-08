@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/models/play.dart';
-import '../../domain/models/player.dart';
+import '../../../domain/models/play.dart';
+import '../../../domain/models/player.dart';
 
 /// A widget to display the most recent turn for a player.
 class MostRecentTurnDisplay extends StatelessWidget {

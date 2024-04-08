@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../enums/scrabble_edition.dart';
-import '../../../../utils/helpers.dart';
-import '../../domain/models/letter.dart';
+import '../../../../../enums/scrabble_edition.dart';
+import '../../../../../utils/helpers.dart';
+import '../../../domain/models/letter.dart';
 
 /// A widget that displays a single letter as a ScrabbleTile widget.
 class ScrabbleTile extends StatefulWidget {

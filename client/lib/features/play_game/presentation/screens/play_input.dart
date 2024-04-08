@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../application/providers/active_game.dart';
-import '../widgets/historical_play.dart';
-import '../widgets/quit_alert_dialogue.dart';
-import '../widgets/score_subtraction_modal.dart';
-import '../widgets/writing_zone.dart';
+import '../widgets/gameplay/historical_play.dart';
+import '../widgets/gameplay/quit_alert_dialogue.dart';
+import '../widgets/gameplay/score_subtraction_modal.dart';
+import '../widgets/gameplay/writing_zone.dart';
 
 /// A page that allows the user to input the scores of the players.
 class PlayInputPage extends ConsumerWidget {
@@ -41,25 +41,22 @@ class PlayInputPage extends ConsumerWidget {
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.flag_rounded, semanticLabel: 'End Game'),
-              onPressed: () {
-                showModalBottomSheet<void>(
-                  isScrollControlled: true,
-                  context: context,
-                  builder: (_) => ProviderScope(
-                    overrides: [
-                      activeGameProvider.overrideWith((_) => ref.read(activeGameProvider.notifier)),
-                    ],
-                    child: ScoreSubtractionModal(),
-                  ),
-                );
-              },
+              onPressed: () => showModalBottomSheet<void>(
+                isScrollControlled: true,
+                context: context,
+                builder: (context) => ScoreSubtractionModal(),
+              ),
             ),
           ],
         ),
         body: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
+              ref.read(activeGameProvider).players.isEmpty
+                  ? const LinearProgressIndicator()
+                  : const SizedBox.shrink(),
               Expanded(
                 child: ListView.builder(
                   itemCount: ref.watch(activeGameProvider).plays.length,

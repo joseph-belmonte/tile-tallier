@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../application/providers/active_game.dart';
-import '../../domain/models/game.dart';
-import '../../domain/models/play.dart';
 import 'play_input.dart';
 
 /// A page that allows the user to input the number of players
-class PreGamePage extends StatefulWidget {
+class PreGamePage extends ConsumerStatefulWidget {
   /// Creates a new [PreGamePage] instance.
   const PreGamePage({super.key});
 
   @override
-  State<PreGamePage> createState() => _PreGamePageState();
+  ConsumerState<PreGamePage> createState() => _PreGamePageState();
 }
 
-class _PreGamePageState extends State<PreGamePage> {
+class _PreGamePageState extends ConsumerState<PreGamePage> {
   int playerCount = 2;
   final _formKey = GlobalKey<FormState>();
   final List<TextEditingController> _controllers = [];
@@ -36,7 +33,7 @@ class _PreGamePageState extends State<PreGamePage> {
   }
 
   /// Validates the form and starts the game
-  void startGame() {
+  void startGame(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       final playerNames = _controllers
           .map((controller) => controller.text.trim())
@@ -44,23 +41,13 @@ class _PreGamePageState extends State<PreGamePage> {
           .toList();
 
       if (playerNames.isNotEmpty) {
-        final activeGameNotifier = ActiveGameNotifier(
-          Game(
-            id: Uuid().v4(),
-            currentPlay: Play(timestamp: DateTime.now()),
-          ),
-        );
-        activeGameNotifier.setPlayers(playerNames);
+        // Assuming ActiveGameNotifier has a method to setup a new game.
+        ref.read(activeGameProvider.notifier).startGame(playerNames);
 
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProviderScope(
-              overrides: [
-                activeGameProvider.overrideWith((_) => activeGameNotifier),
-              ],
-              child: PlayInputPage(),
-            ),
+            builder: (context) => PlayInputPage(),
           ),
         );
       }
@@ -100,7 +87,7 @@ class _PreGamePageState extends State<PreGamePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
+                  children: <Widget>[
                     IconButton(
                       icon: Icon(Icons.remove, semanticLabel: 'remove player'),
                       onPressed: playerCount > 2 ? () => setState(() => playerCount--) : null,
@@ -129,7 +116,7 @@ class _PreGamePageState extends State<PreGamePage> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20.0),
                 child: ElevatedButton.icon(
-                  onPressed: startGame,
+                  onPressed: () => startGame(context),
                   icon: const Icon(Icons.play_arrow_rounded, semanticLabel: 'start game'),
                   label: const Text('Start Game'),
                 ),

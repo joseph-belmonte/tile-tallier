@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/models/play.dart';
-import '../../domain/models/player.dart';
+import '../../../domain/models/play.dart';
+import '../../../domain/models/player.dart';
 import 'scrabble_word.dart';
 
 /// A widget to display a historical play.

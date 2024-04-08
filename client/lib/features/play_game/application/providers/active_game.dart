@@ -21,23 +21,21 @@ class ActiveGameNotifier extends StateNotifier<Game> {
   /// Creates a new [ActiveGameNotifier] with a new game
   ActiveGameNotifier(super.game);
 
-  /// Resets the game to its initial state
-  void resetGame() {
-    state = Game(id: Uuid().v4());
-  }
+  /// Creates a new game instance with:
+  /// * A new UUID
+  /// * A new play with the current timestamp
+  /// * The list of passed in players
+  void startGame(List<String> playerNames) {
+    final newGameId = Uuid().v4();
+    final newPlayers = playerNames.map((name) => Player(name: name, id: Uuid().v4())).toList();
+    final newPlay = Play(timestamp: DateTime.now());
 
-  /// Close the current game
-  void closeGame() {
-    // First, save the game to the database.
-
-    // Then, reset the game state.
-    resetGame();
-  }
-
-  /// Adds players to the game, based on a list of names
-  void setPlayers(List<String> playerNames) {
-    final players = playerNames.map((name) => Player(name: name, id: Uuid().v4())).toList();
-    state = state.copyWith(players: players);
+    state = state.copyWith(
+      id: newGameId,
+      players: newPlayers,
+      currentPlay: newPlay,
+      currentPlayerIndex: 0,
+    );
   }
 
   /// Updates the players in the game.
@@ -164,7 +162,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
 }
 
 /// A provider that exposes the [ActiveGameNotifier] to the UI
-final activeGameProvider = StateNotifierProvider.autoDispose<ActiveGameNotifier, Game>(
+final activeGameProvider = StateNotifierProvider<ActiveGameNotifier, Game>(
   (ref) => ActiveGameNotifier(
     Game(
       id: Uuid().v4(),

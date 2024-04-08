@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../shared/presentation/screens/home.dart';
 import '../../domain/models/game.dart';
-import '../widgets/stats_dialogue.dart';
+import '../widgets/home_button.dart';
+import '../widgets/results/results_bar_chart.dart';
+import '../widgets/results/show_stats_button.dart';
 
 /// A page that displays the game statistics and the winner of the game.
 class ResultsPage extends StatelessWidget {
@@ -14,17 +15,9 @@ class ResultsPage extends StatelessWidget {
 
   final Game _game;
 
-  Future<void> _showStatsDialog(BuildContext context) {
-    return showDialog(
-      context: context,
-      builder: (context) => StatsDialog(game: _game),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final isDraw = _game.sortedPlayers.length > 1 &&
-        _game.sortedPlayers[0].score == _game.sortedPlayers[1].score;
+    final isDraw = _game.sortedPlayers[0].score == _game.sortedPlayers[1].score;
     return Scaffold(
       appBar: AppBar(
         title: Text('GAME OVER'),
@@ -66,55 +59,11 @@ class ResultsPage extends StatelessWidget {
                       ),
                 ),
               ),
+              Center(child: ResultsBarChart()),
               SizedBox(height: 36),
-              ElevatedButton.icon(
-                onPressed: () {
-                  if (_game.plays.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: Theme.of(context).colorScheme.error,
-                        content: Text(
-                          'No plays were made in this game.',
-                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                color: Theme.of(context).colorScheme.onError,
-                              ),
-                        ),
-                      ),
-                    );
-                    return;
-                  } else {
-                    _showStatsDialog(context);
-                  }
-                },
-                icon: Icon(
-                  Icons.format_list_numbered,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                label: Text(
-                  'Stats',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-              ),
+              StatsButton(game: _game),
               SizedBox(height: 12),
-              ElevatedButton.icon(
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(),
-                  ),
-                ),
-                icon: Icon(
-                  Icons.home,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                label: Text(
-                  'Home',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-              ),
+              HomeButton(),
             ],
           ),
         ),

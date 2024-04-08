@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/models/game.dart';
+import '../../../domain/models/game.dart';
 
 /// A stateless widget that displays the game statistics.
 class StatsDialog extends StatelessWidget {

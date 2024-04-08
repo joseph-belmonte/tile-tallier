@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../application/providers/active_game.dart';
-import '../screens/results.dart';
+import '../../../application/providers/active_game.dart';
+import '../../screens/results.dart';
 
 /// A modal that allows the user to input the leftover tiles on each player's rack.
 class ScoreSubtractionModal extends ConsumerStatefulWidget {
@@ -46,9 +46,9 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
 
       ref.read(activeGameProvider.notifier).updatePlayers(updatedPlayers);
 
-      Navigator.of(context).pop();
+      // Navigator.of(context).pop();
       Navigator.of(context).push(
-        MaterialPageRoute<void>(
+        MaterialPageRoute(
           builder: (context) => ResultsPage(game: ref.read(activeGameProvider)),
         ),
       );

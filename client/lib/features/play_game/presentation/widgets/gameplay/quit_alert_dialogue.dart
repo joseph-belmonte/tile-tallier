@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../shared/presentation/screens/home.dart';
+import '../../../../shared/presentation/screens/home.dart';
 
 /// An alert dialog that asks the user if they want to quit the game.
 class QuitGameAlert extends StatelessWidget {

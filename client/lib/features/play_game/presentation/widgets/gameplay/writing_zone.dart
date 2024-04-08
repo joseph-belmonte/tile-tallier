@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../application/providers/active_game.dart';
+import '../../../application/providers/active_game.dart';
 
 import 'scrabble_word.dart';
 import 'turn_hud.dart';
@@ -96,7 +96,7 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            TurnHUD(game: game, gameNotifier: gameNotifier),
+            TurnHUD(),
             SizedBox(width: 16.0),
             Expanded(
               child: SingleChildScrollView(
