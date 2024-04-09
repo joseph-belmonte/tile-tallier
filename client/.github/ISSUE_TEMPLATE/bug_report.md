@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Submit the bug
+about: Submit a bug
 title: "[BUG]"
 labels: bug
 assignees: ''

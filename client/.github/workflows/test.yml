@@ -1,4 +1,4 @@
-name: Flutter CI
+name: Test
 
 on:
   pull_request:
@@ -16,8 +16,10 @@ jobs:
         with:
           flutter-version: "3.19.4" # Specify your Flutter version
 
+      # Install dependencies
       - name: Install dependencies
         run: flutter pub get
 
+      # Run tests
       - name: Run tests
         run: flutter test
