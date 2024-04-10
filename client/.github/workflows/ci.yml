@@ -1,8 +1,10 @@
-name: continuous integration
+name: Continuous Integration and Build
 
 on:
   pull_request:
-    branches: [main] # Triggers the workflow on pull requests to the main branch
+    branches: [main, production] # Triggers the workflow on pull requests to the main and production branches
+  push:
+    branches: [main, production] # Triggers the workflow on pushes to the main and production branches
 
 jobs:
   flutter_test:
@@ -24,10 +26,10 @@ jobs:
 
   # Commenting this block out until we correctly set up the xcode requirements (singing/ceriticate)
   # build_ios:
+  #   if: github.ref == 'refs/heads/production' # Specifies that this job should only run on the production branch
   #   name: Build iOS
-  #   runs-on: macos-latest # Specifies macOS runner for iOS build
-
   #   needs: [flutter_test] # Specifies that this job depends on the successful completion of flutter_test
+  #   runs-on: macos-latest # Specifies macOS runner for iOS build
 
   #   steps:
   #     - uses: actions/checkout@v4
@@ -42,12 +44,14 @@ jobs:
   #     - name: Build iOS
   #       run: flutter build ipa --obfuscate --split-debug-info=build/app/outputs/symbols # Builds an iOS app archive (.ipa file)
   #     - name: Upload Symbols
-  # uses: actions/upload-artifact@v2
-  # with:
-  #   name: ios-symbols
-  #   path: build/app/outputs/symbols
+  #       uses: actions/upload-artifact@v2
+  #       if: github.ref == 'refs/heads/production' # Specifies that this step should only run on the production branch
+  #       with:
+  #         name: ios-symbols
+  #         path: build/app/outputs/symbols
 
   build_apk:
+    if: github.ref == 'refs/heads/production' # Specifies that this job should only run on the production branch
     name: Build Android
     runs-on: ubuntu-latest # Specifies Ubuntu runner for Android build
 
