@@ -1,0 +1,72 @@
+name: continuous integration
+
+on:
+  pull_request:
+    branches: [main] # Triggers the workflow on pull requests to the main branch
+
+jobs:
+  flutter_test:
+    runs-on: ubuntu-latest # Specifies the runner environment
+
+    steps:
+      - uses: actions/checkout@v4 # Checks out your repository under $GITHUB_WORKSPACE
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2 # Sets up Flutter environment
+        with:
+          channel: stable
+
+      - name: Install dependencies
+        run: flutter pub get # Fetches the dependencies for the project
+
+      - name: Run tests
+        run: flutter test # Executes Flutter tests
+
+  # Commenting this block out until we correctly set up the xcode requirements (singing/ceriticate)
+  # build_ios:
+  #   name: Build iOS
+  #   runs-on: macos-latest # Specifies macOS runner for iOS build
+
+  #   needs: [flutter_test] # Specifies that this job depends on the successful completion of flutter_test
+
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Set up Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         channel: stable
+  #     - name: Install dependencies
+  #       run: flutter pub get
+  #     - name: Clean build
+  #       run: flutter clean # Cleans previous builds
+  #     - name: Build iOS
+  #       run: flutter build ipa --obfuscate --split-debug-info=build/app/outputs/symbols # Builds an iOS app archive (.ipa file)
+  #     - name: Upload Symbols
+  # uses: actions/upload-artifact@v2
+  # with:
+  #   name: ios-symbols
+  #   path: build/app/outputs/symbols
+
+  build_apk:
+    name: Build Android
+    runs-on: ubuntu-latest # Specifies Ubuntu runner for Android build
+
+    needs: [flutter_test] # Specifies that this job depends on the successful completion of flutter_test
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Clean build
+        run: flutter clean
+      - name: Build APK
+        run: flutter build apk --obfuscate --split-debug-info=build/app/outputs/symbols # Builds an Android APK file
+      - name: Upload Symbols
+        uses: actions/upload-artifact@v2
+        with:
+          name: android-symbols
+          path: build/app/outputs/symbols
