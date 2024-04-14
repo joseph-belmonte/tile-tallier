@@ -66,9 +66,12 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
         child: Column(
           children: <Widget>[
             const SizedBox(height: 24),
-            const Padding(
+            Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text('Enter the leftover tiles on each player\'s rack.'),
+              child: Text(
+                'Enter the leftover tiles on each player\'s rack.',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
             ),
             ListView.builder(
               shrinkWrap: true,
@@ -89,19 +92,41 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              padding: EdgeInsets.symmetric(vertical: 20.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   ElevatedButton.icon(
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.cancel),
-                    label: const Text('Cancel'),
+                    icon: Icon(
+                      Icons.cancel,
+                      color: Theme.of(context).colorScheme.onErrorContainer,
+                    ),
+                    label: Text(
+                      'Cancel',
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge!
+                          .copyWith(color: Theme.of(context).colorScheme.onErrorContainer),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.errorContainer,
+                    ),
                   ),
                   ElevatedButton.icon(
                     onPressed: _submitRacks,
-                    icon: const Icon(Icons.check),
-                    label: const Text('Submit'),
+                    icon:
+                        Icon(Icons.check, color: Theme.of(context).colorScheme.onPrimaryContainer),
+                    label: Text(
+                      'Submit',
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge!
+                          .copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                    ),
                   ),
                 ],
               ),

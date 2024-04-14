@@ -9,8 +9,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:uuid/uuid.dart';
 import '../../../../enums/score_multipliers.dart';
-import '../../domain/models/game.dart';
+import '../../../../utils/database_helper.dart';
+import '../../../../utils/helpers.dart';
 
+import '../../domain/models/game.dart';
 import '../../domain/models/letter.dart';
 import '../../domain/models/play.dart';
 import '../../domain/models/player.dart';
@@ -158,6 +160,17 @@ class ActiveGameNotifier extends StateNotifier<Game> {
   void toggleBingo() {
     final updatedPlay = state.currentPlay.copyWith(isBingo: !state.currentPlay.isBingo);
     state = state.copyWith(currentPlay: updatedPlay);
+  }
+
+  /// Whether a word or any wildcard variation of the word exists in the database
+  Future<bool> isValidWord(String word) async {
+    // If greater than 2 spaces, return false
+    if (RegExp(' ').allMatches(word).length > 2) return false;
+
+    final possibleWords = generateWildcardWords(word.toLowerCase());
+    final wordExists = await DatabaseHelper.instance.wordExistsInList(possibleWords);
+
+    return wordExists;
   }
 }
 

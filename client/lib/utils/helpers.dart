@@ -1,6 +1,4 @@
-import 'dart:ui';
-
-import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../enums/score_multipliers.dart';
 import '../enums/scrabble_edition.dart';
@@ -25,4 +23,46 @@ String getMultiplierText(ScoreMultiplier multiplier) {
 /// Returns the color to use for the tile.
 Color getTileColor(Letter letter, ScrabbleEdition edition) {
   return colors[edition]![letter.scoreMultiplier]!;
+}
+
+/// Generates a list of words with wildcards based on spaces
+/// Generates a list of words with wildcards based on spaces
+List<String> generateWildcardWords(String word) {
+  final results = <String>{};
+  final indices = List<int>.generate(word.length, (i) => i);
+  // Identify wildcard positions by spaces
+  final wildcardPositions = indices.where((i) => word[i] == ' ').toList();
+
+  if (wildcardPositions.isEmpty) {
+    results.add(word);
+    return results.toList();
+  }
+
+  // Generate all possible words replacing wildcards with 'a' to 'z'
+  results.addAll(_replaceWildcards(word, wildcardPositions, 0, ''));
+
+  return results.toList();
+}
+
+/// Helper function to replace wildcards recursively
+Set<String> _replaceWildcards(String word, List<int> positions, int index, String currentPrefix) {
+  final currentResults = <String>{};
+  if (index >= positions.length) {
+    // Once all positions are replaced, return the completed word
+    return {currentPrefix + word.substring(positions.last + 1)};
+  }
+
+  // Current position to replace
+  final currentPosition = positions[index];
+  final prefix = currentPrefix +
+      (index == 0
+          ? word.substring(0, currentPosition)
+          : word.substring(positions[index - 1] + 1, currentPosition));
+
+  for (var c = 'a'.codeUnitAt(0); c <= 'z'.codeUnitAt(0); c++) {
+    currentResults
+        .addAll(_replaceWildcards(word, positions, index + 1, prefix + String.fromCharCode(c)));
+  }
+
+  return currentResults;
 }

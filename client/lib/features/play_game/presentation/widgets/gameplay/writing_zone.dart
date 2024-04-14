@@ -44,15 +44,28 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
   }
 
   /// Submits the word in the input field to the active play.
-  void _handleWordSubmit(String value) {
-    if (value.isEmpty) {
-      canSubmit = false;
+  void _handleWordSubmit(String value) async {
+    final isValid = await ref.read(activeGameProvider.notifier).isValidWord(value);
+    if (!isValid) {
+      if (RegExp(' ').allMatches(value).length > 2) {
+        _showInvalidWordSnackBar('Too many blank tiles!');
+      } else {
+        _showInvalidWordSnackBar('$value is not a valid word.');
+      }
       return;
     } else {
-      canSubmit = true;
       ref.read(activeGameProvider.notifier).addWordToCurrentPlay(value);
       _textController.clear();
     }
+  }
+
+  void _showInvalidWordSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(milliseconds: 1500),
+      ),
+    );
   }
 
   /// Ends the current turn and advances to the next player.
@@ -134,7 +147,11 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
               icon: Icon(Icons.undo, semanticLabel: 'Undo last turn'),
             ),
             IconButton(
-              onPressed: canSubmit ? () => _handleWordSubmit(_textController.text) : null,
+              onPressed: canSubmit
+                  ? () async {
+                      _handleWordSubmit(_textController.text);
+                    }
+                  : null,
               icon: Icon(Icons.playlist_add, semanticLabel: 'Submit word'),
             ),
             IconButton(

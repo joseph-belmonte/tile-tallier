@@ -1,4 +1,4 @@
-package com.example.scrabble_scorer
+package dev.belmo.scrabble_scorer
 
 import io.flutter.embedding.android.FlutterActivity
 
