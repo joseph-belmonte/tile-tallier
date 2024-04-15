@@ -49,6 +49,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
   /// * Advances the game to the next player's turn
   void endTurn() {
     final currentPlayer = state.players[state.currentPlayerIndex];
+
     // Ensure currentPlay has all necessary data before copying.
     final completedPlay = state.currentPlay.copyWith(playerId: currentPlayer.id);
 

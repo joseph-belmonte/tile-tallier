@@ -10,11 +10,4 @@ class AppDb {
 
   /// Default used [KeyValueDb] implementation.
   static const UsedKeyValueDb keyValue = UsedKeyValueDb.sharedPreferences;
-
-  /// Used file name for the local [KeyValueDb].
-  ///
-  /// In this app only the Hive box [KeyValueDbHive] can use a user defined
-  /// filename, the SharedPreferences packages and her the [KeyValueDbPrefs]
-  /// used a fixed name for it local storage file.
-  static const String keyValueFilename = 'settings_box';
 }

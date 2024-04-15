@@ -41,7 +41,6 @@ class _PreGamePageState extends ConsumerState<PreGamePage> {
           .toList();
 
       if (playerNames.isNotEmpty) {
-        // Assuming ActiveGameNotifier has a method to setup a new game.
         ref.read(activeGameProvider.notifier).startGame(playerNames);
 
         Navigator.push(

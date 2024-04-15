@@ -44,18 +44,19 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
   }
 
   /// Submits the word in the input field to the active play.
-  void _handleWordSubmit(String value) async {
+  Future<void> _handleWordSubmit(String value) async {
     final isValid = await ref.read(activeGameProvider.notifier).isValidWord(value);
-    if (!isValid) {
+
+    if (isValid) {
+      ref.read(activeGameProvider.notifier).addWordToCurrentPlay(value);
+      _textController.clear();
+    } else {
       if (RegExp(' ').allMatches(value).length > 2) {
         _showInvalidWordSnackBar('Too many blank tiles!');
       } else {
         _showInvalidWordSnackBar('$value is not a valid word.');
       }
       return;
-    } else {
-      ref.read(activeGameProvider.notifier).addWordToCurrentPlay(value);
-      _textController.clear();
     }
   }
 
@@ -70,15 +71,18 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
 
   /// Ends the current turn and advances to the next player.
   /// If the input field is not empty, the word is submitted before ending the turn.
-  void _handleEndTurn() {
+  Future<void> _handleEndTurn() async {
     if (_textController.text.isNotEmpty) {
-      _handleWordSubmit(_textController.text);
+      await _handleWordSubmit(_textController.text).then((_) {
+        if (_textController.text.isEmpty) ref.read(activeGameProvider.notifier).endTurn();
+      });
+    } else {
+      ref.read(activeGameProvider.notifier).endTurn();
     }
-    _textController.clear();
-    ref.read(activeGameProvider.notifier).endTurn();
     if (ref.read(activeGameProvider).plays.isNotEmpty) {
       canUndo = true;
     }
+    FocusManager.instance.primaryFocus?.unfocus();
   }
 
   void _handleUndoTurn() {
