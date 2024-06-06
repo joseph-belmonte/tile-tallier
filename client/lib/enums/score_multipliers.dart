@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../theme/constants/theming.dart';
+import '../theme/constants/scrabble_tile_colors.dart';
 import 'scrabble_edition.dart';
 
 /// An enum representing the letter score multipliers in Scrabble.
@@ -29,5 +29,5 @@ enum ScoreMultiplier {
   final String label;
 
   /// Returns the color for the letter score multiplier based on the edition.
-  Color editionColor(ScrabbleEdition edition) => colors[edition]![this]!;
+  Color editionColor(ScrabbleEdition edition) => scrabbleTileColors[edition]![this]!;
 }

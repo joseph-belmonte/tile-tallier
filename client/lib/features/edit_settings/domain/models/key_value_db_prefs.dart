@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../enums/scrabble_edition.dart';
 import '../../../../utils/same_types.dart';
 import 'key_value_db.dart';
 // ignore_for_file: comment_references
@@ -105,6 +106,10 @@ class KeyValueDbPrefs implements KeyValueDb {
   // is about 600 LoC and Hive with type adapters is about 300.
   @override
   T get<T>(String key, T defaultValue) {
+    if (T == ScrabbleEdition) {
+      final index = _prefs.getInt(key) ?? (defaultValue as ScrabbleEdition).index;
+      return ScrabbleEdition.values[index] as T;
+    }
     try {
       // T is boolean nullable value.
       if (sameTypes<T, bool?>()) {
@@ -524,6 +529,10 @@ class KeyValueDbPrefs implements KeyValueDb {
   // this better and is faster.
   @override
   Future<void> put<T>(String key, T value) async {
+    if (value is ScrabbleEdition) {
+      await _prefs.setInt(key, (value as ScrabbleEdition).index);
+      return;
+    }
     try {
       // Save a nullable bool value.
       if (sameTypes<T, bool?>()) {

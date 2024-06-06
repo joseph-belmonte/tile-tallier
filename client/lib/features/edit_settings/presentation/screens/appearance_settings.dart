@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../enums/scrabble_edition.dart';
+import '../../../../theme/controllers/theme_providers.dart';
 import '../controllers/settings.dart';
-import '../screens/color_screen.dart';
-import '../widgets/app_about_tile.dart';
+import 'theme_screen.dart';
 
 /// A page that displays the dark mode settings for the app
 class AppearanceSettingsPage extends ConsumerWidget {
@@ -13,6 +14,8 @@ class AppearanceSettingsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(Settings.themeModeProvider);
+    final scarbbleEdition = ref.watch(scrabbleEditionProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Appearance'),
@@ -44,14 +47,14 @@ class AppearanceSettingsPage extends ConsumerWidget {
           ),
           Divider(),
           ListTile(
-            title: const Text('Primary Color'),
-            subtitle: const Text('Edit the primary color of the app'),
+            title: const Text('Theming'),
+            subtitle: const Text('Browse and select a theme for the app'),
             leading: const Icon(Icons.color_lens),
             trailing: const Icon(Icons.arrow_forward_sharp),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ColorScreen(),
+                builder: (context) => ThemeScreen(),
               ),
             ),
           ),
@@ -64,16 +67,15 @@ class AppearanceSettingsPage extends ConsumerWidget {
           ListTile(
             title: const Text('Classic'),
             leading: const Icon(Icons.format_color_text),
-            trailing: const Icon(Icons.check),
-            onTap: () {},
+            trailing: scarbbleEdition == ScrabbleEdition.classic ? const Icon(Icons.check) : null,
+            onTap: () => ref.read(scrabbleEditionProvider.notifier).state = ScrabbleEdition.classic,
           ),
           ListTile(
-            title: const Text('25th Anniversary'),
+            title: const Text('Hasbro'),
             leading: const Icon(Icons.format_color_text),
-            onTap: () {},
+            trailing: scarbbleEdition == ScrabbleEdition.hasbro ? const Icon(Icons.check) : null,
+            onTap: () => ref.read(scrabbleEditionProvider.notifier).state = ScrabbleEdition.hasbro,
           ),
-          Divider(),
-          AppAboutTile(),
         ],
       ),
     );

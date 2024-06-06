@@ -1,10 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../enums/score_multipliers.dart';
 import '../enums/scrabble_edition.dart';
 import '../features/play_game/domain/models/letter.dart';
 
-import '../theme/constants/theming.dart';
+import '../theme/constants/scrabble_tile_colors.dart';
 
 /// Accepts a [ScoreMultiplier] and returns the text to display.
 String getMultiplierText(ScoreMultiplier multiplier) {
@@ -22,7 +25,7 @@ String getMultiplierText(ScoreMultiplier multiplier) {
 
 /// Returns the color to use for the tile.
 Color getTileColor(Letter letter, ScrabbleEdition edition) {
-  return colors[edition]![letter.scoreMultiplier]!;
+  return scrabbleTileColors[edition]![letter.scoreMultiplier]!;
 }
 
 /// Generates a list of words with wildcards based on spaces
@@ -65,4 +68,13 @@ Set<String> _replaceWildcards(String word, List<int> positions, int index, Strin
   }
 
   return currentResults;
+}
+
+/// Writes the screenshot to storage and returns the file path
+Future<String> writeImageToStorage(Uint8List feedbackScreenshot) async {
+  final output = await getTemporaryDirectory();
+  final screenshotFilePath = '${output.path}/feedback.png';
+  final screenshotFile = File(screenshotFilePath);
+  await screenshotFile.writeAsBytes(feedbackScreenshot);
+  return screenshotFilePath;
 }

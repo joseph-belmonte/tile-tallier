@@ -32,6 +32,9 @@ dependencies:
   sqflite: ^2.3.3
   path_provider: ^2.1.2
   path: ^1.9.0
+  feedback: ^3.1.0
+  flutter_email_sender: ^6.0.3
+  file_selector: ^1.0.3
 
 dev_dependencies:
   flutter_test:
@@ -48,6 +51,13 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.1
+  flutter_launcher_icons: "^0.13.1"
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/board-game.png"
+  remove_alpha_ios: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -62,6 +72,12 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/txt/
+    - assets/fonts/
+    - assets/icon/
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: W95FA
+      fonts:
+        - asset: assets/fonts/W95FA/W95FA.otf

@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../theme/constants/premium_themes.dart';
 import '../../domain/models/settings_entry.dart';
 
 // Set the bool flag to true to show debug prints. Even if you forgot
@@ -21,8 +22,6 @@ class Settings {
   // Default const values for all the settings entries.
   // They are collected here at the top to be easy to modify.
 
-  // Defaults for: use material 3, theme mode and active color scheme.
-  static const bool _useMaterial3 = true;
   static const ThemeMode _themeMode = ThemeMode.system;
   static const int _schemeIndex = 0;
   // Surface mode defaults
@@ -31,9 +30,6 @@ class Settings {
   // surface blend level defaults
   static const int _lightBlendLevel = 10;
   static const int _darkBlendLevel = 25;
-  // Swap primary and secondary colors.
-  static const bool _lightSwapColors = false;
-  static const bool _darkSwapColors = false;
   // AppBar elevation and color defaults.
   static const double _appBarElevation = 0.0;
   static const FlexAppBarStyle _lightAppBarStyle = FlexAppBarStyle.background;
@@ -44,7 +40,6 @@ class Settings {
   static const double _darkAppBarOpacity = 0.91;
   // Dark theme only extra settings, like computed dark theme and true black.
   static const bool _darkIsTrueBlack = false;
-  static const bool _darkComputeTheme = false;
   static const int _darkComputeLevel = 20;
   // Use seeded color scheme and custom tones.
   static const bool _usePrimaryKeyColor = false;
@@ -65,7 +60,6 @@ class Settings {
   static void reset(WidgetRef ref) {
     if (_debug) debugPrint('Settings: reset all DB values');
     // Use material 3, theme mode and active color scheme.
-    ref.read(useMaterial3Provider.notifier).reset();
     ref.read(themeModeProvider.notifier).reset();
     ref.read(schemeIndexProvider.notifier).reset();
     // Surface mode.
@@ -74,9 +68,6 @@ class Settings {
     // Surface blend levels.
     ref.read(lightBlendLevelProvider.notifier).reset();
     ref.read(darkBlendLevelProvider.notifier).reset();
-    // Swap primary and secondary colors.
-    ref.read(lightSwapColorsProvider.notifier).reset();
-    ref.read(darkSwapColorsProvider.notifier).reset();
     // AppBar elevation and color.
     ref.read(appBarElevationProvider.notifier).reset();
     ref.read(lightAppBarStyleProvider.notifier).reset();
@@ -87,7 +78,6 @@ class Settings {
     ref.read(darkAppBarOpacityProvider.notifier).reset();
     // Dark theme only extra settings, like computed dark theme and true black.
     ref.read(darkIsTrueBlackProvider.notifier).reset();
-    ref.read(darkComputeThemeProvider.notifier).reset();
     ref.read(darkComputeLevelProvider.notifier).reset();
     // Use seeded color scheme and custom tones.
     ref.read(usePrimaryKeyColorProvider.notifier).reset();
@@ -107,7 +97,6 @@ class Settings {
   static void init(Ref ref) {
     if (_debug) debugPrint('Settings: init DB values');
     // Use material 3, theme mode and active color scheme.
-    ref.read(useMaterial3Provider.notifier).init();
     ref.read(themeModeProvider.notifier).init();
     ref.read(schemeIndexProvider.notifier).init();
     // Surface mode.
@@ -116,9 +105,6 @@ class Settings {
     // Surface blend levels.
     ref.read(lightBlendLevelProvider.notifier).init();
     ref.read(darkBlendLevelProvider.notifier).init();
-    // Swap primary and secondary colors.
-    ref.read(lightSwapColorsProvider.notifier).init();
-    ref.read(darkSwapColorsProvider.notifier).init();
     // AppBar elevation and color.
     ref.read(appBarElevationProvider.notifier).init();
     ref.read(lightAppBarStyleProvider.notifier).init();
@@ -129,7 +115,6 @@ class Settings {
     ref.read(darkAppBarOpacityProvider.notifier).init();
     // Dark theme only extra settings, like computed dark theme and true black.
     ref.read(darkIsTrueBlackProvider.notifier).init();
-    ref.read(darkComputeThemeProvider.notifier).init();
     ref.read(darkComputeLevelProvider.notifier).init();
     // Seeded color key usage.
     ref.read(usePrimaryKeyColorProvider.notifier).init();
@@ -141,26 +126,6 @@ class Settings {
     // Component theme global border radius.
     ref.read(defaultRadiusProvider.notifier).init();
   }
-
-  /// String key used for defining if we use Material 3 or Material 2.
-  ///
-  /// The associated provider uses same name with "Provider" added to it.
-  static const String _keyUseMaterial3 = 'useMaterial3';
-
-  /// Provider for swapping between using Material 2 and 3 mode.
-  ///
-  /// Defaults to [_useMaterial3].
-  static final NotifierProvider<SettingsEntry<bool>, bool> useMaterial3Provider =
-      NotifierProvider<SettingsEntry<bool>, bool>(
-    () {
-      return SettingsEntry<bool>(
-        defaultValue: _useMaterial3,
-        key: _keyUseMaterial3,
-      );
-    },
-    // Use the unique key-value DB key as provider name, useful for debugging.
-    name: '${_keyUseMaterial3}Provider',
-  );
 
   /// String key used for storing the last used app theme mode.
   ///
@@ -280,46 +245,6 @@ class Settings {
     },
     // Use the unique key-value DB key as provider name, useful for debugging.
     name: '${_keyDarkBlendLevel}Provider',
-  );
-
-  /// String key used for storing light mode primary/secondary color swap.
-  ///
-  /// The associated provider uses same name with "Provider" added to it.
-  static const String _keyLightSwapColors = 'lightSwapColors';
-
-  /// Provider for swapping primary and secondary colors in light theme mode.
-  ///
-  /// Defaults to [_lightSwapColors].
-  static final NotifierProvider<SettingsEntry<bool>, bool> lightSwapColorsProvider =
-      NotifierProvider<SettingsEntry<bool>, bool>(
-    () {
-      return SettingsEntry<bool>(
-        defaultValue: _lightSwapColors,
-        key: _keyLightSwapColors,
-      );
-    },
-    // Use the unique key-value DB key as provider name, useful for debugging.
-    name: '${_keyLightSwapColors}Provider',
-  );
-
-  /// String key used for storing dark mode primary/secondary color swap.
-  ///
-  /// The associated provider uses same name with "Provider" added to it.
-  static const String _keyDarkSwapColors = 'darkSwapColors';
-
-  /// Provider for swapping primary and secondary colors in dark theme mode.
-  ///
-  /// Defaults to [_darkSwapColors].
-  static final NotifierProvider<SettingsEntry<bool>, bool> darkSwapColorsProvider =
-      NotifierProvider<SettingsEntry<bool>, bool>(
-    () {
-      return SettingsEntry<bool>(
-        defaultValue: _darkSwapColors,
-        key: _keyDarkSwapColors,
-      );
-    },
-    // Use the unique key-value DB key as provider name, useful for debugging.
-    name: '${_keyDarkSwapColors}Provider',
   );
 
   /// String key used for storing the [AppBar] elevation.
@@ -471,35 +396,6 @@ class Settings {
   /// String key used for storing bool to define if we use computed dark theme.
   ///
   /// The associated provider uses same name with "Provider" added to it.
-  static const String _keyDarkComputeTheme = 'darkComputeTheme';
-
-  /// Option to use dark scheme calculation from light scheme colors, instead
-  /// of using the pre-defined dark scheme colors.
-  ///
-  /// Default to [_darkComputeTheme].
-  ///
-  /// This can be used use if you want to try to find colors based on your light
-  /// scheme colors, then use this mode and adjust the saturation level, when
-  /// you find colors that work well visually you can pick them with a picker
-  /// and change your defined dark colors to those picked color values instead.
-  ///
-  /// Handy for making a tuned dark scheme based on light scheme colors. You
-  /// can also use the principle shown here as a way to make just computed dark
-  /// themes from light scheme color definitions, just pick a saturation level
-  /// that you think work well enough and use that as the dark scheme color
-  /// input instead. There is an example of this in the FlexColorScheme package
-  /// tutorial as well.
-  static final NotifierProvider<SettingsEntry<bool>, bool> darkComputeThemeProvider =
-      NotifierProvider<SettingsEntry<bool>, bool>(
-    () {
-      return SettingsEntry<bool>(
-        defaultValue: _darkComputeTheme,
-        key: _keyDarkComputeTheme,
-      );
-    },
-    // Use the unique key-value DB key as provider name, useful for debugging.
-    name: '${_keyDarkComputeTheme}Provider',
-  );
 
   /// String key used for storing dark saturation level for computed dark theme.
   ///
@@ -655,5 +551,29 @@ class Settings {
     },
     // Use the unique key-value DB key as provider name, useful for debugging.
     name: '${_keyDefaultRadius}Provider',
+  );
+
+  /// Key used for storing if we use a premium theme.
+  static final NotifierProvider<SettingsEntry<bool>, bool> isPremiumThemeProvider =
+      NotifierProvider<SettingsEntry<bool>, bool>(
+    () {
+      return SettingsEntry<bool>(
+        defaultValue: false,
+        key: 'isPremiumTheme',
+      );
+    },
+    name: 'isPremiumThemeProvider',
+  );
+
+  /// Key used for storing the selected premium theme.
+  static final NotifierProvider<SettingsEntry<PremiumTheme?>, PremiumTheme?> premiumThemeProvider =
+      NotifierProvider<SettingsEntry<PremiumTheme?>, PremiumTheme?>(
+    () {
+      return SettingsEntry<PremiumTheme?>(
+        defaultValue: null,
+        key: 'premiumTheme',
+      );
+    },
+    name: 'premiumThemeProvider',
   );
 }

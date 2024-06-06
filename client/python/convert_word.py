@@ -10,18 +10,19 @@ OUTPUT_FILE = "word_list.dart"
 
 def main():
     """
-    Example:
+    Main function that reads words from a file, prepares a Dart set string,
+    and writes the Dart set to an output file.
 
     """
     # Read words from the file
-    with open(INPUT_FILE, "r") as file:
+    with open(INPUT_FILE, "r", encoding="utf-8") as file:
         words = file.read().splitlines()
 
     # Prepare the Dart set string
     dart_set = "{" + ", ".join(f"'{word}'" for word in words) + "};"
 
     # Write the Dart set to the output file
-    with open(OUTPUT_FILE, "w") as file:
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as file:
         file.write("final Set<String> wordList = ")
         file.write(dart_set)
 
