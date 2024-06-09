@@ -1,6 +1,6 @@
 {
-    "name": "scrabble_scorer",
-    "short_name": "scrabble_scorer",
+    "name": "tile_tally",
+    "short_name": "tile_tally",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

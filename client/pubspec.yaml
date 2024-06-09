@@ -1,4 +1,4 @@
-name: scrabble_scorer
+name: tile_tally
 description: An app to help you keep track of your Scrabble game.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -35,6 +35,7 @@ dependencies:
   feedback: ^3.1.0
   flutter_email_sender: ^6.0.3
   file_selector: ^1.0.3
+  purchases_flutter: ^6.29.3
 
 dev_dependencies:
   flutter_test:

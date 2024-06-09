@@ -1,4 +1,4 @@
-package dev.belmo.scrabble_scorer
+package dev.belmo.tile_tally
 
 import io.flutter.embedding.android.FlutterActivity
 

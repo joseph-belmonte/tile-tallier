@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "dev.belmo" "\0"
-            VALUE "FileDescription", "scrabble_scorer" "\0"
+            VALUE "FileDescription", "tile_tally" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "scrabble_scorer" "\0"
+            VALUE "InternalName", "tile_tally" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 dev.belmo. All rights reserved." "\0"
-            VALUE "OriginalFilename", "scrabble_scorer.exe" "\0"
-            VALUE "ProductName", "scrabble_scorer" "\0"
+            VALUE "OriginalFilename", "tile_tally.exe" "\0"
+            VALUE "ProductName", "tile_tally" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

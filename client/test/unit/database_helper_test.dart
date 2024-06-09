@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:scrabble_scorer/utils/database_helper.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:tile_tally/utils/database_helper.dart';
 
 Future main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +22,7 @@ Future main() async {
     late Directory tempDir; // Temp directory used for testing
 
     setUp(() async {
-      tempDir = await Directory.systemTemp.createTemp('scrabble_scorer');
+      tempDir = await Directory.systemTemp.createTemp('tile_tally');
       final dbPath = '${tempDir.path}/test.db';
 
       db = await openDatabase(

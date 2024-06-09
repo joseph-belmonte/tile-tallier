@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Scrabble Scorer',
+          'TileTallier',
           style: Theme.of(context).textTheme.titleLarge!,
         ),
         automaticallyImplyLeading: false,

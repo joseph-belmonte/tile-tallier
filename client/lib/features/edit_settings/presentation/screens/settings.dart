@@ -2,16 +2,49 @@ import 'dart:io';
 
 import 'package:feedback/feedback.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
+import '../../../manage_purchases/presentation/widgets/dismiss_dialog.dart';
 import '../widgets/app_about_tile.dart';
 import 'appearance_settings.dart';
 
 /// A page that displays the settings for the app
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   /// Creates a new [SettingsPage] instance.
   const SettingsPage({super.key});
+
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  // ignore: unused_field
+  bool _isLoading = false;
+
+  void _restore() async {
+    setState(() => _isLoading = true);
+
+    try {
+      await Purchases.restorePurchases();
+      await Purchases.appUserID;
+    } on PlatformException catch (e) {
+      if (mounted) {
+        await showDialog(
+          context: context,
+          builder: (BuildContext context) => ShowDialogToDismiss(
+            title: 'Error',
+            content: e.message ?? 'Unknown error',
+            buttonText: 'OK',
+          ),
+        );
+      }
+    }
+
+    setState(() => _isLoading = false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +85,7 @@ class SettingsPage extends StatelessWidget {
                       subject: 'App Feedback',
                       body: feedback.text,
                       attachmentPaths: [file.path],
-                      recipients: ['scrabble_scorer@belmo.dev'],
+                      recipients: ['tile_tally@belmo.dev'],
                     );
 
                     try {
@@ -66,6 +99,13 @@ class SettingsPage extends StatelessWidget {
                   if (context.mounted) _showErrorSnackBar(context, error);
                 }
               },
+            ),
+            ListTile(
+              title: Text('Restore Purchases'),
+              subtitle: Text('Restore your purchases if you have reinstalled the app'),
+              leading: Icon(Icons.restore),
+              trailing: Icon(Icons.arrow_forward),
+              onTap: () => _restore,
             ),
             AppAboutTile(),
           ],

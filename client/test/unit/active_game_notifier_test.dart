@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:scrabble_scorer/features/play_game/application/providers/active_game.dart';
-import 'package:scrabble_scorer/features/play_game/domain/models/play.dart';
-import 'package:scrabble_scorer/features/play_game/domain/models/player.dart';
+import 'package:tile_tally/features/play_game/application/providers/active_game.dart';
+import 'package:tile_tally/features/play_game/domain/models/play.dart';
+import 'package:tile_tally/features/play_game/domain/models/player.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {
