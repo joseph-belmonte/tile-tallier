@@ -4,6 +4,11 @@
 - [x] Implement navigation between screens (scorekeeping, settings, main menu).
 - [ ] Ensure responsive and consistent design across devices and orientations.
 
+## Backend Development - 
+- See backend here: [https://github.com/joseph-belmonte/shiny-octothorp](url)
+- [ ] User registration and authentication
+- [ ] Track user purchase history/subscription status
+
 ## Game Logic Integration
 - [x] Implement core Scrabble rules for word formation, scoring, and tile placement.
 - [x] Ensure accurate scoring based on tile values and special tile multipliers.
