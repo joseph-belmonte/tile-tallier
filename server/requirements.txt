@@ -1,0 +1,6 @@
+django
+djangorestframework
+environs
+httpie
+pylint-django
+pygments
