@@ -1,6 +1,5 @@
 django
 djangorestframework
+djangorestframework-simplejwt
 environs
-httpie
 pylint-django
-pygments
