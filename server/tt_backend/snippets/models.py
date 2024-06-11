@@ -1,3 +1,5 @@
+""" This file defines models for the snippets app. """
+
 # Create your models here.
 from django.db import models
 from pygments.lexers import get_all_lexers
