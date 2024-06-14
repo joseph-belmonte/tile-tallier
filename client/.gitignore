@@ -29,3 +29,4 @@ custom_lint.log
 
 # Virtual environment for python
 .venv*
+lib/features/auth/data/routes.dart

@@ -39,7 +39,7 @@ class ResultsPage extends StatelessWidget {
                 Text(
                   'Winner: ${_game.sortedPlayers[0].name} with a score of ${_game.sortedPlayers[0].score}!',
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.onBackground,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
               SizedBox(height: 20),
@@ -48,14 +48,14 @@ class ResultsPage extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.onBackground),
+                    .copyWith(color: Theme.of(context).colorScheme.onSurface),
               ),
               SizedBox(height: 24),
               ..._game.sortedPlayers.map(
                 (player) => Text(
                   '${player.name}: ${player.score}',
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.onBackground,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
               ),

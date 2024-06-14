@@ -21,7 +21,7 @@ class ResultsBarChart extends ConsumerWidget {
         barRods: <BarChartRodData>[
           BarChartRodData(
             toY: player.score.toDouble(),
-            color: Theme.of(context).colorScheme.onBackground,
+            color: Theme.of(context).colorScheme.onSurface,
             borderRadius: BorderRadius.circular(4),
           ),
         ],
@@ -47,7 +47,7 @@ class ResultsBarChart extends ConsumerWidget {
                     return Text(
                       sortedPlayers[value.toInt()].name,
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            color: Theme.of(context).colorScheme.onBackground,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                     );
                   },

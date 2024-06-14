@@ -49,7 +49,6 @@ class _PaywallState extends ConsumerState<Paywall> {
               itemBuilder: (BuildContext context, int index) {
                 final myProductList = widget.offering.availablePackages;
                 return Card(
-                  color: Colors.black,
                   child: ListTile(
                     onTap: () async {
                       try {
@@ -60,6 +59,7 @@ class _PaywallState extends ConsumerState<Paywall> {
                         // appData is a basically a reference to the current user
                         // and has properties like:
                         // entitlementIsActive, appUserID, etc.
+                        // ignore: unused_local_variable
                         final isSubscribed = entitlement?.isActive ?? false;
                       } catch (e) {
                         print(e);

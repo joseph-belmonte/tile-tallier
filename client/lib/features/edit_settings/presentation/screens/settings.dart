@@ -4,23 +4,27 @@ import 'package:feedback/feedback.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
+import '../../../auth/application/providers/auth_provider.dart';
+import '../../../auth/presentation/screens/account_management.dart';
+import '../../../auth/presentation/screens/auth_screen.dart';
 import '../../../manage_purchases/presentation/widgets/dismiss_dialog.dart';
 import '../widgets/app_about_tile.dart';
 import 'appearance_settings.dart';
 
 /// A page that displays the settings for the app
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends ConsumerStatefulWidget {
   /// Creates a new [SettingsPage] instance.
   const SettingsPage({super.key});
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
+  ConsumerState<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingsPageState extends ConsumerState<SettingsPage> {
   // ignore: unused_field
   bool _isLoading = false;
 
@@ -48,6 +52,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
@@ -56,6 +61,30 @@ class _SettingsPageState extends State<SettingsPage> {
         alignment: Alignment.topCenter,
         child: ListView(
           children: <Widget>[
+            ListTile(
+              title: Text('Account Management'),
+              subtitle: authState.isAuthenticated
+                  ? Text('Manage your account settings')
+                  : Text('Sign in to manage your account settings'),
+              leading: Icon(Icons.account_circle),
+              trailing: Icon(Icons.arrow_forward_sharp),
+              onTap: () {
+                if (authState.isAuthenticated) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const AccountManagementScreen(),
+                    ),
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AuthScreen(),
+                    ),
+                  );
+                }
+              },
+            ),
             ListTile(
               title: Text('Appearance'),
               subtitle: Text('Edit the appearance of the app'),

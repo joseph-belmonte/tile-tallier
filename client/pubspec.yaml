@@ -26,7 +26,7 @@ dependencies:
   logger: ^2.2.0
   freezed: ^2.4.7
   freezed_annotation: ^2.4.1
-  shared_preferences: ^2.2.2
+  shared_preferences: ^2.2.3
   accessibility_tools: ^1.0.1
   fl_chart: ^0.67.0
   sqflite: ^2.3.3
@@ -36,6 +36,9 @@ dependencies:
   flutter_email_sender: ^6.0.3
   file_selector: ^1.0.3
   purchases_flutter: ^6.29.3
+  http: ^1.2.1
+  flutter_secure_storage: ^4.2.1
+  mockito: ^5.4.4
 
 dev_dependencies:
   flutter_test:

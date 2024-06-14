@@ -1,3 +1,4 @@
+// ignore: unused_import
 import 'package:accessibility_tools/accessibility_tools.dart';
 import 'package:feedback/feedback.dart';
 import 'package:flutter/material.dart';
@@ -39,10 +40,10 @@ class _ThemingAppState extends ConsumerState<ThemeWrapper> with WidgetsBindingOb
         darkTheme: ref.watch(darkThemeProvider),
         themeMode: ref.watch(Settings.themeModeProvider),
         title: 'Scrabble Score Keeper',
-        builder: (context, child) => AccessibilityTools(
-          checkFontOverflows: true,
-          child: child,
-        ),
+        // builder: (context, child) => AccessibilityTools(
+        //   checkFontOverflows: true,
+        //   child: child,
+        // ),
         home: const HomePage(),
       ),
     );

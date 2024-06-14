@@ -15,7 +15,7 @@ class StatsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
       title: Text(
         'Game Statistics',
         style: Theme.of(context).textTheme.headlineSmall!.copyWith(
@@ -82,13 +82,13 @@ class StatsDialog extends StatelessWidget {
       actions: <Widget>[
         TextButton(
           style: TextButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.background,
+            backgroundColor: Theme.of(context).colorScheme.surface,
           ),
           onPressed: () => Navigator.of(context).pop(),
           child: Text(
             'Close',
             style: TextStyle(
-              color: Theme.of(context).colorScheme.onBackground,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
         ),
