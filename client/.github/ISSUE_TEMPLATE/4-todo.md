@@ -1,5 +1,5 @@
 ---
-name: TODO Template
+name: TODO 
 about: Keep track of todos without cluttering code
 title: "[TODO]"
 labels: 
@@ -8,10 +8,10 @@ assignees: ''
 ---
 
 **Task**
-(As a [type of user]) I want [an action/feature] so that [benefit or reason].
+List the task here.
 
 **Description**
-A clear and concise description of the new feature or enhancement you are requesting.
+Express more thoughts or considerations here. 
 
 **Related Issues**
 Tag or reference any related issues, if applicable.
