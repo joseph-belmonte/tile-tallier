@@ -67,6 +67,7 @@ class _PlayInputPageState extends ConsumerState<PlayInputPage> {
         } else {
           // Dialog was dismissed without a choice (user tapped outside).
           // No action needed, user continues in the game.
+          return;
         }
       },
       child: Scaffold(

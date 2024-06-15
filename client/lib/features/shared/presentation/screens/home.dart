@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
+import '../../../../utils/game_play_storage.dart';
 import '../../../edit_settings/presentation/screens/settings.dart';
 import '../../../play_game/presentation/screens/pre_game.dart';
 import '../../../view_past_games/presentation/screens/game_history.dart';
+import '../widgets/pre_paywall_dialog.dart';
 
 /// The home page for the Scrabble app.
 class HomePage extends StatelessWidget {
@@ -25,9 +28,7 @@ class HomePage extends StatelessWidget {
           children: <Widget>[
             SizedBox(height: 20),
             ElevatedButton.icon(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const PreGamePage()),
-              ),
+              onPressed: () => _validateGameplay(context),
               icon: Icon(Icons.play_arrow_rounded),
               label: Text('Play Game'),
             ),
@@ -49,6 +50,47 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  /// Determines if the user can play a game. Routes to the [PreGamePage] if they can, presents
+  /// a [PrePaywallDialogue] if they cannot.
+  void _validateGameplay(BuildContext context) async {
+    final hasPlayed = await GamePlayStorage.hasPlayedToday();
+    if (!hasPlayed) {
+      if (!context.mounted) return;
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => const PreGamePage()),
+      );
+      return;
+    }
+    final customerInfo = await Purchases.getCustomerInfo();
+    if (customerInfo.entitlements.active.isNotEmpty) {
+      if (!context.mounted) return;
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => const PreGamePage()),
+      );
+    } else {
+      try {
+        if (!context.mounted) return;
+
+        showDialog(
+          context: context,
+          builder: (_) => PrePaywallDialogue(),
+        );
+      } catch (e) {
+        if (!context.mounted) return;
+        _showErrorSnackBar(context, e);
+      }
+    }
+  }
+
+  void _showErrorSnackBar(BuildContext context, Object e) {
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Error: $e'),
       ),
     );
   }

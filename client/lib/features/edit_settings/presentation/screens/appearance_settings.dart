@@ -48,7 +48,7 @@ class AppearanceSettingsPage extends ConsumerWidget {
           Divider(),
           ListTile(
             title: const Text('Theming'),
-            subtitle: const Text('Browse and select a theme for the app'),
+            subtitle: const Text('Check out our premium themes!'),
             leading: const Icon(Icons.color_lens),
             trailing: const Icon(Icons.arrow_forward_sharp),
             onTap: () => Navigator.push(

@@ -39,6 +39,8 @@ dependencies:
   http: ^1.2.1
   flutter_secure_storage: ^4.2.1
   mockito: ^5.4.4
+  flutter_markdown: ^0.7.2
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +80,7 @@ flutter:
     - assets/txt/
     - assets/fonts/
     - assets/icon/
+    - assets/md/
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

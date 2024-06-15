@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
+import '../../../edit_settings/presentation/screens/privacy_policy.dart';
+import '../../../edit_settings/presentation/screens/terms_and_conditions.dart';
 import '../../data/constants/revenue_cat.dart';
 
 /// A page that displays a list of subscription options for the app
@@ -17,6 +19,14 @@ class Paywall extends ConsumerStatefulWidget {
 }
 
 class _PaywallState extends ConsumerState<Paywall> {
+  void _restorePurchase() async {
+    try {
+      await Purchases.restorePurchases();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -31,7 +41,7 @@ class _PaywallState extends ConsumerState<Paywall> {
                 borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
               ),
               child: Center(
-                child: Text('✨ TallyTallier Pro', style: Theme.of(context).textTheme.titleLarge),
+                child: Text('🧮 TallyTallier Pro', style: Theme.of(context).textTheme.titleLarge),
               ),
             ),
             Padding(
@@ -52,9 +62,7 @@ class _PaywallState extends ConsumerState<Paywall> {
                   child: ListTile(
                     onTap: () async {
                       try {
-                        final customerInfo = await Purchases.purchasePackage(
-                          myProductList[index],
-                        );
+                        final customerInfo = await Purchases.purchasePackage(myProductList[index]);
                         final entitlement = customerInfo.entitlements.all[entitlementID];
                         // appData is a basically a reference to the current user
                         // and has properties like:
@@ -92,9 +100,52 @@ class _PaywallState extends ConsumerState<Paywall> {
               padding: EdgeInsets.only(top: 32, bottom: 16, left: 16.0, right: 16.0),
               child: SizedBox(
                 width: double.infinity,
-                child: Text(
-                  footerText,
-                  style: Theme.of(context).textTheme.bodySmall,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        footerText,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (_) => const TermsAndConditions()));
+                        },
+                        child: Text(
+                          'Terms of Service',
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelSmall
+                              ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (_) => const PrivacyPolicy()));
+                        },
+                        child: Text(
+                          'Privacy Policy',
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelSmall
+                              ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: _restorePurchase,
+                        child: Text(
+                          'Already subscribed? Restore purchase.',
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelSmall
+                              ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

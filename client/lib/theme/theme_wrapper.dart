@@ -44,7 +44,7 @@ class _ThemingAppState extends ConsumerState<ThemeWrapper> with WidgetsBindingOb
         //   checkFontOverflows: true,
         //   child: child,
         // ),
-        home: const HomePage(),
+        home: HomePage(),
       ),
     );
   }

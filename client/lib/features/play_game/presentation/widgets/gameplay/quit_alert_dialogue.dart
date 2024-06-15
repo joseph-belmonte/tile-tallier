@@ -20,7 +20,7 @@ class QuitGameAlert extends StatelessWidget {
         TextButton(
           onPressed: () {
             Navigator.of(context).pushReplacement<void, void>(
-              MaterialPageRoute(builder: (context) => const HomePage()),
+              MaterialPageRoute(builder: (context) => HomePage()),
             );
           },
           child: const Text('Yes'),

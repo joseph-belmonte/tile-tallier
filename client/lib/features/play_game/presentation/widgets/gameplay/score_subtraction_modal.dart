@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../../utils/game_play_storage.dart';
 import '../../../application/providers/active_game.dart';
 import '../../screens/results.dart';
 
@@ -33,7 +34,7 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
     super.dispose();
   }
 
-  void _submitRacks() {
+  void _submitRacks() async {
     if (_formKey.currentState!.validate()) {
       final playerRacks = _controllers.map((controller) => controller.text.trim()).toList();
 
@@ -46,7 +47,11 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
 
       ref.read(activeGameProvider.notifier).updatePlayers(updatedPlayers);
 
-      // Navigator.of(context).pop();
+      await GamePlayStorage.setPlayedToday();
+
+      if (!context.mounted) return;
+
+      // ignore: use_build_context_synchronously
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => ResultsPage(game: ref.read(activeGameProvider)),

@@ -14,6 +14,8 @@ import '../../../auth/presentation/screens/auth_screen.dart';
 import '../../../manage_purchases/presentation/widgets/dismiss_dialog.dart';
 import '../widgets/app_about_tile.dart';
 import 'appearance_settings.dart';
+import 'privacy_policy.dart';
+import 'terms_and_conditions.dart';
 
 /// A page that displays the settings for the app
 class SettingsPage extends ConsumerStatefulWidget {
@@ -76,11 +78,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     ),
                   );
                 } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AuthScreen(),
-                    ),
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => AuthScreen()),
                   );
                 }
               },
@@ -90,8 +89,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               subtitle: Text('Edit the appearance of the app'),
               leading: Icon(Icons.color_lens),
               trailing: Icon(Icons.arrow_forward_sharp),
-              onTap: () => Navigator.push(
-                context,
+              onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => const AppearanceSettingsPage(),
                 ),
@@ -135,6 +133,24 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               leading: Icon(Icons.restore),
               trailing: Icon(Icons.arrow_forward),
               onTap: () => _restore,
+            ),
+            ListTile(
+              title: Text('Terms and Conditions'),
+              subtitle: Text('Read the terms and conditions'),
+              leading: Icon(Icons.abc),
+              trailing: Icon(Icons.arrow_forward),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const TermsAndConditions()),
+              ),
+            ),
+            ListTile(
+              title: Text('Privacy Policy'),
+              subtitle: Text('Read the privacy policy'),
+              leading: Icon(Icons.privacy_tip_outlined),
+              trailing: Icon(Icons.arrow_forward),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const PrivacyPolicy()),
+              ),
             ),
             AppAboutTile(),
           ],
