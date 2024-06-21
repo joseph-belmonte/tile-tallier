@@ -28,7 +28,7 @@ dependencies:
   freezed_annotation: ^2.4.1
   shared_preferences: ^2.2.3
   accessibility_tools: ^1.0.1
-  fl_chart: ^0.67.0
+  fl_chart: ^0.68.0
   sqflite: ^2.3.3
   path_provider: ^2.1.2
   path: ^1.9.0
