@@ -18,11 +18,17 @@ jobs:
         with:
           channel: stable
 
-      - name: Install dependencies
-        run: flutter pub get # Fetches the dependencies for the project
+      - name: Install client dependencies
+        # Change to the client directory and install dependencies
+        run: |
+          cd client 
+          flutter pub get
 
-      - name: Run tests
-        run: flutter test # Executes Flutter tests
+      - name: Run client tests
+        # Change to the client directory and run the tests
+        run: |
+          cd client 
+          flutter test
 
   # Commenting this block out until we correctly set up the xcode requirements (singing/ceriticate)
   # build_ios:
@@ -50,27 +56,27 @@ jobs:
   #         name: ios-symbols
   #         path: build/app/outputs/symbols
 
-  build_apk:
-    if: github.ref == 'refs/heads/production' # Specifies that this job should only run on the production branch
-    name: Build Android
-    runs-on: ubuntu-latest # Specifies Ubuntu runner for Android build
+  # build_apk:
+  #   if: github.ref == 'refs/heads/production' # Specifies that this job should only run on the production branch
+  #   name: Build Android
+  #   runs-on: ubuntu-latest # Specifies Ubuntu runner for Android build
 
-    needs: [flutter_test] # Specifies that this job depends on the successful completion of flutter_test
+  #   needs: [flutter_test] # Specifies that this job depends on the successful completion of flutter_test
 
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-      - name: Install dependencies
-        run: flutter pub get
-      - name: Clean build
-        run: flutter clean
-      - name: Build APK
-        run: flutter build apk --obfuscate --split-debug-info=build/app/outputs/symbols # Builds an Android APK file
-      - name: Upload Symbols
-        uses: actions/upload-artifact@v2
-        with:
-          name: android-symbols
-          path: build/app/outputs/symbols
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Set up Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         channel: stable
+  #     - name: Install dependencies
+  #       run: flutter pub get
+  #     - name: Clean build
+  #       run: flutter clean
+  #     - name: Build APK
+  #       run: flutter build apk --obfuscate --split-debug-info=build/app/outputs/symbols # Builds an Android APK file
+  #     - name: Upload Symbols
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: android-symbols
+  #         path: build/app/outputs/symbols

@@ -7,7 +7,6 @@
 
 ## Backend Development -
 
-- See backend here: [https://github.com/joseph-belmonte/shiny-octothorp](url)
 - [ ] User registration and authentication
 - [ ] Track user purchase history/subscription status
 
