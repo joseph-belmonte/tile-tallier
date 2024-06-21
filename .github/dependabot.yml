@@ -5,13 +5,12 @@
 # TODO: update this workflow for the monorepo structure
 version: 2
 updates:
-  - package-ecosystem: "pub" # Or your package manager
-    directory: "/client" # Location of the package manifests
+  - package-ecosystem: "pub"
+    directory: "/client" # Location of the Flutter project
     schedule:
-      interval: "weekly" # Or your preferred schedule
-    target-branch: "main" # Or your default branch
-    open-pull-requests-limit: 10 # Adjust as needed
-    groups:
-      - group-name: "all-dependencies" # Custom name for the group
-        patterns:
-          - "*" # This pattern aims to match all dependencies
+      interval: "weekly"
+
+  - package-ecosystem: "pip"
+    directory: "/server" # Location of the Django project
+    schedule:
+      interval: "weekly"
