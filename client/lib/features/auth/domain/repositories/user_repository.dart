@@ -1,5 +1,5 @@
-import '../../../domain/user.dart';
-import 'api_service.dart';
+import '../../data/sources/network/api_service.dart';
+import '../models/user.dart';
 
 /// A repository for handling user data.
 class UserRepository {

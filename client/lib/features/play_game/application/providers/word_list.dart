@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../utils/database_helper.dart';
+import '../../data/word_database_helper.dart';
 
-/// A provider that exposes a [DatabaseHelper] instance.
-final wordListProvider = Provider<DatabaseHelper>((ref) => DatabaseHelper.instance);
+/// A provider that exposes a [WordDatabaseHelper] instance.
+final wordListProvider = Provider<WordDatabaseHelper>((ref) => WordDatabaseHelper.instance);

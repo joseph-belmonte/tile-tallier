@@ -39,7 +39,10 @@ void main() {
       final container = createContainer();
       final activeGameNotifier = container.read(activeGameProvider.notifier);
 
-      final dummyPlay = Play(timestamp: DateTime.now());
+      final dummyPlay = Play(
+        id: Uuid().v4(),
+        timestamp: DateTime.now(),
+      );
 
       final newPlayers = [
         Player(name: 'Andrea', id: Uuid().v4(), plays: [dummyPlay]),

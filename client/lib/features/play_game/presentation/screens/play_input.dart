@@ -24,9 +24,8 @@ class _PlayInputPageState extends ConsumerState<PlayInputPage> {
   @override
   void initState() {
     super.initState();
-    // Example: Simulate list update
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToEnd(); // Initial scroll
+      _scrollToEnd();
     });
   }
 

@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/source/network/auth_service.dart';
-import '../../data/source/network/user_repository.dart';
-import '../../domain/user.dart';
+import '../../data/sources/network/auth_service.dart';
+import '../../domain/models/user.dart';
+import '../../domain/repositories/user_repository.dart';
 
 /// The [AuthState] class represents the state of the authentication process.
 class AuthState {

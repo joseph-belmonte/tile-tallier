@@ -6,13 +6,13 @@
 import 'dart:async' as _i3;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:tile_tally/features/auth/data/source/network/api_service.dart'
+import 'package:tile_tally/features/auth/data/sources/network/api_service.dart'
     as _i2;
-import 'package:tile_tally/features/auth/data/source/network/auth_service.dart'
+import 'package:tile_tally/features/auth/data/sources/network/auth_service.dart'
     as _i4;
-import 'package:tile_tally/features/auth/data/source/network/user_repository.dart'
+import 'package:tile_tally/features/auth/domain/models/user.dart' as _i6;
+import 'package:tile_tally/features/auth/domain/repositories/user_repository.dart'
     as _i5;
-import 'package:tile_tally/features/auth/domain/user.dart' as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values

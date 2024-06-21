@@ -4,10 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'features/edit_settings/application/providers/key_value_db_listener.dart';
 import 'features/edit_settings/application/providers/key_value_db_provider.dart';
 import 'features/manage_purchases/application/configure_rc_SDK.dart';
-
 import 'features/manage_purchases/application/providers/customer_info_provider.dart';
+import 'features/play_game/data/word_database_helper.dart';
 import 'theme/theme_wrapper.dart';
-import 'utils/database_helper.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,8 +22,8 @@ Future<void> main() async {
   container.read(keyValueDbListenerProvider);
 
   // Check if the database is populated. If not, import the word list.
-  if (!await DatabaseHelper.instance.isDatabasePopulated()) {
-    await DatabaseHelper.instance.importWordList();
+  if (!await WordDatabaseHelper.instance.isDatabasePopulated()) {
+    await WordDatabaseHelper.instance.importWordList();
   }
 
   await configureRcSdk();

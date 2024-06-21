@@ -14,11 +14,18 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
+Letter _$LetterFromJson(Map<String, dynamic> json) {
+  return _Letter.fromJson(json);
+}
+
 /// @nodoc
 mixin _$Letter {
+  String get id => throw _privateConstructorUsedError;
   String get letter => throw _privateConstructorUsedError;
+  @ScoreMultiplierConverter()
   ScoreMultiplier get scoreMultiplier => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $LetterCopyWith<Letter> get copyWith => throw _privateConstructorUsedError;
 }
@@ -28,7 +35,10 @@ abstract class $LetterCopyWith<$Res> {
   factory $LetterCopyWith(Letter value, $Res Function(Letter) then) =
       _$LetterCopyWithImpl<$Res, Letter>;
   @useResult
-  $Res call({String letter, ScoreMultiplier scoreMultiplier});
+  $Res call(
+      {String id,
+      String letter,
+      @ScoreMultiplierConverter() ScoreMultiplier scoreMultiplier});
 }
 
 /// @nodoc
@@ -44,10 +54,15 @@ class _$LetterCopyWithImpl<$Res, $Val extends Letter>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? letter = null,
     Object? scoreMultiplier = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       letter: null == letter
           ? _value.letter
           : letter // ignore: cast_nullable_to_non_nullable
@@ -67,7 +82,10 @@ abstract class _$$LetterImplCopyWith<$Res> implements $LetterCopyWith<$Res> {
       __$$LetterImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String letter, ScoreMultiplier scoreMultiplier});
+  $Res call(
+      {String id,
+      String letter,
+      @ScoreMultiplierConverter() ScoreMultiplier scoreMultiplier});
 }
 
 /// @nodoc
@@ -81,10 +99,15 @@ class __$$LetterImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? letter = null,
     Object? scoreMultiplier = null,
   }) {
     return _then(_$LetterImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       letter: null == letter
           ? _value.letter
           : letter // ignore: cast_nullable_to_non_nullable
@@ -98,21 +121,29 @@ class __$$LetterImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$LetterImpl extends _Letter {
-  const _$LetterImpl(
-      {required this.letter, this.scoreMultiplier = ScoreMultiplier.none})
+  _$LetterImpl(
+      {required this.id,
+      required this.letter,
+      @ScoreMultiplierConverter() this.scoreMultiplier = ScoreMultiplier.none})
       : super._();
 
+  factory _$LetterImpl.fromJson(Map<String, dynamic> json) =>
+      _$$LetterImplFromJson(json);
+
+  @override
+  final String id;
   @override
   final String letter;
   @override
   @JsonKey()
+  @ScoreMultiplierConverter()
   final ScoreMultiplier scoreMultiplier;
 
   @override
   String toString() {
-    return 'Letter(letter: $letter, scoreMultiplier: $scoreMultiplier)';
+    return 'Letter(id: $id, letter: $letter, scoreMultiplier: $scoreMultiplier)';
   }
 
   @override
@@ -120,30 +151,46 @@ class _$LetterImpl extends _Letter {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LetterImpl &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.letter, letter) || other.letter == letter) &&
             (identical(other.scoreMultiplier, scoreMultiplier) ||
                 other.scoreMultiplier == scoreMultiplier));
   }
 
+  @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, letter, scoreMultiplier);
+  int get hashCode => Object.hash(runtimeType, id, letter, scoreMultiplier);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$LetterImplCopyWith<_$LetterImpl> get copyWith =>
       __$$LetterImplCopyWithImpl<_$LetterImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$LetterImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _Letter extends Letter {
-  const factory _Letter(
-      {required final String letter,
-      final ScoreMultiplier scoreMultiplier}) = _$LetterImpl;
-  const _Letter._() : super._();
+  factory _Letter(
+          {required final String id,
+          required final String letter,
+          @ScoreMultiplierConverter() final ScoreMultiplier scoreMultiplier}) =
+      _$LetterImpl;
+  _Letter._() : super._();
 
+  factory _Letter.fromJson(Map<String, dynamic> json) = _$LetterImpl.fromJson;
+
+  @override
+  String get id;
   @override
   String get letter;
   @override
+  @ScoreMultiplierConverter()
   ScoreMultiplier get scoreMultiplier;
   @override
   @JsonKey(ignore: true)

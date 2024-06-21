@@ -4,7 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 /// A helper class to manage the database
-class DatabaseHelper {
+class WordDatabaseHelper {
   static const _databaseName = 'WordDatabase.db';
   static const _databaseVersion = 1;
 
@@ -17,10 +17,10 @@ class DatabaseHelper {
   /// The word column name
   static const columnWord = 'word';
 
-  DatabaseHelper._privateConstructor();
+  WordDatabaseHelper._privateConstructor();
 
   /// The singleton instance
-  static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
+  static final WordDatabaseHelper instance = WordDatabaseHelper._privateConstructor();
 
   static Database? _database;
 

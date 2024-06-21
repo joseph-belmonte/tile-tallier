@@ -14,13 +14,20 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
+Play _$PlayFromJson(Map<String, dynamic> json) {
+  return _Play.fromJson(json);
+}
+
 /// @nodoc
 mixin _$Play {
+  String get id => throw _privateConstructorUsedError;
+  DateTime get timestamp => throw _privateConstructorUsedError;
   List<Word> get playedWords => throw _privateConstructorUsedError;
+  @BoolIntConverter()
   bool get isBingo => throw _privateConstructorUsedError;
   String get playerId => throw _privateConstructorUsedError;
-  DateTime? get timestamp => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $PlayCopyWith<Play> get copyWith => throw _privateConstructorUsedError;
 }
@@ -31,10 +38,11 @@ abstract class $PlayCopyWith<$Res> {
       _$PlayCopyWithImpl<$Res, Play>;
   @useResult
   $Res call(
-      {List<Word> playedWords,
-      bool isBingo,
-      String playerId,
-      DateTime? timestamp});
+      {String id,
+      DateTime timestamp,
+      List<Word> playedWords,
+      @BoolIntConverter() bool isBingo,
+      String playerId});
 }
 
 /// @nodoc
@@ -50,12 +58,21 @@ class _$PlayCopyWithImpl<$Res, $Val extends Play>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
+    Object? timestamp = null,
     Object? playedWords = null,
     Object? isBingo = null,
     Object? playerId = null,
-    Object? timestamp = freezed,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      timestamp: null == timestamp
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       playedWords: null == playedWords
           ? _value.playedWords
           : playedWords // ignore: cast_nullable_to_non_nullable
@@ -68,10 +85,6 @@ class _$PlayCopyWithImpl<$Res, $Val extends Play>
           ? _value.playerId
           : playerId // ignore: cast_nullable_to_non_nullable
               as String,
-      timestamp: freezed == timestamp
-          ? _value.timestamp
-          : timestamp // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
     ) as $Val);
   }
 }
@@ -84,10 +97,11 @@ abstract class _$$PlayImplCopyWith<$Res> implements $PlayCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {List<Word> playedWords,
-      bool isBingo,
-      String playerId,
-      DateTime? timestamp});
+      {String id,
+      DateTime timestamp,
+      List<Word> playedWords,
+      @BoolIntConverter() bool isBingo,
+      String playerId});
 }
 
 /// @nodoc
@@ -100,12 +114,21 @@ class __$$PlayImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
+    Object? timestamp = null,
     Object? playedWords = null,
     Object? isBingo = null,
     Object? playerId = null,
-    Object? timestamp = freezed,
   }) {
     return _then(_$PlayImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      timestamp: null == timestamp
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       playedWords: null == playedWords
           ? _value._playedWords
           : playedWords // ignore: cast_nullable_to_non_nullable
@@ -118,25 +141,29 @@ class __$$PlayImplCopyWithImpl<$Res>
           ? _value.playerId
           : playerId // ignore: cast_nullable_to_non_nullable
               as String,
-      timestamp: freezed == timestamp
-          ? _value.timestamp
-          : timestamp // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
     ));
   }
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$PlayImpl extends _Play {
-  const _$PlayImpl(
-      {final List<Word> playedWords = const [],
-      this.isBingo = false,
-      this.playerId = '',
-      this.timestamp})
+  _$PlayImpl(
+      {required this.id,
+      required this.timestamp,
+      final List<Word> playedWords = const [],
+      @BoolIntConverter() this.isBingo = false,
+      this.playerId = ''})
       : _playedWords = playedWords,
         super._();
 
+  factory _$PlayImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PlayImplFromJson(json);
+
+  @override
+  final String id;
+  @override
+  final DateTime timestamp;
   final List<Word> _playedWords;
   @override
   @JsonKey()
@@ -148,16 +175,15 @@ class _$PlayImpl extends _Play {
 
   @override
   @JsonKey()
+  @BoolIntConverter()
   final bool isBingo;
   @override
   @JsonKey()
   final String playerId;
-  @override
-  final DateTime? timestamp;
 
   @override
   String toString() {
-    return 'Play(playedWords: $playedWords, isBingo: $isBingo, playerId: $playerId, timestamp: $timestamp)';
+    return 'Play(id: $id, timestamp: $timestamp, playedWords: $playedWords, isBingo: $isBingo, playerId: $playerId)';
   }
 
   @override
@@ -165,46 +191,57 @@ class _$PlayImpl extends _Play {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PlayImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.timestamp, timestamp) ||
+                other.timestamp == timestamp) &&
             const DeepCollectionEquality()
                 .equals(other._playedWords, _playedWords) &&
             (identical(other.isBingo, isBingo) || other.isBingo == isBingo) &&
             (identical(other.playerId, playerId) ||
-                other.playerId == playerId) &&
-            (identical(other.timestamp, timestamp) ||
-                other.timestamp == timestamp));
+                other.playerId == playerId));
   }
 
+  @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(_playedWords),
-      isBingo,
-      playerId,
-      timestamp);
+  int get hashCode => Object.hash(runtimeType, id, timestamp,
+      const DeepCollectionEquality().hash(_playedWords), isBingo, playerId);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$PlayImplCopyWith<_$PlayImpl> get copyWith =>
       __$$PlayImplCopyWithImpl<_$PlayImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$PlayImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _Play extends Play {
-  const factory _Play(
-      {final List<Word> playedWords,
-      final bool isBingo,
-      final String playerId,
-      final DateTime? timestamp}) = _$PlayImpl;
-  const _Play._() : super._();
+  factory _Play(
+      {required final String id,
+      required final DateTime timestamp,
+      final List<Word> playedWords,
+      @BoolIntConverter() final bool isBingo,
+      final String playerId}) = _$PlayImpl;
+  _Play._() : super._();
 
+  factory _Play.fromJson(Map<String, dynamic> json) = _$PlayImpl.fromJson;
+
+  @override
+  String get id;
+  @override
+  DateTime get timestamp;
   @override
   List<Word> get playedWords;
   @override
+  @BoolIntConverter()
   bool get isBingo;
   @override
   String get playerId;
-  @override
-  DateTime? get timestamp;
   @override
   @JsonKey(ignore: true)
   _$$PlayImplCopyWith<_$PlayImpl> get copyWith =>

@@ -6,12 +6,11 @@
 // and updating the current word. You should also move the methods for toggling the word multiplier and bingo status to the ActiveGameNotifier class.
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:uuid/uuid.dart';
-import '../../../../enums/score_multipliers.dart';
-import '../../../../utils/database_helper.dart';
-import '../../../../utils/helpers.dart';
 
+import '../../../../enums/score_multipliers.dart';
+import '../../../../utils/helpers.dart';
+import '../../data/word_database_helper.dart';
 import '../../domain/models/game.dart';
 import '../../domain/models/letter.dart';
 import '../../domain/models/play.dart';
@@ -30,7 +29,10 @@ class ActiveGameNotifier extends StateNotifier<Game> {
   void startGame(List<String> playerNames) {
     final newGameId = Uuid().v4();
     final newPlayers = playerNames.map((name) => Player(name: name, id: Uuid().v4())).toList();
-    final newPlay = Play(timestamp: DateTime.now());
+    final newPlay = Play(
+      id: Uuid().v4(),
+      timestamp: DateTime.now(),
+    );
 
     state = state.copyWith(
       id: newGameId,
@@ -62,8 +64,14 @@ class ActiveGameNotifier extends StateNotifier<Game> {
     final nextIndex = (state.currentPlayerIndex + 1) % state.players.length;
     final nextPlayerId = state.players[nextIndex].id;
 
-    final newPlay = Play(playerId: nextPlayerId, timestamp: DateTime.now());
-    final newWord = Word();
+    final newPlay = Play(
+      id: Uuid().v4(),
+      playerId: nextPlayerId,
+      timestamp: DateTime.now(),
+    );
+    final newWord = Word(
+      id: Uuid().v4(),
+    );
     final newPlayers = List<Player>.from(state.players)..[state.currentPlayerIndex] = updatedPlayer;
 
     // Update state with changes for the next turn.
@@ -104,8 +112,14 @@ class ActiveGameNotifier extends StateNotifier<Game> {
         state = state.copyWith(
           players: List<Player>.from(state.players)..[newPlayerIndex] = updatedPlayer,
           currentPlayerIndex: newPlayerIndex,
-          currentPlay: Play(playerId: newPlayer.id, timestamp: DateTime.now()),
-          currentWord: Word(),
+          currentPlay: Play(
+            id: Uuid().v4(),
+            playerId: newPlayer.id,
+            timestamp: DateTime.now(),
+          ),
+          currentWord: Word(
+            id: Uuid().v4(),
+          ),
         );
       }
     }
@@ -113,9 +127,12 @@ class ActiveGameNotifier extends StateNotifier<Game> {
 
   /// Converts the input string to a [Word] and adds it to the current play
   void addWordToCurrentPlay(String input) {
-    var newWord = Word();
+    var newWord = Word(
+      id: Uuid().v4(),
+    );
     for (var char in input.split('')) {
       final letter = Letter(
+        id: Uuid().v4(),
         letter: char,
         scoreMultiplier:
             state.currentWord.playedLetters[newWord.playedLetters.length].scoreMultiplier,
@@ -127,14 +144,24 @@ class ActiveGameNotifier extends StateNotifier<Game> {
       playedWords: [...state.currentPlay.playedWords, newWord],
     );
 
-    state = state.copyWith(currentPlay: updatedPlay, currentWord: Word());
+    state = state.copyWith(
+      currentPlay: updatedPlay,
+      currentWord: Word(
+        id: Uuid().v4(),
+      ),
+    );
   }
 
   /// Updates the current word with the input string
   void updateCurrentWord(String input) {
-    var newWord = Word();
+    var newWord = Word(
+      id: Uuid().v4(),
+    );
     for (var char in input.split('')) {
-      final letter = Letter(letter: char);
+      final letter = Letter(
+        id: Uuid().v4(),
+        letter: char,
+      );
       newWord = newWord.copyWith(playedLetters: [...newWord.playedLetters, letter]);
     }
     state = state.copyWith(currentWord: newWord);
@@ -169,7 +196,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
     if (RegExp(' ').allMatches(word).length > 2) return false;
 
     final possibleWords = generateWildcardWords(word.toLowerCase());
-    final wordExists = await DatabaseHelper.instance.wordExistsInList(possibleWords);
+    final wordExists = await WordDatabaseHelper.instance.wordExistsInList(possibleWords);
 
     return wordExists;
   }
@@ -180,6 +207,8 @@ final activeGameProvider = StateNotifierProvider<ActiveGameNotifier, Game>(
   (ref) => ActiveGameNotifier(
     Game(
       id: Uuid().v4(),
+      currentPlay: Play.createNew(),
+      currentWord: Word.createNew(),
     ),
   ),
 );

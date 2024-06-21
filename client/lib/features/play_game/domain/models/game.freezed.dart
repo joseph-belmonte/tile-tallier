@@ -14,14 +14,19 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
+Game _$GameFromJson(Map<String, dynamic> json) {
+  return _Game.fromJson(json);
+}
+
 /// @nodoc
 mixin _$Game {
   String get id => throw _privateConstructorUsedError;
-  List<Player> get players => throw _privateConstructorUsedError;
-  int get currentPlayerIndex => throw _privateConstructorUsedError;
   Play get currentPlay => throw _privateConstructorUsedError;
   Word get currentWord => throw _privateConstructorUsedError;
+  List<Player> get players => throw _privateConstructorUsedError;
+  int get currentPlayerIndex => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $GameCopyWith<Game> get copyWith => throw _privateConstructorUsedError;
 }
@@ -33,10 +38,10 @@ abstract class $GameCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      List<Player> players,
-      int currentPlayerIndex,
       Play currentPlay,
-      Word currentWord});
+      Word currentWord,
+      List<Player> players,
+      int currentPlayerIndex});
 
   $PlayCopyWith<$Res> get currentPlay;
   $WordCopyWith<$Res> get currentWord;
@@ -56,24 +61,16 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
   @override
   $Res call({
     Object? id = null,
-    Object? players = null,
-    Object? currentPlayerIndex = null,
     Object? currentPlay = null,
     Object? currentWord = null,
+    Object? players = null,
+    Object? currentPlayerIndex = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      players: null == players
-          ? _value.players
-          : players // ignore: cast_nullable_to_non_nullable
-              as List<Player>,
-      currentPlayerIndex: null == currentPlayerIndex
-          ? _value.currentPlayerIndex
-          : currentPlayerIndex // ignore: cast_nullable_to_non_nullable
-              as int,
       currentPlay: null == currentPlay
           ? _value.currentPlay
           : currentPlay // ignore: cast_nullable_to_non_nullable
@@ -82,6 +79,14 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
           ? _value.currentWord
           : currentWord // ignore: cast_nullable_to_non_nullable
               as Word,
+      players: null == players
+          ? _value.players
+          : players // ignore: cast_nullable_to_non_nullable
+              as List<Player>,
+      currentPlayerIndex: null == currentPlayerIndex
+          ? _value.currentPlayerIndex
+          : currentPlayerIndex // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 
@@ -111,10 +116,10 @@ abstract class _$$GameImplCopyWith<$Res> implements $GameCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      List<Player> players,
-      int currentPlayerIndex,
       Play currentPlay,
-      Word currentWord});
+      Word currentWord,
+      List<Player> players,
+      int currentPlayerIndex});
 
   @override
   $PlayCopyWith<$Res> get currentPlay;
@@ -133,24 +138,16 @@ class __$$GameImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? players = null,
-    Object? currentPlayerIndex = null,
     Object? currentPlay = null,
     Object? currentWord = null,
+    Object? players = null,
+    Object? currentPlayerIndex = null,
   }) {
     return _then(_$GameImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      players: null == players
-          ? _value._players
-          : players // ignore: cast_nullable_to_non_nullable
-              as List<Player>,
-      currentPlayerIndex: null == currentPlayerIndex
-          ? _value.currentPlayerIndex
-          : currentPlayerIndex // ignore: cast_nullable_to_non_nullable
-              as int,
       currentPlay: null == currentPlay
           ? _value.currentPlay
           : currentPlay // ignore: cast_nullable_to_non_nullable
@@ -159,24 +156,39 @@ class __$$GameImplCopyWithImpl<$Res>
           ? _value.currentWord
           : currentWord // ignore: cast_nullable_to_non_nullable
               as Word,
+      players: null == players
+          ? _value._players
+          : players // ignore: cast_nullable_to_non_nullable
+              as List<Player>,
+      currentPlayerIndex: null == currentPlayerIndex
+          ? _value.currentPlayerIndex
+          : currentPlayerIndex // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$GameImpl extends _Game {
-  const _$GameImpl(
+  _$GameImpl(
       {required this.id,
+      required this.currentPlay,
+      required this.currentWord,
       final List<Player> players = const [],
-      this.currentPlayerIndex = 0,
-      this.currentPlay = const Play(),
-      this.currentWord = const Word()})
+      this.currentPlayerIndex = 0})
       : _players = players,
         super._();
 
+  factory _$GameImpl.fromJson(Map<String, dynamic> json) =>
+      _$$GameImplFromJson(json);
+
   @override
   final String id;
+  @override
+  final Play currentPlay;
+  @override
+  final Word currentWord;
   final List<Player> _players;
   @override
   @JsonKey()
@@ -189,16 +201,10 @@ class _$GameImpl extends _Game {
   @override
   @JsonKey()
   final int currentPlayerIndex;
-  @override
-  @JsonKey()
-  final Play currentPlay;
-  @override
-  @JsonKey()
-  final Word currentWord;
 
   @override
   String toString() {
-    return 'Game(id: $id, players: $players, currentPlayerIndex: $currentPlayerIndex, currentPlay: $currentPlay, currentWord: $currentWord)';
+    return 'Game(id: $id, currentPlay: $currentPlay, currentWord: $currentWord, players: $players, currentPlayerIndex: $currentPlayerIndex)';
   }
 
   @override
@@ -207,50 +213,55 @@ class _$GameImpl extends _Game {
         (other.runtimeType == runtimeType &&
             other is _$GameImpl &&
             (identical(other.id, id) || other.id == id) &&
-            const DeepCollectionEquality().equals(other._players, _players) &&
-            (identical(other.currentPlayerIndex, currentPlayerIndex) ||
-                other.currentPlayerIndex == currentPlayerIndex) &&
             (identical(other.currentPlay, currentPlay) ||
                 other.currentPlay == currentPlay) &&
             (identical(other.currentWord, currentWord) ||
-                other.currentWord == currentWord));
+                other.currentWord == currentWord) &&
+            const DeepCollectionEquality().equals(other._players, _players) &&
+            (identical(other.currentPlayerIndex, currentPlayerIndex) ||
+                other.currentPlayerIndex == currentPlayerIndex));
   }
 
+  @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      const DeepCollectionEquality().hash(_players),
-      currentPlayerIndex,
-      currentPlay,
-      currentWord);
+  int get hashCode => Object.hash(runtimeType, id, currentPlay, currentWord,
+      const DeepCollectionEquality().hash(_players), currentPlayerIndex);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$GameImplCopyWith<_$GameImpl> get copyWith =>
       __$$GameImplCopyWithImpl<_$GameImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$GameImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _Game extends Game {
-  const factory _Game(
+  factory _Game(
       {required final String id,
+      required final Play currentPlay,
+      required final Word currentWord,
       final List<Player> players,
-      final int currentPlayerIndex,
-      final Play currentPlay,
-      final Word currentWord}) = _$GameImpl;
-  const _Game._() : super._();
+      final int currentPlayerIndex}) = _$GameImpl;
+  _Game._() : super._();
+
+  factory _Game.fromJson(Map<String, dynamic> json) = _$GameImpl.fromJson;
 
   @override
   String get id;
   @override
-  List<Player> get players;
-  @override
-  int get currentPlayerIndex;
-  @override
   Play get currentPlay;
   @override
   Word get currentWord;
+  @override
+  List<Player> get players;
+  @override
+  int get currentPlayerIndex;
   @override
   @JsonKey(ignore: true)
   _$$GameImplCopyWith<_$GameImpl> get copyWith =>

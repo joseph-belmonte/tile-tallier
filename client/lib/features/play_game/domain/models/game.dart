@@ -1,23 +1,37 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 import 'play.dart';
 import 'player.dart';
 import 'word.dart';
 
 part 'game.freezed.dart';
+part 'game.g.dart';
 
 @freezed
 
 /// Represents a game in progress.
 class Game with _$Game {
   /// Creates a new [Game] instance.
-  const factory Game({
+  factory Game({
     required String id,
+    required Play currentPlay,
+    required Word currentWord,
     @Default([]) List<Player> players,
     @Default(0) int currentPlayerIndex,
-    @Default(Play()) Play currentPlay,
-    @Default(Word()) Word currentWord,
   }) = _Game;
+
+  /// Creates a new game.
+  factory Game.createNew() {
+    return Game(
+      id: Uuid().v4(),
+      currentPlay: Play.createNew(),
+      currentWord: Word.createNew(),
+    );
+  }
+
+  /// Converts the game to a map.
+  factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
 
   // Private constructor for computed properties and methods.
   const Game._();
@@ -30,7 +44,7 @@ class Game with _$Game {
 
   /// Returns all the plays made by all players, sorted by timestamp.
   List<Play> get plays => players.expand((player) => player.plays).toList()
-    ..sort((a, b) => a.timestamp!.compareTo(b.timestamp!));
+    ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
 
   /// Returns the highest scoring play.
   Play? get highestScoringPlay =>

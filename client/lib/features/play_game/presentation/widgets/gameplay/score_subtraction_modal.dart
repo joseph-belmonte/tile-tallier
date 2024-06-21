@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../utils/game_play_storage.dart';
+import '../../../../view_past_games/data/game_storage_database_helper.dart';
 import '../../../application/providers/active_game.dart';
 import '../../screens/results.dart';
 
@@ -50,6 +51,10 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
       await GamePlayStorage.setPlayedToday();
 
       if (!context.mounted) return;
+
+      // Save the game to the database:
+      final completedGame = ref.read(activeGameProvider);
+      await GameStorageDatabaseHelper.instance.insertGame(completedGame);
 
       // ignore: use_build_context_synchronously
       Navigator.of(context).push(
