@@ -18,13 +18,13 @@ jobs:
         with:
           channel: stable
 
-      - name: Install dependencies
+      - name: Install client dependencies
         # Change to the client directory and install dependencies
         run: |
           cd client 
           flutter pub get
 
-      - name: Run tests
+      - name: Run client tests
         # Change to the client directory and run the tests
         run: |
           cd client 
