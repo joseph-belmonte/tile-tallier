@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../domain/models/game.dart';
 import '../widgets/home_button.dart';
-import '../widgets/results/results_bar_chart.dart';
+
 import '../widgets/results/show_stats_button.dart';
 
 /// A page that displays the game statistics and the winner of the game.
@@ -59,7 +59,6 @@ class ResultsPage extends StatelessWidget {
                       ),
                 ),
               ),
-              Center(child: ResultsBarChart()),
               SizedBox(height: 36),
               StatsButton(game: _game),
               SizedBox(height: 12),
