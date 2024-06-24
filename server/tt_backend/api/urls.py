@@ -1,5 +1,6 @@
 from django.urls import include, path
 
-urlpatterns = [ 
+urlpatterns = [
     path("game/", include("api.game.urls")),
+    path("auth/", include("api.auth.urls")),
 ]
