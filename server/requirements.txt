@@ -3,3 +3,4 @@ djangorestframework
 djangorestframework-simplejwt
 environs
 pylint-django
+uuid
