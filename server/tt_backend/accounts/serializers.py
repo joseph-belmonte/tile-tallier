@@ -1,6 +1,7 @@
 # accounts/serializers.py
 from rest_framework import serializers
-from .models import User, GamePlay
+from .models import User
+from content.models import GamePlay
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -20,9 +21,3 @@ class UserSerializer(serializers.ModelSerializer):
         validated_data.pop("password2")
         user = User.objects.create_user(**validated_data)
         return user
-
-
-class GamePlaySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = GamePlay
-        fields = ["id", "user", "timestamp"]

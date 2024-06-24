@@ -2,7 +2,6 @@
 from django.db import models
 from common.models import AbstractModel
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.utils import timezone
 
 
 class UserManager(BaseUserManager):
@@ -69,16 +68,6 @@ class User(AbstractModel, AbstractUser):
     class Meta(AbstractModel.Meta):
         verbose_name = "User"
         verbose_name_plural = "Users"
-
-
-class GamePlay(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-    @classmethod
-    def games_played_today(cls, user):
-        today = timezone.now().date()
-        return cls.objects.filter(user=user, timestamp__date=today).count()
 
 
 class Purchase(models.Model):

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     # Local apps
     "accounts.apps.AccountsConfig",
     "common.apps.CommonConfig",
+    "api.apps.ApiConfig",
 ]
 
 # REST framework settings
