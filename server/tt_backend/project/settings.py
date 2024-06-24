@@ -13,6 +13,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 
+import environ
+import os
+
+env = environ.Env()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -57,16 +62,29 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    # "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    # TODO: set this in the environment
+    "PAGE_SIZE": 10,
 }
 
+# Can set this in the environment if desired
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "BLACKLIST_AFTER_ROTATION": True,
     "AUTH_HEADER_TYPES": ("Bearer",),
+    "USER_ID_FIELD": "uuid",
 }
 
 AUTH_USER_MODEL = "accounts.User"
+# TODO: replace these with env variables
+AUTH_TOKEN_TIMEOUT = 2592000
+AUTH_TOKEN_SECRET = "auth_token_secretsecret"
+
+# TODO: replace these with env variables
+API_DEFAULT_PAGE_SIZE = 10
+API_MAX_PAGE_SIZE = 100
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

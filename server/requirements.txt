@@ -7,3 +7,4 @@ uuid
 django-admin-interface
 django-admin-autocomplete-filter
 django_filter
+django-environ
