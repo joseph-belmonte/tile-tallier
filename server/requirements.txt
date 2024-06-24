@@ -4,3 +4,5 @@ djangorestframework-simplejwt
 environs
 pylint-django
 uuid
+django-admin-interface
+django-admin-autocomplete-filter

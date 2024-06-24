@@ -32,6 +32,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # Admin updates
+    "admin_auto_filters",
+    "admin_interface",
+    "colorfield",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -42,7 +46,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     # Local apps
-    "accounts",
+    "accounts.apps.AccountsConfig",
+    "common.apps.CommonConfig",
 ]
 
 # REST framework settings
@@ -59,7 +64,7 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
-AUTH_USER_MODEL = "accounts.CustomUser"
+AUTH_USER_MODEL = "accounts.User"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

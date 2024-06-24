@@ -3,12 +3,12 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .models import CustomUser, GamePlay, Purchase
+from .models import User, GamePlay, Purchase
 from .serializers import UserSerializer, GamePlaySerializer
 
 
 class RegisterView(generics.CreateAPIView):
-    queryset = CustomUser.objects.all()
+    queryset = User.objects.all()
     permission_classes = [permissions.AllowAny]
     serializer_class = UserSerializer
 
@@ -46,7 +46,7 @@ class UserInfoView(APIView):
 
 
 class UserListView(generics.ListAPIView):
-    queryset = CustomUser.objects.all()
+    queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.AllowAny]
 

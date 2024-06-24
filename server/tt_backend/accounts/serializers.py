@@ -1,13 +1,13 @@
 # accounts/serializers.py
 from rest_framework import serializers
-from .models import CustomUser, GamePlay
+from .models import User, GamePlay
 
 
 class UserSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True, required=True)
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = ["email", "password", "password2", "is_subscribed", "purchases"]
         extra_kwargs = {"password": {"write_only": True}}
 
@@ -18,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop("password2")
-        user = CustomUser.objects.create_user(**validated_data)
+        user = User.objects.create_user(**validated_data)
         return user
 
 
