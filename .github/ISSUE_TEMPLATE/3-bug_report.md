@@ -24,8 +24,9 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Affected Platform:**
-- [ ] - iOS
-- [ ] - Android
+(Delete any that don't apply)
+- iOS
+- Android
 
 
 **Additional context**
