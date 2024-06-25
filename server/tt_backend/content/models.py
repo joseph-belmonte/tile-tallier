@@ -1,5 +1,5 @@
-from datetime import timezone
 from django.db import models
+from django.utils import timezone
 from common.models import AbstractModel
 from accounts.models import User
 
@@ -17,8 +17,6 @@ class Game(AbstractModel):
         related_name="games",
         on_delete=models.CASCADE,
     )
-
-    # TODO: add game fields here, should match the game data structure from client
 
 
 class GamePlay(AbstractModel, models.Model):
