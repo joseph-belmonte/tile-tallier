@@ -9,12 +9,12 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - purchases_flutter (6.29.3):
+  - purchases_flutter (6.29.4):
     - Flutter
-    - PurchasesHybridCommon (= 10.8.0)
-  - PurchasesHybridCommon (10.8.0):
-    - RevenueCat (= 4.42.0)
-  - RevenueCat (4.42.0)
+    - PurchasesHybridCommon (= 10.9.0)
+  - PurchasesHybridCommon (10.9.0):
+    - RevenueCat (= 4.43.0)
+  - RevenueCat (4.43.0)
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -56,17 +56,17 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/darwin"
 
 SPEC CHECKSUMS:
-  file_selector_ios: 78baf21d03f1e37a7df97bb2494f9cd86de8fa5d
+  file_selector_ios: f0670c1064a8c8450e38145d8043160105d0b97c
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_email_sender: 10a22605f92809a11ef52b2f412db806c6082d40
   flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
-  path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
-  purchases_flutter: 71bcb09c0ef69612abe998ab895277421e85e968
-  PurchasesHybridCommon: dff07d838f74ac859a6ce20f0fbee527ba61e035
-  RevenueCat: 39f2fbf5eda66f0f87bb72329406f45488f6916e
-  shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  purchases_flutter: a10ab0c4bb4effbc9b78be6513658ae659e67a20
+  PurchasesHybridCommon: 0e157d11d04fdfdd434b5c6d05acb58fd1cc9db8
+  RevenueCat: f7b90c52f4b7e322bc9e7adaf734030523534b06
+  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
 
-PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
+PODFILE CHECKSUM: 7be2f5f74864d463a8ad433546ed1de7e0f29aef
 
 COCOAPODS: 1.15.2
