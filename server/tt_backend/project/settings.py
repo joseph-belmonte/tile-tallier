@@ -62,8 +62,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-    # "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    # TODO: set this in the environment
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
 }
 
@@ -77,11 +76,11 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = "accounts.User"
-# TODO: replace these with env variables
+
 AUTH_TOKEN_TIMEOUT = 2592000
 AUTH_TOKEN_SECRET = "auth_token_secretsecret"
 
-# TODO: replace these with env variables
+
 API_DEFAULT_PAGE_SIZE = 10
 API_MAX_PAGE_SIZE = 100
 
