@@ -27,7 +27,6 @@ class UserManager(BaseUserManager):
 
 class User(AbstractModel, AbstractUser):
     email = models.EmailField(unique=True, db_index=True, max_length=128)
-    username = models.CharField(max_length=32, unique=True)
     password = models.CharField(max_length=128)
     is_subscribed = models.BooleanField(
         default=False, help_text="Designates whether subscribed to the premium plan"
@@ -68,9 +67,3 @@ class User(AbstractModel, AbstractUser):
     class Meta(AbstractModel.Meta):
         verbose_name = "User"
         verbose_name_plural = "Users"
-
-
-class Purchase(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    item_name = models.CharField(max_length=255)
-    purchase_date = models.DateTimeField(auto_now_add=True)
