@@ -4,6 +4,9 @@ runserver:
 makemigrations:
 		python manage.py makemigrations
 
+makesuperuser:
+		python manage.py createsuperuser
+
 migrate:
 		python manage.py migrate
 
