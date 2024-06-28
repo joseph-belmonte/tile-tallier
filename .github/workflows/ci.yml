@@ -67,7 +67,7 @@ jobs:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
         run: |
           source venv/bin/activate
-          cd server
+          cd server/tt_backend
           python manage.py test
 
   # Commenting this block out until we correctly set up the xcode requirements (signing/certificate)
