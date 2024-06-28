@@ -1,104 +1,88 @@
+// providers/auth_provider.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/sources/network/auth_service.dart';
+import '../../domain/models/auth_state.dart';
 import '../../domain/models/user.dart';
-import '../../domain/repositories/user_repository.dart';
 
-/// The [AuthState] class represents the state of the authentication process.
-class AuthState {
-  /// Whether the user is authenticated.
-  final bool isAuthenticated;
+/// Stores the authentication state and provides methods for authentication.
+final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
+  return AuthNotifier(AuthService());
+});
 
-  /// An error message.
-  final String? error;
-
-  /// The user's information.
-  final User? user;
-
-  /// Default constructor for the [AuthState] class.
-  AuthState({
-    required this.isAuthenticated,
-    this.error,
-    this.user,
-  });
-}
-
-/// The [AuthNotifier] class is responsible for handling authentication logic.
+/// A [StateNotifier] that manages the authentication state.
 class AuthNotifier extends StateNotifier<AuthState> {
-  final AuthService _authService = AuthService();
-  final UserRepository _userRepository = UserRepository();
+  final AuthService _authService;
 
-  /// Default constructor for the [AuthNotifier] class.
-  AuthNotifier() : super(AuthState(isAuthenticated: false)) {
-    _loadAuthState();
+  /// Creates a new [AuthNotifier] instance.
+  AuthNotifier(this._authService) : super(AuthState.initial()) {
+    _initializeAuthState();
   }
 
-  Future<void> _loadAuthState() async {
-    final accessToken = await _authService.getAccessToken();
-    if (accessToken != null) {
-      final user = await _userRepository.getUserInfo();
-      if (user != null) {
-        state = AuthState(
+  Future<void> _initializeAuthState() async {
+    try {
+      final userInfo = await _authService.checkStoredTokens();
+      if (userInfo != null) {
+        final user = User(
           isAuthenticated: true,
-          user: user,
+          email: userInfo['email'],
+          isSubscribed: userInfo['is_subscribed'],
         );
-      } else {
-        await _authService.logout();
+        state = state.copyWith(isAuthenticated: true, user: user);
       }
+    } catch (error) {
+      state = state.copyWith(error: error.toString());
     }
   }
 
   /// Registers a new user.
   Future<void> register(String email, String password, String password2) async {
-    final result = await _authService.register(email, password, password2);
-    if (result) {
-      final loginSuccess = await login(email, password);
-      if (!loginSuccess) {
-        state =
-            AuthState(isAuthenticated: false, error: 'Registration successful but login failed');
-      }
-    } else {
-      state = AuthState(isAuthenticated: false, error: 'Registration failed');
+    try {
+      state = state.copyWith(isLoading: true, error: null);
+      await _authService.register(email, password, password2);
+      await login(email, password);
+    } catch (error) {
+      state = state.copyWith(isLoading: false, error: error.toString());
     }
   }
 
   /// Logs in a user.
-  Future<bool> login(String email, String password) async {
-    final success = await _authService.login(email, password);
-    if (success) {
-      final user = await _userRepository.getUserInfo();
-      if (user != null) {
-        state = AuthState(
+  Future<void> login(String email, String password) async {
+    try {
+      state = state.copyWith(isLoading: true, error: null);
+      final result = await _authService.login(email, password);
+
+      if (result.containsKey('user')) {
+        final user = User(
           isAuthenticated: true,
-          user: user,
+          email: result['user']['email'],
+          isSubscribed: result['user']['is_subscribed'],
         );
-        return true;
+
+        state =
+            state.copyWith(isAuthenticated: true, user: user, isLoading: false);
       } else {
-        state = AuthState(isAuthenticated: false, error: 'Failed to load user info');
-        return false;
+        throw Exception('User data is missing or malformed');
       }
-    } else {
-      state = AuthState(isAuthenticated: false, error: 'Login failed');
-      return false;
+    } catch (error) {
+      state = state.copyWith(isLoading: false, error: error.toString());
     }
   }
 
   /// Logs out the user.
   Future<void> logout() async {
     await _authService.logout();
-    state = AuthState(isAuthenticated: false, error: null);
+    state = AuthState.initial();
   }
 
   /// Deletes the user's account.
   Future<void> deleteAccount() async {
-    final success = await _userRepository.deleteUserAccount();
-    if (success) {
-      state = AuthState(isAuthenticated: false, error: null, user: null);
-    } else {
-      state = AuthState(isAuthenticated: true, error: 'Failed to delete account');
-    }
+    await _authService.deleteAccount();
+    state = AuthState.initial();
+  }
+
+  /// Clear error state
+  void clearError() {
+    state = state.copyWith(error: null);
   }
 }
-
-/// A provider for the [AuthNotifier].
-final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) => AuthNotifier());

@@ -16,8 +16,6 @@ void main() {
         'is_authenticated': true,
         'email': 'test@example.com',
         'is_subscribed': true,
-        'subscription_expiry': '2024-12-31T23:59:59Z',
-        'purchases': ['item1', 'item2'],
       };
 
       when(mockApiService.getUserInfo()).thenAnswer((_) async => userJson);

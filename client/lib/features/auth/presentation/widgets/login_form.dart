@@ -17,11 +17,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   final _pwController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     _pwController.dispose();
     super.dispose();
@@ -29,7 +24,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authProvider);
     var email = '';
     var password = '';
 
@@ -37,13 +31,12 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       key: _formKey,
       child: Column(
         children: <Widget>[
-          if (authState.error != null) Text(authState.error!, style: TextStyle(color: Colors.red)),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
               onSaved: (value) => email = value!,
               validator: (value) => value!.isEmpty ? 'Email is required' : null,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: const InputDecoration(labelText: 'Email'),
             ),
           ),
           Padding(
@@ -52,12 +45,13 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               controller: _pwController,
               onSaved: (value) => password = value!,
               onChanged: (value) => password = value,
-              validator: (value) => value!.isEmpty ? 'Password is required' : null,
+              validator: (value) =>
+                  value!.isEmpty ? 'Password is required' : null,
               obscureText: true,
-              decoration: InputDecoration(labelText: 'Password'),
+              decoration: const InputDecoration(labelText: 'Password'),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
@@ -65,7 +59,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 ref.read(authProvider.notifier).login(email, password);
               }
             },
-            child: Text('Login'),
+            child: const Text('Login'),
           ),
         ],
       ),

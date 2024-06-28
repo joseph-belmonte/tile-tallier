@@ -3,3 +3,10 @@ djangorestframework
 djangorestframework-simplejwt
 environs
 pylint-django
+uuid
+django-admin-interface
+django-admin-autocomplete-filter
+django_filter
+django-environ
+pytest
+pytest-django

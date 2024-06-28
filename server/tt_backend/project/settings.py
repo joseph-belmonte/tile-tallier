@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from datetime import timedelta
 from pathlib import Path
+import sys
+
+import environ
+import os
+
+env = environ.Env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,6 +38,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # Admin updates
+    "admin_auto_filters",
+    "admin_interface",
+    "colorfield",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -42,7 +52,10 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     # Local apps
-    "accounts",
+    "accounts.apps.AccountsConfig",
+    "common.apps.CommonConfig",
+    "content.apps.ContentConfig",
+    "api.apps.ApiConfig",
 ]
 
 # REST framework settings
@@ -50,16 +63,28 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
 }
 
+# Can set this in the environment if desired
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "BLACKLIST_AFTER_ROTATION": True,
     "AUTH_HEADER_TYPES": ("Bearer",),
+    "USER_ID_FIELD": "uuid",
 }
 
-AUTH_USER_MODEL = "accounts.CustomUser"
+AUTH_USER_MODEL = "accounts.User"
+
+AUTH_TOKEN_TIMEOUT = 2592000
+AUTH_TOKEN_SECRET = "auth_token_secretsecret"
+
+
+API_DEFAULT_PAGE_SIZE = 10
+API_MAX_PAGE_SIZE = 100
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -71,7 +96,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "tt_backend.urls"
+ROOT_URLCONF = "project.urls"
 
 TEMPLATES = [
     {
@@ -89,7 +114,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "tt_backend.wsgi.application"
+WSGI_APPLICATION = "project.wsgi.application"
 
 
 # Database
@@ -143,3 +168,12 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Test-specific settings
+if "test" in sys.argv:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": ":memory:",  # In-memory database for tests
+        }
+    }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../utils/toast.dart';
 import '../../application/providers/auth_provider.dart';
 
 /// A screen for managing the user's account.
@@ -9,14 +10,17 @@ class AccountManagementScreen extends ConsumerStatefulWidget {
   const AccountManagementScreen({super.key});
 
   @override
-  ConsumerState<AccountManagementScreen> createState() => _AccountManagementScreenState();
+  ConsumerState<AccountManagementScreen> createState() =>
+      _AccountManagementScreenState();
 }
 
-class _AccountManagementScreenState extends ConsumerState<AccountManagementScreen> {
+class _AccountManagementScreenState
+    extends ConsumerState<AccountManagementScreen> {
   Future<void> _deleteAccount(BuildContext context, WidgetRef ref) async {
     await ref.read(authProvider.notifier).deleteAccount();
 
     if (context.mounted) {
+      ToastService.message(context, 'Account deleted');
       Navigator.of(context).pop();
     }
   }
@@ -25,6 +29,7 @@ class _AccountManagementScreenState extends ConsumerState<AccountManagementScree
     await ref.read(authProvider.notifier).logout();
 
     if (context.mounted) {
+      ToastService.message(context, 'Logged out');
       Navigator.of(context).pop();
     }
   }
@@ -47,42 +52,19 @@ class _AccountManagementScreenState extends ConsumerState<AccountManagementScree
             SizedBox(height: 20),
             Text('Email:'),
             ListTile(
-              title: Text('${authState.user?.email}'),
-            ),
-            SizedBox(height: 20),
-            Text('Purchases:'),
-            ...(authState.user?.purchases.isEmpty ?? true
-                ? [
-                    ListTile(
-                      title: Text('No purchases'),
-                    ),
-                  ]
-                : authState.user!.purchases.map(
-                    (purchase) => ListTile(
-                      title: Text(purchase![int.parse('item_name')]),
-                      trailing: Icon(Icons.check, color: Colors.green),
-                    ),
-                  )),
-            SizedBox(height: 20),
-            Text(
-              'Subscription:',
-            ),
-            ListTile(
-              title: Text('Subscription Status: ${authState.user?.isSubscribed}'),
-            ),
-            authState.user?.subscriptionExpiry == null
-                ? ListTile(
-                    title: Text('Subscription Expiry: N/A'),
-                  )
-                : ListTile(
-                    title: Text('Subscription Expiry: ${authState.user?.subscriptionExpiry}'),
-                  ),
-            if (authState.user?.isSubscribed == true)
-              Text(
-                'Subscription Expiry: ${authState.user?.subscriptionExpiry}',
-                style: TextStyle(fontSize: 16),
+              title: Text(
+                authState.user.email.isNotEmpty
+                    ? authState.user.email
+                    : 'Not available',
               ),
+            ),
             SizedBox(height: 20),
+            Text('Subscription:'),
+            ListTile(
+              title: Text(
+                authState.user.isSubscribed ? 'Active' : 'Inactive',
+              ),
+            ),
             Center(
               child: ElevatedButton(
                 onPressed: () => _deleteAccount(context, ref),

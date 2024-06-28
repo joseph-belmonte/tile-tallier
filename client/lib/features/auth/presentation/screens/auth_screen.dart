@@ -1,3 +1,5 @@
+// presentation/screens/auth_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,16 +8,16 @@ import '../widgets/login_form.dart';
 import '../widgets/register_form.dart';
 import 'account_management.dart';
 
-/// A screen for authenticating the user.
-class AuthScreen extends StatefulWidget {
+/// A screen for authenticating users.
+class AuthScreen extends ConsumerStatefulWidget {
   /// Creates a new [AuthScreen] instance.
   const AuthScreen({super.key});
 
   @override
-  State<AuthScreen> createState() => _AuthScreenState();
+  ConsumerState<AuthScreen> createState() => _AuthScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
+class _AuthScreenState extends ConsumerState<AuthScreen> {
   bool _isLogin = true;
 
   void _toggleForm() {
@@ -24,10 +26,12 @@ class _AuthScreenState extends State<AuthScreen> {
     });
   }
 
-  void _navigateBack(BuildContext context) {
+  void _navigateToAccountManagement(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const AccountManagementScreen()),
+        MaterialPageRoute(
+          builder: (context) => const AccountManagementScreen(),
+        ),
       );
     });
   }
@@ -42,22 +46,30 @@ class _AuthScreenState extends State<AuthScreen> {
           builder: (context, ref, child) {
             final authState = ref.watch(authProvider);
 
+            if (authState.isLoading) {
+              return Center(child: CircularProgressIndicator());
+            }
+
             if (authState.isAuthenticated) {
-              _navigateBack(context);
+              _navigateToAccountManagement(context);
             }
 
             return Center(
-              child: Column(
-                children: <Widget>[
-                  _isLogin ? LoginForm() : RegistrationForm(),
-                  SizedBox(height: 20),
-                  TextButton(
-                    onPressed: _toggleForm,
-                    child: Text(
-                      _isLogin ? 'Need to register? Create an account' : 'Have an account? Login',
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    _isLogin ? LoginForm() : RegistrationForm(),
+                    const SizedBox(height: 20),
+                    TextButton(
+                      onPressed: _toggleForm,
+                      child: Text(
+                        _isLogin
+                            ? 'Need to register? Create an account'
+                            : 'Have an account? Login',
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },

@@ -1,35 +1,44 @@
 # accounts/models.py
-from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
-from django.utils import timezone
+from common.models import AbstractModel
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 
-class CustomUserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
+class UserManager(BaseUserManager):
+    def _create_user(self, email, password, **kwargs):
         if not email:
             raise ValueError("The Email field must be set")
+
         email = self.normalize_email(email)
-        extra_fields.setdefault("username", email)
-        user = self.model(email=email, **extra_fields)
+        user = self.model(email=email, **kwargs)
         user.set_password(password)
-        user.is_active = True  # Ensure the user account is active
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_superuser", True)
+    def create_user(self, email, password=None, **kwargs):
+        kwargs.setdefault("is_admin", False)
+        return self._create_user(email, password, **kwargs)
 
-        return self.create_user(email, password, **extra_fields)
+    def create_superuser(self, email, password=None, **kwargs):
+        kwargs.setdefault("is_admin", True)
+        kwargs.setdefault("is_subscribed", True)
+        return self._create_user(email, password, **kwargs)
 
 
-class CustomUser(AbstractUser):
-    email = models.EmailField(unique=True)
-    username = models.CharField(max_length=255, unique=True)
-    is_subscribed = models.BooleanField(default=False)
-    purchases = models.ManyToManyField("Purchase", blank=True)
+class User(AbstractModel, AbstractUser):
+    email = models.EmailField(unique=True, db_index=True, max_length=128)
+    username = None  # Remove the username field
+    is_subscribed = models.BooleanField(
+        default=False, help_text="Designates whether subscribed to the premium plan"
+    )
+    is_active = models.BooleanField(
+        default=True, help_text="Designates whether the user account is active"
+    )
+    is_admin = models.BooleanField(
+        default=False, help_text="Designates whether the user is an admin"
+    )
 
-    objects = CustomUserManager()
+    objects = UserManager()
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -37,18 +46,20 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.email
 
+    @property
+    def is_staff(self):
+        return self.is_admin
 
-class GamePlay(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    @property
+    def is_superuser(self):
+        return self.is_admin
 
-    @classmethod
-    def games_played_today(cls, user):
-        today = timezone.now().date()
-        return cls.objects.filter(user=user, timestamp__date=today).count()
+    def has_perm(self, perm, obj=None):
+        return self.is_admin
 
+    def has_module_perms(self, app_label):
+        return self.is_admin
 
-class Purchase(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    item_name = models.CharField(max_length=255)
-    purchase_date = models.DateTimeField(auto_now_add=True)
+    class Meta(AbstractModel.Meta):
+        verbose_name = "User"
+        verbose_name_plural = "Users"
