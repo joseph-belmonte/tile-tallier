@@ -12,10 +12,12 @@ class AccountRegisterSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if data["password"] != data["password2"]:
-            raise serializers.ValidationError("Passwords do not match")
+            raise serializers.ValidationError({"error": "Passwords do not match"})
 
         if User.objects.filter(email=data["email"]).exists():
-            raise serializers.ValidationError("Email is already in use")
+            raise serializers.ValidationError(
+                {"error": "User with this email already exists"}
+            )
 
         return data
 
@@ -26,5 +28,12 @@ class AccountRegisterSerializer(serializers.ModelSerializer):
 
 
 class AccountLoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    email = serializers.CharField()
     password = serializers.CharField()
+
+
+class AccountInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["email", "is_subscribed"]
+        read_only_fields = ["email"]

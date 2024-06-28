@@ -12,29 +12,28 @@ class UserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **kwargs)
         user.set_password(password)
-        user.is_active = True  # Ensure the user account is active
         user.save(using=self._db)
         return user
 
     def create_user(self, email, password=None, **kwargs):
-        kwargs["is_admin"] = False
+        kwargs.setdefault("is_admin", False)
         return self._create_user(email, password, **kwargs)
 
     def create_superuser(self, email, password=None, **kwargs):
-        kwargs["is_admin"] = True
+        kwargs.setdefault("is_admin", True)
+        kwargs.setdefault("is_subscribed", True)
         return self._create_user(email, password, **kwargs)
 
 
 class User(AbstractModel, AbstractUser):
     email = models.EmailField(unique=True, db_index=True, max_length=128)
-    password = models.CharField(max_length=128)
+    username = None  # Remove the username field
     is_subscribed = models.BooleanField(
         default=False, help_text="Designates whether subscribed to the premium plan"
     )
     is_active = models.BooleanField(
         default=True, help_text="Designates whether the user account is active"
     )
-
     is_admin = models.BooleanField(
         default=False, help_text="Designates whether the user is an admin"
     )
@@ -60,9 +59,6 @@ class User(AbstractModel, AbstractUser):
 
     def has_module_perms(self, app_label):
         return self.is_admin
-
-    def get_all_permissions(self, obj=None):
-        return []
 
     class Meta(AbstractModel.Meta):
         verbose_name = "User"
