@@ -1,4 +1,3 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:tile_tally/features/auth/application/providers/auth_provider.dart';
@@ -7,12 +6,11 @@ import '../mocks/mocks.mocks.dart';
 
 void main() {
   late MockAuthService mockAuthService;
-  late FlutterSecureStorage realSecureStorage;
   late AuthNotifier authNotifier;
 
   setUp(() {
     mockAuthService = MockAuthService();
-    realSecureStorage = FlutterSecureStorage();
+
     authNotifier = AuthNotifier(mockAuthService);
   });
 

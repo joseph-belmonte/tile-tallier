@@ -1,6 +1,7 @@
 // services/auth_service.dart
 
 import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../local_storage/local_storage_service.dart';
@@ -9,7 +10,9 @@ import '../local_storage/local_storage_service.dart';
 /// tokens, and refreshing tokens.
 class AuthService {
   final String _baseUrl = 'http://127.0.0.1:8000/api';
-  final LocalStorageService _localStorageService = LocalStorageService();
+  final LocalStorageService _localStorageService = LocalStorageService(
+    secureStorage: FlutterSecureStorage(),
+  );
 
   /// Check and validate stored tokens on app startup
   Future<Map<String, dynamic>?> checkStoredTokens() async {

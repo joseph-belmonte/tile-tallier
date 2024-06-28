@@ -5,7 +5,10 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i6;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:tile_tally/features/auth/data/sources/local_storage/local_storage_service.dart'
+    as _i5;
 import 'package:tile_tally/features/auth/data/sources/network/api_service.dart'
     as _i2;
 import 'package:tile_tally/features/auth/data/sources/network/auth_service.dart'
@@ -192,6 +195,199 @@ class MockAuthService extends _i1.Mock implements _i4.AuthService {
         Invocation.method(
           #deleteAccount,
           [],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+}
+
+/// A class which mocks [LocalStorageService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockLocalStorageService extends _i1.Mock
+    implements _i5.LocalStorageService {
+  MockLocalStorageService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.Future<void> deleteAuthTokens() => (super.noSuchMethod(
+        Invocation.method(
+          #deleteAuthTokens,
+          [],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<String?> getAccessToken() => (super.noSuchMethod(
+        Invocation.method(
+          #getAccessToken,
+          [],
+        ),
+        returnValue: _i3.Future<String?>.value(),
+      ) as _i3.Future<String?>);
+
+  @override
+  _i3.Future<String?> getRefreshToken() => (super.noSuchMethod(
+        Invocation.method(
+          #getRefreshToken,
+          [],
+        ),
+        returnValue: _i3.Future<String?>.value(),
+      ) as _i3.Future<String?>);
+
+  @override
+  _i3.Future<void> saveAuthTokens({
+    String? accessToken,
+    String? refreshToken,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveAuthTokens,
+          [],
+          {
+            #accessToken: accessToken,
+            #refreshToken: refreshToken,
+          },
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+}
+
+/// A class which mocks [FlutterSecureStorage].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFlutterSecureStorage extends _i1.Mock
+    implements _i6.FlutterSecureStorage {
+  MockFlutterSecureStorage() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.Future<void> write({
+    required String? key,
+    required String? value,
+    _i6.IOSOptions? iOptions = _i6.IOSOptions.defaultOptions,
+    _i6.AndroidOptions? aOptions,
+    _i6.LinuxOptions? lOptions,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #write,
+          [],
+          {
+            #key: key,
+            #value: value,
+            #iOptions: iOptions,
+            #aOptions: aOptions,
+            #lOptions: lOptions,
+          },
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<String?> read({
+    required String? key,
+    _i6.IOSOptions? iOptions = _i6.IOSOptions.defaultOptions,
+    _i6.AndroidOptions? aOptions,
+    _i6.LinuxOptions? lOptions,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #read,
+          [],
+          {
+            #key: key,
+            #iOptions: iOptions,
+            #aOptions: aOptions,
+            #lOptions: lOptions,
+          },
+        ),
+        returnValue: _i3.Future<String?>.value(),
+      ) as _i3.Future<String?>);
+
+  @override
+  _i3.Future<bool> containsKey({
+    required String? key,
+    _i6.IOSOptions? iOptions = _i6.IOSOptions.defaultOptions,
+    _i6.AndroidOptions? aOptions,
+    _i6.LinuxOptions? lOptions,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #containsKey,
+          [],
+          {
+            #key: key,
+            #iOptions: iOptions,
+            #aOptions: aOptions,
+            #lOptions: lOptions,
+          },
+        ),
+        returnValue: _i3.Future<bool>.value(false),
+      ) as _i3.Future<bool>);
+
+  @override
+  _i3.Future<void> delete({
+    required String? key,
+    _i6.IOSOptions? iOptions = _i6.IOSOptions.defaultOptions,
+    _i6.AndroidOptions? aOptions,
+    _i6.LinuxOptions? lOptions,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #delete,
+          [],
+          {
+            #key: key,
+            #iOptions: iOptions,
+            #aOptions: aOptions,
+            #lOptions: lOptions,
+          },
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<Map<String, String>> readAll({
+    _i6.IOSOptions? iOptions = _i6.IOSOptions.defaultOptions,
+    _i6.AndroidOptions? aOptions,
+    _i6.LinuxOptions? lOptions,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #readAll,
+          [],
+          {
+            #iOptions: iOptions,
+            #aOptions: aOptions,
+            #lOptions: lOptions,
+          },
+        ),
+        returnValue: _i3.Future<Map<String, String>>.value(<String, String>{}),
+      ) as _i3.Future<Map<String, String>>);
+
+  @override
+  _i3.Future<void> deleteAll({
+    _i6.IOSOptions? iOptions = _i6.IOSOptions.defaultOptions,
+    _i6.AndroidOptions? aOptions,
+    _i6.LinuxOptions? lOptions,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #deleteAll,
+          [],
+          {
+            #iOptions: iOptions,
+            #aOptions: aOptions,
+            #lOptions: lOptions,
+          },
         ),
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
