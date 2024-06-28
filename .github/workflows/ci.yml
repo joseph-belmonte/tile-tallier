@@ -68,6 +68,8 @@ jobs:
         run: |
           source venv/bin/activate
           cd server/tt_backend
+          python manage.py makemigrations
+          python manage.py migrate
           python manage.py test
 
   # Commenting this block out until we correctly set up the xcode requirements (signing/certificate)
