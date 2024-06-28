@@ -11,6 +11,46 @@ class AuthService {
   final String _baseUrl = 'http://127.0.0.1:8000/api';
   final LocalStorageService _localStorageService = LocalStorageService();
 
+  /// Check and validate stored tokens on app startup
+  Future<Map<String, dynamic>?> checkStoredTokens() async {
+    final accessToken = await _localStorageService.getAccessToken();
+    final refreshToken = await _localStorageService.getRefreshToken();
+
+    if (accessToken == null || refreshToken == null) {
+      return null;
+    }
+
+    // Check if the access token is expired
+    if (isTokenExpired(accessToken)) {
+      // Try to refresh the access token
+      final newAccessToken = await _refreshAccessToken();
+      if (newAccessToken == null) {
+        return null;
+      }
+      // Use the new access token
+      return await _fetchUserInfo(newAccessToken);
+    }
+
+    // Fetch user info using the valid access token
+    return await _fetchUserInfo(accessToken);
+  }
+
+  Future<Map<String, dynamic>?> _fetchUserInfo(String token) async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/account/user_info/'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      return null;
+    }
+  }
+
   // Begin region: /account/
   /// Register a new user.
   Future<Map<String, dynamic>> register(
