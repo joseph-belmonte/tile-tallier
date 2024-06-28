@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../application/providers/auth_provider.dart';
 
-/// A form for logging in.
+/// A form for registering.
 class RegistrationForm extends ConsumerStatefulWidget {
   /// Creates a new [RegistrationForm] instance.
   const RegistrationForm({super.key});
@@ -19,12 +19,8 @@ class _RegisterFormState extends ConsumerState<RegistrationForm> {
   String _confirmedPassword = '';
 
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmedPasswordController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  final TextEditingController _confirmedPasswordController =
+      TextEditingController();
 
   @override
   void dispose() {
@@ -35,19 +31,16 @@ class _RegisterFormState extends ConsumerState<RegistrationForm> {
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authProvider);
-
     return Form(
       key: _formKey,
       child: Column(
         children: <Widget>[
-          if (authState.error != null) Text(authState.error!),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
               onSaved: (value) => _email = value!,
               validator: (value) => value!.isEmpty ? 'Email is required' : null,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: const InputDecoration(labelText: 'Email'),
             ),
           ),
           Padding(
@@ -56,9 +49,10 @@ class _RegisterFormState extends ConsumerState<RegistrationForm> {
               controller: _passwordController,
               onSaved: (value) => _password = value!,
               onChanged: (value) => _password = value,
-              validator: (value) => value!.isEmpty ? 'Password is required' : null,
+              validator: (value) =>
+                  value!.isEmpty ? 'Password is required' : null,
               obscureText: true,
-              decoration: InputDecoration(labelText: 'Password'),
+              decoration: const InputDecoration(labelText: 'Password'),
             ),
           ),
           Padding(
@@ -67,20 +61,32 @@ class _RegisterFormState extends ConsumerState<RegistrationForm> {
               controller: _confirmedPasswordController,
               onSaved: (value) => _confirmedPassword = value!,
               onChanged: (value) => _confirmedPassword = value,
-              validator: (value) => value!.isEmpty ? 'Passwords must match' : null,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please confirm your password';
+                }
+
+                if (_passwordController.text != value) {
+                  return 'Passwords do not match';
+                } else {
+                  return null;
+                }
+              },
               obscureText: true,
-              decoration: InputDecoration(labelText: 'Confirm Password'),
+              decoration: const InputDecoration(labelText: 'Confirm Password'),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                ref.read(authProvider.notifier).register(_email, _password, _confirmedPassword);
+                ref
+                    .read(authProvider.notifier)
+                    .register(_email, _password, _confirmedPassword);
               }
             },
-            child: Text('Register'),
+            child: const Text('Register'),
           ),
         ],
       ),

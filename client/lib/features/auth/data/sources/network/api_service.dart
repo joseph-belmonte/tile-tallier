@@ -1,6 +1,9 @@
+//  Has separate methods for each specific API operation
+// e.g.: (register, login, refreshToken).
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import '../../../../../utils/logger.dart';
 import 'auth_service.dart';
 
 /// A service for making API requests to our Django server.
@@ -9,23 +12,54 @@ class ApiService {
   final String _baseUrl = 'http://127.0.0.1:8000/api';
   final AuthService _authService = AuthService();
 
+  // Begin region: /account/
   /// Registers a new user.
-  Future<Map<String, dynamic>> register(String email, String password, String password2) async {
-    final success = await _authService.register(email, password, password2);
-    if (success) {
-      return {'status': true};
-    } else {
-      return {'status': false, 'message': 'Registration failed'};
+  Future<Map<String, dynamic>> register(
+    String email,
+    String password,
+    String password2,
+  ) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$_baseUrl/account/register/'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+          'password2': password2,
+        }),
+      );
+
+      if (response.statusCode == 201) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to register: ${response.body}');
+      }
+    } catch (error) {
+      throw Exception('Failed to register: $error');
     }
   }
 
   /// Logs in a user.
   Future<Map<String, dynamic>> login(String email, String password) async {
-    final success = await _authService.login(email, password);
-    if (success) {
-      return {'status': true};
-    } else {
-      return {'status': false, 'message': 'Login failed'};
+    try {
+      final response = await http.post(
+        Uri.parse('$_baseUrl/account/login/'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        logger.i('Login response: ${response.body}');
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to login: ${response.body}');
+      }
+    } catch (error) {
+      throw Exception('Failed to login: $error');
     }
   }
 
@@ -37,7 +71,7 @@ class ApiService {
     }
 
     final response = await http.get(
-      Uri.parse('$_baseUrl/user_info/'),
+      Uri.parse('$_baseUrl/account/user_info/'),
       headers: {
         'Authorization': 'Bearer $accessToken',
         'Content-Type': 'application/json',
@@ -59,7 +93,7 @@ class ApiService {
     }
 
     final response = await http.delete(
-      Uri.parse('$_baseUrl/delete_account/'),
+      Uri.parse('$_baseUrl/account/delete_account/'),
       headers: {
         'Authorization': 'Bearer $accessToken',
         'Content-Type': 'application/json',
@@ -68,7 +102,9 @@ class ApiService {
 
     return response.statusCode == 204;
   }
+  // End region: /account/
 
+  // Begin region: /game/
   /// Whether the user can play the game.
   Future<bool> canPlayGame() async {
     final accessToken = await _authService.getAccessToken();
@@ -77,7 +113,7 @@ class ApiService {
     }
 
     final response = await http.get(
-      Uri.parse('$_baseUrl/can_play/'),
+      Uri.parse('$_baseUrl/game/can_play/'),
       headers: {'Authorization': 'Bearer $accessToken'},
     );
 
@@ -95,7 +131,7 @@ class ApiService {
     }
 
     final response = await http.post(
-      Uri.parse('$_baseUrl/log_play/'),
+      Uri.parse('$_baseUrl/game/log_play/'),
       headers: {'Authorization': 'Bearer $accessToken'},
     );
 
@@ -104,4 +140,5 @@ class ApiService {
 
     return response.statusCode == 201;
   }
+  // End region: /game/
 }

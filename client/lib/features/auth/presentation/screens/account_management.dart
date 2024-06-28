@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../utils/logger.dart';
+import '../../../../utils/toast.dart';
 import '../../application/providers/auth_provider.dart';
 
 /// A screen for managing the user's account.
@@ -19,6 +21,7 @@ class _AccountManagementScreenState
     await ref.read(authProvider.notifier).deleteAccount();
 
     if (context.mounted) {
+      ToastService.message(context, 'Account deleted');
       Navigator.of(context).pop();
     }
   }
@@ -27,6 +30,7 @@ class _AccountManagementScreenState
     await ref.read(authProvider.notifier).logout();
 
     if (context.mounted) {
+      ToastService.message(context, 'Logged out');
       Navigator.of(context).pop();
     }
   }
@@ -34,6 +38,7 @@ class _AccountManagementScreenState
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
+    logger.d('User: ${authState.user.toString()}');
 
     return Scaffold(
       appBar: AppBar(title: Text('Account Management')),
@@ -49,11 +54,18 @@ class _AccountManagementScreenState
             SizedBox(height: 20),
             Text('Email:'),
             ListTile(
-              title: Text('${authState.user?.email}'),
+              title: Text(
+                authState.user.email.isNotEmpty
+                    ? authState.user.email
+                    : 'Not available',
+              ),
             ),
             SizedBox(height: 20),
-            Text(
-              'Subscription:',
+            Text('Subscription:'),
+            ListTile(
+              title: Text(
+                authState.user.isSubscribed ? 'Active' : 'Inactive',
+              ),
             ),
             Center(
               child: ElevatedButton(

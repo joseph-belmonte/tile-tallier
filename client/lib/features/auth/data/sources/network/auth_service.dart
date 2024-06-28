@@ -1,40 +1,25 @@
-import 'dart:convert';
+// services/auth_service.dart
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../../../../../utils/logger.dart';
+import '../local_storage/local_storage_service.dart';
 
 /// The [AuthService] class is responsible for handling authentication requests, managing
 /// tokens, and refreshing tokens.
 class AuthService {
   final String _baseUrl = 'http://127.0.0.1:8000/api';
-  final FlutterSecureStorage _storage = FlutterSecureStorage();
+  final LocalStorageService _localStorageService = LocalStorageService();
 
-  /// Log in a user.
-  Future<bool> login(String email, String password) async {
-    final response = await http.post(
-      Uri.parse('$_baseUrl/login/'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'email': email,
-        'password': password,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      await _storage.write(key: 'access_token', value: data['access']);
-      await _storage.write(key: 'refresh_token', value: data['refresh']);
-      return true;
-    } else {
-      print('Login failed: ${response.body}');
-      return false;
-    }
-  }
-
+  // Begin region: /account/
   /// Register a new user.
-  Future<bool> register(String email, String password, String password2) async {
+  Future<Map<String, dynamic>> register(
+    String email,
+    String password,
+    String password2,
+  ) async {
     final response = await http.post(
-      Uri.parse('$_baseUrl/register/'),
+      Uri.parse('$_baseUrl/account/register/'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'email': email,
@@ -43,17 +28,42 @@ class AuthService {
       }),
     );
 
-    if (response.statusCode == 201) {
-      return true;
-    } else {
-      print('Registration failed: ${response.body}');
-      return false;
-    }
+    return _handleResponse(response);
   }
 
+  /// Log in a user.
+  Future<Map<String, dynamic>> login(String email, String password) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/account/login/'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'email': email,
+        'password': password,
+      }),
+    );
+
+    final result = _handleResponse(response);
+
+    if (result['access'] != null && result['refresh'] != null) {
+      await _localStorageService.saveAuthTokens(
+        accessToken: result['access'],
+        refreshToken: result['refresh'],
+      );
+    }
+
+    return result;
+  }
+
+  /// Log out the user by deleting the tokens.
+  Future<void> logout() async {
+    await _localStorageService.deleteAuthTokens();
+  }
+  // End region: /account/
+
+  // Begin region: /token/
   /// Fetch the access token from the secure storage.
   Future<String?> getAccessToken() async {
-    final accessToken = await _storage.read(key: 'access_token');
+    final accessToken = await _localStorageService.getAccessToken();
     if (accessToken != null && isTokenExpired(accessToken)) {
       return await _refreshAccessToken();
     }
@@ -67,29 +77,62 @@ class AuthService {
     return DateTime.now().isAfter(expiry);
   }
 
-  /// Fetch a new access token using the refresh token.
   Future<String?> _refreshAccessToken() async {
-    final refreshToken = await _storage.read(key: 'refresh_token');
+    final refreshToken = await _localStorageService.getRefreshToken();
+
+    if (refreshToken == null) {
+      throw Exception('No refresh token found');
+    }
+
     final response = await http.post(
       Uri.parse('$_baseUrl/token/refresh/'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'refresh': refreshToken}),
     );
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      await _storage.write(key: 'access_token', value: data['access']);
-      return data['access'];
-    } else {
-      await logout();
-      return null;
+    final result = _handleResponse(response);
+
+    if (result['access'] != null) {
+      await _localStorageService.saveAuthTokens(
+        accessToken: result['access'],
+        refreshToken: result['refresh'],
+      );
+      return result['access'];
+    }
+
+    return null;
+  }
+
+  /// Delete the user's account.
+  Future<void> deleteAccount() async {
+    final accessToken = await getAccessToken();
+
+    if (accessToken == null) {
+      throw Exception('No access token found');
+    }
+
+    final response = await http.delete(
+      Uri.parse('$_baseUrl/account/delete/'),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode != 204) {
+      throw Exception('Failed to delete account');
     }
   }
 
-  /// Log out the user by deleting the tokens.
-  Future<void> logout() async {
-    await _storage.delete(key: 'access_token');
-    await _storage.delete(key: 'refresh_token');
+  Map<String, dynamic> _handleResponse(http.Response response) {
+    final Map<String, dynamic> responseBody = jsonDecode(response.body);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      logger.i(responseBody);
+      return responseBody;
+    } else {
+      throw Exception(responseBody['error'] ?? 'Unknown error');
+    }
   }
 
   /// Parse the JWT payload.
@@ -98,4 +141,5 @@ class AuthService {
     final payload = utf8.decode(base64.decode(base64.normalize(parts[1])));
     return jsonDecode(payload);
   }
+  // End region: /token/
 }
