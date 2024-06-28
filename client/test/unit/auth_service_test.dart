@@ -1,50 +1,58 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:tile_tally/features/auth/application/providers/auth_provider.dart';
+
 import '../mocks/mocks.mocks.dart';
 
 void main() {
-  group('AuthService', () {
-    late MockAuthService mockAuthService;
+  late MockAuthService mockAuthService;
+  late FlutterSecureStorage realSecureStorage;
+  late AuthNotifier authNotifier;
 
-    setUp(() {
-      mockAuthService = MockAuthService();
+  setUp(() {
+    mockAuthService = MockAuthService();
+    realSecureStorage = FlutterSecureStorage();
+    authNotifier = AuthNotifier(mockAuthService);
+  });
+
+  group('AuthNotifier', () {
+    test('login - success', () async {
+      const email = 'test@example.com';
+      const password = 'password';
+      final userJson = {
+        'access': 'access_token',
+        'refresh': 'refresh_token',
+        'user': {'email': email, 'is_subscribed': true},
+      };
+
+      // Define the behavior of the mockAuthService.login
+      when(mockAuthService.login(email, password))
+          .thenAnswer((_) async => userJson);
+
+      await authNotifier.login(email, password);
+
+      // Verify that the correct method was called
+      verify(mockAuthService.login(email, password)).called(1);
+
+      // Check that the state was updated correctly
+      expect(authNotifier.state.isAuthenticated, true);
+      expect(authNotifier.state.user.email, email);
+      expect(authNotifier.state.user.isSubscribed, true);
     });
 
-    test('register returns true on success', () async {
-      when(mockAuthService.register('test@example.com', 'password123', 'password123'))
-          .thenAnswer((_) async => true);
+    test('login - failure', () async {
+      const email = 'test@example.com';
+      const password = 'password';
 
-      final result =
-          await mockAuthService.register('test@example.com', 'password123', 'password123');
+      when(mockAuthService.login(email, password))
+          .thenThrow(Exception('Failed to login'));
 
-      expect(result, true);
-    });
+      await authNotifier.login(email, password);
 
-    test('register returns false on failure', () async {
-      when(mockAuthService.register('test@example.com', 'password123', 'password123'))
-          .thenAnswer((_) async => false);
-
-      final result =
-          await mockAuthService.register('test@example.com', 'password123', 'password123');
-
-      expect(result, false);
-    });
-
-    test('login returns true on success', () async {
-      when(mockAuthService.login('test@example.com', 'password')).thenAnswer((_) async => true);
-
-      final result = await mockAuthService.login('test@example.com', 'password');
-
-      expect(result, true);
-    });
-
-    test('login returns false on failure', () async {
-      when(mockAuthService.login('test@example.com', 'wrongpassword'))
-          .thenAnswer((_) async => false);
-
-      final result = await mockAuthService.login('test@example.com', 'wrongpassword');
-
-      expect(result, false);
+      // Verify that the state was updated correctly
+      expect(authNotifier.state.isAuthenticated, false);
+      expect(authNotifier.state.error, 'Exception: Failed to login');
     });
   });
 }

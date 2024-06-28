@@ -5,7 +5,9 @@ import '../../../auth/application/providers/auth_provider.dart';
 import '../../../auth/presentation/screens/account_management.dart';
 import '../../../auth/presentation/screens/auth_screen.dart';
 
+/// List tile for account management on the settings page
 class AccountManagementTile extends ConsumerWidget {
+  /// Creates a new [AccountManagementTile] instance.
   const AccountManagementTile({super.key});
 
   @override

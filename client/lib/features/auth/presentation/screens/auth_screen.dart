@@ -8,7 +8,9 @@ import '../widgets/login_form.dart';
 import '../widgets/register_form.dart';
 import 'account_management.dart';
 
+/// A screen for authenticating users.
 class AuthScreen extends ConsumerStatefulWidget {
+  /// Creates a new [AuthScreen] instance.
   const AuthScreen({super.key});
 
   @override

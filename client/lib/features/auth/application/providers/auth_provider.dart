@@ -5,13 +5,16 @@ import '../../data/sources/network/auth_service.dart';
 import '../../domain/models/auth_state.dart';
 import '../../domain/models/user.dart';
 
+/// Stores the authentication state and provides methods for authentication.
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   return AuthNotifier(AuthService());
 });
 
+/// A [StateNotifier] that manages the authentication state.
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthService _authService;
 
+  /// Creates a new [AuthNotifier] instance.
   AuthNotifier(this._authService) : super(AuthState.initial()) {
     _initializeAuthState();
   }
@@ -27,9 +30,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
         );
         state = state.copyWith(isAuthenticated: true, user: user);
       }
-    } catch (error) {}
+    } catch (error) {
+      state = state.copyWith(error: error.toString());
+    }
   }
 
+  /// Registers a new user.
   Future<void> register(String email, String password, String password2) async {
     try {
       state = state.copyWith(isLoading: true, error: null);
@@ -40,6 +46,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  /// Logs in a user.
   Future<void> login(String email, String password) async {
     try {
       state = state.copyWith(isLoading: true, error: null);
@@ -62,17 +69,19 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  /// Logs out the user.
   Future<void> logout() async {
     await _authService.logout();
     state = AuthState.initial();
   }
 
+  /// Deletes the user's account.
   Future<void> deleteAccount() async {
     await _authService.deleteAccount();
     state = AuthState.initial();
   }
 
-  // clear error
+  /// Clear error state
   void clearError() {
     state = state.copyWith(error: null);
   }

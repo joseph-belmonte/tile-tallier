@@ -10,9 +10,6 @@ import 'package:tile_tally/features/auth/data/sources/network/api_service.dart'
     as _i2;
 import 'package:tile_tally/features/auth/data/sources/network/auth_service.dart'
     as _i4;
-import 'package:tile_tally/features/auth/domain/models/user.dart' as _i6;
-import 'package:tile_tally/features/auth/domain/repositories/user_repository.dart'
-    as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -118,23 +115,16 @@ class MockAuthService extends _i1.Mock implements _i4.AuthService {
   }
 
   @override
-  _i3.Future<bool> login(
-    String? email,
-    String? password,
-  ) =>
-      (super.noSuchMethod(
+  _i3.Future<Map<String, dynamic>?> checkStoredTokens() => (super.noSuchMethod(
         Invocation.method(
-          #login,
-          [
-            email,
-            password,
-          ],
+          #checkStoredTokens,
+          [],
         ),
-        returnValue: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
+        returnValue: _i3.Future<Map<String, dynamic>?>.value(),
+      ) as _i3.Future<Map<String, dynamic>?>);
 
   @override
-  _i3.Future<bool> register(
+  _i3.Future<Map<String, dynamic>> register(
     String? email,
     String? password,
     String? password2,
@@ -148,8 +138,36 @@ class MockAuthService extends _i1.Mock implements _i4.AuthService {
             password2,
           ],
         ),
-        returnValue: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
+        returnValue:
+            _i3.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+      ) as _i3.Future<Map<String, dynamic>>);
+
+  @override
+  _i3.Future<Map<String, dynamic>> login(
+    String? email,
+    String? password,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #login,
+          [
+            email,
+            password,
+          ],
+        ),
+        returnValue:
+            _i3.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+      ) as _i3.Future<Map<String, dynamic>>);
+
+  @override
+  _i3.Future<void> logout() => (super.noSuchMethod(
+        Invocation.method(
+          #logout,
+          [],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
 
   @override
   _i3.Future<String?> getAccessToken() => (super.noSuchMethod(
@@ -170,39 +188,12 @@ class MockAuthService extends _i1.Mock implements _i4.AuthService {
       ) as bool);
 
   @override
-  _i3.Future<void> logout() => (super.noSuchMethod(
+  _i3.Future<void> deleteAccount() => (super.noSuchMethod(
         Invocation.method(
-          #logout,
+          #deleteAccount,
           [],
         ),
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
-}
-
-/// A class which mocks [UserRepository].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockUserRepository extends _i1.Mock implements _i5.UserRepository {
-  MockUserRepository() {
-    _i1.throwOnMissingStub(this);
-  }
-
-  @override
-  _i3.Future<_i6.User?> getUserInfo() => (super.noSuchMethod(
-        Invocation.method(
-          #getUserInfo,
-          [],
-        ),
-        returnValue: _i3.Future<_i6.User?>.value(),
-      ) as _i3.Future<_i6.User?>);
-
-  @override
-  _i3.Future<bool> deleteUserAccount() => (super.noSuchMethod(
-        Invocation.method(
-          #deleteUserAccount,
-          [],
-        ),
-        returnValue: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
 }
