@@ -4,29 +4,26 @@ import 'package:feedback/feedback.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
-import '../../../auth/application/providers/auth_provider.dart';
-import '../../../auth/presentation/screens/account_management.dart';
-import '../../../auth/presentation/screens/auth_screen.dart';
 import '../../../manage_purchases/presentation/widgets/dismiss_dialog.dart';
+import '../widgets/account_management_tile.dart';
 import '../widgets/app_about_tile.dart';
 import 'appearance_settings.dart';
 import 'privacy_policy.dart';
 import 'terms_and_conditions.dart';
 
 /// A page that displays the settings for the app
-class SettingsPage extends ConsumerStatefulWidget {
+class SettingsPage extends StatefulWidget {
   /// Creates a new [SettingsPage] instance.
   const SettingsPage({super.key});
 
   @override
-  ConsumerState<SettingsPage> createState() => _SettingsPageState();
+  State<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _SettingsPageState extends ConsumerState<SettingsPage> {
+class _SettingsPageState extends State<SettingsPage> {
   // ignore: unused_field
   bool _isLoading = false;
 
@@ -54,7 +51,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
@@ -63,27 +59,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         alignment: Alignment.topCenter,
         child: ListView(
           children: <Widget>[
-            ListTile(
-              title: Text('Account Management'),
-              subtitle: authState.isAuthenticated
-                  ? Text('Manage your account settings')
-                  : Text('Sign in to manage your account settings'),
-              leading: Icon(Icons.account_circle),
-              trailing: Icon(Icons.arrow_forward_sharp),
-              onTap: () {
-                if (authState.isAuthenticated) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const AccountManagementScreen(),
-                    ),
-                  );
-                } else {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => AuthScreen()),
-                  );
-                }
-              },
-            ),
+            AccountManagementTile(),
             ListTile(
               title: Text('Appearance'),
               subtitle: Text('Edit the appearance of the app'),
@@ -102,11 +78,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               trailing: Icon(Icons.arrow_forward),
               onTap: () {
                 try {
-                  BetterFeedback.of(context).show((UserFeedback feedback) async {
+                  BetterFeedback.of(context)
+                      .show((UserFeedback feedback) async {
                     // Save the screenshot to a file and get the file path
                     final imageInUnit8List = feedback.screenshot;
                     final tempDir = await getTemporaryDirectory();
-                    final file = await File('${tempDir.path}/image.png').create();
+                    final file =
+                        await File('${tempDir.path}/image.png').create();
                     file.writeAsBytesSync(imageInUnit8List);
                     final email = Email(
                       subject: 'App Feedback',
@@ -129,7 +107,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             ),
             ListTile(
               title: Text('Restore Purchases'),
-              subtitle: Text('Restore your purchases if you have reinstalled the app'),
+              subtitle: Text(
+                'Restore your purchases if you have reinstalled the app',
+              ),
               leading: Icon(Icons.restore),
               trailing: Icon(Icons.arrow_forward),
               onTap: () => _restore,
@@ -140,7 +120,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               leading: Icon(Icons.abc),
               trailing: Icon(Icons.arrow_forward),
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const TermsAndConditions()),
+                MaterialPageRoute(
+                  builder: (context) => const TermsAndConditions(),
+                ),
               ),
             ),
             ListTile(

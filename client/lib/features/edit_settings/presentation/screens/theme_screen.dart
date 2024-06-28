@@ -6,9 +6,10 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '../../../../theme/constants/premium_themes.dart';
 import '../../../../theme/models/app_theme.dart';
-import '../../../../utils/logger.dart';
+
 import '../../../../utils/show_paywall.dart';
 import '../../../manage_purchases/data/constants/revenue_cat.dart';
+import '../../../manage_purchases/presentation/widgets/dismiss_dialog.dart';
 import '../controllers/settings.dart';
 
 /// A page that displays a list of theme options for the app
@@ -38,7 +39,16 @@ class _ThemeScreenState extends ConsumerState<ThemeScreen> {
         setState(() => _isSubscribed = true);
       }
     } on PlatformException catch (e) {
-      logger.e('Error fetching customer info: $e');
+      if (mounted) {
+        await showDialog(
+          context: context,
+          builder: (BuildContext context) => ShowDialogToDismiss(
+            title: 'Error',
+            content: e.message ?? 'Unknown error',
+            buttonText: 'OK',
+          ),
+        );
+      }
     }
     setState(() => _isLoading = false);
   }
@@ -65,25 +75,34 @@ class _ThemeScreenState extends ConsumerState<ThemeScreen> {
                     iconColor: scheme.light.primary,
                     title: Text(scheme.name),
                     subtitle: Text(scheme.description),
-                    leading: AppTheme.premiumSchemes.contains(scheme) && !_isSubscribed
+                    leading: AppTheme.premiumSchemes.contains(scheme) &&
+                            !_isSubscribed
                         ? const Icon(Icons.lock)
                         : const Icon(Icons.palette),
-                    trailing:
-                        ref.watch(Settings.schemeIndexProvider) == AppTheme.schemes.indexOf(scheme)
-                            ? const Icon(Icons.check)
-                            : null,
+                    trailing: ref.watch(Settings.schemeIndexProvider) ==
+                            AppTheme.schemes.indexOf(scheme)
+                        ? const Icon(Icons.check)
+                        : null,
                     onTap: () async {
                       final index = AppTheme.schemes.indexOf(scheme);
-                      final isPremium = AppTheme.premiumSchemes.contains(scheme);
+                      final isPremium =
+                          AppTheme.premiumSchemes.contains(scheme);
 
                       if (isPremium && !_isSubscribed) {
                         await showPaywall(context);
                       } else {
-                        ref.read(Settings.schemeIndexProvider.notifier).set(index);
-                        ref.read(Settings.isPremiumThemeProvider.notifier).set(isPremium);
-                        final premiumIdx = index - AppTheme.defaultSchemes.length;
+                        ref
+                            .read(Settings.schemeIndexProvider.notifier)
+                            .set(index);
+                        ref
+                            .read(Settings.isPremiumThemeProvider.notifier)
+                            .set(isPremium);
+                        final premiumIdx =
+                            index - AppTheme.defaultSchemes.length;
                         ref.read(Settings.premiumThemeProvider.notifier).set(
-                              isPremium ? PremiumTheme.values[premiumIdx] : null,
+                              isPremium
+                                  ? PremiumTheme.values[premiumIdx]
+                                  : null,
                             );
                       }
                     },

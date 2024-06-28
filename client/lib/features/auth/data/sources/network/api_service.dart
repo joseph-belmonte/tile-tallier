@@ -3,7 +3,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../../../../../utils/logger.dart';
 import 'auth_service.dart';
 
 /// A service for making API requests to our Django server.
@@ -53,7 +52,6 @@ class ApiService {
       );
 
       if (response.statusCode == 200) {
-        logger.i('Login response: ${response.body}');
         return jsonDecode(response.body);
       } else {
         throw Exception('Failed to login: ${response.body}');

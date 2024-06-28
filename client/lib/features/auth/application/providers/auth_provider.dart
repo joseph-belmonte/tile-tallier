@@ -1,8 +1,6 @@
 // providers/auth_provider.dart
-// TODO: once login working, keep user logged in across app restarts
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../utils/logger.dart';
 import '../../data/sources/network/auth_service.dart';
 import '../../domain/models/auth_state.dart';
 import '../../domain/models/user.dart';
@@ -14,7 +12,23 @@ final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthService _authService;
 
-  AuthNotifier(this._authService) : super(AuthState.initial());
+  AuthNotifier(this._authService) : super(AuthState.initial()) {
+    _initializeAuthState();
+  }
+
+  Future<void> _initializeAuthState() async {
+    try {
+      final userInfo = await _authService.checkStoredTokens();
+      if (userInfo != null) {
+        final user = User(
+          isAuthenticated: true,
+          email: userInfo['email'],
+          isSubscribed: userInfo['is_subscribed'],
+        );
+        state = state.copyWith(isAuthenticated: true, user: user);
+      }
+    } catch (error) {}
+  }
 
   Future<void> register(String email, String password, String password2) async {
     try {
@@ -31,8 +45,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
       state = state.copyWith(isLoading: true, error: null);
       final result = await _authService.login(email, password);
 
-      logger.d('Login result: $result');
-
       if (result.containsKey('user')) {
         final user = User(
           isAuthenticated: true,
@@ -40,7 +52,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
           isSubscribed: result['user']['is_subscribed'],
         );
 
-        logger.d('User: ${user.toString()}');
         state =
             state.copyWith(isAuthenticated: true, user: user, isLoading: false);
       } else {

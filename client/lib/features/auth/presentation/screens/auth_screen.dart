@@ -1,19 +1,18 @@
+// presentation/screens/auth_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../utils/logger.dart';
 import '../../application/providers/auth_provider.dart';
 import '../widgets/login_form.dart';
 import '../widgets/register_form.dart';
 import 'account_management.dart';
 
-/// A screen for authenticating the user.
 class AuthScreen extends ConsumerStatefulWidget {
-  /// Creates a new [AuthScreen] instance.
   const AuthScreen({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _AuthScreenState();
+  ConsumerState<AuthScreen> createState() => _AuthScreenState();
 }
 
 class _AuthScreenState extends ConsumerState<AuthScreen> {
@@ -22,6 +21,16 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   void _toggleForm() {
     setState(() {
       _isLogin = !_isLogin;
+    });
+  }
+
+  void _navigateToAccountManagement(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const AccountManagementScreen(),
+        ),
+      );
     });
   }
 
@@ -35,38 +44,12 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
           builder: (context, ref, child) {
             final authState = ref.watch(authProvider);
 
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (authState.isAuthenticated) {
-                logger.d('User is authenticated');
-                logger.d('User: ${authState.user.toString()}');
-                // ToastService.message(context, 'Logged in');
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => const AccountManagementScreen(),
-                  ),
-                );
-              }
-            });
-
             if (authState.isLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return Center(child: CircularProgressIndicator());
             }
 
-            if (authState.error != null) {
-              // ToastService.error(context, authState.error.toString());
-              return Center(
-                child: Column(
-                  children: [
-                    Text('Error: ${authState.error}'),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () =>
-                          ref.read(authProvider.notifier).clearError(),
-                      child: const Text('Retry'),
-                    ),
-                  ],
-                ),
-              );
+            if (authState.isAuthenticated) {
+              _navigateToAccountManagement(context);
             }
 
             return Center(

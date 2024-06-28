@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../../../../../utils/logger.dart';
+
 import '../local_storage/local_storage_service.dart';
 
 /// The [AuthService] class is responsible for handling authentication requests, managing
@@ -128,7 +128,6 @@ class AuthService {
     final Map<String, dynamic> responseBody = jsonDecode(response.body);
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      logger.i(responseBody);
       return responseBody;
     } else {
       throw Exception(responseBody['error'] ?? 'Unknown error');

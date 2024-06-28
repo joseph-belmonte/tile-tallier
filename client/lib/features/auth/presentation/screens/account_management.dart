@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../utils/logger.dart';
 import '../../../../utils/toast.dart';
 import '../../application/providers/auth_provider.dart';
 
@@ -38,7 +37,6 @@ class _AccountManagementScreenState
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
-    logger.d('User: ${authState.user.toString()}');
 
     return Scaffold(
       appBar: AppBar(title: Text('Account Management')),
