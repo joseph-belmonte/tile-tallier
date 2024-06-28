@@ -30,7 +30,47 @@ jobs:
           cd client 
           flutter test
 
-  # Commenting this block out until we correctly set up the xcode requirements (singing/ceriticate)
+  server_test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.11" # Specify the Python version
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r server/requirements.txt
+
+      - name: Run server tests
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+        run: |
+          source venv/bin/activate
+          cd server
+          python manage.py test
+
+  # Commenting this block out until we correctly set up the xcode requirements (signing/certificate)
   # build_ios:
   #   if: github.ref == 'refs/heads/production' # Specifies that this job should only run on the production branch
   #   name: Build iOS
