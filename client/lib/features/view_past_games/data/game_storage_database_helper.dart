@@ -40,7 +40,7 @@ class GameStorageDatabaseHelper {
   Future<void> _createDB(Database db, int version) async {
     await db.execute('''
       CREATE TABLE games (
-        id TEXT PRIMARY KEY
+        id TEXT PRIMARY KEY,
         is_favorite INTEGER DEFAULT 0
       )
     ''');
