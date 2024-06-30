@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../../../play_game/domain/models/game.dart';
 import '../../../play_game/presentation/widgets/gameplay/historical_play.dart';
+import '../../domain/models/past_game.dart';
 
 /// A page that displays a past game.
-class PastGame extends StatelessWidget {
-  /// The [Game] whose details are displayed.
-  final Game game;
+class PastGameScreen extends StatelessWidget {
+  /// The [PastGAme] whose details are displayed.
+  final PastGame game;
 
-  /// Creates a new [PastGame] instance.
-  const PastGame({required this.game, super.key});
+  /// Creates a new [PastGameScreen] instance.
+  const PastGameScreen({required this.game, super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../application/providers/past_games_provider.dart';
 import '../../data/game_storage_database_helper.dart';
+import '../../domain/models/past_game.dart';
 import 'past_game.dart';
 
 /// A page that displays the past games.
@@ -71,7 +72,7 @@ class _PastGamesPageState extends ConsumerState<PastGamesPage> {
             ],
           );
         },
-        data: (games) {
+        data: (List<PastGame> games) {
           if (games.isEmpty) {
             return const Center(child: Text('No past games available.'));
           }
@@ -80,10 +81,12 @@ class _PastGamesPageState extends ConsumerState<PastGamesPage> {
             itemBuilder: (context, index) {
               final game = games[index];
 
-              final date = game.currentPlay.timestamp.toLocal().toString().split(' ')[0];
+              final date =
+                  game.currentPlay.timestamp.toLocal().toString().split(' ')[0];
 
-              final playerScores =
-                  game.players.map((player) => '${player.name}: ${player.score}').join(', ');
+              final playerScores = game.players
+                  .map((player) => '${player.name}: ${player.score}')
+                  .join(', ');
 
               return Container(
                 padding: const EdgeInsets.all(8),
@@ -97,7 +100,9 @@ class _PastGamesPageState extends ConsumerState<PastGamesPage> {
                         icon: const Icon(Icons.arrow_forward_rounded),
                         onPressed: () {
                           Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => PastGame(game: game)),
+                            MaterialPageRoute(
+                              builder: (context) => PastGameScreen(game: game),
+                            ),
                           );
                         },
                       ),

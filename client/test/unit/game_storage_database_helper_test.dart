@@ -14,7 +14,8 @@ import 'package:uuid/uuid.dart';
 Future<void> main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   // Mocking the path_provider
-  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+      .setMockMethodCallHandler(
     const MethodChannel('plugins.flutter.io/path_provider'),
     (MethodCall methodCall) async => '.',
   );
@@ -87,14 +88,16 @@ Future<void> main() async {
           await db.execute('CREATE INDEX idx_game_id ON players (gameId)');
           await db.execute('CREATE INDEX idx_player_id ON plays (playerId)');
           await db.execute('CREATE INDEX idx_play_id ON words (playId)');
-          await db.execute('CREATE INDEX idx_word_id ON playedLetters (wordId)');
+          await db
+              .execute('CREATE INDEX idx_word_id ON playedLetters (wordId)');
         },
       );
 
       GameStorageDatabaseHelper.testConstructor(db);
     });
 
-    test('Insert an empty game (no plays) into the database and fetch it', () async {
+    test('Insert an empty game (no plays) into the database and fetch it',
+        () async {
       final game = Game(
         id: Uuid().v4(),
         players: [
@@ -107,7 +110,8 @@ Future<void> main() async {
 
       await GameStorageDatabaseHelper.instance.insertGame(game);
 
-      final fetchedGame = await GameStorageDatabaseHelper.instance.fetchGame(game.id);
+      final fetchedGame =
+          await GameStorageDatabaseHelper.instance.fetchGame(game.id);
 
       expect(fetchedGame.id, game.id);
       expect(fetchedGame.players.length, game.players.length);
@@ -168,14 +172,19 @@ Future<void> main() async {
 
       await GameStorageDatabaseHelper.instance.insertGame(game);
 
-      final fetchedGame = await GameStorageDatabaseHelper.instance.fetchGame(game.id);
+      final fetchedGame =
+          await GameStorageDatabaseHelper.instance.fetchGame(game.id);
 
       expect(fetchedGame.id, game.id);
       expect(fetchedGame.players.length, game.players.length);
       expect(fetchedGame.players.first.name, game.players.first.name);
-      expect(fetchedGame.players.first.plays.length, game.players.first.plays.length);
+      expect(
+        fetchedGame.players.first.plays.length,
+        game.players.first.plays.length,
+      );
       expect(fetchedGame.players.first.score, 53);
       expect(fetchedGame.players.last.score, 6);
+      expect(fetchedGame.isFavorite, false);
     });
 
     test('Delete a game from the database', () async {
