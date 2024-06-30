@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../utils/toast.dart';
 import '../../application/providers/auth_provider.dart';
+import '../../domain/models/auth_state.dart';
 import '../widgets/login_form.dart';
 import '../widgets/register_form.dart';
 import 'account_management.dart';
@@ -38,6 +40,12 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<AuthState>(authProvider, (previous, next) {
+      if (next.error != null) {
+        ToastService.error(context, next.error!);
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(title: Text(_isLogin ? 'Login' : 'Register')),
       body: Padding(
