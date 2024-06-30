@@ -11,7 +11,7 @@ _$PastGameImpl _$$PastGameImplFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       currentPlay: Play.fromJson(json['currentPlay'] as Map<String, dynamic>),
       currentWord: Word.fromJson(json['currentWord'] as Map<String, dynamic>),
-      isFavorite: json['isFavorite'] as bool,
+      isFavorite: json['isFavorite'] as bool? ?? false,
       players: (json['players'] as List<dynamic>?)
               ?.map((e) => Player.fromJson(e as Map<String, dynamic>))
               .toList() ??

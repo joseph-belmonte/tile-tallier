@@ -191,7 +191,7 @@ class _$PastGameImpl extends _PastGame {
       {required this.id,
       required this.currentPlay,
       required this.currentWord,
-      required this.isFavorite,
+      this.isFavorite = false,
       final List<Player> players = const [],
       this.currentPlayerIndex = 0})
       : _players = players,
@@ -207,6 +207,7 @@ class _$PastGameImpl extends _PastGame {
   @override
   final Word currentWord;
   @override
+  @JsonKey()
   final bool isFavorite;
   final List<Player> _players;
   @override
@@ -273,7 +274,7 @@ abstract class _PastGame extends PastGame {
       {required final String id,
       required final Play currentPlay,
       required final Word currentWord,
-      required final bool isFavorite,
+      final bool isFavorite,
       final List<Player> players,
       final int currentPlayerIndex}) = _$PastGameImpl;
   const _PastGame._() : super._();

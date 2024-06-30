@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../play_game/domain/models/game.dart';
 import '../../../play_game/domain/models/play.dart';
 import '../../../play_game/domain/models/player.dart';
 import '../../../play_game/domain/models/word.dart';
@@ -16,19 +17,19 @@ class PastGame with _$PastGame {
     required String id,
     required Play currentPlay,
     required Word currentWord,
-    required bool isFavorite,
+    @Default(false) bool isFavorite,
     @Default([]) List<Player> players,
     @Default(0) int currentPlayerIndex,
-    // Add other fields from Game as necessary
   }) = _PastGame;
 
   /// Creates a new [PastGame] instance from a [Game] instance.
-  factory PastGame.fromGame(PastGame game, {required bool isFavorite}) {
+  factory PastGame.fromGame(Game game) {
     return PastGame(
       id: game.id,
-      isFavorite: isFavorite,
-      currentPlay: Play.createNew(),
-      currentWord: Word.createNew(),
+      currentPlay: game.currentPlay,
+      currentWord: game.currentWord,
+      players: game.players,
+      currentPlayerIndex: game.currentPlayerIndex,
     );
   }
 
@@ -51,12 +52,14 @@ class PastGame with _$PastGame {
     ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
 
   /// Returns the highest scoring play.
-  Play? get highestScoringPlay => plays.reduce(
-        (value, element) => element.score > value.score ? element : value,
-      );
+  Play? get highestScoringPlay => plays.isNotEmpty
+      ? plays.reduce(
+          (value, element) => element.score > value.score ? element : value,
+        )
+      : null;
 
   /// Returns the highest scoring word.
-  Word get highestScoringWord =>
+  Word? get highestScoringWord =>
       plays.expand((play) => play.playedWords).reduce(
             (value, element) => element.score > value.score ? element : value,
           );
