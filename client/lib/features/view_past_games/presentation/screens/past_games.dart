@@ -101,7 +101,7 @@ class _PastGamesPageState extends ConsumerState<PastGamesPage> {
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => PastGameScreen(game: game),
+                              builder: (context) => PastGameScreen(gameId: game.id),
                             ),
                           );
                         },

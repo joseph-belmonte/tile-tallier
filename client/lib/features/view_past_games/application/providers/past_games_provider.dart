@@ -21,6 +21,22 @@ class PastGamesNotifier extends StateNotifier<AsyncValue<List<PastGame>>> {
       state = AsyncValue.error(e, stackTrace);
     }
   }
+
+  /// Toggles the favorite status of the game with the given [gameId].
+  Future<void> toggleFavorite(String gameId) async {
+    try {
+      await _gameRepository.toggleFavorite(gameId);
+      final updatedGames = state.value!.map((game) {
+        if (game.id == gameId) {
+          return game.copyWith(isFavorite: !game.isFavorite);
+        }
+        return game;
+      }).toList();
+      state = AsyncValue.data(updatedGames);
+    } catch (e, stackTrace) {
+      state = AsyncValue.error(e, stackTrace);
+    }
+  }
 }
 
 /// A provider that provides the past games.

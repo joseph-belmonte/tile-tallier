@@ -165,6 +165,7 @@ class GameStorageDatabaseHelper {
     final db = await database;
 
     final gameMap = await db.query('games', where: 'id = ?', whereArgs: [id]);
+
     if (gameMap.isEmpty) {
       throw Exception('Game not found');
     }

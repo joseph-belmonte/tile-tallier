@@ -17,6 +17,11 @@ class GameRepository {
     }
   }
 
+  /// Toggles the favorite status of a game in the database.
+  Future<void> toggleFavorite(String gameId) async {
+    await _databaseHelper.toggleFavorite(gameId);
+  }
+
   /// Loads a game from the database.
   Future<PastGame> loadGame(String id) async {
     try {
