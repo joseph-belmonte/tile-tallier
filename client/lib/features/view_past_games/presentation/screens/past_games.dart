@@ -7,23 +7,14 @@ import '../../domain/models/past_game.dart';
 import 'past_game.dart';
 
 /// A page that displays the past games.
-class PastGamesPage extends ConsumerStatefulWidget {
+class PastGamesPage extends ConsumerWidget {
   /// Creates a new [PastGamesPage] instance.
   const PastGamesPage({super.key});
 
   @override
-  ConsumerState<PastGamesPage> createState() => _PastGamesPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pastGamesNotifier = ref.read(pastGamesProvider.notifier);
 
-class _PastGamesPageState extends ConsumerState<PastGamesPage> {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    ref.read(pastGamesProvider.notifier).fetchGames();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     final pastGamesAsync = ref.watch(pastGamesProvider);
 
     return Scaffold(
@@ -32,9 +23,7 @@ class _PastGamesPageState extends ConsumerState<PastGamesPage> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.refresh),
-            onPressed: () {
-              ref.read(pastGamesProvider.notifier).fetchGames();
-            },
+            onPressed: pastGamesNotifier.fetchGames,
           ),
           IconButton(
             icon: const Icon(Icons.delete),
@@ -59,7 +48,7 @@ class _PastGamesPageState extends ConsumerState<PastGamesPage> {
                 label: const Text('Delete all games'),
               ),
               Center(
-                child: Text('Error fetching past games: $error'),
+                child: Text('Error fetching past games, please try again.'),
               ),
               Divider(),
               Wrap(
@@ -101,7 +90,8 @@ class _PastGamesPageState extends ConsumerState<PastGamesPage> {
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => PastGameScreen(gameId: game.id),
+                              builder: (context) =>
+                                  PastGameScreen(gameId: game.id),
                             ),
                           );
                         },
