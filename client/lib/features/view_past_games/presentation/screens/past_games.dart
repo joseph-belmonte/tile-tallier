@@ -13,18 +13,12 @@ class PastGamesPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pastGamesNotifier = ref.read(pastGamesProvider.notifier);
-
     final pastGamesAsync = ref.watch(pastGamesProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Past Games'),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: pastGamesNotifier.fetchGames,
-          ),
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: GameStorageDatabaseHelper.instance.deleteAllGames,
