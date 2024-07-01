@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../utils/logger.dart';
 import '../../../play_game/presentation/widgets/gameplay/historical_play.dart';
 import '../../application/providers/past_games_provider.dart';
 import '../../domain/models/past_game.dart';
@@ -25,13 +24,7 @@ class PastGameScreen extends ConsumerWidget {
             game.plays.first.timestamp.toLocal().toString().split(' ')[0];
 
         void toggleFavorite() async {
-          logger.d(
-            'Toggling favorite status of game with id: ${game.id}: ${game.isFavorite}',
-          );
           await ref.read(pastGamesProvider.notifier).toggleFavorite(game.id);
-          logger.d(
-            'Toggled favorite status of game with id: ${game.id}: ${game.isFavorite}',
-          );
         }
 
         return Scaffold(
