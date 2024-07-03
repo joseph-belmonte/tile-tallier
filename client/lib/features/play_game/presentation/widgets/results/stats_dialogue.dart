@@ -14,10 +14,11 @@ class StatsDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final topPlay = _game.highestScoringPlay;
     return AlertDialog(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
       title: Text(
-        'Game Statistics',
+        'Notable Stats',
         style: Theme.of(context).textTheme.headlineSmall!.copyWith(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
@@ -30,52 +31,58 @@ class StatsDialog extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 10),
               child: Text(
                 'Total Plays: ${_game.plays.length}',
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
               ),
             ),
             Divider(),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Text(
-                'Longest Word: ${_game.longestWord}',
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                'Longest Word: ${_game.longestWord}, for ${_game.longestWord.length} letters',
               ),
             ),
+            Divider(),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Text(
                 'Highest Scoring Word:\n${_game.highestScoringWord.word} - ${_game.highestScoringWord.score}',
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
               ),
             ),
+            Divider(),
             Padding(
               padding: const EdgeInsets.only(bottom: 10),
-              child: Text(
-                'Highest Scoring Turn:',
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-              ),
+              child: Text('Highest Scoring Turn:'),
             ),
-            if (_game.highestScoringPlay != null)
-              ..._game.highestScoringPlay!.playedWords.map(
+            if (topPlay != null)
+              if (topPlay.isBingo)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Text(
+                    'Bingo! +50 points',
+                  ),
+                ),
+            if (topPlay != null)
+              ...topPlay.playedWords.map(
                 (word) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Text(
                     '${word.word} - ${word.score}',
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
                   ),
                 ),
               ),
-            Divider(),
+            if (topPlay != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  'Total: ${topPlay.score}',
+                ),
+              ),
+            if (topPlay != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  'Score multipliers: ${topPlay.playedWords.map((word) => word.playedLetters.map((letter) => letter.scoreMultiplier.name).where((name) => name != 'none').join(', ')).join(', ')}',
+                ),
+              ),
           ],
         ),
       ),
