@@ -20,6 +20,26 @@ class CustomerInfoNotifier extends StateNotifier<CustomerInfo?> {
       state = null;
     }
   }
+
+  /// Restores purchases for the user.
+  Future<void> restorePurchases() async {
+    try {
+      final customerInfo = await Purchases.restorePurchases();
+      state = customerInfo;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  /// Purchases a package.
+  Future<void> purchasePackage(Package package) async {
+    try {
+      final customerInfo = await Purchases.purchasePackage(package);
+      state = customerInfo;
+    } catch (e) {
+      print(e);
+    }
+  }
 }
 
 /// A [StateNotifierProvider] that provides the [CustomerInfoNotifier] instance.

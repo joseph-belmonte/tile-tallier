@@ -4,10 +4,11 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '../../../edit_settings/presentation/screens/privacy_policy.dart';
 import '../../../edit_settings/presentation/screens/terms_and_conditions.dart';
+import '../../application/providers/customer_info_provider.dart';
 import '../../data/constants/revenue_cat.dart';
 
 /// A page that displays a list of subscription options for the app
-class Paywall extends ConsumerStatefulWidget {
+class Paywall extends ConsumerWidget {
   /// The RevenueCat [Offering] to display.
   final Offering offering;
 
@@ -15,20 +16,9 @@ class Paywall extends ConsumerStatefulWidget {
   const Paywall({required this.offering, super.key});
 
   @override
-  ConsumerState<Paywall> createState() => _PaywallState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final customerInfoNotifier = ref.read(customerInfoProvider.notifier);
 
-class _PaywallState extends ConsumerState<Paywall> {
-  void _restorePurchase() async {
-    try {
-      await Purchases.restorePurchases();
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: SafeArea(
         child: Wrap(
@@ -41,11 +31,15 @@ class _PaywallState extends ConsumerState<Paywall> {
                 borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
               ),
               child: Center(
-                child: Text('🧮 TallyTallier Pro', style: Theme.of(context).textTheme.titleLarge),
+                child: Text(
+                  '🧮 TallyTallier Pro',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 32, bottom: 16, left: 16.0, right: 16.0),
+              padding:
+                  EdgeInsets.only(top: 32, bottom: 16, left: 16.0, right: 16.0),
               child: SizedBox(
                 width: double.infinity,
                 child: Text(
@@ -55,26 +49,16 @@ class _PaywallState extends ConsumerState<Paywall> {
               ),
             ),
             ListView.builder(
-              itemCount: widget.offering.availablePackages.length,
+              itemCount: offering.availablePackages.length,
               itemBuilder: (BuildContext context, int index) {
-                final myProductList = widget.offering.availablePackages;
+                final myProductList = offering.availablePackages;
                 return Card(
                   child: ListTile(
                     onTap: () async {
-                      try {
-                        final customerInfo = await Purchases.purchasePackage(myProductList[index]);
-                        final entitlement = customerInfo.entitlements.all[entitlementID];
-                        // appData is a basically a reference to the current user
-                        // and has properties like:
-                        // entitlementIsActive, appUserID, etc.
-                        // ignore: unused_local_variable
-                        final isSubscribed = entitlement?.isActive ?? false;
-                      } catch (e) {
-                        print(e);
-                      }
+                      await customerInfoNotifier
+                          .purchasePackage(myProductList[index]);
 
                       if (context.mounted) {
-                        setState(() {});
                         Navigator.pop(context);
                       }
                     },
@@ -97,7 +81,8 @@ class _PaywallState extends ConsumerState<Paywall> {
               physics: const ClampingScrollPhysics(),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 32, bottom: 16, left: 16.0, right: 16.0),
+              padding:
+                  EdgeInsets.only(top: 32, bottom: 16, left: 16.0, right: 16.0),
               child: SizedBox(
                 width: double.infinity,
                 child: Center(
@@ -110,38 +95,50 @@ class _PaywallState extends ConsumerState<Paywall> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (_) => const TermsAndConditions()));
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const TermsAndConditions(),
+                            ),
+                          );
                         },
                         child: Text(
                           'Terms of Service',
                           style: Theme.of(context)
                               .textTheme
                               .labelSmall
-                              ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                         ),
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (_) => const PrivacyPolicy()));
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const PrivacyPolicy(),
+                            ),
+                          );
                         },
                         child: Text(
                           'Privacy Policy',
                           style: Theme.of(context)
                               .textTheme
                               .labelSmall
-                              ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                         ),
                       ),
                       TextButton(
-                        onPressed: _restorePurchase,
+                        onPressed: customerInfoNotifier.restorePurchases,
                         child: Text(
                           'Already subscribed? Restore purchase.',
                           style: Theme.of(context)
                               .textTheme
                               .labelSmall
-                              ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                         ),
                       ),
                     ],
