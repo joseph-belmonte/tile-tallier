@@ -4,19 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../application/providers/active_game.dart';
 
 /// A widget to display the current turn information.
-class TurnHUD extends ConsumerStatefulWidget {
+class TurnHUD extends ConsumerWidget {
   /// Creates a new [TurnHUD] instance.
   const TurnHUD({
     super.key,
   });
 
   @override
-  ConsumerState<TurnHUD> createState() => _TurnHUDState();
-}
-
-class _TurnHUDState extends ConsumerState<TurnHUD> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(activeGameProvider);
     final notifier = ref.read(activeGameProvider.notifier);
     return Padding(
