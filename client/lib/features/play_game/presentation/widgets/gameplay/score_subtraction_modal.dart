@@ -24,6 +24,10 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
   @override
   void initState() {
     super.initState();
+    _initializeControllers();
+  }
+
+  void _initializeControllers() {
     final playerCount = ref.read(activeGameProvider).players.length;
     _controllers = List.generate(playerCount, (_) => TextEditingController());
   }
@@ -71,6 +75,11 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
   @override
   Widget build(BuildContext context) {
     final players = ref.watch(activeGameProvider).players;
+
+    // Ensure the controllers are updated whenever the number of players changes
+    if (_controllers.length != players.length) {
+      _initializeControllers();
+    }
 
     return SingleChildScrollView(
       padding:
