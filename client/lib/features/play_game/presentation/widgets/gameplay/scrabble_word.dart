@@ -4,7 +4,7 @@ import '../../../domain/models/word.dart';
 import 'scrabble_tile.dart';
 
 /// A widget that displays a word as a list of ScrabbleTile widgets.
-class ScrabbleWordWidget extends StatefulWidget {
+class ScrabbleWordWidget extends StatelessWidget {
   /// The word to display.
   final Word word;
 
@@ -15,23 +15,18 @@ class ScrabbleWordWidget extends StatefulWidget {
   const ScrabbleWordWidget(this.word, this.onLetterTap, {super.key});
 
   @override
-  State<ScrabbleWordWidget> createState() => _ScrabbleWordWidgetState();
-}
-
-class _ScrabbleWordWidgetState extends State<ScrabbleWordWidget> {
-  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       clipBehavior: Clip.hardEdge,
       child: Row(
         children: <Widget>[
-          ...widget.word.playedLetters.asMap().entries.map((entry) {
+          ...word.playedLetters.asMap().entries.map((entry) {
             final idx = entry.key;
             final letter = entry.value;
             return ScrabbleTile(
               letter,
-              () => widget.onLetterTap(idx),
+              () => onLetterTap(idx),
             );
           }),
         ],

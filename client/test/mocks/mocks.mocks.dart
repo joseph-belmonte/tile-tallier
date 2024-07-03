@@ -3,16 +3,16 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i3;
+import 'dart:async' as _i4;
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i6;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:tile_tally/features/auth/data/sources/local_storage/local_storage_service.dart'
-    as _i5;
+    as _i6;
 import 'package:tile_tally/features/auth/data/sources/network/api_service.dart'
-    as _i2;
+    as _i3;
 import 'package:tile_tally/features/auth/data/sources/network/auth_service.dart'
-    as _i4;
+    as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -27,16 +27,27 @@ import 'package:tile_tally/features/auth/data/sources/network/auth_service.dart'
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
+class _FakeFlutterSecureStorage_0 extends _i1.SmartFake
+    implements _i2.FlutterSecureStorage {
+  _FakeFlutterSecureStorage_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [ApiService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockApiService extends _i1.Mock implements _i2.ApiService {
+class MockApiService extends _i1.Mock implements _i3.ApiService {
   MockApiService() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<Map<String, dynamic>> register(
+  _i4.Future<Map<String, dynamic>> register(
     String? email,
     String? password,
     String? password2,
@@ -51,11 +62,11 @@ class MockApiService extends _i1.Mock implements _i2.ApiService {
           ],
         ),
         returnValue:
-            _i3.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
-      ) as _i3.Future<Map<String, dynamic>>);
+            _i4.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+      ) as _i4.Future<Map<String, dynamic>>);
 
   @override
-  _i3.Future<Map<String, dynamic>> login(
+  _i4.Future<Map<String, dynamic>> login(
     String? email,
     String? password,
   ) =>
@@ -68,66 +79,66 @@ class MockApiService extends _i1.Mock implements _i2.ApiService {
           ],
         ),
         returnValue:
-            _i3.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
-      ) as _i3.Future<Map<String, dynamic>>);
+            _i4.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+      ) as _i4.Future<Map<String, dynamic>>);
 
   @override
-  _i3.Future<Map<String, dynamic>> getUserInfo() => (super.noSuchMethod(
+  _i4.Future<Map<String, dynamic>> getUserInfo() => (super.noSuchMethod(
         Invocation.method(
           #getUserInfo,
           [],
         ),
         returnValue:
-            _i3.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
-      ) as _i3.Future<Map<String, dynamic>>);
+            _i4.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+      ) as _i4.Future<Map<String, dynamic>>);
 
   @override
-  _i3.Future<bool> deleteAccount() => (super.noSuchMethod(
+  _i4.Future<bool> deleteAccount() => (super.noSuchMethod(
         Invocation.method(
           #deleteAccount,
           [],
         ),
-        returnValue: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
 
   @override
-  _i3.Future<bool> canPlayGame() => (super.noSuchMethod(
+  _i4.Future<bool> canPlayGame() => (super.noSuchMethod(
         Invocation.method(
           #canPlayGame,
           [],
         ),
-        returnValue: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
 
   @override
-  _i3.Future<bool> logGamePlay() => (super.noSuchMethod(
+  _i4.Future<bool> logGamePlay() => (super.noSuchMethod(
         Invocation.method(
           #logGamePlay,
           [],
         ),
-        returnValue: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
 }
 
 /// A class which mocks [AuthService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAuthService extends _i1.Mock implements _i4.AuthService {
+class MockAuthService extends _i1.Mock implements _i5.AuthService {
   MockAuthService() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<Map<String, dynamic>?> checkStoredTokens() => (super.noSuchMethod(
+  _i4.Future<Map<String, dynamic>?> checkStoredTokens() => (super.noSuchMethod(
         Invocation.method(
           #checkStoredTokens,
           [],
         ),
-        returnValue: _i3.Future<Map<String, dynamic>?>.value(),
-      ) as _i3.Future<Map<String, dynamic>?>);
+        returnValue: _i4.Future<Map<String, dynamic>?>.value(),
+      ) as _i4.Future<Map<String, dynamic>?>);
 
   @override
-  _i3.Future<Map<String, dynamic>> register(
+  _i4.Future<Map<String, dynamic>> register(
     String? email,
     String? password,
     String? password2,
@@ -142,11 +153,11 @@ class MockAuthService extends _i1.Mock implements _i4.AuthService {
           ],
         ),
         returnValue:
-            _i3.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
-      ) as _i3.Future<Map<String, dynamic>>);
+            _i4.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+      ) as _i4.Future<Map<String, dynamic>>);
 
   @override
-  _i3.Future<Map<String, dynamic>> login(
+  _i4.Future<Map<String, dynamic>> login(
     String? email,
     String? password,
   ) =>
@@ -159,27 +170,27 @@ class MockAuthService extends _i1.Mock implements _i4.AuthService {
           ],
         ),
         returnValue:
-            _i3.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
-      ) as _i3.Future<Map<String, dynamic>>);
+            _i4.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+      ) as _i4.Future<Map<String, dynamic>>);
 
   @override
-  _i3.Future<void> logout() => (super.noSuchMethod(
+  _i4.Future<void> logout() => (super.noSuchMethod(
         Invocation.method(
           #logout,
           [],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
-  _i3.Future<String?> getAccessToken() => (super.noSuchMethod(
+  _i4.Future<String?> getAccessToken() => (super.noSuchMethod(
         Invocation.method(
           #getAccessToken,
           [],
         ),
-        returnValue: _i3.Future<String?>.value(),
-      ) as _i3.Future<String?>);
+        returnValue: _i4.Future<String?>.value(),
+      ) as _i4.Future<String?>);
 
   @override
   bool isTokenExpired(String? token) => (super.noSuchMethod(
@@ -191,55 +202,64 @@ class MockAuthService extends _i1.Mock implements _i4.AuthService {
       ) as bool);
 
   @override
-  _i3.Future<void> deleteAccount() => (super.noSuchMethod(
+  _i4.Future<void> deleteAccount() => (super.noSuchMethod(
         Invocation.method(
           #deleteAccount,
           [],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 }
 
 /// A class which mocks [LocalStorageService].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockLocalStorageService extends _i1.Mock
-    implements _i5.LocalStorageService {
+    implements _i6.LocalStorageService {
   MockLocalStorageService() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<void> deleteAuthTokens() => (super.noSuchMethod(
+  _i2.FlutterSecureStorage get secureStorage => (super.noSuchMethod(
+        Invocation.getter(#secureStorage),
+        returnValue: _FakeFlutterSecureStorage_0(
+          this,
+          Invocation.getter(#secureStorage),
+        ),
+      ) as _i2.FlutterSecureStorage);
+
+  @override
+  _i4.Future<void> deleteAuthTokens() => (super.noSuchMethod(
         Invocation.method(
           #deleteAuthTokens,
           [],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
-  _i3.Future<String?> getAccessToken() => (super.noSuchMethod(
+  _i4.Future<String?> getAccessToken() => (super.noSuchMethod(
         Invocation.method(
           #getAccessToken,
           [],
         ),
-        returnValue: _i3.Future<String?>.value(),
-      ) as _i3.Future<String?>);
+        returnValue: _i4.Future<String?>.value(),
+      ) as _i4.Future<String?>);
 
   @override
-  _i3.Future<String?> getRefreshToken() => (super.noSuchMethod(
+  _i4.Future<String?> getRefreshToken() => (super.noSuchMethod(
         Invocation.method(
           #getRefreshToken,
           [],
         ),
-        returnValue: _i3.Future<String?>.value(),
-      ) as _i3.Future<String?>);
+        returnValue: _i4.Future<String?>.value(),
+      ) as _i4.Future<String?>);
 
   @override
-  _i3.Future<void> saveAuthTokens({
+  _i4.Future<void> saveAuthTokens({
     String? accessToken,
     String? refreshToken,
   }) =>
@@ -252,27 +272,27 @@ class MockLocalStorageService extends _i1.Mock
             #refreshToken: refreshToken,
           },
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 }
 
 /// A class which mocks [FlutterSecureStorage].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFlutterSecureStorage extends _i1.Mock
-    implements _i6.FlutterSecureStorage {
+    implements _i2.FlutterSecureStorage {
   MockFlutterSecureStorage() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<void> write({
+  _i4.Future<void> write({
     required String? key,
     required String? value,
-    _i6.IOSOptions? iOptions = _i6.IOSOptions.defaultOptions,
-    _i6.AndroidOptions? aOptions,
-    _i6.LinuxOptions? lOptions,
+    _i2.IOSOptions? iOptions = _i2.IOSOptions.defaultOptions,
+    _i2.AndroidOptions? aOptions,
+    _i2.LinuxOptions? lOptions,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -286,16 +306,16 @@ class MockFlutterSecureStorage extends _i1.Mock
             #lOptions: lOptions,
           },
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
-  _i3.Future<String?> read({
+  _i4.Future<String?> read({
     required String? key,
-    _i6.IOSOptions? iOptions = _i6.IOSOptions.defaultOptions,
-    _i6.AndroidOptions? aOptions,
-    _i6.LinuxOptions? lOptions,
+    _i2.IOSOptions? iOptions = _i2.IOSOptions.defaultOptions,
+    _i2.AndroidOptions? aOptions,
+    _i2.LinuxOptions? lOptions,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -308,15 +328,15 @@ class MockFlutterSecureStorage extends _i1.Mock
             #lOptions: lOptions,
           },
         ),
-        returnValue: _i3.Future<String?>.value(),
-      ) as _i3.Future<String?>);
+        returnValue: _i4.Future<String?>.value(),
+      ) as _i4.Future<String?>);
 
   @override
-  _i3.Future<bool> containsKey({
+  _i4.Future<bool> containsKey({
     required String? key,
-    _i6.IOSOptions? iOptions = _i6.IOSOptions.defaultOptions,
-    _i6.AndroidOptions? aOptions,
-    _i6.LinuxOptions? lOptions,
+    _i2.IOSOptions? iOptions = _i2.IOSOptions.defaultOptions,
+    _i2.AndroidOptions? aOptions,
+    _i2.LinuxOptions? lOptions,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -329,15 +349,15 @@ class MockFlutterSecureStorage extends _i1.Mock
             #lOptions: lOptions,
           },
         ),
-        returnValue: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
 
   @override
-  _i3.Future<void> delete({
+  _i4.Future<void> delete({
     required String? key,
-    _i6.IOSOptions? iOptions = _i6.IOSOptions.defaultOptions,
-    _i6.AndroidOptions? aOptions,
-    _i6.LinuxOptions? lOptions,
+    _i2.IOSOptions? iOptions = _i2.IOSOptions.defaultOptions,
+    _i2.AndroidOptions? aOptions,
+    _i2.LinuxOptions? lOptions,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -350,15 +370,15 @@ class MockFlutterSecureStorage extends _i1.Mock
             #lOptions: lOptions,
           },
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
-  _i3.Future<Map<String, String>> readAll({
-    _i6.IOSOptions? iOptions = _i6.IOSOptions.defaultOptions,
-    _i6.AndroidOptions? aOptions,
-    _i6.LinuxOptions? lOptions,
+  _i4.Future<Map<String, String>> readAll({
+    _i2.IOSOptions? iOptions = _i2.IOSOptions.defaultOptions,
+    _i2.AndroidOptions? aOptions,
+    _i2.LinuxOptions? lOptions,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -370,14 +390,14 @@ class MockFlutterSecureStorage extends _i1.Mock
             #lOptions: lOptions,
           },
         ),
-        returnValue: _i3.Future<Map<String, String>>.value(<String, String>{}),
-      ) as _i3.Future<Map<String, String>>);
+        returnValue: _i4.Future<Map<String, String>>.value(<String, String>{}),
+      ) as _i4.Future<Map<String, String>>);
 
   @override
-  _i3.Future<void> deleteAll({
-    _i6.IOSOptions? iOptions = _i6.IOSOptions.defaultOptions,
-    _i6.AndroidOptions? aOptions,
-    _i6.LinuxOptions? lOptions,
+  _i4.Future<void> deleteAll({
+    _i2.IOSOptions? iOptions = _i2.IOSOptions.defaultOptions,
+    _i2.AndroidOptions? aOptions,
+    _i2.LinuxOptions? lOptions,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -389,7 +409,7 @@ class MockFlutterSecureStorage extends _i1.Mock
             #lOptions: lOptions,
           },
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 }

@@ -3,38 +3,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../application/providers/past_games_provider.dart';
 import '../../data/game_storage_database_helper.dart';
+import '../../domain/models/past_game.dart';
 import 'past_game.dart';
 
 /// A page that displays the past games.
-class PastGamesPage extends ConsumerStatefulWidget {
+class PastGamesPage extends ConsumerWidget {
   /// Creates a new [PastGamesPage] instance.
   const PastGamesPage({super.key});
 
   @override
-  ConsumerState<PastGamesPage> createState() => _PastGamesPageState();
-}
-
-class _PastGamesPageState extends ConsumerState<PastGamesPage> {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    ref.read(pastGamesProvider.notifier).fetchGames();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final pastGamesAsync = ref.watch(pastGamesProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Past Games'),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () {
-              ref.read(pastGamesProvider.notifier).fetchGames();
-            },
-          ),
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: GameStorageDatabaseHelper.instance.deleteAllGames,
@@ -58,7 +42,7 @@ class _PastGamesPageState extends ConsumerState<PastGamesPage> {
                 label: const Text('Delete all games'),
               ),
               Center(
-                child: Text('Error fetching past games: $error'),
+                child: Text('Error fetching past games, please try again.'),
               ),
               Divider(),
               Wrap(
@@ -71,7 +55,7 @@ class _PastGamesPageState extends ConsumerState<PastGamesPage> {
             ],
           );
         },
-        data: (games) {
+        data: (List<PastGame> games) {
           if (games.isEmpty) {
             return const Center(child: Text('No past games available.'));
           }
@@ -80,10 +64,12 @@ class _PastGamesPageState extends ConsumerState<PastGamesPage> {
             itemBuilder: (context, index) {
               final game = games[index];
 
-              final date = game.currentPlay.timestamp.toLocal().toString().split(' ')[0];
+              final date =
+                  game.currentPlay.timestamp.toLocal().toString().split(' ')[0];
 
-              final playerScores =
-                  game.players.map((player) => '${player.name}: ${player.score}').join(', ');
+              final playerScores = game.players
+                  .map((player) => '${player.name}: ${player.score}')
+                  .join(', ');
 
               return Container(
                 padding: const EdgeInsets.all(8),
@@ -97,7 +83,10 @@ class _PastGamesPageState extends ConsumerState<PastGamesPage> {
                         icon: const Icon(Icons.arrow_forward_rounded),
                         onPressed: () {
                           Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => PastGame(game: game)),
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  PastGameScreen(gameId: game.id),
+                            ),
                           );
                         },
                       ),

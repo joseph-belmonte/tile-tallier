@@ -1,9 +1,11 @@
 import '../../../play_game/domain/models/game.dart';
 import '../../data/game_storage_database_helper.dart';
+import '../models/past_game.dart';
 
 /// A repository for interacting with the game storage database.
 class GameRepository {
-  final GameStorageDatabaseHelper _databaseHelper = GameStorageDatabaseHelper.instance;
+  final GameStorageDatabaseHelper _databaseHelper =
+      GameStorageDatabaseHelper.instance;
 
   /// Saves a game to the database.
   Future<void> saveGame(Game game) async {
@@ -15,8 +17,13 @@ class GameRepository {
     }
   }
 
+  /// Toggles the favorite status of a game in the database.
+  Future<void> toggleFavorite(String gameId) async {
+    await _databaseHelper.toggleFavorite(gameId);
+  }
+
   /// Loads a game from the database.
-  Future<Game> loadGame(String id) async {
+  Future<PastGame> loadGame(String id) async {
     try {
       return await _databaseHelper.fetchGame(id);
     } catch (e) {
@@ -26,7 +33,7 @@ class GameRepository {
   }
 
   /// Loads all games from the database.
-  Future<List<Game>> loadAllGames() async {
+  Future<List<PastGame>> loadAllGames() async {
     try {
       return await _databaseHelper.fetchGames();
     } catch (e) {

@@ -6,11 +6,13 @@ import '../../play_game/domain/models/letter.dart';
 import '../../play_game/domain/models/play.dart';
 import '../../play_game/domain/models/player.dart';
 import '../../play_game/domain/models/word.dart';
+import '../domain/models/past_game.dart';
 
 /// A helper class for the game storage database.
 class GameStorageDatabaseHelper {
   /// The singleton instance of the [GameStorageDatabaseHelper].
-  static final GameStorageDatabaseHelper instance = GameStorageDatabaseHelper._init();
+  static final GameStorageDatabaseHelper instance =
+      GameStorageDatabaseHelper._init();
   static Database? _database;
 
   GameStorageDatabaseHelper._init();
@@ -38,7 +40,8 @@ class GameStorageDatabaseHelper {
   Future<void> _createDB(Database db, int version) async {
     await db.execute('''
       CREATE TABLE games (
-        id TEXT PRIMARY KEY
+        id TEXT PRIMARY KEY,
+        is_favorite INTEGER DEFAULT 0
       )
     ''');
 
@@ -96,7 +99,11 @@ class GameStorageDatabaseHelper {
     final db = await database;
 
     await db.transaction((txn) async {
-      await txn.insert('games', {'id': game.id}, conflictAlgorithm: ConflictAlgorithm.replace);
+      await txn.insert(
+        'games',
+        {'id': game.id},
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
 
       for (var player in game.players) {
         await txn.insert(
@@ -154,10 +161,11 @@ class GameStorageDatabaseHelper {
   }
 
   /// Fetches a game from the database.
-  Future<Game> fetchGame(String id) async {
+  Future<PastGame> fetchGame(String id) async {
     final db = await database;
 
     final gameMap = await db.query('games', where: 'id = ?', whereArgs: [id]);
+
     if (gameMap.isEmpty) {
       throw Exception('Game not found');
     }
@@ -165,8 +173,22 @@ class GameStorageDatabaseHelper {
     return await _assembleGame(gameMap.first);
   }
 
+  /// Toggles the favorite status of a game.
+  Future<void> toggleFavorite(String id) async {
+    final db = await database;
+
+    await db.rawUpdate(
+      '''
+      UPDATE games
+      SET is_favorite = 1 - is_favorite
+      WHERE id = ?
+    ''',
+      [id],
+    );
+  }
+
   /// Fetches all games from the database.
-  Future<List<Game>> fetchGames() async {
+  Future<List<PastGame>> fetchGames() async {
     final db = await database;
 
     final gamesMap = await db.query('games');
@@ -180,29 +202,35 @@ class GameStorageDatabaseHelper {
     return games;
   }
 
-  Future<Game> _assembleGame(Map<String, dynamic> gameJson) async {
+  Future<PastGame> _assembleGame(Map<String, dynamic> gameJson) async {
     final db = await database;
 
     final gameId = gameJson['id'] as String;
 
-    final playersMap = await db.query('players', where: 'gameId = ?', whereArgs: [gameId]);
+    final playersMap =
+        await db.query('players', where: 'gameId = ?', whereArgs: [gameId]);
     final players = await Future.wait(
       playersMap.map((player) async {
         var playerObj = Player.fromJson(player);
 
-        final playsMap = await db.query('plays', where: 'playerId = ?', whereArgs: [playerObj.id]);
+        final playsMap = await db
+            .query('plays', where: 'playerId = ?', whereArgs: [playerObj.id]);
 
         final plays = await Future.wait(
           playsMap.map((play) async {
             var playObj = Play.fromJson(play);
 
-            final wordsMap = await db.query('words', where: 'playId = ?', whereArgs: [playObj.id]);
+            final wordsMap = await db
+                .query('words', where: 'playId = ?', whereArgs: [playObj.id]);
             final words = await Future.wait(
               wordsMap.map((word) async {
                 var wordObj = Word.fromJson(word);
 
-                final lettersMap =
-                    await db.query('playedLetters', where: 'wordId = ?', whereArgs: [wordObj.id]);
+                final lettersMap = await db.query(
+                  'playedLetters',
+                  where: 'wordId = ?',
+                  whereArgs: [wordObj.id],
+                );
                 final letters = lettersMap.map(Letter.fromJson).toList();
 
                 wordObj = wordObj.copyWith(playedLetters: letters);
@@ -223,10 +251,13 @@ class GameStorageDatabaseHelper {
     final gameJsonMutable = Map<String, dynamic>.from(gameJson);
 
     // Ensure currentPlay and currentWord are not null
-    gameJsonMutable['currentPlay'] = gameJson['currentPlay'] ?? Play.createNew().toJson();
-    gameJsonMutable['currentWord'] = gameJson['currentWord'] ?? Word.createNew().toJson();
+    gameJsonMutable['currentPlay'] =
+        gameJson['currentPlay'] ?? Play.createNew().toJson();
+    gameJsonMutable['currentWord'] =
+        gameJson['currentWord'] ?? Word.createNew().toJson();
 
-    final game = Game.fromJson(gameJsonMutable).copyWith(players: players);
+    final game = PastGame.fromJson(gameJsonMutable).copyWith(players: players);
+
     return game;
   }
 
@@ -238,7 +269,8 @@ class GameStorageDatabaseHelper {
       await txn.delete('games', where: 'id = ?', whereArgs: [id]);
       await txn.delete('players', where: 'gameId = ?', whereArgs: [id]);
 
-      final plays = await txn.query('plays', where: 'gameId = ?', whereArgs: [id]);
+      final plays =
+          await txn.query('plays', where: 'gameId = ?', whereArgs: [id]);
       for (var play in plays) {
         await txn.delete('words', where: 'playId = ?', whereArgs: [play['id']]);
         await txn.delete(

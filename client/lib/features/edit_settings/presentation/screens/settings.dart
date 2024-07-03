@@ -1,56 +1,22 @@
-import 'dart:io';
-
-import 'package:feedback/feedback.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
 
-import '../../../manage_purchases/presentation/widgets/dismiss_dialog.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../widgets/account_management_tile.dart';
 import '../widgets/app_about_tile.dart';
+import '../widgets/restore_purchase_tile.dart';
+import '../widgets/submit_feedback_tile.dart';
 import 'appearance_settings.dart';
 import 'privacy_policy.dart';
 import 'terms_and_conditions.dart';
 
 /// A page that displays the settings for the app
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends ConsumerWidget {
   /// Creates a new [SettingsPage] instance.
   const SettingsPage({super.key});
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
-}
-
-class _SettingsPageState extends State<SettingsPage> {
-  // ignore: unused_field
-  bool _isLoading = false;
-
-  void _restore() async {
-    setState(() => _isLoading = true);
-
-    try {
-      await Purchases.restorePurchases();
-      await Purchases.appUserID;
-    } on PlatformException catch (e) {
-      if (mounted) {
-        await showDialog(
-          context: context,
-          builder: (BuildContext context) => ShowDialogToDismiss(
-            title: 'Error',
-            content: e.message ?? 'Unknown error',
-            buttonText: 'OK',
-          ),
-        );
-      }
-    }
-
-    setState(() => _isLoading = false);
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
@@ -71,49 +37,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
             ),
-            ListTile(
-              title: Text('Submit a bug report'),
-              subtitle: Text('Let us know if you find a bug'),
-              leading: Icon(Icons.bug_report_outlined),
-              trailing: Icon(Icons.arrow_forward),
-              onTap: () {
-                try {
-                  BetterFeedback.of(context)
-                      .show((UserFeedback feedback) async {
-                    // Save the screenshot to a file and get the file path
-                    final imageInUnit8List = feedback.screenshot;
-                    final tempDir = await getTemporaryDirectory();
-                    final file =
-                        await File('${tempDir.path}/image.png').create();
-                    file.writeAsBytesSync(imageInUnit8List);
-                    final email = Email(
-                      subject: 'App Feedback',
-                      body: feedback.text,
-                      attachmentPaths: [file.path],
-                      recipients: ['tile_tally@belmo.dev'],
-                    );
-
-                    try {
-                      await FlutterEmailSender.send(email);
-                      if (context.mounted) _showSuccessSnackBar(context);
-                    } on Exception catch (e) {
-                      if (context.mounted) _showErrorSnackBar(context, e);
-                    }
-                  });
-                } on Exception catch (error) {
-                  if (context.mounted) _showErrorSnackBar(context, error);
-                }
-              },
-            ),
-            ListTile(
-              title: Text('Restore Purchases'),
-              subtitle: Text(
-                'Restore your purchases if you have reinstalled the app',
-              ),
-              leading: Icon(Icons.restore),
-              trailing: Icon(Icons.arrow_forward),
-              onTap: () => _restore,
-            ),
+            SubmitFeedbackTile(),
+            RestorePurchaseTile(),
             ListTile(
               title: Text('Terms and Conditions'),
               subtitle: Text('Read the terms and conditions'),
@@ -140,22 +65,4 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
   }
-}
-
-void _showSuccessSnackBar(BuildContext context) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: const Text('Feedback sent successfully'),
-      backgroundColor: Theme.of(context).colorScheme.secondary,
-    ),
-  );
-}
-
-void _showErrorSnackBar(BuildContext context, Exception error) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text('Error sending feedback: $error'),
-      backgroundColor: Theme.of(context).colorScheme.error,
-    ),
-  );
 }

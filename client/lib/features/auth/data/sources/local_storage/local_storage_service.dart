@@ -2,8 +2,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 /// The [LocalStorageService] class is responsible for handling secure storage
 class LocalStorageService {
+  /// The secure storage instance
   final FlutterSecureStorage secureStorage;
 
+  /// Creates a new [LocalStorageService] instance
   LocalStorageService({required this.secureStorage});
 
   /// Deletes the stored authentication tokens

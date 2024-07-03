@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '../../../../utils/game_play_storage.dart';
+import '../../../../utils/toast.dart';
 import '../../../edit_settings/presentation/screens/settings.dart';
 import '../../../play_game/presentation/screens/pre_game.dart';
 import '../../../view_past_games/presentation/screens/past_games.dart';
@@ -81,17 +82,8 @@ class HomePage extends StatelessWidget {
         );
       } catch (e) {
         if (!context.mounted) return;
-        _showErrorSnackBar(context, e);
+        ToastService.error(context, 'Error fetching customer info');
       }
     }
-  }
-
-  void _showErrorSnackBar(BuildContext context, Object e) {
-    if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Error: $e'),
-      ),
-    );
   }
 }
