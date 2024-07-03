@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../enums/scrabble_edition.dart';
 import '../../../../theme/controllers/theme_providers.dart';
-import '../controllers/settings.dart';
+import '../controllers/settings_controller.dart';
 import 'theme_screen.dart';
 
 /// A page that displays the dark mode settings for the app

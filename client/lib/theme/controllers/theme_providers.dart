@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../enums/scrabble_edition.dart';
-import '../../features/edit_settings/presentation/controllers/settings.dart';
+import '../../features/edit_settings/presentation/controllers/settings_controller.dart';
 
 import '../models/app_theme.dart';
 

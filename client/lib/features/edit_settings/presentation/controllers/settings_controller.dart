@@ -25,8 +25,10 @@ class Settings {
   static const ThemeMode _themeMode = ThemeMode.system;
   static const int _schemeIndex = 0;
   // Surface mode defaults
-  static const FlexSurfaceMode _lightSurfaceMode = FlexSurfaceMode.highBackgroundLowScaffold;
-  static const FlexSurfaceMode _darkSurfaceMode = FlexSurfaceMode.highBackgroundLowScaffold;
+  static const FlexSurfaceMode _lightSurfaceMode =
+      FlexSurfaceMode.highBackgroundLowScaffold;
+  static const FlexSurfaceMode _darkSurfaceMode =
+      FlexSurfaceMode.highBackgroundLowScaffold;
   // surface blend level defaults
   static const int _lightBlendLevel = 10;
   static const int _darkBlendLevel = 25;
@@ -136,8 +138,8 @@ class Settings {
   /// state of the [ThemeMode], to toggle the application wide theme mode.
   ///
   /// Defaults to [_themeMode].
-  static final NotifierProvider<SettingsEntry<ThemeMode>, ThemeMode> themeModeProvider =
-      NotifierProvider<SettingsEntry<ThemeMode>, ThemeMode>(
+  static final NotifierProvider<SettingsEntry<ThemeMode>, ThemeMode>
+      themeModeProvider = NotifierProvider<SettingsEntry<ThemeMode>, ThemeMode>(
     () {
       return SettingsEntry<ThemeMode>(
         defaultValue: _themeMode,
@@ -176,7 +178,8 @@ class Settings {
   ///
   /// Defaults to [_lightSurfaceMode].
   static final NotifierProvider<SettingsEntry<FlexSurfaceMode>, FlexSurfaceMode>
-      lightSurfaceModeProvider = NotifierProvider<SettingsEntry<FlexSurfaceMode>, FlexSurfaceMode>(
+      lightSurfaceModeProvider =
+      NotifierProvider<SettingsEntry<FlexSurfaceMode>, FlexSurfaceMode>(
     () {
       return SettingsEntry<FlexSurfaceMode>(
         defaultValue: _lightSurfaceMode,
@@ -196,7 +199,8 @@ class Settings {
   ///
   /// Defaults to [_darkSurfaceMode].
   static final NotifierProvider<SettingsEntry<FlexSurfaceMode>, FlexSurfaceMode>
-      darkSurfaceModeProvider = NotifierProvider<SettingsEntry<FlexSurfaceMode>, FlexSurfaceMode>(
+      darkSurfaceModeProvider =
+      NotifierProvider<SettingsEntry<FlexSurfaceMode>, FlexSurfaceMode>(
     () {
       return SettingsEntry<FlexSurfaceMode>(
         defaultValue: _darkSurfaceMode,
@@ -215,8 +219,8 @@ class Settings {
   /// Provider for the strength of the blend level used by light surface mode.
   ///
   /// Defaults to [_lightBlendLevel].
-  static final NotifierProvider<SettingsEntry<int>, int> lightBlendLevelProvider =
-      NotifierProvider<SettingsEntry<int>, int>(
+  static final NotifierProvider<SettingsEntry<int>, int>
+      lightBlendLevelProvider = NotifierProvider<SettingsEntry<int>, int>(
     () {
       return SettingsEntry<int>(
         defaultValue: _lightBlendLevel,
@@ -235,8 +239,8 @@ class Settings {
   /// Provider for the strength of the blend level used by dark surface mode.
   ///
   /// Defaults to [_darkBlendLevel].
-  static final NotifierProvider<SettingsEntry<int>, int> darkBlendLevelProvider =
-      NotifierProvider<SettingsEntry<int>, int>(
+  static final NotifierProvider<SettingsEntry<int>, int>
+      darkBlendLevelProvider = NotifierProvider<SettingsEntry<int>, int>(
     () {
       return SettingsEntry<int>(
         defaultValue: _darkBlendLevel,
@@ -255,8 +259,8 @@ class Settings {
   /// Provider for the elevation level used on the AppBar theme.
   ///
   /// Defaults to [_appBarElevation].
-  static final NotifierProvider<SettingsEntry<double>, double> appBarElevationProvider =
-      NotifierProvider<SettingsEntry<double>, double>(
+  static final NotifierProvider<SettingsEntry<double>, double>
+      appBarElevationProvider = NotifierProvider<SettingsEntry<double>, double>(
     () {
       return SettingsEntry<double>(
         defaultValue: _appBarElevation,
@@ -276,8 +280,8 @@ class Settings {
   ///
   /// Defaults to [_lightAppBarStyle].
   /// Primary color is the default for Material 2 apps.
-  static final NotifierProvider<SettingsEntry<FlexAppBarStyle?>, FlexAppBarStyle?>
-      lightAppBarStyleProvider =
+  static final NotifierProvider<SettingsEntry<FlexAppBarStyle?>,
+          FlexAppBarStyle?> lightAppBarStyleProvider =
       NotifierProvider<SettingsEntry<FlexAppBarStyle?>, FlexAppBarStyle?>(
     () {
       return SettingsEntry<FlexAppBarStyle?>(
@@ -301,8 +305,9 @@ class Settings {
   /// the Material background color  for active theme mode. The used default
   /// here [FlexAppBarStyle.background] is the background color that gets
   /// primary color branding based on the current [FlexSurfaceMode] setting.
-  static final NotifierProvider<SettingsEntry<FlexAppBarStyle?>, FlexAppBarStyle?>
-      darkAppBarStyleProvider = NotifierProvider<SettingsEntry<FlexAppBarStyle?>, FlexAppBarStyle?>(
+  static final NotifierProvider<SettingsEntry<FlexAppBarStyle?>,
+          FlexAppBarStyle?> darkAppBarStyleProvider =
+      NotifierProvider<SettingsEntry<FlexAppBarStyle?>, FlexAppBarStyle?>(
     () {
       return SettingsEntry<FlexAppBarStyle?>(
         defaultValue: _darkAppBarStyle,
@@ -321,7 +326,8 @@ class Settings {
   /// Provider for android app bar scrim usage.
   ///
   /// Defaults to [_transparentStatusBar].
-  static final NotifierProvider<SettingsEntry<bool>, bool> transparentStatusBarProvider =
+  static final NotifierProvider<SettingsEntry<bool>, bool>
+      transparentStatusBarProvider =
       NotifierProvider<SettingsEntry<bool>, bool>(
     () {
       return SettingsEntry<bool>(
@@ -341,7 +347,8 @@ class Settings {
   /// Provider for the light [AppBar] opacity.
   ///
   /// Defaults to [_lightAppBarOpacity].
-  static final NotifierProvider<SettingsEntry<double>, double> lightAppBarOpacityProvider =
+  static final NotifierProvider<SettingsEntry<double>, double>
+      lightAppBarOpacityProvider =
       NotifierProvider<SettingsEntry<double>, double>(
     () {
       return SettingsEntry<double>(
@@ -361,7 +368,8 @@ class Settings {
   /// Provider for the dark [AppBar] opacity.
   ///
   /// Defaults to [_darkAppBarOpacity].
-  static final NotifierProvider<SettingsEntry<double>, double> darkAppBarOpacityProvider =
+  static final NotifierProvider<SettingsEntry<double>, double>
+      darkAppBarOpacityProvider =
       NotifierProvider<SettingsEntry<double>, double>(
     () {
       return SettingsEntry<double>(
@@ -381,8 +389,8 @@ class Settings {
   /// Provider for using true black, instead of normal dark, in dark theme mode.
   ///
   /// Defaults to [_darkIsTrueBlack].
-  static final NotifierProvider<SettingsEntry<bool>, bool> darkIsTrueBlackProvider =
-      NotifierProvider<SettingsEntry<bool>, bool>(
+  static final NotifierProvider<SettingsEntry<bool>, bool>
+      darkIsTrueBlackProvider = NotifierProvider<SettingsEntry<bool>, bool>(
     () {
       return SettingsEntry<bool>(
         defaultValue: _darkIsTrueBlack,
@@ -412,8 +420,8 @@ class Settings {
   /// scheme colors are, and personal preferences.
   ///
   /// Defaults to [_darkComputeLevel]%.
-  static final NotifierProvider<SettingsEntry<int>, int> darkComputeLevelProvider =
-      NotifierProvider<SettingsEntry<int>, int>(
+  static final NotifierProvider<SettingsEntry<int>, int>
+      darkComputeLevelProvider = NotifierProvider<SettingsEntry<int>, int>(
     () {
       return SettingsEntry<int>(
         defaultValue: _darkComputeLevel,
@@ -433,8 +441,8 @@ class Settings {
   /// Provider for using true black, instead of normal dark, in dark theme mode.
   ///
   /// Defaults to [_usePrimaryKeyColor].
-  static final NotifierProvider<SettingsEntry<bool>, bool> usePrimaryKeyColorProvider =
-      NotifierProvider<SettingsEntry<bool>, bool>(
+  static final NotifierProvider<SettingsEntry<bool>, bool>
+      usePrimaryKeyColorProvider = NotifierProvider<SettingsEntry<bool>, bool>(
     () {
       return SettingsEntry<bool>(
         defaultValue: _usePrimaryKeyColor,
@@ -454,7 +462,8 @@ class Settings {
   /// Provider for using true black, instead of normal dark, in dark theme mode.
   ///
   /// Defaults to [_useSecondaryKeyColor].
-  static final NotifierProvider<SettingsEntry<bool>, bool> useSecondaryKeyColorProvider =
+  static final NotifierProvider<SettingsEntry<bool>, bool>
+      useSecondaryKeyColorProvider =
       NotifierProvider<SettingsEntry<bool>, bool>(
     () {
       return SettingsEntry<bool>(
@@ -475,8 +484,8 @@ class Settings {
   /// Provider for using true black, instead of normal dark, in dark theme mode.
   ///
   /// Defaults to [_useTertiaryKeyColor].
-  static final NotifierProvider<SettingsEntry<bool>, bool> useTertiaryKeyColorProvider =
-      NotifierProvider<SettingsEntry<bool>, bool>(
+  static final NotifierProvider<SettingsEntry<bool>, bool>
+      useTertiaryKeyColorProvider = NotifierProvider<SettingsEntry<bool>, bool>(
     () {
       return SettingsEntry<bool>(
         defaultValue: _useTertiaryKeyColor,
@@ -521,8 +530,8 @@ class Settings {
   /// Provider for using true black, instead of normal dark, in dark theme mode.
   ///
   /// Defaults to [_useSubThemes].
-  static final NotifierProvider<SettingsEntry<bool>, bool> useSubThemesProvider =
-      NotifierProvider<SettingsEntry<bool>, bool>(
+  static final NotifierProvider<SettingsEntry<bool>, bool>
+      useSubThemesProvider = NotifierProvider<SettingsEntry<bool>, bool>(
     () {
       return SettingsEntry<bool>(
         defaultValue: _useSubThemes,
@@ -541,8 +550,8 @@ class Settings {
   /// Provider for the default border radius.
   ///
   /// Defaults to [_defaultRadius].
-  static final NotifierProvider<SettingsEntry<double?>, double?> defaultRadiusProvider =
-      NotifierProvider<SettingsEntry<double?>, double?>(
+  static final NotifierProvider<SettingsEntry<double?>, double?>
+      defaultRadiusProvider = NotifierProvider<SettingsEntry<double?>, double?>(
     () {
       return SettingsEntry<double?>(
         defaultValue: _defaultRadius,
@@ -554,8 +563,8 @@ class Settings {
   );
 
   /// Key used for storing if we use a premium theme.
-  static final NotifierProvider<SettingsEntry<bool>, bool> isPremiumThemeProvider =
-      NotifierProvider<SettingsEntry<bool>, bool>(
+  static final NotifierProvider<SettingsEntry<bool>, bool>
+      isPremiumThemeProvider = NotifierProvider<SettingsEntry<bool>, bool>(
     () {
       return SettingsEntry<bool>(
         defaultValue: false,
@@ -566,7 +575,8 @@ class Settings {
   );
 
   /// Key used for storing the selected premium theme.
-  static final NotifierProvider<SettingsEntry<PremiumTheme?>, PremiumTheme?> premiumThemeProvider =
+  static final NotifierProvider<SettingsEntry<PremiumTheme?>, PremiumTheme?>
+      premiumThemeProvider =
       NotifierProvider<SettingsEntry<PremiumTheme?>, PremiumTheme?>(
     () {
       return SettingsEntry<PremiumTheme?>(
@@ -575,5 +585,17 @@ class Settings {
       );
     },
     name: 'premiumThemeProvider',
+  );
+
+  /// Key used for storing if word check is enabled.
+  static final NotifierProvider<SettingsEntry<bool>, bool> isWordCheckProvider =
+      NotifierProvider<SettingsEntry<bool>, bool>(
+    () {
+      return SettingsEntry<bool>(
+        defaultValue: true,
+        key: 'isWordCheck',
+      );
+    },
+    name: 'isWordCheckProvider',
   );
 }

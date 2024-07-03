@@ -4,7 +4,7 @@ import 'package:feedback/feedback.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../features/edit_settings/presentation/controllers/settings.dart';
+import '../features/edit_settings/presentation/controllers/settings_controller.dart';
 import '../features/shared/presentation/screens/home.dart';
 
 import 'controllers/theme_providers.dart';
