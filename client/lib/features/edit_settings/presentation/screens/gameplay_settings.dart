@@ -18,8 +18,9 @@ class GameplaySettingsPage extends ConsumerWidget {
         children: <Widget>[
           SwitchListTile(
             title: Text('Word Check'),
-            subtitle:
-                Text('Use the official Scrabble word list to check words'),
+            subtitle: Text(
+              'Check words against an open-source word list.',
+            ),
             value: ref.watch(Settings.isWordCheckProvider),
             onChanged: (bool value) {
               ref.read(Settings.isWordCheckProvider.notifier).set(value);
