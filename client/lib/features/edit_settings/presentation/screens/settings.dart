@@ -7,6 +7,7 @@ import '../widgets/app_about_tile.dart';
 import '../widgets/restore_purchase_tile.dart';
 import '../widgets/submit_feedback_tile.dart';
 import 'appearance_settings.dart';
+import 'gameplay_settings.dart';
 import 'privacy_policy.dart';
 import 'terms_and_conditions.dart';
 
@@ -57,6 +58,17 @@ class SettingsPage extends ConsumerWidget {
               trailing: Icon(Icons.arrow_forward),
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const PrivacyPolicy()),
+              ),
+            ),
+            ListTile(
+              title: Text('Gameplay'),
+              subtitle: Text('Edit the gameplay settings'),
+              leading: Icon(Icons.sports_esports),
+              trailing: Icon(Icons.arrow_forward),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const GameplaySettingsPage(),
+                ),
               ),
             ),
             AppAboutTile(),

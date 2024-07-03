@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../edit_settings/presentation/controllers/settings_controller.dart';
 import '../../../application/providers/active_game.dart';
 
 import 'scrabble_word.dart';
@@ -45,20 +46,24 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
 
   /// Submits the word in the input field to the active play.
   Future<void> _handleWordSubmit(String value) async {
-    final isValid =
-        await ref.read(activeGameProvider.notifier).isValidWord(value);
+    // if word check is enabled:
+    final wordCheckEnabled = ref.watch(Settings.isWordCheckProvider);
 
-    if (isValid) {
-      ref.read(activeGameProvider.notifier).addWordToCurrentPlay(value);
-      _textController.clear();
-    } else {
-      if (RegExp(' ').allMatches(value).length > 2) {
-        _showInvalidWordSnackBar('Too many blank tiles!');
-      } else {
-        _showInvalidWordSnackBar('$value is not a valid word.');
+    if (wordCheckEnabled) {
+      final isValid =
+          await ref.read(activeGameProvider.notifier).isValidWord(value);
+
+      if (!isValid) {
+        if (RegExp(' ').allMatches(value).length > 2) {
+          _showInvalidWordSnackBar('Too many blank tiles!');
+        } else {
+          _showInvalidWordSnackBar('$value is not a valid word.');
+        }
+        return;
       }
-      return;
     }
+    ref.read(activeGameProvider.notifier).addWordToCurrentPlay(value);
+    _textController.clear();
   }
 
   void _showInvalidWordSnackBar(String message) {
