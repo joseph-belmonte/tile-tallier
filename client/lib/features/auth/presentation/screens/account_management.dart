@@ -5,17 +5,10 @@ import '../../../../utils/toast.dart';
 import '../../application/providers/auth_provider.dart';
 
 /// A screen for managing the user's account.
-class AccountManagementScreen extends ConsumerStatefulWidget {
+class AccountManagementScreen extends ConsumerWidget {
   /// Creates a new [AccountManagementScreen] instance.
   const AccountManagementScreen({super.key});
 
-  @override
-  ConsumerState<AccountManagementScreen> createState() =>
-      _AccountManagementScreenState();
-}
-
-class _AccountManagementScreenState
-    extends ConsumerState<AccountManagementScreen> {
   Future<void> _deleteAccount(BuildContext context, WidgetRef ref) async {
     await ref.read(authProvider.notifier).deleteAccount();
 
@@ -35,7 +28,7 @@ class _AccountManagementScreenState
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authProvider);
 
     return Scaffold(
