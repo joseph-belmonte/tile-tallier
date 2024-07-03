@@ -14,9 +14,7 @@ class CustomerInfoNotifier extends StateNotifier<CustomerInfo?> {
       final customerInfo = await Purchases.getCustomerInfo();
       state = customerInfo;
     } on PlatformException catch (e) {
-      // Error fetching customer info
       print(e.message);
-
       state = null;
     }
   }
@@ -24,10 +22,11 @@ class CustomerInfoNotifier extends StateNotifier<CustomerInfo?> {
   /// Restores purchases for the user.
   Future<void> restorePurchases() async {
     try {
-      final customerInfo = await Purchases.restorePurchases();
-      state = customerInfo;
+      await Purchases.restorePurchases();
+      await _fetchCustomerInfo();
+      print('Purchases restored successfully');
     } catch (e) {
-      print(e);
+      print('Error restoring purchases: $e');
     }
   }
 
