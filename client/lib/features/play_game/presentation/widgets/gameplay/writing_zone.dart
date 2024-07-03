@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../edit_settings/presentation/controllers/settings_controller.dart';
 import '../../../application/providers/active_game.dart';
 
 import 'scrabble_word.dart';
@@ -45,19 +46,24 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
 
   /// Submits the word in the input field to the active play.
   Future<void> _handleWordSubmit(String value) async {
-    final isValid = await ref.read(activeGameProvider.notifier).isValidWord(value);
+    // if word check is enabled:
+    final wordCheckEnabled = ref.watch(Settings.isWordCheckProvider);
 
-    if (isValid) {
-      ref.read(activeGameProvider.notifier).addWordToCurrentPlay(value);
-      _textController.clear();
-    } else {
-      if (RegExp(' ').allMatches(value).length > 2) {
-        _showInvalidWordSnackBar('Too many blank tiles!');
-      } else {
-        _showInvalidWordSnackBar('$value is not a valid word.');
+    if (wordCheckEnabled) {
+      final isValid =
+          await ref.read(activeGameProvider.notifier).isValidWord(value);
+
+      if (!isValid) {
+        if (RegExp(' ').allMatches(value).length > 2) {
+          _showInvalidWordSnackBar('Too many blank tiles!');
+        } else {
+          _showInvalidWordSnackBar('$value is not a valid word.');
+        }
+        return;
       }
-      return;
     }
+    ref.read(activeGameProvider.notifier).addWordToCurrentPlay(value);
+    _textController.clear();
   }
 
   void _showInvalidWordSnackBar(String message) {
@@ -74,7 +80,9 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
   Future<void> _handleEndTurn() async {
     if (_textController.text.isNotEmpty) {
       await _handleWordSubmit(_textController.text).then((_) {
-        if (_textController.text.isEmpty) ref.read(activeGameProvider.notifier).endTurn();
+        if (_textController.text.isEmpty) {
+          ref.read(activeGameProvider.notifier).endTurn();
+        }
       });
     } else {
       ref.read(activeGameProvider.notifier).endTurn();
@@ -122,7 +130,10 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
                 child: ScrabbleWordWidget(
                   key: ValueKey(game.currentWord),
                   game.currentWord,
-                  (index) => gameNotifier.toggleScoreMultiplier(game.currentWord, index),
+                  (index) => gameNotifier.toggleScoreMultiplier(
+                    game.currentWord,
+                    index,
+                  ),
                 ),
               ),
             ),
@@ -138,7 +149,9 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
               labelText: 'Play a word',
               border: OutlineInputBorder(),
             ),
-            inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]'))],
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]')),
+            ],
             textCapitalization: TextCapitalization.characters,
             autocorrect: false,
           ),
@@ -160,7 +173,8 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
             ),
             IconButton(
               onPressed: _handleEndTurn,
-              icon: (_textController.text.isEmpty && game.currentPlay.playedWords.isEmpty)
+              icon: (_textController.text.isEmpty &&
+                      game.currentPlay.playedWords.isEmpty)
                   ? Icon(Icons.skip_next, semanticLabel: 'Skip turn')
                   : Icon(Icons.redo, semanticLabel: 'End turn and submit word'),
             ),

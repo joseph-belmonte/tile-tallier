@@ -10,7 +10,7 @@ import '../../../../theme/models/app_theme.dart';
 import '../../../../utils/show_paywall.dart';
 import '../../../manage_purchases/data/constants/revenue_cat.dart';
 import '../../../manage_purchases/presentation/widgets/dismiss_dialog.dart';
-import '../controllers/settings.dart';
+import '../controllers/settings_controller.dart';
 
 /// A page that displays a list of theme options for the app
 class ThemeScreen extends ConsumerStatefulWidget {

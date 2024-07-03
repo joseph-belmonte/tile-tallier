@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/models/key_value_db.dart';
-import '../../presentation/controllers/settings.dart';
+import '../../presentation/controllers/settings_controller.dart';
 import 'key_value_db_provider.dart';
 
 // Set the bool flag to true to show debug prints. Even if you forgot
