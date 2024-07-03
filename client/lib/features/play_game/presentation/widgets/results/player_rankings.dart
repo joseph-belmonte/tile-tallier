@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../domain/models/game.dart';
 
+/// A widget that displays the player rankings for a game.
 class PlayerRankings extends StatelessWidget {
+  /// Creates a new [PlayerRankings] instance.
   const PlayerRankings({
     required Game game,
     super.key,
