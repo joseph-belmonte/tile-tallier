@@ -4,11 +4,12 @@
 # https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 version: 2
 updates:
-  - package-ecosystem: "pub"
-    directory: "/client" # Location of the Flutter project
-    schedule:
-      # limit updates because of compatibility issues
-      interval: "monthly"
+  # flutter pub get will automatically find the most compatible version of all packages.
+  # - package-ecosystem: "pub"
+  #   directory: "/client" # Location of the Flutter project
+  #   schedule:
+  #     # limit updates because of compatibility issues
+  #     interval: "monthly"
 
   - package-ecosystem: "pip"
     directory: "/server" # Location of the Django project
