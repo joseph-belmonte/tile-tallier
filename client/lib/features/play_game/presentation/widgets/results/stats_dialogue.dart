@@ -14,81 +14,62 @@ class StatsDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final topPlay = _game.highestScoringPlay;
     return AlertDialog(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
       title: Text(
-        'Game Statistics',
+        'Game Summary',
         style: Theme.of(context).textTheme.headlineSmall!.copyWith(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
       ),
       content: SingleChildScrollView(
+        primary: true,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Text(
-                'Total Plays: ${_game.plays.length}',
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-              ),
+            Text('Winner: ${_game.sortedPlayers.first.name}'),
+            Text('Total Plays: ${_game.plays.length}'),
+            SizedBox(height: 16),
+            Text('Longest Word:'),
+            Text(_game.longestWord),
+            SizedBox(height: 16),
+            Text('Highest Scoring Word:'),
+            Text(
+              '${_game.highestScoringWord.word} - ${_game.highestScoringWord.score}',
             ),
-            Divider(),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                'Longest Word: ${_game.longestWord}',
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                'Highest Scoring Word:\n${_game.highestScoringWord.word} - ${_game.highestScoringWord.score}',
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Text(
-                'Highest Scoring Turn:',
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-              ),
-            ),
-            if (_game.highestScoringPlay != null)
-              ..._game.highestScoringPlay!.playedWords.map(
-                (word) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Text(
-                    '${word.word} - ${word.score}',
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
+            SizedBox(height: 16),
+            Text('Highest Scoring Play:'),
+            if (topPlay != null)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Player: ${_game.players.where((player) => player.id == topPlay.playerId).first.name}',
                   ),
-                ),
+                  Text(
+                    'Play Score: ${topPlay.score} ${topPlay.isBingo ? '- Bingo!' : ''}',
+                  ),
+                  SizedBox(height: 8),
+                  Text('Played Words:'),
+                  ...topPlay.playedWords.map(
+                    (word) => Text('${word.word} - ${word.score}'),
+                  ),
+                ],
               ),
-            Divider(),
           ],
         ),
       ),
       actions: <Widget>[
         TextButton(
           style: TextButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.surface,
+            backgroundColor: Theme.of(context).colorScheme.primary,
           ),
           onPressed: () => Navigator.of(context).pop(),
           child: Text(
             'Close',
             style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurface,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
           ),
         ),

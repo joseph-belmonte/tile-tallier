@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
+// import 'package:purchases_flutter/purchases_flutter.dart';
 
-import '../../../../utils/game_play_storage.dart';
-import '../../../../utils/toast.dart';
+// import '../../../../utils/game_play_storage.dart';
+// import '../../../../utils/toast.dart';
 import '../../../edit_settings/presentation/screens/settings.dart';
 import '../../../play_game/presentation/screens/pre_game.dart';
 import '../../../view_past_games/presentation/screens/past_games.dart';
@@ -58,32 +58,35 @@ class HomePage extends StatelessWidget {
   /// Determines if the user can play a game. Routes to the [PreGamePage] if they can, presents
   /// a [PrePaywallDialogue] if they cannot.
   void _validateGameplay(BuildContext context) async {
-    final hasPlayed = await GamePlayStorage.hasPlayedToday();
-    if (!hasPlayed) {
-      if (!context.mounted) return;
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const PreGamePage()),
-      );
-      return;
-    }
-    final customerInfo = await Purchases.getCustomerInfo();
-    if (customerInfo.entitlements.active.isNotEmpty) {
-      if (!context.mounted) return;
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const PreGamePage()),
-      );
-    } else {
-      try {
-        if (!context.mounted) return;
+    // final hasPlayed = await GamePlayStorage.hasPlayedToday();
+    // if (!hasPlayed) {
+    //   if (!context.mounted) return;
+    //   Navigator.of(context).push(
+    //     MaterialPageRoute(builder: (context) => const PreGamePage()),
+    //   );
+    //   return;
+    // }
+    // final customerInfo = await Purchases.getCustomerInfo();
+    // if (customerInfo.entitlements.active.isNotEmpty) {
+    //   if (!context.mounted) return;
+    //   Navigator.of(context).push(
+    //     MaterialPageRoute(builder: (context) => const PreGamePage()),
+    //   );
+    // } else {
+    //   try {
+    //     if (!context.mounted) return;
 
-        showDialog(
-          context: context,
-          builder: (_) => PrePaywallDialogue(),
-        );
-      } catch (e) {
-        if (!context.mounted) return;
-        ToastService.error(context, 'Error fetching customer info');
-      }
-    }
+    //     showDialog(
+    //       context: context,
+    //       builder: (_) => PrePaywallDialogue(),
+    //     );
+    //   } catch (e) {
+    //     if (!context.mounted) return;
+    //     ToastService.error(context, 'Error fetching customer info');
+    //   }
+    // }
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const PreGamePage()),
+    );
   }
 }
