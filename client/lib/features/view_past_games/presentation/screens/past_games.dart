@@ -63,9 +63,12 @@ class PastGamesPage extends ConsumerWidget {
             itemCount: games.length,
             itemBuilder: (context, index) {
               final game = games[index];
+              final playCount = game.plays.length;
 
-              final date =
-                  game.currentPlay.timestamp.toLocal().toString().split(' ')[0];
+              final date = game.plays[playCount - 1].timestamp
+                  .toLocal()
+                  .toString()
+                  .split(' ')[0];
 
               final playerScores = game.players
                   .map((player) => '${player.name}: ${player.score}')
