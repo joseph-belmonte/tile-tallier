@@ -84,4 +84,13 @@ class Player with _$Player {
     final score = totalPlayScores - endRackScore;
     return score;
   }
+
+  /// Lists all plays by the player.
+  List<Play> get allPlays {
+    final allPlays = <Play>[];
+    for (final play in plays) {
+      allPlays.add(play);
+    }
+    return allPlays;
+  }
 }
