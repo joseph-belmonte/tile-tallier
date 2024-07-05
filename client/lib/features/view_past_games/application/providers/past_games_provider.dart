@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../play_game/domain/models/player.dart';
+import '../../domain/models/player.dart';
 import '../../domain/models/past_game.dart';
 import '../../domain/repositories/game_repository.dart';
 

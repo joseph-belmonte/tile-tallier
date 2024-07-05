@@ -5,7 +5,7 @@ import '../../play_game/domain/models/game.dart';
 import '../../play_game/domain/models/game_player.dart';
 import '../../play_game/domain/models/letter.dart';
 import '../../play_game/domain/models/play.dart';
-import '../../play_game/domain/models/player.dart';
+import '../domain/models/player.dart';
 import '../../play_game/domain/models/word.dart';
 import '../domain/models/past_game.dart';
 
