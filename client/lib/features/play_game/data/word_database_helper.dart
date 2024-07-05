@@ -69,7 +69,8 @@ class WordDatabaseHelper {
   Future<int?> queryRowCount({Database? txn}) async {
     final db = txn ?? await instance.database;
     return Sqflite.firstIntValue(
-        await db.rawQuery('SELECT COUNT(*) FROM $table'));
+      await db.rawQuery('SELECT COUNT(*) FROM $table'),
+    );
   }
 
   /// Delete all rows in the table
