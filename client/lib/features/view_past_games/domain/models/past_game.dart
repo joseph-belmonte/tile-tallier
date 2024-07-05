@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../play_game/domain/models/game.dart';
+import '../../../play_game/domain/models/game_player.dart';
 import '../../../play_game/domain/models/play.dart';
-import '../../../play_game/domain/models/player.dart';
 import '../../../play_game/domain/models/word.dart';
 
 part 'past_game.freezed.dart';
@@ -10,7 +10,7 @@ part 'past_game.g.dart';
 
 @freezed
 
-/// Represents a past game in the storage.
+/// Represents a game that has been completed and is stored in the database.
 class PastGame with _$PastGame {
   /// Creates a new [PastGame] instance.
   const factory PastGame({
@@ -18,7 +18,7 @@ class PastGame with _$PastGame {
     required Play currentPlay,
     required Word currentWord,
     @Default(false) bool isFavorite,
-    @Default([]) List<Player> players,
+    @Default([]) List<GamePlayer> players,
     @Default(0) int currentPlayerIndex,
   }) = _PastGame;
 
@@ -41,11 +41,11 @@ class PastGame with _$PastGame {
   const PastGame._();
 
   /// Returns the players sorted by score.
-  List<Player> get sortedPlayers =>
+  List<GamePlayer> get sortedPlayers =>
       [...players]..sort((a, b) => b.score.compareTo(a.score));
 
   /// Returns the current player.
-  Player get currentPlayer => players[currentPlayerIndex];
+  GamePlayer get currentPlayer => players[currentPlayerIndex];
 
   /// Returns all the plays made by all players, sorted by timestamp.
   List<Play> get plays => players.expand((player) => player.plays).toList()

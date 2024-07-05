@@ -2,6 +2,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../play_game/domain/models/game.dart';
+import '../../play_game/domain/models/game_player.dart';
 import '../../play_game/domain/models/letter.dart';
 import '../../play_game/domain/models/play.dart';
 import '../../play_game/domain/models/player.dart';
@@ -202,6 +203,24 @@ class GameStorageDatabaseHelper {
     return games;
   }
 
+  /// Fetches all players from the database.
+  Future<List<Player>> fetchAllPlayers() async {
+    final db = await database;
+    final result = await db.query('players');
+    return result.map(Player.fromJson).toList();
+  }
+
+  /// Update a player's name.
+  Future<void> updatePlayerName(String playerId, String newName) async {
+    final db = await database;
+    await db.update(
+      'players',
+      {'name': newName},
+      where: 'id = ?',
+      whereArgs: [playerId],
+    );
+  }
+
   Future<PastGame> _assembleGame(Map<String, dynamic> gameJson) async {
     final db = await database;
 
@@ -211,7 +230,7 @@ class GameStorageDatabaseHelper {
         await db.query('players', where: 'gameId = ?', whereArgs: [gameId]);
     final players = await Future.wait(
       playersMap.map((player) async {
-        var playerObj = Player.fromJson(player);
+        var playerObj = GamePlayer.fromJson(player);
 
         final playsMap = await db
             .query('plays', where: 'playerId = ?', whereArgs: [playerObj.id]);

@@ -13,7 +13,7 @@ _$PastGameImpl _$$PastGameImplFromJson(Map<String, dynamic> json) =>
       currentWord: Word.fromJson(json['currentWord'] as Map<String, dynamic>),
       isFavorite: json['isFavorite'] as bool? ?? false,
       players: (json['players'] as List<dynamic>?)
-              ?.map((e) => Player.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => GamePlayer.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
       currentPlayerIndex: (json['currentPlayerIndex'] as num?)?.toInt() ?? 0,

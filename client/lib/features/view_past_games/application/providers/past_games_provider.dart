@@ -1,11 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../play_game/domain/models/player.dart';
 import '../../domain/models/past_game.dart';
 import '../../domain/repositories/game_repository.dart';
 
 /// A provider that fetches the past games from the database.
 class PastGamesNotifier extends StateNotifier<AsyncValue<List<PastGame>>> {
-  final GameRepository _gameRepository;
+  final PastGameRepository _gameRepository;
 
   /// Creates a new [PastGamesNotifier] instance.
   PastGamesNotifier(this._gameRepository) : super(const AsyncLoading()) {
@@ -37,11 +38,16 @@ class PastGamesNotifier extends StateNotifier<AsyncValue<List<PastGame>>> {
       state = AsyncValue.error(e, stackTrace);
     }
   }
+
+  /// Fetches all [Player]s from the database.
+  Future<List<Player>> fetchAllPlayers() async {
+    return await _gameRepository.fetchAllPlayers();
+  }
 }
 
 /// A provider that provides the past games.
 final pastGamesProvider =
     StateNotifierProvider<PastGamesNotifier, AsyncValue<List<PastGame>>>((ref) {
-  final gameRepository = GameRepository();
-  return PastGamesNotifier(gameRepository);
+  final pastGameRepository = PastGameRepository();
+  return PastGamesNotifier(pastGameRepository);
 });

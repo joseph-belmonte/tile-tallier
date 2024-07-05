@@ -1,9 +1,10 @@
 import '../../../play_game/domain/models/game.dart';
+import '../../../play_game/domain/models/player.dart';
 import '../../data/game_storage_database_helper.dart';
 import '../models/past_game.dart';
 
 /// A repository for interacting with the game storage database.
-class GameRepository {
+class PastGameRepository {
   final GameStorageDatabaseHelper _databaseHelper =
       GameStorageDatabaseHelper.instance;
 
@@ -19,7 +20,12 @@ class GameRepository {
 
   /// Toggles the favorite status of a game in the database.
   Future<void> toggleFavorite(String gameId) async {
-    await _databaseHelper.toggleFavorite(gameId);
+    try {
+      await _databaseHelper.toggleFavorite(gameId);
+    } catch (e) {
+      // Handle or rethrow the error as needed
+      throw Exception('Failed to toggle favorite status: $e');
+    }
   }
 
   /// Loads a game from the database.
@@ -59,6 +65,26 @@ class GameRepository {
     } catch (e) {
       // Handle or rethrow the error as needed
       throw Exception('Failed to delete all games: $e');
+    }
+  }
+
+  /// Fetches all players from the database.
+  Future<List<Player>> fetchAllPlayers() async {
+    try {
+      return await _databaseHelper.fetchAllPlayers();
+    } catch (e) {
+      // Handle or rethrow the error as needed
+      throw Exception('Failed to fetch players: $e');
+    }
+  }
+
+  /// Updates a player's name in the database.
+  Future<void> updatePlayerName(String playerId, String newName) async {
+    try {
+      await _databaseHelper.updatePlayerName(playerId, newName);
+    } catch (e) {
+      // Handle or rethrow the error as needed
+      throw Exception('Failed to update player name: $e');
     }
   }
 }
