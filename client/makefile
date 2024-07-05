@@ -4,6 +4,9 @@ buildrunner:
 lint:
 	dart format .
 
+test.dart:
+	flutter test
+
 clean_and_get:
 	flutter clean
 	flutter pub get
