@@ -77,32 +77,56 @@ final Map<PremiumTheme, Typography> premiumThemeTypography = {
   PremiumTheme.vaporwave: Typography.material2021().copyWith(),
   PremiumTheme.windows98: Typography.material2021().copyWith(
     black: TextTheme(
-      displayLarge: TextStyle(fontFamily: 'W95FA', fontSize: 96, color: Colors.black),
-      displayMedium: TextStyle(fontFamily: 'W95FA', fontSize: 60, color: Colors.black),
-      displaySmall: TextStyle(fontFamily: 'W95FA', fontSize: 48, color: Colors.black),
-      titleLarge: TextStyle(fontFamily: 'W95FA', fontSize: 24, color: Colors.black),
-      titleMedium: TextStyle(fontFamily: 'W95FA', fontSize: 20, color: Colors.black),
-      titleSmall: TextStyle(fontFamily: 'W95FA', fontSize: 16, color: Colors.black),
-      bodyLarge: TextStyle(fontFamily: 'W95FA', fontSize: 14, color: Colors.black),
-      bodyMedium: TextStyle(fontFamily: 'W95FA', fontSize: 12, color: Colors.black),
-      bodySmall: TextStyle(fontFamily: 'W95FA', fontSize: 10, color: Colors.black),
-      labelLarge: TextStyle(fontFamily: 'W95FA', fontSize: 14, color: Colors.black),
-      labelMedium: TextStyle(fontFamily: 'W95FA', fontSize: 12, color: Colors.black),
-      labelSmall: TextStyle(fontFamily: 'W95FA', fontSize: 10, color: Colors.black),
+      displayLarge:
+          TextStyle(fontFamily: 'W95FA', fontSize: 96, color: Colors.black),
+      displayMedium:
+          TextStyle(fontFamily: 'W95FA', fontSize: 60, color: Colors.black),
+      displaySmall:
+          TextStyle(fontFamily: 'W95FA', fontSize: 48, color: Colors.black),
+      titleLarge:
+          TextStyle(fontFamily: 'W95FA', fontSize: 24, color: Colors.black),
+      titleMedium:
+          TextStyle(fontFamily: 'W95FA', fontSize: 20, color: Colors.black),
+      titleSmall:
+          TextStyle(fontFamily: 'W95FA', fontSize: 16, color: Colors.black),
+      bodyLarge:
+          TextStyle(fontFamily: 'W95FA', fontSize: 14, color: Colors.black),
+      bodyMedium:
+          TextStyle(fontFamily: 'W95FA', fontSize: 12, color: Colors.black),
+      bodySmall:
+          TextStyle(fontFamily: 'W95FA', fontSize: 10, color: Colors.black),
+      labelLarge:
+          TextStyle(fontFamily: 'W95FA', fontSize: 14, color: Colors.black),
+      labelMedium:
+          TextStyle(fontFamily: 'W95FA', fontSize: 12, color: Colors.black),
+      labelSmall:
+          TextStyle(fontFamily: 'W95FA', fontSize: 10, color: Colors.black),
     ),
     white: TextTheme(
-      displayLarge: TextStyle(fontFamily: 'W95FA', fontSize: 96, color: Colors.white),
-      displayMedium: TextStyle(fontFamily: 'W95FA', fontSize: 60, color: Colors.white),
-      displaySmall: TextStyle(fontFamily: 'W95FA', fontSize: 48, color: Colors.white),
-      titleLarge: TextStyle(fontFamily: 'W95FA', fontSize: 24, color: Colors.white),
-      titleMedium: TextStyle(fontFamily: 'W95FA', fontSize: 20, color: Colors.white),
-      titleSmall: TextStyle(fontFamily: 'W95FA', fontSize: 16, color: Colors.white),
-      bodyLarge: TextStyle(fontFamily: 'W95FA', fontSize: 14, color: Colors.white),
-      bodyMedium: TextStyle(fontFamily: 'W95FA', fontSize: 12, color: Colors.white),
-      bodySmall: TextStyle(fontFamily: 'W95FA', fontSize: 10, color: Colors.white),
-      labelLarge: TextStyle(fontFamily: 'W95FA', fontSize: 14, color: Colors.white),
-      labelMedium: TextStyle(fontFamily: 'W95FA', fontSize: 12, color: Colors.white),
-      labelSmall: TextStyle(fontFamily: 'W95FA', fontSize: 10, color: Colors.white),
+      displayLarge:
+          TextStyle(fontFamily: 'W95FA', fontSize: 96, color: Colors.white),
+      displayMedium:
+          TextStyle(fontFamily: 'W95FA', fontSize: 60, color: Colors.white),
+      displaySmall:
+          TextStyle(fontFamily: 'W95FA', fontSize: 48, color: Colors.white),
+      titleLarge:
+          TextStyle(fontFamily: 'W95FA', fontSize: 24, color: Colors.white),
+      titleMedium:
+          TextStyle(fontFamily: 'W95FA', fontSize: 20, color: Colors.white),
+      titleSmall:
+          TextStyle(fontFamily: 'W95FA', fontSize: 16, color: Colors.white),
+      bodyLarge:
+          TextStyle(fontFamily: 'W95FA', fontSize: 14, color: Colors.white),
+      bodyMedium:
+          TextStyle(fontFamily: 'W95FA', fontSize: 12, color: Colors.white),
+      bodySmall:
+          TextStyle(fontFamily: 'W95FA', fontSize: 10, color: Colors.white),
+      labelLarge:
+          TextStyle(fontFamily: 'W95FA', fontSize: 14, color: Colors.white),
+      labelMedium:
+          TextStyle(fontFamily: 'W95FA', fontSize: 12, color: Colors.white),
+      labelSmall:
+          TextStyle(fontFamily: 'W95FA', fontSize: 10, color: Colors.white),
     ),
   ),
 };

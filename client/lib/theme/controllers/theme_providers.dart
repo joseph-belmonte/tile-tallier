@@ -69,4 +69,5 @@ final Provider<ThemeData> darkThemeProvider = Provider<ThemeData>(
 );
 
 /// The [ScrabbleEdition] provider.
-final scrabbleEditionProvider = StateProvider<ScrabbleEdition>((ref) => ScrabbleEdition.classic);
+final scrabbleEditionProvider =
+    StateProvider<ScrabbleEdition>((ref) => ScrabbleEdition.classic);

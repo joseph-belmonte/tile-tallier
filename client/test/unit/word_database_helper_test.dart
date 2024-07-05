@@ -8,7 +8,8 @@ import 'package:tile_tally/features/play_game/data/word_database_helper.dart';
 Future main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   // Mocking the path_provider
-  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+      .setMockMethodCallHandler(
     const MethodChannel('plugins.flutter.io/path_provider'),
     (MethodCall methodCall) async => '.',
   );

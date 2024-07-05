@@ -31,19 +31,25 @@ class AppearanceSettingsPage extends ConsumerWidget {
             title: const Text('System Mode'),
             leading: const Icon(Icons.phone_android),
             trailing: themeMode.index == 0 ? const Icon(Icons.check) : null,
-            onTap: () => ref.read(Settings.themeModeProvider.notifier).set(ThemeMode.system),
+            onTap: () => ref
+                .read(Settings.themeModeProvider.notifier)
+                .set(ThemeMode.system),
           ),
           ListTile(
             title: const Text('Light Mode'),
             leading: const Icon(Icons.light_mode),
             trailing: themeMode.index == 1 ? const Icon(Icons.check) : null,
-            onTap: () => ref.read(Settings.themeModeProvider.notifier).set(ThemeMode.light),
+            onTap: () => ref
+                .read(Settings.themeModeProvider.notifier)
+                .set(ThemeMode.light),
           ),
           ListTile(
             title: const Text('Dark Mode'),
             leading: const Icon(Icons.dark_mode),
             trailing: themeMode.index == 2 ? const Icon(Icons.check) : null,
-            onTap: () => ref.read(Settings.themeModeProvider.notifier).set(ThemeMode.dark),
+            onTap: () => ref
+                .read(Settings.themeModeProvider.notifier)
+                .set(ThemeMode.dark),
           ),
           Divider(),
           ListTile(
@@ -67,14 +73,20 @@ class AppearanceSettingsPage extends ConsumerWidget {
           ListTile(
             title: const Text('Classic'),
             leading: const Icon(Icons.format_color_text),
-            trailing: scarbbleEdition == ScrabbleEdition.classic ? const Icon(Icons.check) : null,
-            onTap: () => ref.read(scrabbleEditionProvider.notifier).state = ScrabbleEdition.classic,
+            trailing: scarbbleEdition == ScrabbleEdition.classic
+                ? const Icon(Icons.check)
+                : null,
+            onTap: () => ref.read(scrabbleEditionProvider.notifier).state =
+                ScrabbleEdition.classic,
           ),
           ListTile(
             title: const Text('Hasbro'),
             leading: const Icon(Icons.format_color_text),
-            trailing: scarbbleEdition == ScrabbleEdition.hasbro ? const Icon(Icons.check) : null,
-            onTap: () => ref.read(scrabbleEditionProvider.notifier).state = ScrabbleEdition.hasbro,
+            trailing: scarbbleEdition == ScrabbleEdition.hasbro
+                ? const Icon(Icons.check)
+                : null,
+            onTap: () => ref.read(scrabbleEditionProvider.notifier).state =
+                ScrabbleEdition.hasbro,
           ),
         ],
       ),

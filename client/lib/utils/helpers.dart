@@ -48,7 +48,8 @@ List<String> generateWildcardWords(String word) {
 }
 
 /// Helper function to replace wildcards recursively
-Set<String> _replaceWildcards(String word, List<int> positions, int index, String currentPrefix) {
+Set<String> _replaceWildcards(
+    String word, List<int> positions, int index, String currentPrefix) {
   final currentResults = <String>{};
   if (index >= positions.length) {
     // Once all positions are replaced, return the completed word
@@ -63,8 +64,8 @@ Set<String> _replaceWildcards(String word, List<int> positions, int index, Strin
           : word.substring(positions[index - 1] + 1, currentPosition));
 
   for (var c = 'a'.codeUnitAt(0); c <= 'z'.codeUnitAt(0); c++) {
-    currentResults
-        .addAll(_replaceWildcards(word, positions, index + 1, prefix + String.fromCharCode(c)));
+    currentResults.addAll(_replaceWildcards(
+        word, positions, index + 1, prefix + String.fromCharCode(c)));
   }
 
   return currentResults;

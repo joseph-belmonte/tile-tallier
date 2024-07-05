@@ -15,7 +15,9 @@ class Letter with _$Letter {
   factory Letter({
     required String id,
     required String letter,
-    @ScoreMultiplierConverter() @Default(ScoreMultiplier.none) ScoreMultiplier scoreMultiplier,
+    @ScoreMultiplierConverter()
+    @Default(ScoreMultiplier.none)
+    ScoreMultiplier scoreMultiplier,
   }) = _Letter;
 
   const Letter._();

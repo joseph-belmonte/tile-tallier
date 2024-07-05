@@ -32,12 +32,14 @@ class Word with _$Word {
 
   /// Returns the total score of the word.
   int get score {
-    final baseScore = playedLetters.fold(0, (total, letter) => total + letter.score);
+    final baseScore =
+        playedLetters.fold(0, (total, letter) => total + letter.score);
     var wordMultiplier = 1;
 
     // Check if any letters have word multipliers and apply the highest one.
     for (var letter in playedLetters) {
-      if (letter.scoreMultiplier == ScoreMultiplier.doubleWord && wordMultiplier < 2) {
+      if (letter.scoreMultiplier == ScoreMultiplier.doubleWord &&
+          wordMultiplier < 2) {
         wordMultiplier = 2;
       } else if (letter.scoreMultiplier == ScoreMultiplier.tripleWord) {
         wordMultiplier = 3;

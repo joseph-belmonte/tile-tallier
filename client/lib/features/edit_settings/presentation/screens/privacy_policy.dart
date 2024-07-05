@@ -21,7 +21,8 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
   }
 
   Future<void> _loadMarkdown() async {
-    final markdownData = await rootBundle.loadString('assets/md/privacy-policy.md');
+    final markdownData =
+        await rootBundle.loadString('assets/md/privacy-policy.md');
     setState(() {
       _markdownData = markdownData;
     });
@@ -41,7 +42,8 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: MarkdownBody(
                   data: _markdownData,
                 ),

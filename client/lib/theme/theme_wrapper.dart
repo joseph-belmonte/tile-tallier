@@ -18,7 +18,8 @@ class ThemeWrapper extends ConsumerStatefulWidget {
   ConsumerState<ThemeWrapper> createState() => _ThemingAppState();
 }
 
-class _ThemingAppState extends ConsumerState<ThemeWrapper> with WidgetsBindingObserver {
+class _ThemingAppState extends ConsumerState<ThemeWrapper>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
