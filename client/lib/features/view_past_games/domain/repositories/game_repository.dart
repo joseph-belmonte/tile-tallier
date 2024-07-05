@@ -1,7 +1,7 @@
 import '../../../play_game/domain/models/game.dart';
-import '../models/player.dart';
 import '../../data/game_storage_database_helper.dart';
 import '../models/past_game.dart';
+import '../models/player.dart';
 
 /// A repository for interacting with the game storage database.
 class PastGameRepository {
