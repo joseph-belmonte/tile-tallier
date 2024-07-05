@@ -22,8 +22,6 @@ Player _$PlayerFromJson(Map<String, dynamic> json) {
 mixin _$Player {
   String get name => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
-  List<Play> get plays => throw _privateConstructorUsedError;
-  String get endRack => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +33,7 @@ abstract class $PlayerCopyWith<$Res> {
   factory $PlayerCopyWith(Player value, $Res Function(Player) then) =
       _$PlayerCopyWithImpl<$Res, Player>;
   @useResult
-  $Res call({String name, String id, List<Play> plays, String endRack});
+  $Res call({String name, String id});
 }
 
 /// @nodoc
@@ -53,8 +51,6 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
   $Res call({
     Object? name = null,
     Object? id = null,
-    Object? plays = null,
-    Object? endRack = null,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -64,14 +60,6 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      plays: null == plays
-          ? _value.plays
-          : plays // ignore: cast_nullable_to_non_nullable
-              as List<Play>,
-      endRack: null == endRack
-          ? _value.endRack
-          : endRack // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -84,7 +72,7 @@ abstract class _$$PlayerImplCopyWith<$Res> implements $PlayerCopyWith<$Res> {
       __$$PlayerImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String name, String id, List<Play> plays, String endRack});
+  $Res call({String name, String id});
 }
 
 /// @nodoc
@@ -100,8 +88,6 @@ class __$$PlayerImplCopyWithImpl<$Res>
   $Res call({
     Object? name = null,
     Object? id = null,
-    Object? plays = null,
-    Object? endRack = null,
   }) {
     return _then(_$PlayerImpl(
       name: null == name
@@ -112,28 +98,14 @@ class __$$PlayerImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      plays: null == plays
-          ? _value._plays
-          : plays // ignore: cast_nullable_to_non_nullable
-              as List<Play>,
-      endRack: null == endRack
-          ? _value.endRack
-          : endRack // ignore: cast_nullable_to_non_nullable
-              as String,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$PlayerImpl extends _Player with DiagnosticableTreeMixin {
-  const _$PlayerImpl(
-      {required this.name,
-      required this.id,
-      final List<Play> plays = const [],
-      this.endRack = ''})
-      : _plays = plays,
-        super._();
+class _$PlayerImpl extends _Player {
+  const _$PlayerImpl({required this.name, required this.id}) : super._();
 
   factory _$PlayerImpl.fromJson(Map<String, dynamic> json) =>
       _$$PlayerImplFromJson(json);
@@ -142,33 +114,10 @@ class _$PlayerImpl extends _Player with DiagnosticableTreeMixin {
   final String name;
   @override
   final String id;
-  final List<Play> _plays;
-  @override
-  @JsonKey()
-  List<Play> get plays {
-    if (_plays is EqualUnmodifiableListView) return _plays;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_plays);
-  }
 
   @override
-  @JsonKey()
-  final String endRack;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Player(name: $name, id: $id, plays: $plays, endRack: $endRack)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'Player'))
-      ..add(DiagnosticsProperty('name', name))
-      ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('plays', plays))
-      ..add(DiagnosticsProperty('endRack', endRack));
+  String toString() {
+    return 'Player(name: $name, id: $id)';
   }
 
   @override
@@ -177,15 +126,12 @@ class _$PlayerImpl extends _Player with DiagnosticableTreeMixin {
         (other.runtimeType == runtimeType &&
             other is _$PlayerImpl &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.id, id) || other.id == id) &&
-            const DeepCollectionEquality().equals(other._plays, _plays) &&
-            (identical(other.endRack, endRack) || other.endRack == endRack));
+            (identical(other.id, id) || other.id == id));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, name, id,
-      const DeepCollectionEquality().hash(_plays), endRack);
+  int get hashCode => Object.hash(runtimeType, name, id);
 
   @JsonKey(ignore: true)
   @override
@@ -203,10 +149,7 @@ class _$PlayerImpl extends _Player with DiagnosticableTreeMixin {
 
 abstract class _Player extends Player {
   const factory _Player(
-      {required final String name,
-      required final String id,
-      final List<Play> plays,
-      final String endRack}) = _$PlayerImpl;
+      {required final String name, required final String id}) = _$PlayerImpl;
   const _Player._() : super._();
 
   factory _Player.fromJson(Map<String, dynamic> json) = _$PlayerImpl.fromJson;
@@ -215,10 +158,6 @@ abstract class _Player extends Player {
   String get name;
   @override
   String get id;
-  @override
-  List<Play> get plays;
-  @override
-  String get endRack;
   @override
   @JsonKey(ignore: true)
   _$$PlayerImplCopyWith<_$PlayerImpl> get copyWith =>

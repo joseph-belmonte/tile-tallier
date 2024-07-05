@@ -23,7 +23,7 @@ mixin _$Game {
   String get id => throw _privateConstructorUsedError;
   Play get currentPlay => throw _privateConstructorUsedError;
   Word get currentWord => throw _privateConstructorUsedError;
-  List<Player> get players => throw _privateConstructorUsedError;
+  List<GamePlayer> get players => throw _privateConstructorUsedError;
   int get currentPlayerIndex => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -40,7 +40,7 @@ abstract class $GameCopyWith<$Res> {
       {String id,
       Play currentPlay,
       Word currentWord,
-      List<Player> players,
+      List<GamePlayer> players,
       int currentPlayerIndex});
 
   $PlayCopyWith<$Res> get currentPlay;
@@ -82,7 +82,7 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
       players: null == players
           ? _value.players
           : players // ignore: cast_nullable_to_non_nullable
-              as List<Player>,
+              as List<GamePlayer>,
       currentPlayerIndex: null == currentPlayerIndex
           ? _value.currentPlayerIndex
           : currentPlayerIndex // ignore: cast_nullable_to_non_nullable
@@ -118,7 +118,7 @@ abstract class _$$GameImplCopyWith<$Res> implements $GameCopyWith<$Res> {
       {String id,
       Play currentPlay,
       Word currentWord,
-      List<Player> players,
+      List<GamePlayer> players,
       int currentPlayerIndex});
 
   @override
@@ -159,7 +159,7 @@ class __$$GameImplCopyWithImpl<$Res>
       players: null == players
           ? _value._players
           : players // ignore: cast_nullable_to_non_nullable
-              as List<Player>,
+              as List<GamePlayer>,
       currentPlayerIndex: null == currentPlayerIndex
           ? _value.currentPlayerIndex
           : currentPlayerIndex // ignore: cast_nullable_to_non_nullable
@@ -175,7 +175,7 @@ class _$GameImpl extends _Game {
       {required this.id,
       required this.currentPlay,
       required this.currentWord,
-      final List<Player> players = const [],
+      final List<GamePlayer> players = const [],
       this.currentPlayerIndex = 0})
       : _players = players,
         super._();
@@ -189,10 +189,10 @@ class _$GameImpl extends _Game {
   final Play currentPlay;
   @override
   final Word currentWord;
-  final List<Player> _players;
+  final List<GamePlayer> _players;
   @override
   @JsonKey()
-  List<Player> get players {
+  List<GamePlayer> get players {
     if (_players is EqualUnmodifiableListView) return _players;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_players);
@@ -246,7 +246,7 @@ abstract class _Game extends Game {
       {required final String id,
       required final Play currentPlay,
       required final Word currentWord,
-      final List<Player> players,
+      final List<GamePlayer> players,
       final int currentPlayerIndex}) = _$GameImpl;
   _Game._() : super._();
 
@@ -259,7 +259,7 @@ abstract class _Game extends Game {
   @override
   Word get currentWord;
   @override
-  List<Player> get players;
+  List<GamePlayer> get players;
   @override
   int get currentPlayerIndex;
   @override

@@ -11,7 +11,7 @@ _$GameImpl _$$GameImplFromJson(Map<String, dynamic> json) => _$GameImpl(
       currentPlay: Play.fromJson(json['currentPlay'] as Map<String, dynamic>),
       currentWord: Word.fromJson(json['currentWord'] as Map<String, dynamic>),
       players: (json['players'] as List<dynamic>?)
-              ?.map((e) => Player.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => GamePlayer.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
       currentPlayerIndex: (json['currentPlayerIndex'] as num?)?.toInt() ?? 0,
