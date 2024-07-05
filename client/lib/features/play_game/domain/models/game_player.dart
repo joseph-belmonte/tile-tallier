@@ -15,6 +15,7 @@ class GamePlayer with _$GamePlayer {
   const factory GamePlayer({
     required String name,
     required String id, // Unique identifier for this GamePlayer instance
+    required String gameId,
     required String playerId, // Unique identifier for the Player across games
     required List<Play> plays,
     required String endRack,

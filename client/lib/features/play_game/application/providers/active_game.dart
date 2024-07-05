@@ -33,6 +33,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
           (name) => GamePlayer(
             name: name,
             id: Uuid().v4(),
+            gameId: newGameId,
             playerId: Uuid().v4(),
             plays: [],
             endRack: '',

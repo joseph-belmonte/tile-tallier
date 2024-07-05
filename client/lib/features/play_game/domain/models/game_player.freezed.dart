@@ -23,6 +23,7 @@ mixin _$GamePlayer {
   String get name => throw _privateConstructorUsedError;
   String get id =>
       throw _privateConstructorUsedError; // Unique identifier for this GamePlayer instance
+  String get gameId => throw _privateConstructorUsedError;
   String get playerId =>
       throw _privateConstructorUsedError; // Unique identifier for the Player across games
   List<Play> get plays => throw _privateConstructorUsedError;
@@ -43,6 +44,7 @@ abstract class $GamePlayerCopyWith<$Res> {
   $Res call(
       {String name,
       String id,
+      String gameId,
       String playerId,
       List<Play> plays,
       String endRack});
@@ -63,6 +65,7 @@ class _$GamePlayerCopyWithImpl<$Res, $Val extends GamePlayer>
   $Res call({
     Object? name = null,
     Object? id = null,
+    Object? gameId = null,
     Object? playerId = null,
     Object? plays = null,
     Object? endRack = null,
@@ -75,6 +78,10 @@ class _$GamePlayerCopyWithImpl<$Res, $Val extends GamePlayer>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      gameId: null == gameId
+          ? _value.gameId
+          : gameId // ignore: cast_nullable_to_non_nullable
               as String,
       playerId: null == playerId
           ? _value.playerId
@@ -103,6 +110,7 @@ abstract class _$$GamePlayerImplCopyWith<$Res>
   $Res call(
       {String name,
       String id,
+      String gameId,
       String playerId,
       List<Play> plays,
       String endRack});
@@ -121,6 +129,7 @@ class __$$GamePlayerImplCopyWithImpl<$Res>
   $Res call({
     Object? name = null,
     Object? id = null,
+    Object? gameId = null,
     Object? playerId = null,
     Object? plays = null,
     Object? endRack = null,
@@ -133,6 +142,10 @@ class __$$GamePlayerImplCopyWithImpl<$Res>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      gameId: null == gameId
+          ? _value.gameId
+          : gameId // ignore: cast_nullable_to_non_nullable
               as String,
       playerId: null == playerId
           ? _value.playerId
@@ -156,6 +169,7 @@ class _$GamePlayerImpl extends _GamePlayer {
   const _$GamePlayerImpl(
       {required this.name,
       required this.id,
+      required this.gameId,
       required this.playerId,
       required final List<Play> plays,
       required this.endRack})
@@ -170,6 +184,8 @@ class _$GamePlayerImpl extends _GamePlayer {
   @override
   final String id;
 // Unique identifier for this GamePlayer instance
+  @override
+  final String gameId;
   @override
   final String playerId;
 // Unique identifier for the Player across games
@@ -187,7 +203,7 @@ class _$GamePlayerImpl extends _GamePlayer {
 
   @override
   String toString() {
-    return 'GamePlayer(name: $name, id: $id, playerId: $playerId, plays: $plays, endRack: $endRack)';
+    return 'GamePlayer(name: $name, id: $id, gameId: $gameId, playerId: $playerId, plays: $plays, endRack: $endRack)';
   }
 
   @override
@@ -197,6 +213,7 @@ class _$GamePlayerImpl extends _GamePlayer {
             other is _$GamePlayerImpl &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.gameId, gameId) || other.gameId == gameId) &&
             (identical(other.playerId, playerId) ||
                 other.playerId == playerId) &&
             const DeepCollectionEquality().equals(other._plays, _plays) &&
@@ -205,7 +222,7 @@ class _$GamePlayerImpl extends _GamePlayer {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, name, id, playerId,
+  int get hashCode => Object.hash(runtimeType, name, id, gameId, playerId,
       const DeepCollectionEquality().hash(_plays), endRack);
 
   @JsonKey(ignore: true)
@@ -226,6 +243,7 @@ abstract class _GamePlayer extends GamePlayer {
   const factory _GamePlayer(
       {required final String name,
       required final String id,
+      required final String gameId,
       required final String playerId,
       required final List<Play> plays,
       required final String endRack}) = _$GamePlayerImpl;
@@ -239,6 +257,8 @@ abstract class _GamePlayer extends GamePlayer {
   @override
   String get id;
   @override // Unique identifier for this GamePlayer instance
+  String get gameId;
+  @override
   String get playerId;
   @override // Unique identifier for the Player across games
   List<Play> get plays;

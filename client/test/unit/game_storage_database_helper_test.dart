@@ -7,7 +7,6 @@ import 'package:tile_tally/features/play_game/domain/models/game.dart';
 import 'package:tile_tally/features/play_game/domain/models/game_player.dart';
 import 'package:tile_tally/features/play_game/domain/models/letter.dart';
 import 'package:tile_tally/features/play_game/domain/models/play.dart';
-import 'package:tile_tally/features/play_game/domain/models/player.dart';
 
 import 'package:tile_tally/features/play_game/domain/models/word.dart';
 import 'package:tile_tally/features/view_past_games/data/game_storage_database_helper.dart';
@@ -100,11 +99,26 @@ Future<void> main() async {
 
     test('Insert an empty game (no plays) into the database and fetch it',
         () async {
+      final gameId = Uuid().v4();
       final game = Game(
-        id: Uuid().v4(),
+        id: gameId,
         players: [
-          Player(id: Uuid().v4(), name: 'Player 1'),
-          Player(id: Uuid().v4(), name: 'Player 2'),
+          GamePlayer(
+            id: Uuid().v4(),
+            gameId: gameId,
+            name: 'Player 1',
+            playerId: '',
+            plays: [],
+            endRack: '',
+          ),
+          GamePlayer(
+            id: Uuid().v4(),
+            gameId: gameId,
+            name: 'Player 2',
+            playerId: '',
+            plays: [],
+            endRack: '',
+          ),
         ],
         currentPlay: Play(id: Uuid().v4(), timestamp: DateTime.now()),
         currentWord: Word(id: Uuid().v4()),
@@ -162,11 +176,27 @@ Future<void> main() async {
         ),
       ];
 
+      final gameId = Uuid().v4();
+
       final game = Game(
         id: Uuid().v4(),
         players: [
-          Player(id: Uuid().v4(), name: 'Player 1', plays: player1play),
-          Player(id: Uuid().v4(), name: 'Player 2', plays: player2play),
+          GamePlayer(
+            id: Uuid().v4(),
+            gameId: gameId,
+            name: 'Player 1',
+            plays: player1play,
+            playerId: '',
+            endRack: '',
+          ),
+          GamePlayer(
+            id: Uuid().v4(),
+            gameId: gameId,
+            name: 'Player 2',
+            plays: player2play,
+            playerId: '',
+            endRack: '',
+          ),
         ],
         currentPlay: Play(id: Uuid().v4(), timestamp: DateTime.now()),
         currentWord: Word(id: Uuid().v4()),
@@ -190,11 +220,26 @@ Future<void> main() async {
     });
 
     test('Delete a game from the database', () async {
+      final gameId = Uuid().v4();
       final game = Game(
-        id: Uuid().v4(),
-        players: <Player>[
-          Player(id: Uuid().v4(), name: 'Player 1'),
-          Player(id: Uuid().v4(), name: 'Player 2'),
+        id: gameId,
+        players: <GamePlayer>[
+          GamePlayer(
+            id: Uuid().v4(),
+            gameId: gameId,
+            name: 'Player 1',
+            playerId: '',
+            plays: [],
+            endRack: '',
+          ),
+          GamePlayer(
+            id: Uuid().v4(),
+            gameId: gameId,
+            name: 'Player 2',
+            playerId: '',
+            plays: [],
+            endRack: '',
+          ),
         ],
         currentPlay: Play(id: Uuid().v4(), timestamp: DateTime.now()),
         currentWord: Word(id: Uuid().v4()),

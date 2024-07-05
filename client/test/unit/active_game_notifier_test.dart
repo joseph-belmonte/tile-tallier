@@ -39,14 +39,30 @@ void main() {
       final container = createContainer();
       final activeGameNotifier = container.read(activeGameProvider.notifier);
 
+      final gameId = Uuid().v4();
+
       final dummyPlay = Play(
         id: Uuid().v4(),
         timestamp: DateTime.now(),
       );
 
       final newPlayers = [
-        Player(name: 'Andrea', id: Uuid().v4(), plays: [dummyPlay]),
-        Player(name: 'Joe', id: Uuid().v4()),
+        GamePlayer(
+          id: Uuid().v4(),
+          playerId: Uuid().v4(),
+          gameId: gameId,
+          name: 'Andrea',
+          plays: [dummyPlay],
+          endRack: '',
+        ),
+        GamePlayer(
+          id: Uuid().v4(),
+          playerId: Uuid().v4(),
+          gameId: gameId,
+          name: 'Joe',
+          plays: [],
+          endRack: '',
+        ),
       ];
       activeGameNotifier.updatePlayers(newPlayers);
 
@@ -60,10 +76,25 @@ void main() {
     test('validate endTurn', () {
       final container = createContainer();
       final activeGameNotifier = container.read(activeGameProvider.notifier);
+      final gameId = Uuid().v4();
 
       final newPlayers = [
-        Player(name: 'Andrea', id: Uuid().v4()),
-        Player(name: 'Joe', id: Uuid().v4()),
+        GamePlayer(
+          id: Uuid().v4(),
+          playerId: Uuid().v4(),
+          gameId: gameId,
+          name: 'Andrea',
+          endRack: '',
+          plays: [],
+        ),
+        GamePlayer(
+          id: Uuid().v4(),
+          gameId: gameId,
+          playerId: Uuid().v4(),
+          name: 'Joe',
+          endRack: '',
+          plays: [],
+        ),
       ];
 
       activeGameNotifier.updatePlayers(newPlayers);
@@ -90,10 +121,25 @@ void main() {
     test('validate undoTurn', () {
       final container = createContainer();
       final activeGameNotifier = container.read(activeGameProvider.notifier);
+      final gameId = Uuid().v4();
 
       final newPlayers = [
-        Player(name: 'Andrea', id: Uuid().v4()),
-        Player(name: 'Joe', id: Uuid().v4()),
+        GamePlayer(
+          name: 'Andrea',
+          id: Uuid().v4(),
+          gameId: gameId,
+          playerId: Uuid().v4(),
+          plays: [],
+          endRack: '',
+        ),
+        GamePlayer(
+          name: 'Joe',
+          id: Uuid().v4(),
+          gameId: gameId,
+          playerId: Uuid().v4(),
+          plays: [],
+          endRack: '',
+        ),
       ];
 
       activeGameNotifier.updatePlayers(newPlayers);
