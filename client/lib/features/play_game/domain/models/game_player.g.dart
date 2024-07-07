@@ -12,10 +12,11 @@ _$GamePlayerImpl _$$GamePlayerImplFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       gameId: json['gameId'] as String,
       playerId: json['playerId'] as String,
-      plays: (json['plays'] as List<dynamic>)
-          .map((e) => Play.fromJson(e as Map<String, dynamic>))
-          .toList(),
       endRack: json['endRack'] as String,
+      plays: (json['plays'] as List<dynamic>?)
+              ?.map((e) => Play.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$GamePlayerImplToJson(_$GamePlayerImpl instance) =>
@@ -24,6 +25,6 @@ Map<String, dynamic> _$$GamePlayerImplToJson(_$GamePlayerImpl instance) =>
       'id': instance.id,
       'gameId': instance.gameId,
       'playerId': instance.playerId,
-      'plays': instance.plays,
       'endRack': instance.endRack,
+      'plays': instance.plays,
     };

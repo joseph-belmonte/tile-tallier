@@ -17,8 +17,8 @@ class GamePlayer with _$GamePlayer {
     required String id, // Unique identifier for this GamePlayer instance
     required String gameId,
     required String playerId, // Unique identifier for the Player across games
-    required List<Play> plays,
     required String endRack,
+    @Default([]) List<Play> plays,
   }) = _GamePlayer;
 
   const GamePlayer._();

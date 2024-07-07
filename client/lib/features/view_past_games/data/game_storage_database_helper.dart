@@ -230,21 +230,30 @@ class GameStorageDatabaseHelper {
         await db.query('players', where: 'gameId = ?', whereArgs: [gameId]);
     final players = await Future.wait(
       playersMap.map((player) async {
-        var playerObj = GamePlayer.fromJson(player);
+        // Create a [GamePlayer] from the player map
+        var playerObj = GamePlayer(
+          id: player['id'] as String? ?? '',
+          playerId: player['playerId'] as String? ?? '',
+          gameId: player['gameId'] as String? ?? '',
+          name: player['name'] as String? ?? '',
+          endRack: player['endRack'] as String? ?? '',
+        );
 
+        // Get the plays for this player
         final playsMap = await db
             .query('plays', where: 'playerId = ?', whereArgs: [playerObj.id]);
-
         final plays = await Future.wait(
           playsMap.map((play) async {
             var playObj = Play.fromJson(play);
 
+            // Fetch words for this play
             final wordsMap = await db
                 .query('words', where: 'playId = ?', whereArgs: [playObj.id]);
             final words = await Future.wait(
               wordsMap.map((word) async {
                 var wordObj = Word.fromJson(word);
 
+                // Fetch letters for this word
                 final lettersMap = await db.query(
                   'playedLetters',
                   where: 'wordId = ?',

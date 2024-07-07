@@ -24,10 +24,10 @@ mixin _$GamePlayer {
   String get id =>
       throw _privateConstructorUsedError; // Unique identifier for this GamePlayer instance
   String get gameId => throw _privateConstructorUsedError;
-  String get playerId =>
+  String get playerId => throw _privateConstructorUsedError;
+  String get endRack =>
       throw _privateConstructorUsedError; // Unique identifier for the Player across games
   List<Play> get plays => throw _privateConstructorUsedError;
-  String get endRack => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -46,8 +46,8 @@ abstract class $GamePlayerCopyWith<$Res> {
       String id,
       String gameId,
       String playerId,
-      List<Play> plays,
-      String endRack});
+      String endRack,
+      List<Play> plays});
 }
 
 /// @nodoc
@@ -67,8 +67,8 @@ class _$GamePlayerCopyWithImpl<$Res, $Val extends GamePlayer>
     Object? id = null,
     Object? gameId = null,
     Object? playerId = null,
-    Object? plays = null,
     Object? endRack = null,
+    Object? plays = null,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -87,14 +87,14 @@ class _$GamePlayerCopyWithImpl<$Res, $Val extends GamePlayer>
           ? _value.playerId
           : playerId // ignore: cast_nullable_to_non_nullable
               as String,
-      plays: null == plays
-          ? _value.plays
-          : plays // ignore: cast_nullable_to_non_nullable
-              as List<Play>,
       endRack: null == endRack
           ? _value.endRack
           : endRack // ignore: cast_nullable_to_non_nullable
               as String,
+      plays: null == plays
+          ? _value.plays
+          : plays // ignore: cast_nullable_to_non_nullable
+              as List<Play>,
     ) as $Val);
   }
 }
@@ -112,8 +112,8 @@ abstract class _$$GamePlayerImplCopyWith<$Res>
       String id,
       String gameId,
       String playerId,
-      List<Play> plays,
-      String endRack});
+      String endRack,
+      List<Play> plays});
 }
 
 /// @nodoc
@@ -131,8 +131,8 @@ class __$$GamePlayerImplCopyWithImpl<$Res>
     Object? id = null,
     Object? gameId = null,
     Object? playerId = null,
-    Object? plays = null,
     Object? endRack = null,
+    Object? plays = null,
   }) {
     return _then(_$GamePlayerImpl(
       name: null == name
@@ -151,14 +151,14 @@ class __$$GamePlayerImplCopyWithImpl<$Res>
           ? _value.playerId
           : playerId // ignore: cast_nullable_to_non_nullable
               as String,
-      plays: null == plays
-          ? _value._plays
-          : plays // ignore: cast_nullable_to_non_nullable
-              as List<Play>,
       endRack: null == endRack
           ? _value.endRack
           : endRack // ignore: cast_nullable_to_non_nullable
               as String,
+      plays: null == plays
+          ? _value._plays
+          : plays // ignore: cast_nullable_to_non_nullable
+              as List<Play>,
     ));
   }
 }
@@ -171,8 +171,8 @@ class _$GamePlayerImpl extends _GamePlayer {
       required this.id,
       required this.gameId,
       required this.playerId,
-      required final List<Play> plays,
-      required this.endRack})
+      required this.endRack,
+      final List<Play> plays = const []})
       : _plays = plays,
         super._();
 
@@ -188,10 +188,13 @@ class _$GamePlayerImpl extends _GamePlayer {
   final String gameId;
   @override
   final String playerId;
+  @override
+  final String endRack;
 // Unique identifier for the Player across games
   final List<Play> _plays;
 // Unique identifier for the Player across games
   @override
+  @JsonKey()
   List<Play> get plays {
     if (_plays is EqualUnmodifiableListView) return _plays;
     // ignore: implicit_dynamic_type
@@ -199,11 +202,8 @@ class _$GamePlayerImpl extends _GamePlayer {
   }
 
   @override
-  final String endRack;
-
-  @override
   String toString() {
-    return 'GamePlayer(name: $name, id: $id, gameId: $gameId, playerId: $playerId, plays: $plays, endRack: $endRack)';
+    return 'GamePlayer(name: $name, id: $id, gameId: $gameId, playerId: $playerId, endRack: $endRack, plays: $plays)';
   }
 
   @override
@@ -216,14 +216,14 @@ class _$GamePlayerImpl extends _GamePlayer {
             (identical(other.gameId, gameId) || other.gameId == gameId) &&
             (identical(other.playerId, playerId) ||
                 other.playerId == playerId) &&
-            const DeepCollectionEquality().equals(other._plays, _plays) &&
-            (identical(other.endRack, endRack) || other.endRack == endRack));
+            (identical(other.endRack, endRack) || other.endRack == endRack) &&
+            const DeepCollectionEquality().equals(other._plays, _plays));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, name, id, gameId, playerId,
-      const DeepCollectionEquality().hash(_plays), endRack);
+      endRack, const DeepCollectionEquality().hash(_plays));
 
   @JsonKey(ignore: true)
   @override
@@ -245,8 +245,8 @@ abstract class _GamePlayer extends GamePlayer {
       required final String id,
       required final String gameId,
       required final String playerId,
-      required final List<Play> plays,
-      required final String endRack}) = _$GamePlayerImpl;
+      required final String endRack,
+      final List<Play> plays}) = _$GamePlayerImpl;
   const _GamePlayer._() : super._();
 
   factory _GamePlayer.fromJson(Map<String, dynamic> json) =
@@ -260,10 +260,10 @@ abstract class _GamePlayer extends GamePlayer {
   String get gameId;
   @override
   String get playerId;
-  @override // Unique identifier for the Player across games
-  List<Play> get plays;
   @override
   String get endRack;
+  @override // Unique identifier for the Player across games
+  List<Play> get plays;
   @override
   @JsonKey(ignore: true)
   _$$GamePlayerImplCopyWith<_$GamePlayerImpl> get copyWith =>
