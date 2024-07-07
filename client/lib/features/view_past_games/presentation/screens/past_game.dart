@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../play_game/domain/models/game.dart';
+
+import '../../../play_game/presentation/screens/player_results.dart';
 import '../../../play_game/presentation/widgets/gameplay/historical_play.dart';
 import '../../application/providers/past_games_provider.dart';
 import '../../domain/models/past_game.dart';
@@ -76,7 +79,19 @@ class PastGameScreen extends ConsumerWidget {
                 Text('Final Scores:'),
                 Column(
                   children: game.players.map((player) {
-                    return Text('${player.name}: ${player.score}');
+                    return GestureDetector(
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => PlayerResultsScreen(
+                            game: Game.fromPastGame(game),
+                            player: player,
+                          ),
+                        ),
+                      ),
+                      child: Text(
+                        '${player.name}: ${player.score}',
+                      ),
+                    );
                   }).toList(),
                 ),
               ],

@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../view_past_games/domain/models/past_game.dart';
 import 'game_player.dart';
 import 'play.dart';
 import 'word.dart';
@@ -32,6 +33,17 @@ class Game with _$Game {
 
   /// Converts the game to a map.
   factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
+
+  /// Creates a new [Game] instance from a [PastGame] instance.
+  factory Game.fromPastGame(PastGame pastGame) {
+    return Game(
+      id: pastGame.id,
+      currentPlay: pastGame.currentPlay,
+      currentWord: pastGame.currentWord,
+      players: pastGame.players,
+      currentPlayerIndex: pastGame.currentPlayerIndex,
+    );
+  }
 
   // Private constructor for computed properties and methods.
   const Game._();
