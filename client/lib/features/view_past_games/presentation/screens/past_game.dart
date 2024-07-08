@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../play_game/domain/models/game.dart';
+import '../../../core/domain/models/game.dart';
 
 import '../../../play_game/presentation/screens/player_results.dart';
 import '../../../play_game/presentation/widgets/gameplay/historical_play.dart';

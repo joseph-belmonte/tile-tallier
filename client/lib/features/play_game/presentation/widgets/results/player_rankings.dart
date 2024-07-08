@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../domain/models/game.dart';
+import '../../../../core/domain/models/game.dart';
 import '../../screens/player_results.dart';
 
 /// A widget that displays the player rankings for a game.

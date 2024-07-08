@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:tile_tally/features/play_game/domain/models/game.dart';
-import 'package:tile_tally/features/play_game/domain/models/game_player.dart';
-import 'package:tile_tally/features/play_game/domain/models/letter.dart';
-import 'package:tile_tally/features/play_game/domain/models/play.dart';
+import 'package:tile_tally/features/core/domain/models/game.dart';
+import 'package:tile_tally/features/core/domain/models/game_player.dart';
+import 'package:tile_tally/features/core/domain/models/letter.dart';
+import 'package:tile_tally/features/core/domain/models/play.dart';
 
-import 'package:tile_tally/features/play_game/domain/models/word.dart';
+import 'package:tile_tally/features/core/domain/models/word.dart';
 import 'package:tile_tally/features/view_past_games/data/game_storage_database_helper.dart';
 import 'package:uuid/uuid.dart';
 

@@ -1,5 +1,5 @@
 import 'package:sqflite/sqflite.dart';
-import '../../../play_game/domain/models/letter.dart';
+import '../../../core/domain/models/letter.dart';
 import 'database_helper.dart';
 
 /// Helper class for the playedLetters table in the database.

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/models/game.dart';
+import '../../../core/domain/models/game.dart';
 import '../widgets/home_button.dart';
 import '../widgets/results/player_rankings.dart';
 import '../widgets/results/show_stats_button.dart';

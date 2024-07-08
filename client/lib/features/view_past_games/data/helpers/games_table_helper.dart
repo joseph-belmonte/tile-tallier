@@ -1,10 +1,10 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../play_game/domain/models/game.dart';
-import '../../../play_game/domain/models/game_player.dart';
-import '../../../play_game/domain/models/letter.dart';
-import '../../../play_game/domain/models/play.dart';
-import '../../../play_game/domain/models/word.dart';
+import '../../../core/domain/models/game.dart';
+import '../../../core/domain/models/game_player.dart';
+import '../../../core/domain/models/letter.dart';
+import '../../../core/domain/models/play.dart';
+import '../../../core/domain/models/word.dart';
 import '../../domain/models/past_game.dart';
 import 'database_helper.dart';
 

@@ -10,12 +10,12 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../enums/score_multipliers.dart';
 import '../../../../utils/helpers.dart';
+import '../../../core/domain/models/game.dart';
+import '../../../core/domain/models/game_player.dart';
+import '../../../core/domain/models/letter.dart';
+import '../../../core/domain/models/play.dart';
+import '../../../core/domain/models/word.dart';
 import '../../data/word_database_helper.dart';
-import '../../domain/models/game.dart';
-import '../../domain/models/game_player.dart';
-import '../../domain/models/letter.dart';
-import '../../domain/models/play.dart';
-import '../../domain/models/word.dart';
 
 /// A [StateNotifier] that manages the state of the active game.
 class ActiveGameNotifier extends StateNotifier<Game> {

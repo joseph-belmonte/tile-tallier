@@ -1,4 +1,4 @@
-import '../../../play_game/domain/models/game.dart';
+import '../../../core/domain/models/game.dart';
 import '../../data/game_storage_database_helper.dart';
 import '../models/past_game.dart';
 import '../models/player.dart';

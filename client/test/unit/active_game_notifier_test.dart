@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tile_tally/features/core/domain/models/game_player.dart';
+import 'package:tile_tally/features/core/domain/models/play.dart';
 import 'package:tile_tally/features/play_game/application/providers/active_game.dart';
-import 'package:tile_tally/features/play_game/domain/models/game_player.dart';
-import 'package:tile_tally/features/play_game/domain/models/play.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {

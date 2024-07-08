@@ -1,5 +1,5 @@
 import 'package:sqflite/sqflite.dart';
-import '../../../play_game/domain/models/word.dart';
+import '../../../core/domain/models/word.dart';
 
 import 'database_helper.dart';
 

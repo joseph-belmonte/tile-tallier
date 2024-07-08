@@ -3,7 +3,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../enums/score_multipliers.dart';
 import '../../../../utils/converters.dart';
-import '../../data/letter_scores.dart';
+import '../../../play_game/data/letter_scores.dart';
 
 part 'letter.freezed.dart';
 part 'letter.g.dart';
