@@ -221,6 +221,31 @@ class GameStorageDatabaseHelper {
     );
   }
 
+  /// Saves a new [Player] to the database.
+  Future<void> savePlayer(Player player) async {
+    final db = await database;
+    await db.insert(
+      'players',
+      player.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  /// Find a [Player] by name
+  Future<Player> findPlayerByName(String name) async {
+    final db = await database;
+    final result =
+        await db.query('players', where: 'name = ?', whereArgs: [name]);
+    return result.map(Player.fromJson).first;
+  }
+
+  /// Delete a [Player] from the database.
+  Future<void> deletePlayer(String id) async {
+    final db = await database;
+    await db.delete('players', where: 'id = ?', whereArgs: [id]);
+  }
+
+  /// Assembles a game from the database.
   Future<PastGame> _assembleGame(Map<String, dynamic> gameJson) async {
     final db = await database;
 
