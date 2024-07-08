@@ -87,4 +87,23 @@ class PastGameRepository {
       throw Exception('Failed to update player name: $e');
     }
   }
+
+  /// Searches for a player by name in the database.
+  Future<Player?> findPlayerByName(String name) async {
+    try {
+      return await _databaseHelper.findPlayerByName(name);
+    } catch (e) {
+      throw Exception('Failed to find player by name: $e');
+    }
+  }
+
+  /// Saves a player to the database.
+  Future<void> savePlayer(Player player) async {
+    try {
+      await _databaseHelper.savePlayer(player);
+    } catch (e) {
+      // Handle or rethrow the error as needed
+      throw Exception('Failed to save player: $e');
+    }
+  }
 }

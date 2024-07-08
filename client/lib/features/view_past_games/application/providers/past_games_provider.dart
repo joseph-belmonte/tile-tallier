@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/models/past_game.dart';
 import '../../domain/models/player.dart';
-import '../../domain/repositories/game_repository.dart';
+import '../../domain/repositories/past_game_repository.dart';
 
 /// A provider that fetches the past games from the database.
 class PastGamesNotifier extends StateNotifier<AsyncValue<List<PastGame>>> {
