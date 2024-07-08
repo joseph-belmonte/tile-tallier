@@ -9,7 +9,7 @@ class PlayerTableHelper extends DatabaseHelper {
     await db.execute('''
       CREATE TABLE players (
         id TEXT PRIMARY KEY,
-        name TEXT
+        name TEXT UNIQUE
       )
     ''');
   }
