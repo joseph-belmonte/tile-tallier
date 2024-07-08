@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../play_game/domain/models/game_player.dart';
+import '../../../core/domain/models/game_player.dart';
 import 'database_helper.dart';
 
 /// A helper class for interacting with the game_players table in the database.
