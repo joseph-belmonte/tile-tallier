@@ -4,6 +4,6 @@ import 'past_game_repository_provider.dart';
 
 /// A provider that fetches the players from the database.
 final playersProvider = FutureProvider<List<Player>>((ref) async {
-  final gameRepository = ref.read(pastGameRepositoryProvider);
-  return await gameRepository.fetchAllPlayers();
+  final pastGameRepository = ref.read(pastGameRepositoryProvider);
+  return await pastGameRepository.fetchAllPlayers();
 });
