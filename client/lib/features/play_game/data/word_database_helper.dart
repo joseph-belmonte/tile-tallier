@@ -3,9 +3,10 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-/// A helper class to manage the database
-class WordDatabaseHelper {
-  static const _databaseName = 'WordDatabase.db';
+/// A helper class to manage the word_database file.
+/// It mainly contains the word_list table.
+class WordListDBHelper {
+  static const _databaseName = 'word_database.db';
   static const _databaseVersion = 1;
 
   /// The table name
@@ -17,11 +18,11 @@ class WordDatabaseHelper {
   /// The word column name
   static const columnWord = 'word';
 
-  WordDatabaseHelper._privateConstructor();
+  WordListDBHelper._privateConstructor();
 
   /// The singleton instance
-  static final WordDatabaseHelper instance =
-      WordDatabaseHelper._privateConstructor();
+  static final WordListDBHelper instance =
+      WordListDBHelper._privateConstructor();
 
   static Database? _database;
 

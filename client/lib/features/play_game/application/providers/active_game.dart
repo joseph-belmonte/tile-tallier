@@ -216,7 +216,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
 
     final possibleWords = generateWildcardWords(word.toLowerCase());
     final wordExists =
-        await WordDatabaseHelper.instance.wordExistsInList(possibleWords);
+        await WordListDBHelper.instance.wordExistsInList(possibleWords);
 
     return wordExists;
   }
