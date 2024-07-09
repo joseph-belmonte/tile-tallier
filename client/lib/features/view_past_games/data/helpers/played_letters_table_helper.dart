@@ -5,7 +5,8 @@ import 'database_helper.dart';
 /// Helper class for the playedLetters table in the database.
 class PlayedLetterTableHelper extends DatabaseHelper {
   /// Creates the playedLetters table in the database.
-  Future<void> createTable(Database db, int version) async {
+  @override
+  Future<void> createDB(Database db, int version) async {
     await db.execute('''
       CREATE TABLE playedLetters (
         id TEXT PRIMARY KEY,

@@ -20,12 +20,12 @@ abstract class DatabaseHelper {
     return await openDatabase(
       path,
       version: 1,
-      onCreate: _createDB,
+      onCreate: createDB,
     );
   }
 
   /// Creates the database tables. This method should be overridden by subclasses.
-  Future<void> _createDB(Database db, int version);
+  Future<void> createDB(Database db, int version);
 
   /// Closes the database.
   Future<void> close() async {

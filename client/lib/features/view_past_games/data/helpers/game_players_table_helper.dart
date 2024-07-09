@@ -6,7 +6,8 @@ import 'database_helper.dart';
 /// A helper class for interacting with the game_players table in the database.
 class GamePlayerTableHelper extends DatabaseHelper {
   /// Creates the 'game_players' table in the database.
-  Future<void> createTable(Database db, int version) async {
+  @override
+  Future<void> createDB(Database db, int version) async {
     await db.execute('''
       CREATE TABLE game_players (
         id TEXT PRIMARY KEY,

@@ -6,7 +6,8 @@ import 'database_helper.dart';
 /// Helper class for the words table in the database.
 class WordTableHelper extends DatabaseHelper {
   /// Creates the words table in the database.
-  Future<void> createTable(Database db, int version) async {
+  @override
+  Future<void> createDB(Database db, int version) async {
     await db.execute('''
       CREATE TABLE words (
         id TEXT PRIMARY KEY,

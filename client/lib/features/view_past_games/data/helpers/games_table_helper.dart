@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 
+import '../../../../utils/logger.dart';
 import '../../../core/domain/models/game.dart';
 import '../../../core/domain/models/game_player.dart';
 import '../../../core/domain/models/letter.dart';
@@ -11,7 +12,8 @@ import 'database_helper.dart';
 /// A helper class for interacting with the games table in the database.
 class GameTableHelper extends DatabaseHelper {
   /// Creates the 'games' table in the database.
-  Future<void> createTable(Database db, int version) async {
+  @override
+  Future<void> createDB(Database db, int version) async {
     await db.execute('''
       CREATE TABLE games (
         id TEXT PRIMARY KEY,
@@ -140,6 +142,7 @@ class GameTableHelper extends DatabaseHelper {
 
   /// Deletes a game from the database.
   Future<void> deleteGame(String id) async {
+    logger.d('Deleting game with ID: $id');
     final db = await database;
     await db.transaction((txn) async {
       await txn.delete('games', where: 'id = ?', whereArgs: [id]);
@@ -158,6 +161,7 @@ class GameTableHelper extends DatabaseHelper {
 
       await txn.delete('plays', where: 'gameId = ?', whereArgs: [id]);
     });
+    logger.d('Deleted game with ID: $id');
   }
 
   /// Deletes all games from the database.
