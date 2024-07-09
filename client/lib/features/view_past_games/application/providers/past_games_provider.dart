@@ -1,32 +1,33 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../domain/models/past_game.dart';
 import '../../domain/models/player.dart';
-import '../../domain/repositories/past_game_repository.dart';
+import '../../domain/repositories/history_repository.dart';
+import 'history_repository_provider.dart';
 
 /// A provider that fetches the past games from the database.
 class PastGamesNotifier extends StateNotifier<AsyncValue<List<PastGame>>> {
-  final PastGameRepository _gameRepository;
+  final HistoryRepository _historyRepository;
 
   /// Creates a new [PastGamesNotifier] instance.
-  PastGamesNotifier(this._gameRepository) : super(const AsyncLoading()) {
+  PastGamesNotifier(this._historyRepository) : super(const AsyncLoading()) {
     fetchGames();
   }
 
   /// Fetches the [PastGame]s from the database.
   Future<void> fetchGames() async {
+    state = const AsyncLoading();
     try {
-      final games = await _gameRepository.loadAllGames();
+      final games = await _historyRepository.loadAllGames();
       state = AsyncValue.data(games);
     } catch (e, stackTrace) {
       state = AsyncValue.error(e, stackTrace);
     }
   }
 
-  /// Toggles the favorite status of the game with the given [gameId].
+  /// Toggles the favorite status of a specific game in the database.
   Future<void> toggleFavorite(String gameId) async {
     try {
-      await _gameRepository.toggleFavorite(gameId);
+      await _historyRepository.toggleFavorite(gameId);
       final updatedGames = state.value!.map((game) {
         if (game.id == gameId) {
           return game.copyWith(isFavorite: !game.isFavorite);
@@ -39,15 +40,37 @@ class PastGamesNotifier extends StateNotifier<AsyncValue<List<PastGame>>> {
     }
   }
 
+  /// Deletes a specific game from the database and updates the state.
+  Future<void> deleteGame(String gameId) async {
+    try {
+      await _historyRepository.deleteGame(gameId);
+      final updatedGames =
+          state.value!.where((game) => game.id != gameId).toList();
+      state = AsyncValue.data(updatedGames);
+    } catch (e, stackTrace) {
+      state = AsyncValue.error(e, stackTrace);
+    }
+  }
+
+  /// Deletes all games from the database and updates the state.
+  Future<void> deleteAllGames() async {
+    try {
+      await _historyRepository.deleteAllGames();
+      state = const AsyncValue.data([]);
+    } catch (e, stackTrace) {
+      state = AsyncValue.error(e, stackTrace);
+    }
+  }
+
   /// Fetches all [Player]s from the database.
   Future<List<Player>> fetchAllPlayers() async {
-    return await _gameRepository.fetchAllPlayers();
+    return await _historyRepository.fetchAllPlayers();
   }
 }
 
-/// A provider that provides the past games.
+/// A provider that exposes the [PastGamesNotifier].
 final pastGamesProvider =
     StateNotifierProvider<PastGamesNotifier, AsyncValue<List<PastGame>>>((ref) {
-  final pastGameRepository = PastGameRepository();
-  return PastGamesNotifier(pastGameRepository);
+  final historyRepository = ref.watch(historyRepositoryProvider);
+  return PastGamesNotifier(historyRepository);
 });
