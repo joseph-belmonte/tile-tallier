@@ -1,4 +1,5 @@
 import 'package:sqflite/sqflite.dart';
+import '../../../../utils/logger.dart';
 import '../../../core/domain/models/game_player.dart';
 import '../../domain/models/database_helper.dart';
 
@@ -23,6 +24,7 @@ class GamePlayerTableHelper extends DatabaseHelper {
   /// Inserts a game player into the database.
   Future<void> insertGamePlayer(GamePlayer gamePlayer) async {
     final db = await database;
+    logger.i({gamePlayer.toJson()});
     await db.insert(
       'game_players',
       gamePlayer.toJson(),
@@ -31,7 +33,7 @@ class GamePlayerTableHelper extends DatabaseHelper {
   }
 
   /// Fetches all game players from the database.
-  Future<List<GamePlayer>> fetchGamePlayersByGameId(String gameId) async {
+  Future<List<GamePlayer>> fetchGamePlayers({required String gameId}) async {
     final db = await database;
     final result = await db
         .query('game_players', where: 'gameId = ?', whereArgs: [gameId]);
@@ -39,7 +41,7 @@ class GamePlayerTableHelper extends DatabaseHelper {
   }
 
   /// Deletes all game players from the database by their game ID.
-  Future<void> deleteGamePlayersByGameId(String gameId) async {
+  Future<void> deleteGamePlayers({required String gameId}) async {
     final db = await database;
     await db.delete('game_players', where: 'gameId = ?', whereArgs: [gameId]);
   }
