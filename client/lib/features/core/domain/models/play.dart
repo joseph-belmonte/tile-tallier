@@ -25,10 +25,7 @@ class Play with _$Play {
 
   /// Creates a new play.
   factory Play.createNew() {
-    return Play(
-      id: Uuid().v4(),
-      timestamp: DateTime.now(),
-    );
+    return Play(id: Uuid().v4(), timestamp: DateTime.now());
   }
 
   /// Converts Play to a map.
