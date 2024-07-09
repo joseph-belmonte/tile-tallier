@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
+import '../../../../utils/logger.dart';
 import '../../../core/domain/models/letter.dart';
-import 'database_helper.dart';
+import '../../domain/models/database_helper.dart';
 
 /// Helper class for the playedLetters table in the database.
 class PlayedLetterTableHelper extends DatabaseHelper {

@@ -1,7 +1,6 @@
 import 'package:sqflite/sqflite.dart';
-
 import '../../../core/domain/models/play.dart';
-import 'database_helper.dart';
+import '../../domain/models/database_helper.dart';
 
 /// A helper class for interacting with the 'plays' table in the database.
 class PlayTableHelper extends DatabaseHelper {

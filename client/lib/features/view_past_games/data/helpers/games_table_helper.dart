@@ -1,12 +1,11 @@
 import 'package:sqflite/sqflite.dart';
-
 import '../../../../utils/logger.dart';
 import '../../../core/domain/models/game.dart';
 import '../../../core/domain/models/game_player.dart';
 import '../../../core/domain/models/letter.dart';
 import '../../../core/domain/models/play.dart';
 import '../../../core/domain/models/word.dart';
-import 'database_helper.dart';
+import '../../domain/models/database_helper.dart';
 
 /// A helper class for interacting with the games table in the database.
 class GameTableHelper extends DatabaseHelper {

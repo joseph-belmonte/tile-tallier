@@ -1,6 +1,5 @@
 import 'package:sqflite/sqflite.dart';
-
-import 'database_helper.dart';
+import '../../domain/models/database_helper.dart';
 import 'game_players_table_helper.dart';
 import 'games_table_helper.dart';
 import 'played_letters_table_helper.dart';

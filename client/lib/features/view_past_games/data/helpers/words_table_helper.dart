@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import '../../../core/domain/models/word.dart';
 
-import 'database_helper.dart';
+import '../../domain/models/database_helper.dart';
 
 /// Helper class for the words table in the database.
 class WordTableHelper extends DatabaseHelper {
