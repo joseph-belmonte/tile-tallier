@@ -38,7 +38,7 @@ class HistoryRepository {
   }
 
   /// Loads all games from the database.
-  Future<List<Game>> loadAllGames() async {
+  Future<List<Game>> fetchGames() async {
     return await _gameTableHelper.fetchGames();
   }
 
