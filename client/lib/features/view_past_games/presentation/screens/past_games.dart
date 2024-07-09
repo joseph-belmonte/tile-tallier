@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/domain/models/game.dart';
 import '../../application/providers/past_games_provider.dart';
-import '../../data/game_storage_database_helper.dart';
-import '../../domain/models/past_game.dart';
 import 'past_game.dart';
 
 /// A page that displays the past games.
@@ -21,11 +20,21 @@ class PastGamesPage extends ConsumerWidget {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.delete),
-            onPressed: GameStorageDatabaseHelper.instance.deleteAllGames,
+            onPressed: () async {
+              await ref.read(pastGamesProvider.notifier).deleteAllGames();
+              ref.read(pastGamesProvider.notifier).fetchGames();
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              ref.read(pastGamesProvider.notifier).fetchGames();
+            },
           ),
         ],
       ),
       body: pastGamesAsync.when(
+        skipLoadingOnRefresh: true,
         loading: () {
           return const Center(
             child: CircularProgressIndicator(),
@@ -37,7 +46,10 @@ class PastGamesPage extends ConsumerWidget {
             children: <Widget>[
               const Text('An error occurred while fetching past games.'),
               TextButton.icon(
-                onPressed: GameStorageDatabaseHelper.instance.deleteAllGames,
+                onPressed: () async {
+                  await ref.read(pastGamesProvider.notifier).deleteAllGames();
+                  ref.read(pastGamesProvider.notifier).fetchGames();
+                },
                 icon: const Icon(Icons.delete),
                 label: const Text('Delete all games'),
               ),
@@ -49,13 +61,18 @@ class PastGamesPage extends ConsumerWidget {
                 direction: Axis.vertical,
                 children: <Widget>[
                   FittedBox(child: Text('Error stack trace: $error')),
-                  FittedBox(child: Text('Stack trace: $stack')),
+                  Wrap(
+                    children: <Widget>[
+                      const Text('Stack trace: '),
+                      Text('$stack'),
+                    ],
+                  ),
                 ],
               ),
             ],
           );
         },
-        data: (List<PastGame> games) {
+        data: (List<Game> games) {
           if (games.isEmpty) {
             return const Center(child: Text('No past games available.'));
           }
@@ -65,7 +82,11 @@ class PastGamesPage extends ConsumerWidget {
               final game = games[index];
               final playCount = game.plays.length;
 
-              final date = game.plays[playCount - 1].timestamp
+              if (playCount == 0) {
+                return const SizedBox.shrink();
+              }
+
+              final date = game.plays[playCount].timestamp
                   .toLocal()
                   .toString()
                   .split(' ')[0];
@@ -74,27 +95,35 @@ class PastGamesPage extends ConsumerWidget {
                   .map((player) => '${player.name}: ${player.score}')
                   .join(', ');
 
-              return Container(
-                padding: const EdgeInsets.all(8),
-                color: Theme.of(context).listTileTheme.tileColor,
-                child: Column(
-                  children: <Widget>[
-                    ListTile(
-                      title: Text('Game on $date'),
-                      subtitle: Text(playerScores),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.arrow_forward_rounded),
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  PastGameScreen(gameId: game.id),
-                            ),
-                          );
-                        },
+              return Dismissible(
+                key: Key(game.id),
+                onDismissed: (direction) {
+                  ref.read(pastGamesProvider.notifier).deleteGame(game.id);
+                },
+                direction: DismissDirection.endToStart,
+                background: Container(color: Colors.red),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  color: Theme.of(context).listTileTheme.tileColor,
+                  child: Column(
+                    children: <Widget>[
+                      ListTile(
+                        title: Text('Game on $date'),
+                        subtitle: Text(playerScores),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.arrow_forward_rounded),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    PastGameScreen(gameId: game.id),
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             },

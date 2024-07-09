@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/domain/models/game.dart';
-
 import '../../../play_game/presentation/screens/player_results.dart';
 import '../../../play_game/presentation/widgets/gameplay/historical_play.dart';
 import '../../application/providers/past_games_provider.dart';
-import '../../domain/models/past_game.dart';
+
 
 /// A page that displays a past game.
 class PastGameScreen extends ConsumerWidget {
-  /// The [PastGame] whose details are displayed.
+  /// The [Game] whose details are displayed.
   final String gameId;
 
   /// Creates a new [PastGameScreen] instance.
@@ -83,7 +81,7 @@ class PastGameScreen extends ConsumerWidget {
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => PlayerResultsScreen(
-                            game: Game.fromPastGame(game),
+                            game: game,
                             player: player,
                           ),
                         ),

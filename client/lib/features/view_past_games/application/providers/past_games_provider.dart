@@ -1,11 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/models/past_game.dart';
+import '../../../../utils/logger.dart';
+
+import '../../../core/domain/models/game.dart';
 import '../../domain/models/player.dart';
 import '../../domain/repositories/history_repository.dart';
 import 'history_repository_provider.dart';
 
 /// A provider that fetches the past games from the database.
-class PastGamesNotifier extends StateNotifier<AsyncValue<List<PastGame>>> {
+class PastGamesNotifier extends StateNotifier<AsyncValue<List<Game>>> {
   final HistoryRepository _historyRepository;
 
   /// Creates a new [PastGamesNotifier] instance.
@@ -13,14 +15,15 @@ class PastGamesNotifier extends StateNotifier<AsyncValue<List<PastGame>>> {
     fetchGames();
   }
 
-  /// Fetches the [PastGame]s from the database.
+  /// Fetches the [Game]s from the database.
   Future<void> fetchGames() async {
     state = const AsyncLoading();
     try {
-      final games = await _historyRepository.loadAllGames();
+      final games = await _historyRepository.fetchGames();
       state = AsyncValue.data(games);
     } catch (e, stackTrace) {
       state = AsyncValue.error(e, stackTrace);
+      logger.e('Failed to fetch games $e + $stackTrace');
     }
   }
 
@@ -70,7 +73,7 @@ class PastGamesNotifier extends StateNotifier<AsyncValue<List<PastGame>>> {
 
 /// A provider that exposes the [PastGamesNotifier].
 final pastGamesProvider =
-    StateNotifierProvider<PastGamesNotifier, AsyncValue<List<PastGame>>>((ref) {
+    StateNotifierProvider<PastGamesNotifier, AsyncValue<List<Game>>>((ref) {
   final historyRepository = ref.watch(historyRepositoryProvider);
   return PastGamesNotifier(historyRepository);
 });

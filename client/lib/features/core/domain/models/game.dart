@@ -34,17 +34,6 @@ class Game with _$Game {
   /// Converts the game to a map.
   factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
 
-  /// Creates a new [Game] instance from a [PastGame] instance.
-  factory Game.fromPastGame(PastGame pastGame) {
-    return Game(
-      id: pastGame.id,
-      currentPlay: pastGame.currentPlay,
-      currentWord: pastGame.currentWord,
-      players: pastGame.players,
-      currentPlayerIndex: pastGame.currentPlayerIndex,
-    );
-  }
-
   // Private constructor for computed properties and methods.
   const Game._();
 

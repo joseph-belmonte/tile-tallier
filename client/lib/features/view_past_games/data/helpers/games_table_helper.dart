@@ -6,7 +6,6 @@ import '../../../core/domain/models/game_player.dart';
 import '../../../core/domain/models/letter.dart';
 import '../../../core/domain/models/play.dart';
 import '../../../core/domain/models/word.dart';
-import '../../domain/models/past_game.dart';
 import 'database_helper.dart';
 
 /// A helper class for interacting with the games table in the database.
@@ -33,7 +32,7 @@ class GameTableHelper extends DatabaseHelper {
   }
 
   /// Fetches a game from the database by its ID.
-  Future<PastGame> fetchGame(String id) async {
+  Future<Game> fetchGame(String id) async {
     final db = await database;
     final gameMap = await db.query('games', where: 'id = ?', whereArgs: [id]);
 
@@ -45,7 +44,7 @@ class GameTableHelper extends DatabaseHelper {
   }
 
   /// Fetches all games from the database.
-  Future<List<PastGame>> fetchGames() async {
+  Future<List<Game>> fetchGames() async {
     final db = await database;
     final gamesMap = await db.query('games');
 
@@ -71,8 +70,8 @@ class GameTableHelper extends DatabaseHelper {
     );
   }
 
-  /// Assembles a [PastGame] object from a game map.
-  Future<PastGame> _assembleGame(Map<String, dynamic> gameJson) async {
+  /// Assembles a [Game] object from a game map.
+  Future<Game> _assembleGame(Map<String, dynamic> gameJson) async {
     final db = await database;
 
     final gameId = gameJson['id'] as String;
@@ -135,7 +134,7 @@ class GameTableHelper extends DatabaseHelper {
     gameJsonMutable['currentWord'] =
         gameJson['currentWord'] ?? Word.createNew().toJson();
 
-    final game = PastGame.fromJson(gameJsonMutable).copyWith(players: players);
+    final game = Game.fromJson(gameJsonMutable).copyWith(players: players);
 
     return game;
   }

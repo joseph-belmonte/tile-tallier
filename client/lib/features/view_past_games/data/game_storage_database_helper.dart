@@ -6,7 +6,6 @@ import '../../core/domain/models/game_player.dart';
 import '../../core/domain/models/letter.dart';
 import '../../core/domain/models/play.dart';
 import '../../core/domain/models/word.dart';
-import '../domain/models/past_game.dart';
 import '../domain/models/player.dart';
 
 /// A helper class for the game storage database.
@@ -162,7 +161,7 @@ class GameStorageDatabaseHelper {
   }
 
   /// Fetches a game from the database.
-  Future<PastGame> fetchGame(String id) async {
+  Future<Game> fetchGame(String id) async {
     final db = await database;
 
     final gameMap = await db.query('games', where: 'id = ?', whereArgs: [id]);
@@ -189,7 +188,7 @@ class GameStorageDatabaseHelper {
   }
 
   /// Fetches all games from the database.
-  Future<List<PastGame>> fetchGames() async {
+  Future<List<Game>> fetchGames() async {
     final db = await database;
 
     final gamesMap = await db.query('games');
@@ -246,7 +245,7 @@ class GameStorageDatabaseHelper {
   }
 
   /// Assembles a game from the database.
-  Future<PastGame> _assembleGame(Map<String, dynamic> gameJson) async {
+  Future<Game> _assembleGame(Map<String, dynamic> gameJson) async {
     final db = await database;
 
     final gameId = gameJson['id'] as String;
@@ -309,7 +308,7 @@ class GameStorageDatabaseHelper {
     gameJsonMutable['currentWord'] =
         gameJson['currentWord'] ?? Word.createNew().toJson();
 
-    final game = PastGame.fromJson(gameJsonMutable).copyWith(players: players);
+    final game = Game.fromJson(gameJsonMutable).copyWith(players: players);
 
     return game;
   }

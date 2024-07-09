@@ -2,7 +2,6 @@ import '../../../../utils/logger.dart';
 import '../../../core/domain/models/game.dart';
 import '../../data/helpers/games_table_helper.dart';
 import '../../data/helpers/players_table_helper.dart';
-import '../models/past_game.dart';
 import '../models/player.dart';
 
 /// A repository for interacting with the game storage database.
@@ -39,7 +38,7 @@ class HistoryRepository {
   }
 
   /// Loads all games from the database.
-  Future<List<PastGame>> loadAllGames() async {
+  Future<List<Game>> loadAllGames() async {
     return await _gameTableHelper.fetchGames();
   }
 
