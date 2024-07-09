@@ -111,11 +111,11 @@ void main() {
       expect(updatedState2.players[1].plays.length, equals(0));
       expect(updatedState2.currentPlayerIndex, equals(1));
       expect(
-        updatedState2.currentPlay.playerId,
+        updatedState2.currentPlay!.playerId,
         equals(updatedState2.players[1].id),
       );
       expect(updatedState2.currentWord, isNotNull);
-      expect(updatedState2.currentWord.word.isEmpty, true);
+      expect(updatedState2.currentWord!.word.isEmpty, true);
     });
 
     test('validate undoTurn', () {
@@ -158,11 +158,11 @@ void main() {
       expect(updatedState2.players[1].plays.length, equals(0));
       expect(updatedState2.currentPlayerIndex, equals(0));
       expect(
-        updatedState2.currentPlay.playerId,
+        updatedState2.currentPlay!.playerId,
         equals(updatedState2.players[0].id),
       );
       expect(updatedState2.currentWord, isNotNull);
-      expect(updatedState2.currentWord.word.isEmpty, true);
+      expect(updatedState2.currentWord!.word.isEmpty, true);
     });
   });
 }

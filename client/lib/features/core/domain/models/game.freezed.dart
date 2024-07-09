@@ -21,8 +21,9 @@ Game _$GameFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Game {
   String get id => throw _privateConstructorUsedError;
-  Play get currentPlay => throw _privateConstructorUsedError;
-  Word get currentWord => throw _privateConstructorUsedError;
+  Play? get currentPlay => throw _privateConstructorUsedError;
+  Word? get currentWord => throw _privateConstructorUsedError;
+  bool get isFavorite => throw _privateConstructorUsedError;
   List<GamePlayer> get players => throw _privateConstructorUsedError;
   int get currentPlayerIndex => throw _privateConstructorUsedError;
 
@@ -38,13 +39,14 @@ abstract class $GameCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      Play currentPlay,
-      Word currentWord,
+      Play? currentPlay,
+      Word? currentWord,
+      bool isFavorite,
       List<GamePlayer> players,
       int currentPlayerIndex});
 
-  $PlayCopyWith<$Res> get currentPlay;
-  $WordCopyWith<$Res> get currentWord;
+  $PlayCopyWith<$Res>? get currentPlay;
+  $WordCopyWith<$Res>? get currentWord;
 }
 
 /// @nodoc
@@ -61,8 +63,9 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
   @override
   $Res call({
     Object? id = null,
-    Object? currentPlay = null,
-    Object? currentWord = null,
+    Object? currentPlay = freezed,
+    Object? currentWord = freezed,
+    Object? isFavorite = null,
     Object? players = null,
     Object? currentPlayerIndex = null,
   }) {
@@ -71,14 +74,18 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      currentPlay: null == currentPlay
+      currentPlay: freezed == currentPlay
           ? _value.currentPlay
           : currentPlay // ignore: cast_nullable_to_non_nullable
-              as Play,
-      currentWord: null == currentWord
+              as Play?,
+      currentWord: freezed == currentWord
           ? _value.currentWord
           : currentWord // ignore: cast_nullable_to_non_nullable
-              as Word,
+              as Word?,
+      isFavorite: null == isFavorite
+          ? _value.isFavorite
+          : isFavorite // ignore: cast_nullable_to_non_nullable
+              as bool,
       players: null == players
           ? _value.players
           : players // ignore: cast_nullable_to_non_nullable
@@ -92,16 +99,24 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
 
   @override
   @pragma('vm:prefer-inline')
-  $PlayCopyWith<$Res> get currentPlay {
-    return $PlayCopyWith<$Res>(_value.currentPlay, (value) {
+  $PlayCopyWith<$Res>? get currentPlay {
+    if (_value.currentPlay == null) {
+      return null;
+    }
+
+    return $PlayCopyWith<$Res>(_value.currentPlay!, (value) {
       return _then(_value.copyWith(currentPlay: value) as $Val);
     });
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $WordCopyWith<$Res> get currentWord {
-    return $WordCopyWith<$Res>(_value.currentWord, (value) {
+  $WordCopyWith<$Res>? get currentWord {
+    if (_value.currentWord == null) {
+      return null;
+    }
+
+    return $WordCopyWith<$Res>(_value.currentWord!, (value) {
       return _then(_value.copyWith(currentWord: value) as $Val);
     });
   }
@@ -116,15 +131,16 @@ abstract class _$$GameImplCopyWith<$Res> implements $GameCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      Play currentPlay,
-      Word currentWord,
+      Play? currentPlay,
+      Word? currentWord,
+      bool isFavorite,
       List<GamePlayer> players,
       int currentPlayerIndex});
 
   @override
-  $PlayCopyWith<$Res> get currentPlay;
+  $PlayCopyWith<$Res>? get currentPlay;
   @override
-  $WordCopyWith<$Res> get currentWord;
+  $WordCopyWith<$Res>? get currentWord;
 }
 
 /// @nodoc
@@ -138,8 +154,9 @@ class __$$GameImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? currentPlay = null,
-    Object? currentWord = null,
+    Object? currentPlay = freezed,
+    Object? currentWord = freezed,
+    Object? isFavorite = null,
     Object? players = null,
     Object? currentPlayerIndex = null,
   }) {
@@ -148,14 +165,18 @@ class __$$GameImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      currentPlay: null == currentPlay
+      currentPlay: freezed == currentPlay
           ? _value.currentPlay
           : currentPlay // ignore: cast_nullable_to_non_nullable
-              as Play,
-      currentWord: null == currentWord
+              as Play?,
+      currentWord: freezed == currentWord
           ? _value.currentWord
           : currentWord // ignore: cast_nullable_to_non_nullable
-              as Word,
+              as Word?,
+      isFavorite: null == isFavorite
+          ? _value.isFavorite
+          : isFavorite // ignore: cast_nullable_to_non_nullable
+              as bool,
       players: null == players
           ? _value._players
           : players // ignore: cast_nullable_to_non_nullable
@@ -175,6 +196,7 @@ class _$GameImpl extends _Game {
       {required this.id,
       required this.currentPlay,
       required this.currentWord,
+      this.isFavorite = false,
       final List<GamePlayer> players = const [],
       this.currentPlayerIndex = 0})
       : _players = players,
@@ -186,9 +208,12 @@ class _$GameImpl extends _Game {
   @override
   final String id;
   @override
-  final Play currentPlay;
+  final Play? currentPlay;
   @override
-  final Word currentWord;
+  final Word? currentWord;
+  @override
+  @JsonKey()
+  final bool isFavorite;
   final List<GamePlayer> _players;
   @override
   @JsonKey()
@@ -204,7 +229,7 @@ class _$GameImpl extends _Game {
 
   @override
   String toString() {
-    return 'Game(id: $id, currentPlay: $currentPlay, currentWord: $currentWord, players: $players, currentPlayerIndex: $currentPlayerIndex)';
+    return 'Game(id: $id, currentPlay: $currentPlay, currentWord: $currentWord, isFavorite: $isFavorite, players: $players, currentPlayerIndex: $currentPlayerIndex)';
   }
 
   @override
@@ -217,6 +242,8 @@ class _$GameImpl extends _Game {
                 other.currentPlay == currentPlay) &&
             (identical(other.currentWord, currentWord) ||
                 other.currentWord == currentWord) &&
+            (identical(other.isFavorite, isFavorite) ||
+                other.isFavorite == isFavorite) &&
             const DeepCollectionEquality().equals(other._players, _players) &&
             (identical(other.currentPlayerIndex, currentPlayerIndex) ||
                 other.currentPlayerIndex == currentPlayerIndex));
@@ -224,8 +251,14 @@ class _$GameImpl extends _Game {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, currentPlay, currentWord,
-      const DeepCollectionEquality().hash(_players), currentPlayerIndex);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      currentPlay,
+      currentWord,
+      isFavorite,
+      const DeepCollectionEquality().hash(_players),
+      currentPlayerIndex);
 
   @JsonKey(ignore: true)
   @override
@@ -244,8 +277,9 @@ class _$GameImpl extends _Game {
 abstract class _Game extends Game {
   factory _Game(
       {required final String id,
-      required final Play currentPlay,
-      required final Word currentWord,
+      required final Play? currentPlay,
+      required final Word? currentWord,
+      final bool isFavorite,
       final List<GamePlayer> players,
       final int currentPlayerIndex}) = _$GameImpl;
   _Game._() : super._();
@@ -255,9 +289,11 @@ abstract class _Game extends Game {
   @override
   String get id;
   @override
-  Play get currentPlay;
+  Play? get currentPlay;
   @override
-  Word get currentWord;
+  Word? get currentWord;
+  @override
+  bool get isFavorite;
   @override
   List<GamePlayer> get players;
   @override

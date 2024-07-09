@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../view_past_games/domain/models/past_game.dart';
 import 'game_player.dart';
 import 'play.dart';
 import 'word.dart';
@@ -16,8 +15,9 @@ class Game with _$Game {
   /// Creates a new [Game] instance.
   factory Game({
     required String id,
-    required Play currentPlay,
-    required Word currentWord,
+    required Play? currentPlay,
+    required Word? currentWord,
+    @Default(false) bool isFavorite,
     @Default([]) List<GamePlayer> players,
     @Default(0) int currentPlayerIndex,
   }) = _Game;

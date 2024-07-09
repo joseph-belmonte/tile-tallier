@@ -20,17 +20,17 @@ class TurnHUD extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Text('Current: ${game.currentPlayer.name}'),
-          Text('Play Score: ${game.currentPlay.score}'),
-          Text('Word Score: ${game.currentWord.score}'),
+          Text('Play Score: ${game.currentPlay!.score}'),
+          Text('Word Score: ${game.currentWord!.score}'),
           IconButton(
             onPressed: notifier.toggleBingo,
-            icon: game.currentPlay.isBingo
+            icon: game.currentPlay!.isBingo
                 ? Icon(Icons.star, semanticLabel: 'Play is bingo')
                 : Icon(Icons.star_border, semanticLabel: 'Play is not bingo'),
             iconSize: 32.0,
           ),
           Text(
-            'Played Words: ${game.currentPlay.playedWords.map((word) => word.word).join(', ')}',
+            'Played Words: ${game.currentPlay!.playedWords.map((word) => word.word).join(', ')}',
           ),
         ],
       ),

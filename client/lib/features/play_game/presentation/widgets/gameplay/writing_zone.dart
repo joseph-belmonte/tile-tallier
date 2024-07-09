@@ -129,9 +129,9 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
                 controller: _scrollController,
                 child: ScrabbleWordWidget(
                   key: ValueKey(game.currentWord),
-                  game.currentWord,
+                  game.currentWord!,
                   (index) => gameNotifier.toggleScoreMultiplier(
-                    game.currentWord,
+                    game.currentWord!,
                     index,
                   ),
                 ),
@@ -174,7 +174,7 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
             IconButton(
               onPressed: _handleEndTurn,
               icon: (_textController.text.isEmpty &&
-                      game.currentPlay.playedWords.isEmpty)
+                      game.currentPlay!.playedWords.isEmpty)
                   ? Icon(Icons.skip_next, semanticLabel: 'Skip turn')
                   : Icon(Icons.redo, semanticLabel: 'End turn and submit word'),
             ),

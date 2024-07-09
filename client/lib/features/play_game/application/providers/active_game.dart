@@ -65,7 +65,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
 
     // Ensure currentPlay has all necessary data before copying.
     final completedPlay =
-        state.currentPlay.copyWith(playerId: currentPlayer.id);
+        state.currentPlay!.copyWith(playerId: currentPlayer.id);
 
     // Update the current player with the new play.
     final updatedPlayer = currentPlayer.copyWith(
@@ -104,9 +104,9 @@ class ActiveGameNotifier extends StateNotifier<Game> {
       return;
     } else {
       // First, clear any current words before undoing the turn.
-      if (state.currentPlay.playedWords.isNotEmpty) {
+      if (state.currentPlay!.playedWords.isNotEmpty) {
         state = state.copyWith(
-          currentPlay: state.currentPlay.copyWith(
+          currentPlay: state.currentPlay!.copyWith(
             playedWords: [],
           ),
         );
@@ -149,15 +149,15 @@ class ActiveGameNotifier extends StateNotifier<Game> {
       final letter = Letter(
         id: Uuid().v4(),
         letter: char,
-        scoreMultiplier: state.currentWord
+        scoreMultiplier: state.currentWord!
             .playedLetters[newWord.playedLetters.length].scoreMultiplier,
       );
       newWord =
           newWord.copyWith(playedLetters: [...newWord.playedLetters, letter]);
     }
 
-    final updatedPlay = state.currentPlay.copyWith(
-      playedWords: [...state.currentPlay.playedWords, newWord],
+    final updatedPlay = state.currentPlay!.copyWith(
+      playedWords: [...state.currentPlay!.playedWords, newWord],
     );
 
     state = state.copyWith(
@@ -205,7 +205,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
   /// Toggles the current play's bingo status
   void toggleBingo() {
     final updatedPlay =
-        state.currentPlay.copyWith(isBingo: !state.currentPlay.isBingo);
+        state.currentPlay!.copyWith(isBingo: !state.currentPlay!.isBingo);
     state = state.copyWith(currentPlay: updatedPlay);
   }
 
@@ -219,6 +219,14 @@ class ActiveGameNotifier extends StateNotifier<Game> {
         await WordListDBHelper.instance.wordExistsInList(possibleWords);
 
     return wordExists;
+  }
+
+  /// Ends the game by setting the current play and word to null
+  void endGame() {
+    state = state.copyWith(
+      currentPlay: null,
+      currentWord: null,
+    );
   }
 }
 

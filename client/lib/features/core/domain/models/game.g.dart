@@ -8,8 +8,13 @@ part of 'game.dart';
 
 _$GameImpl _$$GameImplFromJson(Map<String, dynamic> json) => _$GameImpl(
       id: json['id'] as String,
-      currentPlay: Play.fromJson(json['currentPlay'] as Map<String, dynamic>),
-      currentWord: Word.fromJson(json['currentWord'] as Map<String, dynamic>),
+      currentPlay: json['currentPlay'] == null
+          ? null
+          : Play.fromJson(json['currentPlay'] as Map<String, dynamic>),
+      currentWord: json['currentWord'] == null
+          ? null
+          : Word.fromJson(json['currentWord'] as Map<String, dynamic>),
+      isFavorite: json['isFavorite'] as bool? ?? false,
       players: (json['players'] as List<dynamic>?)
               ?.map((e) => GamePlayer.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -22,6 +27,7 @@ Map<String, dynamic> _$$GameImplToJson(_$GameImpl instance) =>
       'id': instance.id,
       'currentPlay': instance.currentPlay,
       'currentWord': instance.currentWord,
+      'isFavorite': instance.isFavorite,
       'players': instance.players,
       'currentPlayerIndex': instance.currentPlayerIndex,
     };

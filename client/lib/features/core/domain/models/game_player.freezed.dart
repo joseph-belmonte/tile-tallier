@@ -24,9 +24,9 @@ mixin _$GamePlayer {
   String get id =>
       throw _privateConstructorUsedError; // Unique identifier for this GamePlayer instance
   String get gameId => throw _privateConstructorUsedError;
-  String get playerId => throw _privateConstructorUsedError;
-  String get endRack =>
+  String get playerId =>
       throw _privateConstructorUsedError; // Unique identifier for the Player across games
+  String get endRack => throw _privateConstructorUsedError;
   List<Play> get plays => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -188,11 +188,10 @@ class _$GamePlayerImpl extends _GamePlayer {
   final String gameId;
   @override
   final String playerId;
+// Unique identifier for the Player across games
   @override
   final String endRack;
-// Unique identifier for the Player across games
   final List<Play> _plays;
-// Unique identifier for the Player across games
   @override
   @JsonKey()
   List<Play> get plays {
@@ -260,9 +259,9 @@ abstract class _GamePlayer extends GamePlayer {
   String get gameId;
   @override
   String get playerId;
-  @override
-  String get endRack;
   @override // Unique identifier for the Player across games
+  String get endRack;
+  @override
   List<Play> get plays;
   @override
   @JsonKey(ignore: true)
