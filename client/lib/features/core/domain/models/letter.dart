@@ -27,11 +27,7 @@ class Letter with _$Letter {
     required String letter,
     ScoreMultiplier scoreMultiplier = ScoreMultiplier.none,
   }) {
-    return Letter(
-      id: Uuid().v4(),
-      letter: letter,
-      scoreMultiplier: scoreMultiplier,
-    );
+    return Letter(id: Uuid().v4(), letter: letter);
   }
 
   /// Converts the game to a map.
