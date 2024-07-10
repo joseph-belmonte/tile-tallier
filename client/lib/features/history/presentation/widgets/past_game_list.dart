@@ -1,27 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/domain/models/game.dart';
+import '../../application/providers/past_games_provider.dart';
 import 'past_game_list_item.dart';
 
 /// A list of past games, sorted by date.
-// ignore: non_constant_identifier_names
-ListView PastGameList(
-  List<Game> games,
-  BuildContext context,
-  WidgetRef ref, {
-  bool isFavoriteList = false,
-}) {
-  if (isFavoriteList) {
-    games = games.where((game) => game.isFavorite).toList();
+class PastGameList extends ConsumerWidget {
+  /// Whether this list is displaying favorite games.
+  final bool isFavoriteList;
+
+  /// Creates a new [PastGameList] instance.
+  const PastGameList({
+    this.isFavoriteList = false,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pastGamesAsync = ref.watch(pastGamesProvider);
+
+    return pastGamesAsync.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stack) => Center(child: Text('Error: $error')),
+      data: (games) {
+        final filteredGames = isFavoriteList
+            ? games.where((game) => game.isFavorite).toList()
+            : games;
+
+        return ListView.builder(
+          itemCount: filteredGames.length,
+          itemBuilder: (context, index) {
+            return PastGameListItem(
+              game: filteredGames[index],
+              ref: ref,
+            );
+          },
+        );
+      },
+    );
   }
-  return ListView.builder(
-    itemCount: games.length,
-    itemBuilder: (context, index) {
-      return PastGameListItem(
-        game: games[index],
-        ref: ref,
-      );
-    },
-  );
 }
