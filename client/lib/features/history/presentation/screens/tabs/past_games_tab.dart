@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/domain/models/game.dart';
+
 import '../../../application/providers/past_games_provider.dart';
 
 import '../../widgets/past_game_list.dart';
@@ -20,11 +20,13 @@ class PastGamesTab extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: const [
           Text('An error occurred while fetching past games.'),
-          Center(child: Text('Error fetching past games, please try again.')),
+          Center(
+            child: Text('Error fetching past games, please try again.'),
+          ),
           Divider(),
         ],
       ),
-      data: (List<Game> games) => PastGameList(games, context, ref),
+      data: (games) => PastGameList(isFavoriteList: false),
     );
   }
 }
