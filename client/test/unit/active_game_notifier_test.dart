@@ -42,6 +42,7 @@ void main() {
       final gameId = Uuid().v4();
 
       final dummyPlay = Play(
+        gameId: gameId,
         id: Uuid().v4(),
         timestamp: DateTime.now(),
       );

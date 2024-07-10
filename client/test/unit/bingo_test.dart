@@ -20,6 +20,7 @@ void main() {
 
     final noBingo = Play(
       id: Uuid().v4(),
+      gameId: Uuid().v4(),
       playedWords: [word],
       isBingo: false,
       timestamp: DateTime.now(),
