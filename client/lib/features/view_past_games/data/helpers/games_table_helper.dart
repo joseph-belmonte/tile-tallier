@@ -1,5 +1,4 @@
 import 'package:sqflite/sqflite.dart';
-import '../../../../utils/logger.dart';
 import '../../../core/domain/models/game.dart';
 import '../../../core/domain/models/game_player.dart';
 import '../../../core/domain/models/letter.dart';
@@ -76,7 +75,6 @@ class GameTableHelper extends DatabaseHelper {
         await _playTableHelper.insertPlay(play, txn);
       }
     }
-    logger.d('Game inserted with ID: ${game.id}');
   }
 
   /// Fetches a game from the database by its ID.
@@ -93,11 +91,8 @@ class GameTableHelper extends DatabaseHelper {
 
   /// Fetches all games from the database.
   Future<List<Game>> fetchGames() async {
-    logger.d('Fetching games');
     final db = await database;
     final gamesMap = await db.query('games');
-
-    logger.d('Games fetched: $gamesMap');
 
     final games = await Future.wait(
       gamesMap.map((gameMap) async {
@@ -126,7 +121,6 @@ class GameTableHelper extends DatabaseHelper {
     final db = await database;
 
     final gameId = gameJson['id'] as String;
-    logger.d('Assembling game with ID: $gameId');
 
     // Fetch game players from the 'game_players' table
     final playersMap = await db.query(
@@ -134,8 +128,6 @@ class GameTableHelper extends DatabaseHelper {
       where: 'gameId = ?',
       whereArgs: [gameId],
     );
-
-    logger.d('Players map: $playersMap');
 
     final players = await Future.wait(
       playersMap.map((playerMap) async {
@@ -148,8 +140,6 @@ class GameTableHelper extends DatabaseHelper {
           whereArgs: [playerId],
         );
 
-        logger.d('Plays map for player $playerId: $playsMap');
-
         final plays = await Future.wait(
           playsMap.map((playMap) async {
             final play = Play.fromJson(playMap);
@@ -161,8 +151,6 @@ class GameTableHelper extends DatabaseHelper {
               whereArgs: [play.id],
             );
 
-            logger.d('Words map for play ${play.id}: $wordsMap');
-
             final words = await Future.wait(
               wordsMap.map((wordMap) async {
                 final word = Word.fromJson(wordMap);
@@ -173,8 +161,6 @@ class GameTableHelper extends DatabaseHelper {
                   where: 'wordId = ?',
                   whereArgs: [word.id],
                 );
-
-                logger.d('Letters map for word ${word.id}: $lettersMap');
 
                 final letters = lettersMap.map(Letter.fromJson).toList();
 
