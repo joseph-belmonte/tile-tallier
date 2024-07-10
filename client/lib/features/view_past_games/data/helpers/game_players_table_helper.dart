@@ -1,40 +1,27 @@
 import 'package:sqflite/sqflite.dart';
-import '../../../../utils/logger.dart';
 import '../../../core/domain/models/game_player.dart';
-import '../../domain/models/database_helper.dart';
+import 'master_database_helper.dart';
 
 /// A helper class for interacting with the game_players table in the database.
-class GamePlayerTableHelper extends DatabaseHelper {
-  /// Creates the 'game_players' table in the database.
-  @override
-  Future<void> createDB(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE game_players (
-        id TEXT PRIMARY KEY,
-        playerId TEXT,
-        gameId TEXT,
-        name TEXT,
-        endRack TEXT,
-        FOREIGN KEY (playerId) REFERENCES players (id),
-        FOREIGN KEY (gameId) REFERENCES games (id)
-      )
-    ''');
-  }
-
+class GamePlayerTableHelper {
   /// Inserts a game player into the database.
-  Future<void> insertGamePlayer(GamePlayer gamePlayer) async {
-    final db = await database;
-    logger.i({gamePlayer.toJson()});
-    await db.insert(
+  Future<void> insertGamePlayer(GamePlayer gamePlayer, Transaction txn) async {
+    await txn.insert(
       'game_players',
-      gamePlayer.toJson(),
+      {
+        'id': gamePlayer.id,
+        'playerId': gamePlayer.playerId,
+        'gameId': gamePlayer.gameId,
+        'name': gamePlayer.name,
+        'endRack': gamePlayer.endRack,
+      },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
   /// Fetches all game players from the database.
   Future<List<GamePlayer>> fetchGamePlayers({required String gameId}) async {
-    final db = await database;
+    final db = await MasterDatabaseHelper.instance.database;
     final result = await db
         .query('game_players', where: 'gameId = ?', whereArgs: [gameId]);
     return result.map(GamePlayer.fromJson).toList();
@@ -42,7 +29,7 @@ class GamePlayerTableHelper extends DatabaseHelper {
 
   /// Deletes all game players from the database by their game ID.
   Future<void> deleteGamePlayers({required String gameId}) async {
-    final db = await database;
+    final db = await MasterDatabaseHelper.instance.database;
     await db.delete('game_players', where: 'gameId = ?', whereArgs: [gameId]);
   }
 }

@@ -1,3 +1,5 @@
+import 'package:sqflite/sqflite.dart';
+
 import '../../../../utils/logger.dart';
 import '../../../core/domain/models/game.dart';
 import '../../data/helpers/games_table_helper.dart';
@@ -11,9 +13,9 @@ class HistoryRepository {
 
   // Region: 'games' table methods
   /// Saves a game to the database.
-  Future<void> saveGame(Game game) async {
+  Future<void> saveGame(Game game, Transaction txn) async {
     try {
-      await _gameTableHelper.insertGame(game);
+      await _gameTableHelper.insertGame(game, txn);
     } catch (e) {
       // Handle or rethrow the error as needed
       throw Exception('Failed to save game: $e');
@@ -22,14 +24,7 @@ class HistoryRepository {
 
   /// Deletes a specific game from the database.
   Future<void> deleteGame(String id) async {
-    try {
-      logger.d('Deleting game with ID: $id');
-      await _gameTableHelper.deleteGame(id);
-      logger.d('Deleted game with ID: $id');
-    } catch (e) {
-      logger.d('Failed to delete game with ID $id: $e');
-      throw Exception('Failed to delete game: $e');
-    }
+    await _gameTableHelper.deleteGame(id);
   }
 
   /// Toggles the favorite status of a game in the database.
@@ -39,6 +34,7 @@ class HistoryRepository {
 
   /// Loads all games from the database.
   Future<List<Game>> fetchGames() async {
+    logger.d('Fetching games');
     return await _gameTableHelper.fetchGames();
   }
 

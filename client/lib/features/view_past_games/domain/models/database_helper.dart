@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 
 /// An abstract class that provides helper methods for interacting with a database.
 abstract class DatabaseHelper {
-  Database? _database;
+  static Database? _database;
 
   /// Returns the database instance, initializing it if necessary.
   Future<Database> get database async {

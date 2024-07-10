@@ -1,18 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../utils/logger.dart';
 import '../../../core/domain/models/game.dart';
 import '../../application/providers/past_games_provider.dart';
+import '../widgets/deletion_dialog.dart';
 import 'past_game.dart';
 
 /// A page that displays the past games.
-class PastGamesPage extends ConsumerWidget {
+class PastGamesPage extends ConsumerStatefulWidget {
   /// Creates a new [PastGamesPage] instance.
   const PastGamesPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PastGamesPage> createState() => _PastGamesPageState();
+}
+
+class _PastGamesPageState extends ConsumerState<PastGamesPage> {
+  @override
+  void initState() {
+    super.initState();
+    // Fetch games when the widget is first built
+    Future.microtask(() => ref.read(pastGamesProvider.notifier).fetchGames());
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final pastGamesAsync = ref.watch(pastGamesProvider);
+
+    /// Deletes all games from the database and updates the state.
+    void deletePastGames() async {
+      await ref.read(pastGamesProvider.notifier).deleteAllGames();
+      ref.read(pastGamesProvider.notifier).fetchGames();
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -20,15 +43,12 @@ class PastGamesPage extends ConsumerWidget {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.delete),
-            onPressed: () async {
-              await ref.read(pastGamesProvider.notifier).deleteAllGames();
-              ref.read(pastGamesProvider.notifier).fetchGames();
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.refresh),
             onPressed: () {
-              ref.read(pastGamesProvider.notifier).fetchGames();
+              logger.d('showing modal');
+              showDeletionDialog(
+                context,
+                onConfirm: deletePastGames,
+              );
             },
           ),
         ],
@@ -83,10 +103,10 @@ class PastGamesPage extends ConsumerWidget {
               final playCount = game.plays.length;
 
               if (playCount == 0) {
-                return const SizedBox.shrink();
+                return const Text('No plays in this game');
               }
 
-              final date = game.plays[playCount].timestamp
+              final date = game.plays[playCount - 1].timestamp
                   .toLocal()
                   .toString()
                   .split(' ')[0];

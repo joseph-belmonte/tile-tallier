@@ -1,5 +1,4 @@
 import 'package:sqflite/sqflite.dart';
-import '../../../../utils/logger.dart';
 import '../../../core/domain/models/letter.dart';
 import '../../domain/models/database_helper.dart';
 
@@ -20,17 +19,25 @@ class PlayedLetterTableHelper extends DatabaseHelper {
   }
 
   /// Inserts a played letter into the playedLetters table.
-  Future<void> insertPlayedLetter(Letter playedLetter) async {
-    final db = await database;
-    await db.insert(
+  Future<void> insertPlayedLetter(
+    Letter playedLetter,
+    String wordId,
+    Transaction txn,
+  ) async {
+    await txn.insert(
       'playedLetters',
-      playedLetter.toJson(),
+      {
+        'id': playedLetter.id,
+        'wordId': wordId,
+        'letter': playedLetter.letter,
+        'scoreMultiplier': playedLetter.scoreMultiplier.index,
+      },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
   /// Fetches all played letters associated with a word.
-  Future<List<Letter>> fetchLettersByWordId(String wordId) async {
+  Future<List<Letter>> fetchLetters({required String wordId}) async {
     final db = await database;
     final result = await db
         .query('playedLetters', where: 'wordId = ?', whereArgs: [wordId]);
@@ -38,7 +45,7 @@ class PlayedLetterTableHelper extends DatabaseHelper {
   }
 
   /// Deletes all played letters associated with a word.
-  Future<void> deleteLettersByWordId(String wordId) async {
+  Future<void> deleteLetters({required String wordId}) async {
     final db = await database;
     await db.delete('playedLetters', where: 'wordId = ?', whereArgs: [wordId]);
   }

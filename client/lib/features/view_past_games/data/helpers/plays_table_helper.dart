@@ -1,46 +1,57 @@
+/// A helper class for interacting with the 'plays' table in the database.
+library;
+
+import 'dart:convert';
 import 'package:sqflite/sqflite.dart';
+import '../../../../utils/logger.dart';
 import '../../../core/domain/models/play.dart';
-import '../../domain/models/database_helper.dart';
+import 'master_database_helper.dart';
 
 /// A helper class for interacting with the 'plays' table in the database.
-class PlayTableHelper extends DatabaseHelper {
-  /// Creates the 'plays' table in the database.
-  @override
-  Future<void> createDB(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE plays (
-        id TEXT PRIMARY KEY,
-        playerId TEXT,
-        gameId TEXT,
-        isBingo INTEGER,
-        timestamp TEXT,
-        FOREIGN KEY (playerId) REFERENCES game_players (id),
-        FOREIGN KEY (gameId) REFERENCES games (id)
-      )
-    ''');
-  }
-
+class PlayTableHelper {
   /// Inserts a play into the database.
-  Future<void> insertPlay(Play play) async {
-    final db = await database;
-    await db.insert(
+  Future<void> insertPlay(Play play, Transaction txn) async {
+    await txn.insert(
       'plays',
-      play.toJson(),
+      {
+        'id': play.id,
+        'playerId': play.playerId,
+        'gameId': play.gameId,
+        'isBingo': play.isBingo ? 1 : 0,
+        'timestamp': play.timestamp.toIso8601String(),
+        'playedWords':
+            jsonEncode(play.playedWords.map((word) => word.toJson()).toList()),
+      },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
-  /// Fetches all plays by one [Player] from the database, given their ID.
-  Future<List<Play>> fetchPlaysByPlayerId(String playerId) async {
-    final db = await database;
-    final result =
+  /// Fetches all plays from the database.
+  Future<List<Play>> fetchPlays({required String playerId}) async {
+    final db = await MasterDatabaseHelper.instance.database;
+    final playerPlaysMap =
         await db.query('plays', where: 'playerId = ?', whereArgs: [playerId]);
-    return result.map(Play.fromJson).toList();
+
+    final plays = <Play>[];
+
+    for (var playMap in playerPlaysMap) {
+      logger.d('playMap: $playMap');
+
+      // Deserialize the main Play object
+      final play = Play.fromJson(playMap);
+
+      logger.d('play: $play');
+
+      // Add the play to the list
+      plays.add(play);
+    }
+
+    return plays;
   }
 
-  /// Deletes all plays from a game by its gameid.
-  Future<void> deletePlaysByGameId(String gameId) async {
-    final db = await database;
+  /// Deletes all plays from the database by their game ID.
+  Future<void> deletePlays({required String gameId}) async {
+    final db = await MasterDatabaseHelper.instance.database;
     await db.delete('plays', where: 'gameId = ?', whereArgs: [gameId]);
   }
 }

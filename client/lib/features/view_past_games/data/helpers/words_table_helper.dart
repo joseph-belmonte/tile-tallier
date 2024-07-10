@@ -20,17 +20,21 @@ class WordTableHelper extends DatabaseHelper {
   }
 
   /// Inserts a word into the words table.
-  Future<void> insertWord(Word word) async {
-    final db = await database;
-    await db.insert(
+  Future<void> insertWord(Word word, String playId, Transaction txn) async {
+    await txn.insert(
       'words',
-      word.toJson(),
+      {
+        'id': word.id,
+        'playId': playId,
+        'word': word.word,
+        'score': word.score,
+      },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
   /// Fetches all words associated with a play.
-  Future<List<Word>> fetchWordsByPlayId(String playId) async {
+  Future<List<Word>> fetchWords({required String playId}) async {
     final db = await database;
     final result =
         await db.query('words', where: 'playId = ?', whereArgs: [playId]);
@@ -38,7 +42,7 @@ class WordTableHelper extends DatabaseHelper {
   }
 
   /// Deletes all words associated with a play.
-  Future<void> deleteWordsByPlayId(String playId) async {
+  Future<void> deleteWords({required String playId}) async {
     final db = await database;
     await db.delete('words', where: 'playId = ?', whereArgs: [playId]);
   }

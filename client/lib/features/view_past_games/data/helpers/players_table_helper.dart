@@ -44,12 +44,26 @@ class PlayerTableHelper extends DatabaseHelper {
   }
 
   /// Fetches a player from the database by their name
-  Future<Player?> findPlayerByName(String name) async {
+  Future<Player?> findPlayer({
+    String? id,
+    String? name,
+  }) async {
     final db = await database;
-    final result =
-        await db.query('players', where: 'name = ?', whereArgs: [name]);
-    if (result.isNotEmpty) {
-      return Player.fromJson(result.first);
+    if (id != null) {
+      final result =
+          await db.query('players', where: 'id = ?', whereArgs: [id]);
+
+      if (result.isNotEmpty) {
+        return Player.fromJson(result.first);
+      }
+      return null;
+    } else if (name != null) {
+      final result =
+          await db.query('players', where: 'name = ?', whereArgs: [name]);
+      if (result.isNotEmpty) {
+        return Player.fromJson(result.first);
+      }
+      return null;
     }
     return null;
   }

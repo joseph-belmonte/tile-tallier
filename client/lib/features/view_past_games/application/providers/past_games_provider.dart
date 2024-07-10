@@ -22,8 +22,8 @@ class PastGamesNotifier extends StateNotifier<AsyncValue<List<Game>>> {
       final games = await _historyRepository.fetchGames();
       state = AsyncValue.data(games);
     } catch (e, stackTrace) {
+      logger.e('Failed to fetch games\nerror:$e\n$stackTrace');
       state = AsyncValue.error(e, stackTrace);
-      logger.e('Failed to fetch games $e + $stackTrace');
     }
   }
 
