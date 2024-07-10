@@ -7,7 +7,7 @@ import '../../widgets/past_game_list.dart';
 
 /// Displays all favorite games.
 class FavoriteGamesTab extends ConsumerWidget {
-  // ignore: public_member_api_docs
+  /// Creates a new [FavoriteGamesTab] instance.
   const FavoriteGamesTab({super.key});
 
   @override
@@ -26,9 +26,7 @@ class FavoriteGamesTab extends ConsumerWidget {
           Divider(),
         ],
       ),
-      data: (List<Game> games) => games.any((game) => game.isFavorite)
-          ? PastGameList(games, context, ref, isFavoriteList: true)
-          : const Center(child: Text('No favorite games yet.')),
+      data: (List<Game> games) => PastGameList(isFavoriteList: true),
     );
   }
 }
