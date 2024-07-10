@@ -41,6 +41,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
         )
         .toList();
     final newPlay = Play(
+      gameId: newGameId,
       id: Uuid().v4(),
       timestamp: DateTime.now(),
     );
@@ -77,6 +78,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
     final nextPlayerId = state.players[nextIndex].id;
 
     final newPlay = Play(
+      gameId: state.id,
       id: Uuid().v4(),
       playerId: nextPlayerId,
       timestamp: DateTime.now(),
@@ -129,6 +131,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
           currentPlayerIndex: newPlayerIndex,
           currentPlay: Play(
             id: Uuid().v4(),
+            gameId: state.id,
             playerId: newPlayer.id,
             timestamp: DateTime.now(),
           ),
@@ -235,7 +238,7 @@ final activeGameProvider = StateNotifierProvider<ActiveGameNotifier, Game>(
   (ref) => ActiveGameNotifier(
     Game(
       id: Uuid().v4(),
-      currentPlay: Play.createNew(),
+      currentPlay: Play.createNew(gameId: Uuid().v4()),
       currentWord: Word.createNew(),
     ),
   ),

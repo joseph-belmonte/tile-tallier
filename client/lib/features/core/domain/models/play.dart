@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../utils/converters.dart';
@@ -15,7 +17,9 @@ class Play with _$Play {
   /// Creates a new Play instance.
   factory Play({
     required String id,
+    required String gameId,
     required DateTime timestamp,
+    // @JsonKey(fromJson: _wordsFromJson, toJson: _wordsToJson)
     @Default([]) List<Word> playedWords,
     @BoolIntConverter() @Default(false) bool isBingo,
     @Default('') String playerId,
@@ -24,8 +28,8 @@ class Play with _$Play {
   const Play._();
 
   /// Creates a new play.
-  factory Play.createNew() {
-    return Play(id: Uuid().v4(), timestamp: DateTime.now());
+  factory Play.createNew({required String gameId}) {
+    return Play(id: Uuid().v4(), timestamp: DateTime.now(), gameId: gameId);
   }
 
   /// Converts Play to a map.
@@ -39,4 +43,20 @@ class Play with _$Play {
         ) +
         (isBingo ? 50 : 0);
   }
+}
+
+/// Custom converter to handle List<Word> from/to JSON
+List<Word> _wordsFromJson(dynamic json) {
+  if (json is String) {
+    final decoded = jsonDecode(json) as List<dynamic>;
+    return decoded
+        .map((wordJson) => Word.fromJson(wordJson as Map<String, dynamic>))
+        .toList();
+  }
+  return json as List<Word>;
+}
+
+String _wordsToJson(List<Word> words) {
+  final jsonList = words.map((word) => word.toJson()).toList();
+  return jsonEncode(jsonList);
 }

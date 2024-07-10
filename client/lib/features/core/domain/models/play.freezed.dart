@@ -21,7 +21,9 @@ Play _$PlayFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Play {
   String get id => throw _privateConstructorUsedError;
+  String get gameId => throw _privateConstructorUsedError;
   DateTime get timestamp => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _wordsFromJson, toJson: _wordsToJson)
   List<Word> get playedWords => throw _privateConstructorUsedError;
   @BoolIntConverter()
   bool get isBingo => throw _privateConstructorUsedError;
@@ -39,7 +41,9 @@ abstract class $PlayCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
+      String gameId,
       DateTime timestamp,
+      @JsonKey(fromJson: _wordsFromJson, toJson: _wordsToJson)
       List<Word> playedWords,
       @BoolIntConverter() bool isBingo,
       String playerId});
@@ -59,6 +63,7 @@ class _$PlayCopyWithImpl<$Res, $Val extends Play>
   @override
   $Res call({
     Object? id = null,
+    Object? gameId = null,
     Object? timestamp = null,
     Object? playedWords = null,
     Object? isBingo = null,
@@ -68,6 +73,10 @@ class _$PlayCopyWithImpl<$Res, $Val extends Play>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      gameId: null == gameId
+          ? _value.gameId
+          : gameId // ignore: cast_nullable_to_non_nullable
               as String,
       timestamp: null == timestamp
           ? _value.timestamp
@@ -98,7 +107,9 @@ abstract class _$$PlayImplCopyWith<$Res> implements $PlayCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
+      String gameId,
       DateTime timestamp,
+      @JsonKey(fromJson: _wordsFromJson, toJson: _wordsToJson)
       List<Word> playedWords,
       @BoolIntConverter() bool isBingo,
       String playerId});
@@ -115,6 +126,7 @@ class __$$PlayImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? gameId = null,
     Object? timestamp = null,
     Object? playedWords = null,
     Object? isBingo = null,
@@ -124,6 +136,10 @@ class __$$PlayImplCopyWithImpl<$Res>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      gameId: null == gameId
+          ? _value.gameId
+          : gameId // ignore: cast_nullable_to_non_nullable
               as String,
       timestamp: null == timestamp
           ? _value.timestamp
@@ -150,7 +166,9 @@ class __$$PlayImplCopyWithImpl<$Res>
 class _$PlayImpl extends _Play {
   _$PlayImpl(
       {required this.id,
+      required this.gameId,
       required this.timestamp,
+      @JsonKey(fromJson: _wordsFromJson, toJson: _wordsToJson)
       final List<Word> playedWords = const [],
       @BoolIntConverter() this.isBingo = false,
       this.playerId = ''})
@@ -163,10 +181,12 @@ class _$PlayImpl extends _Play {
   @override
   final String id;
   @override
+  final String gameId;
+  @override
   final DateTime timestamp;
   final List<Word> _playedWords;
   @override
-  @JsonKey()
+  @JsonKey(fromJson: _wordsFromJson, toJson: _wordsToJson)
   List<Word> get playedWords {
     if (_playedWords is EqualUnmodifiableListView) return _playedWords;
     // ignore: implicit_dynamic_type
@@ -183,7 +203,7 @@ class _$PlayImpl extends _Play {
 
   @override
   String toString() {
-    return 'Play(id: $id, timestamp: $timestamp, playedWords: $playedWords, isBingo: $isBingo, playerId: $playerId)';
+    return 'Play(id: $id, gameId: $gameId, timestamp: $timestamp, playedWords: $playedWords, isBingo: $isBingo, playerId: $playerId)';
   }
 
   @override
@@ -192,6 +212,7 @@ class _$PlayImpl extends _Play {
         (other.runtimeType == runtimeType &&
             other is _$PlayImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.gameId, gameId) || other.gameId == gameId) &&
             (identical(other.timestamp, timestamp) ||
                 other.timestamp == timestamp) &&
             const DeepCollectionEquality()
@@ -203,7 +224,7 @@ class _$PlayImpl extends _Play {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, timestamp,
+  int get hashCode => Object.hash(runtimeType, id, gameId, timestamp,
       const DeepCollectionEquality().hash(_playedWords), isBingo, playerId);
 
   @JsonKey(ignore: true)
@@ -223,7 +244,9 @@ class _$PlayImpl extends _Play {
 abstract class _Play extends Play {
   factory _Play(
       {required final String id,
+      required final String gameId,
       required final DateTime timestamp,
+      @JsonKey(fromJson: _wordsFromJson, toJson: _wordsToJson)
       final List<Word> playedWords,
       @BoolIntConverter() final bool isBingo,
       final String playerId}) = _$PlayImpl;
@@ -234,8 +257,11 @@ abstract class _Play extends Play {
   @override
   String get id;
   @override
+  String get gameId;
+  @override
   DateTime get timestamp;
   @override
+  @JsonKey(fromJson: _wordsFromJson, toJson: _wordsToJson)
   List<Word> get playedWords;
   @override
   @BoolIntConverter()

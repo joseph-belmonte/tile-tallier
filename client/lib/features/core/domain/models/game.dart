@@ -24,9 +24,10 @@ class Game with _$Game {
 
   /// Creates a new game.
   factory Game.createNew() {
+    final gameId = Uuid().v4();
     return Game(
-      id: Uuid().v4(),
-      currentPlay: Play.createNew(),
+      id: gameId,
+      currentPlay: Play.createNew(gameId: gameId),
       currentWord: Word.createNew(),
     );
   }

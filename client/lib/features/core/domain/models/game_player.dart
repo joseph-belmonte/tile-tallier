@@ -56,9 +56,9 @@ class GamePlayer with _$GamePlayer {
   }
 
   /// The highest scoring play by the player.
-  Play get highestScoringPlay {
+  Play? get highestScoringPlay {
     if (plays.isEmpty) {
-      return Play(id: '', timestamp: DateTime.now());
+      return null;
     } else {
       var highestScoring = plays.first;
       for (final play in plays) {
