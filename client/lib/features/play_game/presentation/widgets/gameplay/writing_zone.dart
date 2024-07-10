@@ -127,14 +127,16 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 controller: _scrollController,
-                child: ScrabbleWordWidget(
-                  key: ValueKey(game.currentWord),
-                  game.currentWord!,
-                  (index) => gameNotifier.toggleScoreMultiplier(
-                    game.currentWord!,
-                    index,
-                  ),
-                ),
+                child: game.currentWord != null
+                    ? ScrabbleWordWidget(
+                        key: ValueKey(game.currentWord),
+                        game.currentWord!,
+                        (index) => gameNotifier.toggleScoreMultiplier(
+                          game.currentWord!,
+                          index,
+                        ),
+                      )
+                    : const SizedBox.shrink(),
               ),
             ),
           ],
