@@ -26,7 +26,19 @@ class FavoriteGamesTab extends ConsumerWidget {
           Divider(),
         ],
       ),
-      data: (List<Game> games) => PastGameList(isFavoriteList: true),
+      data: (List<Game> games) {
+        if (games.isEmpty) {
+          return const Center(
+            child: Text('No games found.'),
+          );
+        } else if (games.any((game) => game.isFavorite) == false) {
+          return const Center(
+            child: Text('No favorite games found.'),
+          );
+        } else {
+          return PastGameList(isFavoriteList: true);
+        }
+      },
     );
   }
 }
