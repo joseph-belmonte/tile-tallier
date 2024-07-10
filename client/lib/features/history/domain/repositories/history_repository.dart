@@ -23,13 +23,18 @@ class HistoryRepository {
   }
 
   /// Deletes a specific game from the database.
-  Future<void> deleteGame(String id) async {
-    await _gameTableHelper.deleteGame(id);
+  Future<void> deleteGame(String id, Transaction txn) async {
+    await _gameTableHelper.deleteGame(id, txn);
   }
 
   /// Toggles the favorite status of a game in the database.
-  Future<void> toggleFavorite(String id) async {
-    await _gameTableHelper.toggleFavorite(id);
+  Future<void> toggleFavorite(String id, Transaction txn) async {
+    await _gameTableHelper.toggleFavorite(id, txn);
+  }
+
+  /// Fetches a game from the database.
+  Future<Game> fetchGame(String id) async {
+    return await _gameTableHelper.fetchGame(id);
   }
 
   /// Loads all games from the database.
@@ -60,8 +65,12 @@ class HistoryRepository {
   }
 
   /// Updates a player's name in the database.
-  Future<void> updatePlayerName(String playerId, String newName) async {
-    await _playerTableHelper.updatePlayerName(playerId, newName);
+  Future<void> updatePlayerName(
+    Transaction txn, {
+    required String playerId,
+    required String newName,
+  }) async {
+    await _playerTableHelper.updatePlayerName(txn, playerId, newName);
   }
 
   /// Deletes a player from the database.
