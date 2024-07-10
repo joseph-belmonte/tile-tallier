@@ -23,13 +23,13 @@ class HistoryRepository {
   }
 
   /// Deletes a specific game from the database.
-  Future<void> deleteGame(String id, Transaction txn) async {
-    await _gameTableHelper.deleteGame(id, txn);
+  Future<void> deleteGame(String id) async {
+    await _gameTableHelper.deleteGame(id);
   }
 
   /// Toggles the favorite status of a game in the database.
-  Future<void> toggleFavorite(String id, Transaction txn) async {
-    await _gameTableHelper.toggleFavorite(id, txn);
+  Future<void> toggleFavorite(String id) async {
+    await _gameTableHelper.toggleFavorite(id);
   }
 
   /// Fetches a game from the database.
