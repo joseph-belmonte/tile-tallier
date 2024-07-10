@@ -32,6 +32,11 @@ class MasterDatabaseHelper {
     );
   }
 
+  /// Creates the database tables, only used for testing.
+  Future<void> testCreateDB(Database db, int version) {
+    return _createDB(db, version);
+  }
+
   Future<void> _createDB(Database db, int version) async {
     await db.execute('''
       CREATE TABLE games (
@@ -91,12 +96,19 @@ class MasterDatabaseHelper {
         FOREIGN KEY (wordId) REFERENCES words (id)
       )
     ''');
-    logger.d('Database created');
+    logger.d(
+      'Database created with tables: games, players, game_players, plays, words, playedLetters',
+    );
   }
 
   /// Closes the database.
   Future<void> close() async {
     final db = await instance.database;
     await db.close();
+  }
+
+  /// Inject a database for testing
+  static void testConstructor(Database testDb) {
+    _database = testDb;
   }
 }
