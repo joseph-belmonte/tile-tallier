@@ -10,7 +10,7 @@ Future<void> showDeletionDialog(
     builder: (context) => AlertDialog(
       title: const Text('Delete all games?'),
       content: const Text(
-        'Are you sure you want to delete all games? This action cannot be undone.',
+        'Are you sure you want to delete all player and game data? This action cannot be undone.',
       ),
       actions: <Widget>[
         TextButton(

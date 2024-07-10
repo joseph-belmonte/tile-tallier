@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-// import 'package:purchases_flutter/purchases_flutter.dart';
-
-// import '../../../../utils/game_play_storage.dart';
-// import '../../../../utils/toast.dart';
 import '../../../edit_settings/presentation/screens/settings.dart';
+import '../../../history/presentation/screens/history_page.dart';
 import '../../../play_game/presentation/screens/pre_game.dart';
-import '../../../view_past_games/presentation/screens/past_games.dart';
 import '../widgets/pre_paywall_dialog.dart';
 
 /// The home page for the Scrabble app.
@@ -36,7 +32,7 @@ class HomePage extends StatelessWidget {
             SizedBox(height: 24),
             ElevatedButton.icon(
               onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const PastGamesPage()),
+                MaterialPageRoute(builder: (context) => const HistoryPage()),
               ),
               icon: Icon(Icons.history_edu),
               label: Text('View History'),

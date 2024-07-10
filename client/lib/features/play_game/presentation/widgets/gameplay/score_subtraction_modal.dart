@@ -6,9 +6,9 @@ import 'package:sqflite/sqflite.dart';
 import '../../../../../utils/game_play_storage.dart';
 import '../../../../../utils/logger.dart';
 import '../../../../core/domain/models/game.dart';
-import '../../../../view_past_games/application/providers/history_repository_provider.dart';
-import '../../../../view_past_games/data/helpers/master_database_helper.dart';
-import '../../../../view_past_games/domain/models/player.dart';
+import '../../../../history/application/providers/history_repository_provider.dart';
+import '../../../../history/data/helpers/master_database_helper.dart';
+import '../../../../history/domain/models/player.dart';
 import '../../../application/providers/active_game.dart';
 import '../../screens/results.dart';
 
@@ -87,7 +87,10 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
         final player = await ref
             .read(historyRepositoryProvider)
             .fetchPlayer(gamePlayer.playerId, txn);
-        logger.d('Fetched player from database');
+
+        if (player != null) {
+          logger.d('Player already exists in database');
+        }
 
         // If the player does not exist, save them to the database
         if (player == null) {

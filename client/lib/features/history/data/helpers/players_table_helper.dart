@@ -86,4 +86,10 @@ class PlayerTableHelper extends DatabaseHelper {
     final db = await database;
     await db.delete('players', where: 'id = ?', whereArgs: [id]);
   }
+
+  /// Deletes all players from the database.
+  Future<void> deleteAllPlayers() async {
+    final db = await database;
+    await db.delete('players');
+  }
 }

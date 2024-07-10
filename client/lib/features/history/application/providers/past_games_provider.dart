@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../utils/logger.dart';
 
 import '../../../core/domain/models/game.dart';
-import '../../domain/models/player.dart';
 import '../../domain/repositories/history_repository.dart';
 import 'history_repository_provider.dart';
 
@@ -63,11 +62,6 @@ class PastGamesNotifier extends StateNotifier<AsyncValue<List<Game>>> {
     } catch (e, stackTrace) {
       state = AsyncValue.error(e, stackTrace);
     }
-  }
-
-  /// Fetches all [Player]s from the database.
-  Future<List<Player>> fetchAllPlayers() async {
-    return await _historyRepository.fetchAllPlayers();
   }
 }
 

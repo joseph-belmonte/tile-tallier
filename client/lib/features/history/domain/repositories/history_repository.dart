@@ -68,6 +68,12 @@ class HistoryRepository {
   Future<void> deletePlayer(String playerId) async {
     await _playerTableHelper.deletePlayer(playerId);
   }
+
+  /// Deletes all players from the database.
+  Future<void> deleteAllPlayers() async {
+    await _playerTableHelper.deleteAllPlayers();
+  }
+
   // End region
 
   /// Gets all games played by a specific player.
