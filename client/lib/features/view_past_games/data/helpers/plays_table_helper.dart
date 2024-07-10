@@ -3,7 +3,6 @@ library;
 
 import 'dart:convert';
 import 'package:sqflite/sqflite.dart';
-import '../../../../utils/logger.dart';
 import '../../../core/domain/models/play.dart';
 import 'master_database_helper.dart';
 
@@ -35,12 +34,8 @@ class PlayTableHelper {
     final plays = <Play>[];
 
     for (var playMap in playerPlaysMap) {
-      logger.d('playMap: $playMap');
-
       // Deserialize the main Play object
       final play = Play.fromJson(playMap);
-
-      logger.d('play: $play');
 
       // Add the play to the list
       plays.add(play);
