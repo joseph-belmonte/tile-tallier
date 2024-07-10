@@ -18,9 +18,9 @@ class BoolIntConverter implements JsonConverter<bool, int> {
   }
 }
 
-/// A class with two methods that convert ScoreMultiplier/ints to/from JSON.
+/// A converter that converts a ScoreMultiplier to an int and vice versa.
 class ScoreMultiplierConverter implements JsonConverter<ScoreMultiplier, int> {
-  /// Creates a new instance of the converter.
+  // ignore: public_member_api_docs
   const ScoreMultiplierConverter();
 
   @override

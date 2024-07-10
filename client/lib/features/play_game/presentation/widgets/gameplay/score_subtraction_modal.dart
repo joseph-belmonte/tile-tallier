@@ -3,7 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../utils/game_play_storage.dart';
-import '../../../../view_past_games/data/game_storage_database_helper.dart';
+import '../../../../../utils/logger.dart';
+import '../../../../view_past_games/data/helpers/game_players_table_helper.dart';
+import '../../../../view_past_games/data/helpers/games_table_helper.dart';
+import '../../../../view_past_games/data/helpers/master_database_helper.dart';
 import '../../../application/providers/active_game.dart';
 import '../../screens/results.dart';
 
@@ -20,6 +23,10 @@ class ScoreSubtractionModal extends ConsumerStatefulWidget {
 class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
   final _formKey = GlobalKey<FormState>();
   late List<TextEditingController> _controllers;
+  final bool _isLoading = false;
+
+  final _gameTableHelper = GameTableHelper();
+  final _gamePlayerTableHelper = GamePlayerTableHelper();
 
   @override
   void initState() {
@@ -41,6 +48,7 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
   }
 
   void _submitRacks() async {
+    final db = await MasterDatabaseHelper.instance.database;
     if (_formKey.currentState!.validate()) {
       final playerRacks =
           _controllers.map((controller) => controller.text.trim()).toList();
@@ -61,7 +69,16 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
 
       // Save the game to the database:
       final completedGame = ref.read(activeGameProvider);
-      await GameStorageDatabaseHelper.instance.insertGame(completedGame);
+      logger.d('Saving game to database: $completedGame');
+      await db.transaction((txn) async {
+        await _gameTableHelper.insertGame(completedGame, txn);
+        logger.d('Game saved to database!');
+        logger.d('Saving players to database: ${completedGame.players}');
+        for (var player in completedGame.players) {
+          await _gamePlayerTableHelper.insertGamePlayer(player, txn);
+        }
+        logger.d('Players saved to database!');
+      });
 
       // ignore: use_build_context_synchronously
       Navigator.of(context).push(
@@ -117,6 +134,11 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
                 ),
               ),
             ),
+            if (_isLoading)
+              const Padding(
+                padding: EdgeInsets.all(20.0),
+                child: LinearProgressIndicator(),
+              ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 20.0),
               child: Row(

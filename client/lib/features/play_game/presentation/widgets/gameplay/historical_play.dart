@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../domain/models/game_player.dart';
-import '../../../domain/models/play.dart';
+import '../../../../core/domain/models/game_player.dart';
+import '../../../../core/domain/models/play.dart';
 
 import 'scrabble_word.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../shared/presentation/screens/home.dart';
+import '../../../core/presentation/screens/home.dart';
 
 /// A button that navigates to the home page.
 class HomeButton extends StatelessWidget {

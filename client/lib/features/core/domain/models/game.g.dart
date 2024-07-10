@@ -1,16 +1,19 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'past_game.dart';
+part of 'game.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$PastGameImpl _$$PastGameImplFromJson(Map<String, dynamic> json) =>
-    _$PastGameImpl(
+_$GameImpl _$$GameImplFromJson(Map<String, dynamic> json) => _$GameImpl(
       id: json['id'] as String,
-      currentPlay: Play.fromJson(json['currentPlay'] as Map<String, dynamic>),
-      currentWord: Word.fromJson(json['currentWord'] as Map<String, dynamic>),
+      currentPlay: json['currentPlay'] == null
+          ? null
+          : Play.fromJson(json['currentPlay'] as Map<String, dynamic>),
+      currentWord: json['currentWord'] == null
+          ? null
+          : Word.fromJson(json['currentWord'] as Map<String, dynamic>),
       isFavorite: json['isFavorite'] as bool? ?? false,
       players: (json['players'] as List<dynamic>?)
               ?.map((e) => GamePlayer.fromJson(e as Map<String, dynamic>))
@@ -19,7 +22,7 @@ _$PastGameImpl _$$PastGameImplFromJson(Map<String, dynamic> json) =>
       currentPlayerIndex: (json['currentPlayerIndex'] as num?)?.toInt() ?? 0,
     );
 
-Map<String, dynamic> _$$PastGameImplToJson(_$PastGameImpl instance) =>
+Map<String, dynamic> _$$GameImplToJson(_$GameImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'currentPlay': instance.currentPlay,

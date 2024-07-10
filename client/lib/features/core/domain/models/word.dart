@@ -24,7 +24,7 @@ class Word with _$Word {
     );
   }
 
-  /// Converts the word to a map.
+  /// Converts the word from a map.
   factory Word.fromJson(Map<String, dynamic> json) => _$WordFromJson(json);
 
   /// Returns the word as a string.

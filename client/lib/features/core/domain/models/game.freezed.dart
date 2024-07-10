@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'past_game.dart';
+part of 'game.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,46 +14,45 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-PastGame _$PastGameFromJson(Map<String, dynamic> json) {
-  return _PastGame.fromJson(json);
+Game _$GameFromJson(Map<String, dynamic> json) {
+  return _Game.fromJson(json);
 }
 
 /// @nodoc
-mixin _$PastGame {
+mixin _$Game {
   String get id => throw _privateConstructorUsedError;
-  Play get currentPlay => throw _privateConstructorUsedError;
-  Word get currentWord => throw _privateConstructorUsedError;
+  Play? get currentPlay => throw _privateConstructorUsedError;
+  Word? get currentWord => throw _privateConstructorUsedError;
   bool get isFavorite => throw _privateConstructorUsedError;
   List<GamePlayer> get players => throw _privateConstructorUsedError;
   int get currentPlayerIndex => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $PastGameCopyWith<PastGame> get copyWith =>
-      throw _privateConstructorUsedError;
+  $GameCopyWith<Game> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $PastGameCopyWith<$Res> {
-  factory $PastGameCopyWith(PastGame value, $Res Function(PastGame) then) =
-      _$PastGameCopyWithImpl<$Res, PastGame>;
+abstract class $GameCopyWith<$Res> {
+  factory $GameCopyWith(Game value, $Res Function(Game) then) =
+      _$GameCopyWithImpl<$Res, Game>;
   @useResult
   $Res call(
       {String id,
-      Play currentPlay,
-      Word currentWord,
+      Play? currentPlay,
+      Word? currentWord,
       bool isFavorite,
       List<GamePlayer> players,
       int currentPlayerIndex});
 
-  $PlayCopyWith<$Res> get currentPlay;
-  $WordCopyWith<$Res> get currentWord;
+  $PlayCopyWith<$Res>? get currentPlay;
+  $WordCopyWith<$Res>? get currentWord;
 }
 
 /// @nodoc
-class _$PastGameCopyWithImpl<$Res, $Val extends PastGame>
-    implements $PastGameCopyWith<$Res> {
-  _$PastGameCopyWithImpl(this._value, this._then);
+class _$GameCopyWithImpl<$Res, $Val extends Game>
+    implements $GameCopyWith<$Res> {
+  _$GameCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -64,8 +63,8 @@ class _$PastGameCopyWithImpl<$Res, $Val extends PastGame>
   @override
   $Res call({
     Object? id = null,
-    Object? currentPlay = null,
-    Object? currentWord = null,
+    Object? currentPlay = freezed,
+    Object? currentWord = freezed,
     Object? isFavorite = null,
     Object? players = null,
     Object? currentPlayerIndex = null,
@@ -75,14 +74,14 @@ class _$PastGameCopyWithImpl<$Res, $Val extends PastGame>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      currentPlay: null == currentPlay
+      currentPlay: freezed == currentPlay
           ? _value.currentPlay
           : currentPlay // ignore: cast_nullable_to_non_nullable
-              as Play,
-      currentWord: null == currentWord
+              as Play?,
+      currentWord: freezed == currentWord
           ? _value.currentWord
           : currentWord // ignore: cast_nullable_to_non_nullable
-              as Word,
+              as Word?,
       isFavorite: null == isFavorite
           ? _value.isFavorite
           : isFavorite // ignore: cast_nullable_to_non_nullable
@@ -100,74 +99,80 @@ class _$PastGameCopyWithImpl<$Res, $Val extends PastGame>
 
   @override
   @pragma('vm:prefer-inline')
-  $PlayCopyWith<$Res> get currentPlay {
-    return $PlayCopyWith<$Res>(_value.currentPlay, (value) {
+  $PlayCopyWith<$Res>? get currentPlay {
+    if (_value.currentPlay == null) {
+      return null;
+    }
+
+    return $PlayCopyWith<$Res>(_value.currentPlay!, (value) {
       return _then(_value.copyWith(currentPlay: value) as $Val);
     });
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $WordCopyWith<$Res> get currentWord {
-    return $WordCopyWith<$Res>(_value.currentWord, (value) {
+  $WordCopyWith<$Res>? get currentWord {
+    if (_value.currentWord == null) {
+      return null;
+    }
+
+    return $WordCopyWith<$Res>(_value.currentWord!, (value) {
       return _then(_value.copyWith(currentWord: value) as $Val);
     });
   }
 }
 
 /// @nodoc
-abstract class _$$PastGameImplCopyWith<$Res>
-    implements $PastGameCopyWith<$Res> {
-  factory _$$PastGameImplCopyWith(
-          _$PastGameImpl value, $Res Function(_$PastGameImpl) then) =
-      __$$PastGameImplCopyWithImpl<$Res>;
+abstract class _$$GameImplCopyWith<$Res> implements $GameCopyWith<$Res> {
+  factory _$$GameImplCopyWith(
+          _$GameImpl value, $Res Function(_$GameImpl) then) =
+      __$$GameImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
       {String id,
-      Play currentPlay,
-      Word currentWord,
+      Play? currentPlay,
+      Word? currentWord,
       bool isFavorite,
       List<GamePlayer> players,
       int currentPlayerIndex});
 
   @override
-  $PlayCopyWith<$Res> get currentPlay;
+  $PlayCopyWith<$Res>? get currentPlay;
   @override
-  $WordCopyWith<$Res> get currentWord;
+  $WordCopyWith<$Res>? get currentWord;
 }
 
 /// @nodoc
-class __$$PastGameImplCopyWithImpl<$Res>
-    extends _$PastGameCopyWithImpl<$Res, _$PastGameImpl>
-    implements _$$PastGameImplCopyWith<$Res> {
-  __$$PastGameImplCopyWithImpl(
-      _$PastGameImpl _value, $Res Function(_$PastGameImpl) _then)
+class __$$GameImplCopyWithImpl<$Res>
+    extends _$GameCopyWithImpl<$Res, _$GameImpl>
+    implements _$$GameImplCopyWith<$Res> {
+  __$$GameImplCopyWithImpl(_$GameImpl _value, $Res Function(_$GameImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = null,
-    Object? currentPlay = null,
-    Object? currentWord = null,
+    Object? currentPlay = freezed,
+    Object? currentWord = freezed,
     Object? isFavorite = null,
     Object? players = null,
     Object? currentPlayerIndex = null,
   }) {
-    return _then(_$PastGameImpl(
+    return _then(_$GameImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      currentPlay: null == currentPlay
+      currentPlay: freezed == currentPlay
           ? _value.currentPlay
           : currentPlay // ignore: cast_nullable_to_non_nullable
-              as Play,
-      currentWord: null == currentWord
+              as Play?,
+      currentWord: freezed == currentWord
           ? _value.currentWord
           : currentWord // ignore: cast_nullable_to_non_nullable
-              as Word,
+              as Word?,
       isFavorite: null == isFavorite
           ? _value.isFavorite
           : isFavorite // ignore: cast_nullable_to_non_nullable
@@ -186,8 +191,8 @@ class __$$PastGameImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$PastGameImpl extends _PastGame {
-  const _$PastGameImpl(
+class _$GameImpl extends _Game {
+  _$GameImpl(
       {required this.id,
       required this.currentPlay,
       required this.currentWord,
@@ -197,15 +202,15 @@ class _$PastGameImpl extends _PastGame {
       : _players = players,
         super._();
 
-  factory _$PastGameImpl.fromJson(Map<String, dynamic> json) =>
-      _$$PastGameImplFromJson(json);
+  factory _$GameImpl.fromJson(Map<String, dynamic> json) =>
+      _$$GameImplFromJson(json);
 
   @override
   final String id;
   @override
-  final Play currentPlay;
+  final Play? currentPlay;
   @override
-  final Word currentWord;
+  final Word? currentWord;
   @override
   @JsonKey()
   final bool isFavorite;
@@ -224,14 +229,14 @@ class _$PastGameImpl extends _PastGame {
 
   @override
   String toString() {
-    return 'PastGame(id: $id, currentPlay: $currentPlay, currentWord: $currentWord, isFavorite: $isFavorite, players: $players, currentPlayerIndex: $currentPlayerIndex)';
+    return 'Game(id: $id, currentPlay: $currentPlay, currentWord: $currentWord, isFavorite: $isFavorite, players: $players, currentPlayerIndex: $currentPlayerIndex)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PastGameImpl &&
+            other is _$GameImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.currentPlay, currentPlay) ||
                 other.currentPlay == currentPlay) &&
@@ -258,36 +263,35 @@ class _$PastGameImpl extends _PastGame {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$PastGameImplCopyWith<_$PastGameImpl> get copyWith =>
-      __$$PastGameImplCopyWithImpl<_$PastGameImpl>(this, _$identity);
+  _$$GameImplCopyWith<_$GameImpl> get copyWith =>
+      __$$GameImplCopyWithImpl<_$GameImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$PastGameImplToJson(
+    return _$$GameImplToJson(
       this,
     );
   }
 }
 
-abstract class _PastGame extends PastGame {
-  const factory _PastGame(
+abstract class _Game extends Game {
+  factory _Game(
       {required final String id,
-      required final Play currentPlay,
-      required final Word currentWord,
+      required final Play? currentPlay,
+      required final Word? currentWord,
       final bool isFavorite,
       final List<GamePlayer> players,
-      final int currentPlayerIndex}) = _$PastGameImpl;
-  const _PastGame._() : super._();
+      final int currentPlayerIndex}) = _$GameImpl;
+  _Game._() : super._();
 
-  factory _PastGame.fromJson(Map<String, dynamic> json) =
-      _$PastGameImpl.fromJson;
+  factory _Game.fromJson(Map<String, dynamic> json) = _$GameImpl.fromJson;
 
   @override
   String get id;
   @override
-  Play get currentPlay;
+  Play? get currentPlay;
   @override
-  Word get currentWord;
+  Word? get currentWord;
   @override
   bool get isFavorite;
   @override
@@ -296,6 +300,6 @@ abstract class _PastGame extends PastGame {
   int get currentPlayerIndex;
   @override
   @JsonKey(ignore: true)
-  _$$PastGameImplCopyWith<_$PastGameImpl> get copyWith =>
+  _$$GameImplCopyWith<_$GameImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

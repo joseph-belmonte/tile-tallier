@@ -22,8 +22,8 @@ Future<void> main() async {
   container.read(keyValueDbListenerProvider);
 
   // Check if the database is populated. If not, import the word list.
-  if (!await WordDatabaseHelper.instance.isDatabasePopulated()) {
-    await WordDatabaseHelper.instance.importWordList();
+  if (!await WordListDBHelper.instance.isDatabasePopulated()) {
+    await WordListDBHelper.instance.importWordList();
   }
 
   await configureRcSdk();

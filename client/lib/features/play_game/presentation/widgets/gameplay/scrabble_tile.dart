@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../theme/controllers/theme_providers.dart';
 import '../../../../../utils/helpers.dart';
-import '../../../domain/models/letter.dart';
+import '../../../../core/domain/models/letter.dart';
 
 /// A widget that displays a single letter as a ScrabbleTile widget.
 class ScrabbleTile extends ConsumerWidget {

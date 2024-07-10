@@ -39,21 +39,21 @@ Future main() async {
         },
       );
 
-      WordDatabaseHelper.testConstructor(db);
+      WordListDBHelper.testConstructor(db);
     });
 
     test('Insert and query words', () async {
-      await WordDatabaseHelper.instance.insert({'word': 'hello'});
-      await WordDatabaseHelper.instance.insert({'word': 'world'});
-      final rows = await WordDatabaseHelper.instance.queryAllRows();
+      await WordListDBHelper.instance.insert({'word': 'hello'});
+      await WordListDBHelper.instance.insert({'word': 'world'});
+      final rows = await WordListDBHelper.instance.queryAllRows();
       expect(rows, hasLength(2));
       expect(rows.first['word'], 'hello');
     });
 
     test('Delete all words', () async {
-      await WordDatabaseHelper.instance.insert({'word': 'world'});
-      await WordDatabaseHelper.instance.deleteAll();
-      final rows = await WordDatabaseHelper.instance.queryAllRows();
+      await WordListDBHelper.instance.insert({'word': 'world'});
+      await WordListDBHelper.instance.deleteAll();
+      final rows = await WordListDBHelper.instance.queryAllRows();
       expect(rows, isEmpty);
     });
 

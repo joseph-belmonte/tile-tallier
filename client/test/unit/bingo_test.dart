@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tile_tally/enums/score_multipliers.dart';
-import 'package:tile_tally/features/play_game/domain/models/letter.dart';
-import 'package:tile_tally/features/play_game/domain/models/play.dart';
-import 'package:tile_tally/features/play_game/domain/models/word.dart';
+import 'package:tile_tally/features/core/domain/models/letter.dart';
+import 'package:tile_tally/features/core/domain/models/play.dart';
+import 'package:tile_tally/features/core/domain/models/word.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {
@@ -20,6 +20,7 @@ void main() {
 
     final noBingo = Play(
       id: Uuid().v4(),
+      gameId: Uuid().v4(),
       playedWords: [word],
       isBingo: false,
       timestamp: DateTime.now(),
