@@ -2,6 +2,7 @@ import 'package:sqflite/sqflite.dart';
 import '../../../../utils/logger.dart';
 import '../../../core/domain/models/game.dart';
 import '../../../core/domain/models/game_player.dart';
+import '../../../core/domain/models/letter.dart';
 import '../../../core/domain/models/play.dart';
 import '../../../core/domain/models/word.dart';
 import '../../domain/models/database_helper.dart';
@@ -23,6 +24,7 @@ class GameTableHelper extends DatabaseHelper {
     ''');
   }
 
+  /// Inserts a game into the database.
   /// Inserts a game into the database.
   Future<void> insertGame(Game game, Transaction txn) async {
     await txn.insert(
@@ -64,6 +66,8 @@ class GameTableHelper extends DatabaseHelper {
             {
               'id': word.id,
               'playId': play.id,
+              'word': word.word,
+              'score': word.score,
             },
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
@@ -72,6 +76,7 @@ class GameTableHelper extends DatabaseHelper {
         await _playTableHelper.insertPlay(play, txn);
       }
     }
+    logger.d('Game inserted with ID: ${game.id}');
   }
 
   /// Fetches a game from the database by its ID.
@@ -80,7 +85,7 @@ class GameTableHelper extends DatabaseHelper {
     final gameMap = await db.query('games', where: 'id = ?', whereArgs: [id]);
 
     if (gameMap.isEmpty) {
-      throw Exception('Game not found');
+      throw Exception('Game with id $id not found');
     }
 
     return await assembleGame(gameMap.first);
@@ -118,50 +123,74 @@ class GameTableHelper extends DatabaseHelper {
 
   /// Assembles a [Game] object from a game map.
   Future<Game> assembleGame(Map<String, dynamic> gameJson) async {
-    logger.d('Assembling game: $gameJson');
     final db = await database;
 
     final gameId = gameJson['id'] as String;
+    logger.d('Assembling game with ID: $gameId');
 
-    final gamePlayersMap = await db
-        .query('game_players', where: 'gameId = ?', whereArgs: [gameId]);
+    // Fetch game players from the 'game_players' table
+    final playersMap = await db.query(
+      'game_players',
+      where: 'gameId = ?',
+      whereArgs: [gameId],
+    );
 
-    logger.d('Game players fetched: $gamePlayersMap');
+    logger.d('Players map: $playersMap');
 
-    final gamePlayers = await Future.wait(
-      gamePlayersMap.map((gamePlayer) async {
-        var gamePlayerObj = GamePlayer(
-          id: gamePlayer['id'] as String? ?? '',
-          playerId: gamePlayer['playerId'] as String? ?? '',
-          gameId: gamePlayer['gameId'] as String? ?? '',
-          name: gamePlayer['name'] as String? ?? '',
-          endRack: gamePlayer['endRack'] as String? ?? '',
+    final players = await Future.wait(
+      playersMap.map((playerMap) async {
+        final playerId = playerMap['id'] as String;
+
+        // Get the plays for this game player
+        final playsMap = await db.query(
+          'plays',
+          where: 'playerId = ?',
+          whereArgs: [playerId],
         );
 
-        logger.d('Game player assembled: $gamePlayerObj');
+        logger.d('Plays map for player $playerId: $playsMap');
 
-        final plays =
-            await _playTableHelper.fetchPlays(playerId: gamePlayerObj.id);
+        final plays = await Future.wait(
+          playsMap.map((playMap) async {
+            final play = Play.fromJson(playMap);
 
-        logger.d('Plays fetched: $plays');
+            // Fetch words for this play
+            final wordsMap = await db.query(
+              'words',
+              where: 'playId = ?',
+              whereArgs: [play.id],
+            );
 
-        gamePlayerObj = gamePlayerObj.copyWith(plays: plays);
-        return gamePlayerObj;
+            logger.d('Words map for play ${play.id}: $wordsMap');
+
+            final words = await Future.wait(
+              wordsMap.map((wordMap) async {
+                final word = Word.fromJson(wordMap);
+
+                // Fetch letters for this word
+                final lettersMap = await db.query(
+                  'playedLetters',
+                  where: 'wordId = ?',
+                  whereArgs: [word.id],
+                );
+
+                logger.d('Letters map for word ${word.id}: $lettersMap');
+
+                final letters = lettersMap.map(Letter.fromJson).toList();
+
+                return word.copyWith(playedLetters: letters);
+              }).toList(),
+            );
+
+            return play.copyWith(playedWords: words);
+          }).toList(),
+        );
+
+        return GamePlayer.fromJson(playerMap).copyWith(plays: plays);
       }).toList(),
     );
 
-    final gameJsonMutable = Map<String, dynamic>.from(gameJson);
-
-    gameJsonMutable['currentPlay'] = gameJson['currentPlay'] ??
-        Play.createNew(
-          gameId: gameId,
-        ).toJson();
-    gameJsonMutable['currentWord'] =
-        gameJson['currentWord'] ?? Word.createNew().toJson();
-
-    final game = Game.fromJson(gameJsonMutable).copyWith(players: gamePlayers);
-
-    return game;
+    return Game.fromJson(gameJson).copyWith(players: players);
   }
 
   /// Deletes a game from the database.

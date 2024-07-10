@@ -42,6 +42,13 @@ class HistoryRepository {
   Future<void> deleteAllGames() async {
     await _gameTableHelper.deleteAllGames();
   }
+  // End region
+
+  // Region: 'players' table methods
+  /// Inserts a player into the database.
+  Future<void> insertPlayer(Player player) async {
+    await _playerTableHelper.insertPlayer(player);
+  }
 
   /// Fetches all players from the database.
   Future<List<Player>> fetchAllPlayers() async {
@@ -52,4 +59,10 @@ class HistoryRepository {
   Future<void> updatePlayerName(String playerId, String newName) async {
     await _playerTableHelper.updatePlayerName(playerId, newName);
   }
+
+  /// Deletes a player from the database.
+  Future<void> deletePlayer(String playerId) async {
+    await _playerTableHelper.deletePlayer(playerId);
+  }
+  // End region
 }
