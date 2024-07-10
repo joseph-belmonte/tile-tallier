@@ -46,7 +46,11 @@ class PlayerTableHelper extends DatabaseHelper {
   }
 
   /// Updates a player's name in the database, given their ID.
-  Future<void> updatePlayerName(String playerId, String newName) async {
+  Future<void> updatePlayerName(
+    Transaction txn,
+    String playerId,
+    String newName,
+  ) async {
     final db = await database;
     await db.update(
       'players',
