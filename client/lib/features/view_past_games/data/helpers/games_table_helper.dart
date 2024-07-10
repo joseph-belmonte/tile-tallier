@@ -165,27 +165,20 @@ class GameTableHelper extends DatabaseHelper {
   }
 
   /// Deletes a game from the database.
-  Future<void> deleteGame(String id) async {
-    logger.d('Deleting game with ID: $id');
-    final db = await database;
-    await db.transaction((txn) async {
-      await txn.delete('games', where: 'id = ?', whereArgs: [id]);
-      await txn.delete('game_players', where: 'gameId = ?', whereArgs: [id]);
-
-      final plays =
-          await txn.query('plays', where: 'gameId = ?', whereArgs: [id]);
-      for (var play in plays) {
-        await txn.delete('words', where: 'playId = ?', whereArgs: [play['id']]);
-        await txn.delete(
-          'playedLetters',
-          where: 'wordId IN (SELECT id FROM words WHERE playId = ?)',
-          whereArgs: [play['id']],
-        );
-      }
-
-      await txn.delete('plays', where: 'gameId = ?', whereArgs: [id]);
-    });
-    logger.d('Deleted game with ID: $id');
+  Future<void> deleteGame(String id, {Transaction? txn}) async {
+    final db = txn ?? await database;
+    await db.delete('game_players', where: 'gameId = ?', whereArgs: [id]);
+    final plays = await db.query('plays', where: 'gameId = ?', whereArgs: [id]);
+    for (var play in plays) {
+      await db.delete('words', where: 'playId = ?', whereArgs: [play['id']]);
+      await db.delete(
+        'playedLetters',
+        where: 'wordId IN (SELECT id FROM words WHERE playId = ?)',
+        whereArgs: [play['id']],
+      );
+    }
+    await db.delete('plays', where: 'gameId = ?', whereArgs: [id]);
+    await db.delete('games', where: 'id = ?', whereArgs: [id]);
   }
 
   /// Deletes all games from the database.
