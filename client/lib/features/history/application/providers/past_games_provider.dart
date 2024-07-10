@@ -14,9 +14,19 @@ class PastGamesNotifier extends StateNotifier<AsyncValue<List<Game>>> {
     fetchGames();
   }
 
+  /// Fetches a [Game] from the database.
+  Future<void> fetchGame(String gameId) async {
+    state = const AsyncLoading();
+    try {
+      final game = await _historyRepository.fetchGame(gameId);
+      state = AsyncValue.data([game]);
+    } catch (e, stackTrace) {
+      state = AsyncValue.error(e, stackTrace);
+    }
+  }
+
   /// Fetches the [Game]s from the database.
   Future<void> fetchGames() async {
-    state = const AsyncLoading();
     try {
       final games = await _historyRepository.fetchGames();
       state = AsyncValue.data(games);
