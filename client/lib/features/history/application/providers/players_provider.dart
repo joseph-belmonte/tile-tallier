@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sqflite/sqflite.dart';
 import '../../domain/models/player.dart';
 import '../../domain/repositories/history_repository.dart';
 import 'history_repository_provider.dart';
@@ -29,6 +30,30 @@ class PlayersNotifier extends StateNotifier<AsyncValue<List<Player>>> {
       return await _historyRepository.fetchAllPlayers();
     } catch (e) {
       rethrow;
+    }
+  }
+
+  /// Update the player in the database and updates the state.
+  Future<void> updatePlayerName(
+    Transaction txn, {
+    required String playerId,
+    required String updatedName,
+  }) async {
+    try {
+      await _historyRepository.updatePlayerName(
+        txn,
+        playerId: playerId,
+        newName: updatedName,
+      );
+      final updatedPlayers = state.value!.map((player) {
+        if (player.id == playerId) {
+          return player.copyWith(name: updatedName);
+        }
+        return player;
+      }).toList();
+      state = AsyncValue.data(updatedPlayers);
+    } catch (e, stackTrace) {
+      state = AsyncValue.error(e, stackTrace);
     }
   }
 
