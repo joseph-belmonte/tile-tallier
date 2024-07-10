@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/models/game.dart';
-import '../../domain/models/game_player.dart';
+import '../../../core/domain/models/game.dart';
+import '../../../core/domain/models/game_player.dart';
 
 import '../widgets/gameplay/historical_play.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tile_tally/features/core/domain/models/game_player.dart';
+import 'package:tile_tally/features/core/domain/models/play.dart';
 import 'package:tile_tally/features/play_game/application/providers/active_game.dart';
-import 'package:tile_tally/features/play_game/domain/models/game_player.dart';
-import 'package:tile_tally/features/play_game/domain/models/play.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {
@@ -42,6 +42,7 @@ void main() {
       final gameId = Uuid().v4();
 
       final dummyPlay = Play(
+        gameId: gameId,
         id: Uuid().v4(),
         timestamp: DateTime.now(),
       );
@@ -111,11 +112,11 @@ void main() {
       expect(updatedState2.players[1].plays.length, equals(0));
       expect(updatedState2.currentPlayerIndex, equals(1));
       expect(
-        updatedState2.currentPlay.playerId,
+        updatedState2.currentPlay!.playerId,
         equals(updatedState2.players[1].id),
       );
       expect(updatedState2.currentWord, isNotNull);
-      expect(updatedState2.currentWord.word.isEmpty, true);
+      expect(updatedState2.currentWord!.word.isEmpty, true);
     });
 
     test('validate undoTurn', () {
@@ -158,11 +159,11 @@ void main() {
       expect(updatedState2.players[1].plays.length, equals(0));
       expect(updatedState2.currentPlayerIndex, equals(0));
       expect(
-        updatedState2.currentPlay.playerId,
+        updatedState2.currentPlay!.playerId,
         equals(updatedState2.players[0].id),
       );
       expect(updatedState2.currentWord, isNotNull);
-      expect(updatedState2.currentWord.word.isEmpty, true);
+      expect(updatedState2.currentWord!.word.isEmpty, true);
     });
   });
 }

@@ -1,44 +1,42 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:uuid/uuid.dart';
 
-import '../../../play_game/domain/models/game.dart';
-import '../../../play_game/domain/models/game_player.dart';
-import '../../../play_game/domain/models/play.dart';
-import '../../../play_game/domain/models/word.dart';
+import 'game_player.dart';
+import 'play.dart';
+import 'word.dart';
 
-part 'past_game.freezed.dart';
-part 'past_game.g.dart';
+part 'game.freezed.dart';
+part 'game.g.dart';
 
 @freezed
 
-/// Represents a game that has been completed and is stored in the database.
-class PastGame with _$PastGame {
-  /// Creates a new [PastGame] instance.
-  const factory PastGame({
+/// Represents a game in progress.
+class Game with _$Game {
+  /// Creates a new [Game] instance.
+  factory Game({
     required String id,
-    required Play currentPlay,
-    required Word currentWord,
+    required Play? currentPlay,
+    required Word? currentWord,
     @Default(false) bool isFavorite,
     @Default([]) List<GamePlayer> players,
     @Default(0) int currentPlayerIndex,
-  }) = _PastGame;
+  }) = _Game;
 
-  /// Creates a new [PastGame] instance from a [Game] instance.
-  factory PastGame.fromGame(Game game) {
-    return PastGame(
-      id: game.id,
-      currentPlay: game.currentPlay,
-      currentWord: game.currentWord,
-      players: game.players,
-      currentPlayerIndex: game.currentPlayerIndex,
+  /// Creates a new game.
+  factory Game.createNew() {
+    final gameId = Uuid().v4();
+    return Game(
+      id: gameId,
+      currentPlay: Play.createNew(gameId: gameId),
+      currentWord: Word.createNew(),
     );
   }
 
-  /// Converts the past game to a map.
-  factory PastGame.fromJson(Map<String, dynamic> json) =>
-      _$PastGameFromJson(json);
+  /// Converts the game to a map.
+  factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
 
   // Private constructor for computed properties and methods.
-  const PastGame._();
+  const Game._();
 
   /// Returns the players sorted by score.
   List<GamePlayer> get sortedPlayers =>
@@ -52,14 +50,12 @@ class PastGame with _$PastGame {
     ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
 
   /// Returns the highest scoring play.
-  Play? get highestScoringPlay => plays.isNotEmpty
-      ? plays.reduce(
-          (value, element) => element.score > value.score ? element : value,
-        )
-      : null;
+  Play? get highestScoringPlay => plays.reduce(
+        (value, element) => element.score > value.score ? element : value,
+      );
 
   /// Returns the highest scoring word.
-  Word? get highestScoringWord =>
+  Word get highestScoringWord =>
       plays.expand((play) => play.playedWords).reduce(
             (value, element) => element.score > value.score ? element : value,
           );

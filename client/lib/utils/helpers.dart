@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../enums/score_multipliers.dart';
 import '../enums/scrabble_edition.dart';
-import '../features/play_game/domain/models/letter.dart';
+import '../features/core/domain/models/letter.dart';
 
 import '../theme/constants/scrabble_tile_colors.dart';
 

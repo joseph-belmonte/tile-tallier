@@ -10,12 +10,12 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../enums/score_multipliers.dart';
 import '../../../../utils/helpers.dart';
+import '../../../core/domain/models/game.dart';
+import '../../../core/domain/models/game_player.dart';
+import '../../../core/domain/models/letter.dart';
+import '../../../core/domain/models/play.dart';
+import '../../../core/domain/models/word.dart';
 import '../../data/word_database_helper.dart';
-import '../../domain/models/game.dart';
-import '../../domain/models/game_player.dart';
-import '../../domain/models/letter.dart';
-import '../../domain/models/play.dart';
-import '../../domain/models/word.dart';
 
 /// A [StateNotifier] that manages the state of the active game.
 class ActiveGameNotifier extends StateNotifier<Game> {
@@ -41,6 +41,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
         )
         .toList();
     final newPlay = Play(
+      gameId: newGameId,
       id: Uuid().v4(),
       timestamp: DateTime.now(),
     );
@@ -65,7 +66,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
 
     // Ensure currentPlay has all necessary data before copying.
     final completedPlay =
-        state.currentPlay.copyWith(playerId: currentPlayer.id);
+        state.currentPlay!.copyWith(playerId: currentPlayer.id);
 
     // Update the current player with the new play.
     final updatedPlayer = currentPlayer.copyWith(
@@ -77,6 +78,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
     final nextPlayerId = state.players[nextIndex].id;
 
     final newPlay = Play(
+      gameId: state.id,
       id: Uuid().v4(),
       playerId: nextPlayerId,
       timestamp: DateTime.now(),
@@ -104,9 +106,9 @@ class ActiveGameNotifier extends StateNotifier<Game> {
       return;
     } else {
       // First, clear any current words before undoing the turn.
-      if (state.currentPlay.playedWords.isNotEmpty) {
+      if (state.currentPlay!.playedWords.isNotEmpty) {
         state = state.copyWith(
-          currentPlay: state.currentPlay.copyWith(
+          currentPlay: state.currentPlay!.copyWith(
             playedWords: [],
           ),
         );
@@ -129,6 +131,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
           currentPlayerIndex: newPlayerIndex,
           currentPlay: Play(
             id: Uuid().v4(),
+            gameId: state.id,
             playerId: newPlayer.id,
             timestamp: DateTime.now(),
           ),
@@ -149,15 +152,15 @@ class ActiveGameNotifier extends StateNotifier<Game> {
       final letter = Letter(
         id: Uuid().v4(),
         letter: char,
-        scoreMultiplier: state.currentWord
+        scoreMultiplier: state.currentWord!
             .playedLetters[newWord.playedLetters.length].scoreMultiplier,
       );
       newWord =
           newWord.copyWith(playedLetters: [...newWord.playedLetters, letter]);
     }
 
-    final updatedPlay = state.currentPlay.copyWith(
-      playedWords: [...state.currentPlay.playedWords, newWord],
+    final updatedPlay = state.currentPlay!.copyWith(
+      playedWords: [...state.currentPlay!.playedWords, newWord],
     );
 
     state = state.copyWith(
@@ -205,7 +208,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
   /// Toggles the current play's bingo status
   void toggleBingo() {
     final updatedPlay =
-        state.currentPlay.copyWith(isBingo: !state.currentPlay.isBingo);
+        state.currentPlay!.copyWith(isBingo: !state.currentPlay!.isBingo);
     state = state.copyWith(currentPlay: updatedPlay);
   }
 
@@ -216,9 +219,17 @@ class ActiveGameNotifier extends StateNotifier<Game> {
 
     final possibleWords = generateWildcardWords(word.toLowerCase());
     final wordExists =
-        await WordDatabaseHelper.instance.wordExistsInList(possibleWords);
+        await WordListDBHelper.instance.wordExistsInList(possibleWords);
 
     return wordExists;
+  }
+
+  /// Ends the game by setting the current play and word to null
+  void endGame() {
+    state = state.copyWith(
+      currentPlay: null,
+      currentWord: null,
+    );
   }
 }
 
@@ -227,7 +238,7 @@ final activeGameProvider = StateNotifierProvider<ActiveGameNotifier, Game>(
   (ref) => ActiveGameNotifier(
     Game(
       id: Uuid().v4(),
-      currentPlay: Play.createNew(),
+      currentPlay: Play.createNew(gameId: Uuid().v4()),
       currentWord: Word.createNew(),
     ),
   ),

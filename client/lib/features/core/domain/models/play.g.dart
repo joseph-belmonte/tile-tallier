@@ -8,11 +8,11 @@ part of 'play.dart';
 
 _$PlayImpl _$$PlayImplFromJson(Map<String, dynamic> json) => _$PlayImpl(
       id: json['id'] as String,
+      gameId: json['gameId'] as String,
       timestamp: DateTime.parse(json['timestamp'] as String),
-      playedWords: (json['playedWords'] as List<dynamic>?)
-              ?.map((e) => Word.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const [],
+      playedWords: json['playedWords'] == null
+          ? const []
+          : _wordsFromJson(json['playedWords']),
       isBingo: json['isBingo'] == null
           ? false
           : const BoolIntConverter().fromJson((json['isBingo'] as num).toInt()),
@@ -22,8 +22,9 @@ _$PlayImpl _$$PlayImplFromJson(Map<String, dynamic> json) => _$PlayImpl(
 Map<String, dynamic> _$$PlayImplToJson(_$PlayImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'gameId': instance.gameId,
       'timestamp': instance.timestamp.toIso8601String(),
-      'playedWords': instance.playedWords,
+      'playedWords': _wordsToJson(instance.playedWords),
       'isBingo': const BoolIntConverter().toJson(instance.isBingo),
       'playerId': instance.playerId,
     };
