@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../utils/logger.dart';
 import '../../../core/domain/models/game.dart';
 import '../../application/providers/past_games_provider.dart';
 import '../widgets/deletion_dialog.dart';
-import 'past_game.dart';
+import '../widgets/past_game_list.dart';
 
 /// A page that displays the past games.
 class PastGamesPage extends ConsumerStatefulWidget {
@@ -16,12 +15,27 @@ class PastGamesPage extends ConsumerStatefulWidget {
   ConsumerState<PastGamesPage> createState() => _PastGamesPageState();
 }
 
-class _PastGamesPageState extends ConsumerState<PastGamesPage> {
+class _PastGamesPageState extends ConsumerState<PastGamesPage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  static const List<Tab> myTabs = <Tab>[
+    Tab(text: 'Past Games'),
+    Tab(text: 'Favorite Games'),
+  ];
+
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(vsync: this, length: myTabs.length);
     // Fetch games when the widget is first built
     Future.microtask(() => ref.read(pastGamesProvider.notifier).fetchGames());
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -39,12 +53,11 @@ class _PastGamesPageState extends ConsumerState<PastGamesPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Past Games'),
+        title: const Text('Game History'),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () {
-              logger.d('showing modal');
               showDeletionDialog(
                 context,
                 onConfirm: deletePastGames,
@@ -52,6 +65,10 @@ class _PastGamesPageState extends ConsumerState<PastGamesPage> {
             },
           ),
         ],
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: myTabs,
+        ),
       ),
       body: pastGamesAsync.when(
         skipLoadingOnRefresh: true,
@@ -63,90 +80,37 @@ class _PastGamesPageState extends ConsumerState<PastGamesPage> {
         error: (error, stack) {
           return Column(
             mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              const Text('An error occurred while fetching past games.'),
-              TextButton.icon(
-                onPressed: () async {
-                  await ref.read(pastGamesProvider.notifier).deleteAllGames();
-                  ref.read(pastGamesProvider.notifier).fetchGames();
-                },
-                icon: const Icon(Icons.delete),
-                label: const Text('Delete all games'),
-              ),
+            children: const <Widget>[
+              Text('An error occurred while fetching past games.'),
               Center(
                 child: Text('Error fetching past games, please try again.'),
               ),
               Divider(),
-              Wrap(
-                direction: Axis.vertical,
-                children: <Widget>[
-                  FittedBox(child: Text('Error stack trace: $error')),
-                  Wrap(
-                    children: <Widget>[
-                      const Text('Stack trace: '),
-                      Text('$stack'),
-                    ],
-                  ),
-                ],
-              ),
             ],
           );
         },
         data: (List<Game> games) {
-          if (games.isEmpty) {
-            return const Center(child: Text('No past games available.'));
-          }
-          return ListView.builder(
-            itemCount: games.length,
-            itemBuilder: (context, index) {
-              final game = games[index];
-              final playCount = game.plays.length;
-
-              if (playCount == 0) {
-                return const Text('No plays in this game');
-              }
-
-              final date = game.plays[playCount - 1].timestamp
-                  .toLocal()
-                  .toString()
-                  .split(' ')[0];
-
-              final playerScores = game.players
-                  .map((player) => '${player.name}: ${player.score}')
-                  .join(', ');
-
-              return Dismissible(
-                key: Key(game.id),
-                onDismissed: (direction) {
-                  ref.read(pastGamesProvider.notifier).deleteGame(game.id);
-                },
-                direction: DismissDirection.endToStart,
-                background: Container(color: Colors.red),
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  color: Theme.of(context).listTileTheme.tileColor,
-                  child: Column(
-                    children: <Widget>[
-                      ListTile(
-                        title: Text('Game on $date'),
-                        subtitle: Text(playerScores),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.arrow_forward_rounded),
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    PastGameScreen(gameId: game.id),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
+          return Column(
+            children: [
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: <Widget>[
+                    PastGameList(games, context, ref),
+                    games.any((game) => game.isFavorite)
+                        ? PastGameList(
+                            games,
+                            context,
+                            ref,
+                            isFavoriteList: true,
+                          )
+                        : const Center(
+                            child: Text('No favorite games yet.'),
+                          ),
+                  ],
                 ),
-              );
-            },
+              ),
+            ],
           );
         },
       ),
