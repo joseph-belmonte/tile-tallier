@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../../../../../utils/game_play_storage.dart';
 import '../../../../../utils/logger.dart';
-import '../../../../view_past_games/data/helpers/game_players_table_helper.dart';
-import '../../../../view_past_games/data/helpers/games_table_helper.dart';
+import '../../../../core/domain/models/game.dart';
+import '../../../../view_past_games/application/providers/history_repository_provider.dart';
 import '../../../../view_past_games/data/helpers/master_database_helper.dart';
+import '../../../../view_past_games/domain/models/player.dart';
 import '../../../application/providers/active_game.dart';
 import '../../screens/results.dart';
 
@@ -24,9 +26,6 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
   final _formKey = GlobalKey<FormState>();
   late List<TextEditingController> _controllers;
   final bool _isLoading = false;
-
-  final _gameTableHelper = GameTableHelper();
-  final _gamePlayerTableHelper = GamePlayerTableHelper();
 
   @override
   void initState() {
@@ -47,21 +46,11 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
     super.dispose();
   }
 
-  void _submitRacks() async {
+  void _submitGameRacks() async {
     final db = await MasterDatabaseHelper.instance.database;
+
     if (_formKey.currentState!.validate()) {
-      final playerRacks =
-          _controllers.map((controller) => controller.text.trim()).toList();
-
-      final updatedPlayers =
-          ref.read(activeGameProvider).players.asMap().entries.map((entry) {
-        final index = entry.key;
-        final player = entry.value;
-
-        return player.copyWith(endRack: playerRacks[index]);
-      }).toList();
-
-      ref.read(activeGameProvider.notifier).updatePlayers(updatedPlayers);
+      _updateGameRacks();
 
       await GamePlayStorage.setPlayedToday();
 
@@ -69,16 +58,12 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
 
       // Save the game to the database:
       final completedGame = ref.read(activeGameProvider);
-      logger.d('Saving game to database: $completedGame');
-      await db.transaction((txn) async {
-        await _gameTableHelper.insertGame(completedGame, txn);
-        logger.d('Game saved to database!');
-        logger.d('Saving players to database: ${completedGame.players}');
-        for (var player in completedGame.players) {
-          await _gamePlayerTableHelper.insertGamePlayer(player, txn);
-        }
-        logger.d('Players saved to database!');
-      });
+
+      if (completedGame.plays.isEmpty) {
+        return;
+      }
+
+      await _submitDataToDatabase(db, completedGame);
 
       // ignore: use_build_context_synchronously
       Navigator.of(context).push(
@@ -86,7 +71,48 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
           builder: (context) => ResultsPage(game: ref.read(activeGameProvider)),
         ),
       );
+      logger.d('Navigated to results page');
     }
+  }
+
+  Future<void> _submitDataToDatabase(Database db, Game completedGame) async {
+    await db.transaction((txn) async {
+      // Save the game
+      await ref.read(historyRepositoryProvider).saveGame(completedGame, txn);
+      logger.d('Saved game to database');
+
+      // Save the Players
+      for (var gamePlayer in completedGame.players) {
+        // Check if the player already exists in the database
+        final player = await ref
+            .read(historyRepositoryProvider)
+            .fetchPlayer(gamePlayer.playerId, txn);
+        logger.d('Fetched player from database');
+
+        // If the player does not exist, save them to the database
+        if (player == null) {
+          final newPlayer =
+              Player(name: gamePlayer.name, id: gamePlayer.playerId);
+          await ref.read(historyRepositoryProvider).savePlayer(newPlayer, txn);
+          logger.d('Saved player to database');
+        }
+      }
+    });
+  }
+
+  void _updateGameRacks() {
+    final playerRacks =
+        _controllers.map((controller) => controller.text.trim()).toList();
+
+    final updatedPlayers =
+        ref.read(activeGameProvider).players.asMap().entries.map((entry) {
+      final index = entry.key;
+      final player = entry.value;
+
+      return player.copyWith(endRack: playerRacks[index]);
+    }).toList();
+
+    ref.read(activeGameProvider.notifier).updatePlayers(updatedPlayers);
   }
 
   @override
@@ -163,7 +189,7 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
                     ),
                   ),
                   ElevatedButton.icon(
-                    onPressed: _submitRacks,
+                    onPressed: _submitGameRacks,
                     icon: Icon(
                       Icons.check,
                       color: Theme.of(context).colorScheme.onPrimaryContainer,

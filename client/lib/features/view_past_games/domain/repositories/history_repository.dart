@@ -1,8 +1,8 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../../utils/logger.dart';
 import '../../../core/domain/models/game.dart';
 import '../../data/helpers/games_table_helper.dart';
+import '../../data/helpers/master_database_helper.dart';
 import '../../data/helpers/players_table_helper.dart';
 import '../models/player.dart';
 
@@ -34,7 +34,6 @@ class HistoryRepository {
 
   /// Loads all games from the database.
   Future<List<Game>> fetchGames() async {
-    logger.d('Fetching games');
     return await _gameTableHelper.fetchGames();
   }
 
@@ -46,8 +45,13 @@ class HistoryRepository {
 
   // Region: 'players' table methods
   /// Inserts a player into the database.
-  Future<void> insertPlayer(Player player) async {
-    await _playerTableHelper.insertPlayer(player);
+  Future<void> savePlayer(Player player, Transaction txn) async {
+    await _playerTableHelper.insertPlayer(player, txn);
+  }
+
+  /// Fetches a player from the database.
+  Future<Player?> fetchPlayer(String playerId, Transaction txn) async {
+    return await _playerTableHelper.fetchPlayer(playerId, txn);
   }
 
   /// Fetches all players from the database.
@@ -65,4 +69,26 @@ class HistoryRepository {
     await _playerTableHelper.deletePlayer(playerId);
   }
   // End region
+
+  /// Gets all games played by a specific player.
+  Future<List<Game>> fetchGamesByPlayerId(String playerId) async {
+    final db = await MasterDatabaseHelper.instance.database;
+    final result = await db.rawQuery(
+      '''
+      SELECT g.* 
+      FROM games g
+      JOIN game_players gp ON g.id = gp.gameId
+      WHERE gp.playerId = ?
+    ''',
+      [playerId],
+    );
+
+    final games = await Future.wait(
+      result.map((gameMap) async {
+        return await _gameTableHelper.assembleGame(gameMap);
+      }).toList(),
+    );
+
+    return games;
+  }
 }

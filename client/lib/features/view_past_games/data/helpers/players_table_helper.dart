@@ -16,13 +16,26 @@ class PlayerTableHelper extends DatabaseHelper {
   }
 
   /// Inserts a player into the database.
-  Future<void> insertPlayer(Player player) async {
-    final db = await database;
+  Future<void> insertPlayer(Player player, Transaction txn) async {
+    final db = txn;
     await db.insert(
       'players',
       player.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+  }
+
+  /// Fetches a player from the database.
+  Future<Player?> fetchPlayer(String playerId, Transaction txn) async {
+    final db = txn;
+    final result =
+        await db.query('players', where: 'id = ?', whereArgs: [playerId]);
+
+    if (result.isNotEmpty) {
+      return Player.fromJson(result.first);
+    } else {
+      return null;
+    }
   }
 
   /// Fetches all players from the database.

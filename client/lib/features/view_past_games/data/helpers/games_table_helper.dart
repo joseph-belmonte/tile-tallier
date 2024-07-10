@@ -24,7 +24,6 @@ class GameTableHelper extends DatabaseHelper {
   }
 
   /// Inserts a game into the database.
-  /// Inserts a game into the database.
   Future<void> insertGame(Game game, Transaction txn) async {
     await txn.insert(
       'games',
