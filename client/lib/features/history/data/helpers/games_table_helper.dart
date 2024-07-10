@@ -103,8 +103,9 @@ class GameTableHelper extends DatabaseHelper {
   }
 
   /// Toggles the favorite status of a game in the database.
-  Future<void> toggleFavorite(String id) async {
-    final db = await database;
+  Future<void> toggleFavorite(String id, Transaction txn) async {
+    final db = txn;
+
     await db.rawUpdate(
       '''
       UPDATE games
@@ -179,8 +180,8 @@ class GameTableHelper extends DatabaseHelper {
   }
 
   /// Deletes a game from the database.
-  Future<void> deleteGame(String id, {Transaction? txn}) async {
-    final db = txn ?? await database;
+  Future<void> deleteGame(String id, Transaction txn) async {
+    final db = txn;
     await db.delete('game_players', where: 'gameId = ?', whereArgs: [id]);
     final plays = await db.query('plays', where: 'gameId = ?', whereArgs: [id]);
     for (var play in plays) {
