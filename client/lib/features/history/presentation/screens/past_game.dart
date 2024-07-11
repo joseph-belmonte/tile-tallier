@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../utils/toast.dart';
 import '../../../play_game/presentation/screens/player_results.dart';
 import '../../../play_game/presentation/widgets/gameplay/historical_play.dart';
 import '../../application/providers/past_games_provider.dart';
-
 
 /// A page that displays a past game.
 class PastGameScreen extends ConsumerWidget {
@@ -28,6 +28,18 @@ class PastGameScreen extends ConsumerWidget {
           await ref.read(pastGamesProvider.notifier).toggleFavorite(game.id);
         }
 
+        void handleFavoriteButtonPressed() {
+          toggleFavorite();
+          if (!game.isFavorite) {
+            ToastService.message(context, 'Game added to favorites');
+          } else {
+            ToastService.message(
+              context,
+              'Game removed from favorites',
+            );
+          }
+        }
+
         return Scaffold(
           appBar: AppBar(
             title: Text('Game on $date'),
@@ -36,7 +48,7 @@ class PastGameScreen extends ConsumerWidget {
                 icon: Icon(
                   game.isFavorite ? Icons.favorite : Icons.favorite_border,
                 ),
-                onPressed: toggleFavorite,
+                onPressed: handleFavoriteButtonPressed,
               ),
             ],
           ),
