@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../utils/toast.dart';
+
 /// A dialog that prompts the user to confirm the deletion of all games.
 Future<void> showDeletionDialog(
   BuildContext context, {
@@ -34,6 +36,17 @@ Future<void> showDeletionDialog(
               await onConfirm();
               if (context.mounted) {
                 Navigator.of(context).pop();
+                ToastService.message(
+                  context,
+                  'Data deleted successfully',
+                );
+              }
+            } else {
+              if (context.mounted) {
+                ToastService.error(
+                  context,
+                  'Error deleting data, please try again.',
+                );
               }
             }
           },
