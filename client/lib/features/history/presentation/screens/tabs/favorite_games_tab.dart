@@ -25,16 +25,17 @@ class FavoriteGamesTab extends ConsumerWidget {
         ],
       ),
       data: (List<Game> games) {
+        final favoriteGames = games.where((game) => game.isFavorite).toList();
         if (games.isEmpty) {
           return const Center(
             child: Text('No games found.'),
           );
-        } else if (games.any((game) => game.isFavorite) == false) {
+        } else if (favoriteGames.isEmpty) {
           return const Center(
             child: Text('No favorite games found.'),
           );
         } else {
-          return PastGameList(isFavoriteList: true);
+          return PastGameList(games: favoriteGames);
         }
       },
     );
