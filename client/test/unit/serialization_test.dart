@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:tile_tally/features/core/domain/models/letter.dart';
 import 'package:tile_tally/features/core/domain/models/play.dart';
 import 'package:tile_tally/features/core/domain/models/word.dart';
@@ -17,10 +18,8 @@ void main() {
     );
 
     final playJson = play.toJson();
-    print('Serialized Play: $playJson');
 
     final deserializedPlay = Play.fromJson(playJson);
-    print('Deserialized Play: $deserializedPlay');
 
     expect(deserializedPlay, play);
   });
