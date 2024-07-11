@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../utils/logger.dart';
 
 import '../../../core/domain/models/game.dart';
 import '../../domain/repositories/history_repository.dart';
@@ -31,7 +30,6 @@ class PastGamesNotifier extends StateNotifier<AsyncValue<List<Game>>> {
       final games = await _historyRepository.fetchGames();
       state = AsyncValue.data(games);
     } catch (e, stackTrace) {
-      logger.e('Failed to fetch games\nerror:$e\n$stackTrace');
       state = AsyncValue.error(e, stackTrace);
     }
   }
