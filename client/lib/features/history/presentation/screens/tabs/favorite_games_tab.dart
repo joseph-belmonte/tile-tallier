@@ -18,12 +18,10 @@ class FavoriteGamesTab extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stack) => Column(
         mainAxisSize: MainAxisSize.min,
-        children: const [
-          Text('An error occurred while fetching favorite games.'),
+        children: const <Widget>[
           Center(
             child: Text('Error fetching favorite games, please try again.'),
           ),
-          Divider(),
         ],
       ),
       data: (List<Game> games) {
