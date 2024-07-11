@@ -7,22 +7,18 @@ import '../../application/providers/past_games_provider.dart';
 import '../screens/past_game.dart';
 
 /// A widget that displays one past game in a dismissible list.
-class PastGameListItem extends StatelessWidget {
+class PastGameListItem extends ConsumerWidget {
   // ignore: public_member_api_docs
   const PastGameListItem({
     required this.game,
-    required this.ref,
     super.key,
   });
 
   /// The game to display.
   final Game game;
 
-  /// The [WidgetRef] used to read providers.
-  final WidgetRef ref;
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final playCount = game.plays.length;
     final date =
         game.plays[playCount - 1].timestamp.toLocal().toString().split(' ')[0];
