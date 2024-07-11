@@ -27,7 +27,7 @@ class PastGamesTab extends ConsumerWidget {
           Divider(),
         ],
       ),
-      data: (games) => PastGameList(isFavoriteList: false),
+      data: (games) => PastGameList(games: games),
     );
   }
 }
