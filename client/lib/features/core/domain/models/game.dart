@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../../utils/converters.dart';
 import 'game_player.dart';
 import 'play.dart';
 import 'word.dart';
@@ -17,7 +18,7 @@ class Game with _$Game {
     required String id,
     required Play? currentPlay,
     required Word? currentWord,
-    @Default(false) bool isFavorite,
+    @BoolIntConverter() @Default(false) bool isFavorite,
     @Default([]) List<GamePlayer> players,
     @Default(0) int currentPlayerIndex,
   }) = _Game;

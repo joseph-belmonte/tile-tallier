@@ -19,8 +19,10 @@ class Play with _$Play {
     required String id,
     required String gameId,
     required DateTime timestamp,
-    // @JsonKey(fromJson: _wordsFromJson, toJson: _wordsToJson)
-    @Default([]) List<Word> playedWords,
+    // ignore: invalid_annotation_target
+    @JsonKey(fromJson: _wordsFromJson, toJson: _wordsToJson)
+    @Default([])
+    List<Word> playedWords,
     @BoolIntConverter() @Default(false) bool isBingo,
     @Default('') String playerId,
   }) = _Play;

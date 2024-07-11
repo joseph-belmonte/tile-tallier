@@ -23,6 +23,7 @@ mixin _$Game {
   String get id => throw _privateConstructorUsedError;
   Play? get currentPlay => throw _privateConstructorUsedError;
   Word? get currentWord => throw _privateConstructorUsedError;
+  @BoolIntConverter()
   bool get isFavorite => throw _privateConstructorUsedError;
   List<GamePlayer> get players => throw _privateConstructorUsedError;
   int get currentPlayerIndex => throw _privateConstructorUsedError;
@@ -41,7 +42,7 @@ abstract class $GameCopyWith<$Res> {
       {String id,
       Play? currentPlay,
       Word? currentWord,
-      bool isFavorite,
+      @BoolIntConverter() bool isFavorite,
       List<GamePlayer> players,
       int currentPlayerIndex});
 
@@ -133,7 +134,7 @@ abstract class _$$GameImplCopyWith<$Res> implements $GameCopyWith<$Res> {
       {String id,
       Play? currentPlay,
       Word? currentWord,
-      bool isFavorite,
+      @BoolIntConverter() bool isFavorite,
       List<GamePlayer> players,
       int currentPlayerIndex});
 
@@ -196,7 +197,7 @@ class _$GameImpl extends _Game {
       {required this.id,
       required this.currentPlay,
       required this.currentWord,
-      this.isFavorite = false,
+      @BoolIntConverter() this.isFavorite = false,
       final List<GamePlayer> players = const [],
       this.currentPlayerIndex = 0})
       : _players = players,
@@ -213,6 +214,7 @@ class _$GameImpl extends _Game {
   final Word? currentWord;
   @override
   @JsonKey()
+  @BoolIntConverter()
   final bool isFavorite;
   final List<GamePlayer> _players;
   @override
@@ -279,7 +281,7 @@ abstract class _Game extends Game {
       {required final String id,
       required final Play? currentPlay,
       required final Word? currentWord,
-      final bool isFavorite,
+      @BoolIntConverter() final bool isFavorite,
       final List<GamePlayer> players,
       final int currentPlayerIndex}) = _$GameImpl;
   _Game._() : super._();
@@ -293,6 +295,7 @@ abstract class _Game extends Game {
   @override
   Word? get currentWord;
   @override
+  @BoolIntConverter()
   bool get isFavorite;
   @override
   List<GamePlayer> get players;

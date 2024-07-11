@@ -175,7 +175,12 @@ class GameTableHelper extends DatabaseHelper {
       }).toList(),
     );
 
-    return Game.fromJson(gameJson).copyWith(players: players);
+    final isFavorite = gameJson['is_favorite'] == 1;
+
+    final game = Game.fromJson(gameJson)
+        .copyWith(players: players, isFavorite: isFavorite);
+
+    return game;
   }
 
   /// Deletes a game from the database.

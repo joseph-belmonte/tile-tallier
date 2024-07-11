@@ -14,7 +14,10 @@ _$GameImpl _$$GameImplFromJson(Map<String, dynamic> json) => _$GameImpl(
       currentWord: json['currentWord'] == null
           ? null
           : Word.fromJson(json['currentWord'] as Map<String, dynamic>),
-      isFavorite: json['isFavorite'] as bool? ?? false,
+      isFavorite: json['isFavorite'] == null
+          ? false
+          : const BoolIntConverter()
+              .fromJson((json['isFavorite'] as num).toInt()),
       players: (json['players'] as List<dynamic>?)
               ?.map((e) => GamePlayer.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -27,7 +30,7 @@ Map<String, dynamic> _$$GameImplToJson(_$GameImpl instance) =>
       'id': instance.id,
       'currentPlay': instance.currentPlay,
       'currentWord': instance.currentWord,
-      'isFavorite': instance.isFavorite,
+      'isFavorite': const BoolIntConverter().toJson(instance.isFavorite),
       'players': instance.players,
       'currentPlayerIndex': instance.currentPlayerIndex,
     };

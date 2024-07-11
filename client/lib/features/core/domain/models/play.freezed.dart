@@ -22,7 +22,8 @@ Play _$PlayFromJson(Map<String, dynamic> json) {
 mixin _$Play {
   String get id => throw _privateConstructorUsedError;
   String get gameId => throw _privateConstructorUsedError;
-  DateTime get timestamp => throw _privateConstructorUsedError;
+  DateTime get timestamp =>
+      throw _privateConstructorUsedError; // ignore: invalid_annotation_target
   @JsonKey(fromJson: _wordsFromJson, toJson: _wordsToJson)
   List<Word> get playedWords => throw _privateConstructorUsedError;
   @BoolIntConverter()
@@ -184,7 +185,9 @@ class _$PlayImpl extends _Play {
   final String gameId;
   @override
   final DateTime timestamp;
+// ignore: invalid_annotation_target
   final List<Word> _playedWords;
+// ignore: invalid_annotation_target
   @override
   @JsonKey(fromJson: _wordsFromJson, toJson: _wordsToJson)
   List<Word> get playedWords {
@@ -260,7 +263,7 @@ abstract class _Play extends Play {
   String get gameId;
   @override
   DateTime get timestamp;
-  @override
+  @override // ignore: invalid_annotation_target
   @JsonKey(fromJson: _wordsFromJson, toJson: _wordsToJson)
   List<Word> get playedWords;
   @override
