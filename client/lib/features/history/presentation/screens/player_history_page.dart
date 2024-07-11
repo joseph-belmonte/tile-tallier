@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../play_game/presentation/screens/player_results.dart';
-import '../../application/providers/past_games_provider.dart';
+import '../../application/providers/player_games_provider.dart';
 import '../../domain/models/player.dart';
+import '../widgets/past_game_list.dart';
 
 /// A page that displays a list of all games that a player has played.
 /// Perhaps put some personal stats here in the future.
@@ -18,47 +18,25 @@ class PlayerHistoryPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pastGamesState = ref.watch(pastGamesProvider);
+    final playerGamesState = ref.watch(playerGamesProvider(player.id));
 
     return Scaffold(
       appBar: AppBar(
         title: Text('${player.name} History'),
       ),
       // Fetch the games specific to this player
-      body: pastGamesState.when(
+      body: playerGamesState.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stackTrace) => Center(
           child: Text('Error: $error\n$stackTrace'),
         ),
         data: (games) {
-          final playerGames = games.where((game) {
-            return game.players.any((p) => p.id == player.id);
-          }).toList();
-
-          return ListView.builder(
-            itemCount: playerGames.length,
-            itemBuilder: (_, int i) {
-              final game = playerGames[i];
-              final date =
-                  game.plays.first.timestamp.toLocal().toString().split(' ')[0];
-
-              return ListTile(
-                title: Text('Game on $date'),
-                onTap: () {
-                  Navigator.of(context).push<void>(
-                    MaterialPageRoute(
-                      builder: (_) => PlayerResultsScreen(
-                        game: game,
-                        player: game.players.firstWhere(
-                          (p) => p.id == player.id,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              );
-            },
-          );
+          if (games.isEmpty) {
+            return const Center(
+              child: Text('No games found for this player.'),
+            );
+          }
+          return PastGameList(games: games);
         },
       ),
     );

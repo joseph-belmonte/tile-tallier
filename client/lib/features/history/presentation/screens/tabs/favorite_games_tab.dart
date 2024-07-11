@@ -34,9 +34,8 @@ class FavoriteGamesTab extends ConsumerWidget {
           return const Center(
             child: Text('No favorite games found.'),
           );
-        } else {
-          return PastGameList(games: favoriteGames);
         }
+        return PastGameList(games: favoriteGames);
       },
     );
   }

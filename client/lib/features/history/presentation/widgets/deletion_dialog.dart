@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 /// A dialog that prompts the user to confirm the deletion of all games.
 Future<void> showDeletionDialog(
   BuildContext context, {
-  required void Function()? onConfirm,
+  required Future<void> Function()? onConfirm,
 }) async {
   return await showDialog<void>(
     context: context,
@@ -29,7 +29,14 @@ Future<void> showDeletionDialog(
           style: TextButton.styleFrom(
             backgroundColor: Theme.of(context).colorScheme.errorContainer,
           ),
-          onPressed: onConfirm,
+          onPressed: () async {
+            if (onConfirm != null) {
+              await onConfirm();
+              if (context.mounted) {
+                Navigator.of(context).pop();
+              }
+            }
+          },
           child: Text(
             'Delete',
             style: TextStyle(

@@ -45,9 +45,11 @@ class _HistoryPageState extends ConsumerState<HistoryPage>
   }
 
   /// Deletes all games from the database and updates the state.
-  void deletePastGames() async {
+  Future<void> deleteAllData() async {
     await ref.read(pastGamesProvider.notifier).deleteAllGames();
+    await ref.read(playersProvider.notifier).deleteAllPlayers();
     ref.read(pastGamesProvider.notifier).fetchGames();
+    ref.read(playersProvider.notifier).fetchPlayers();
   }
 
   @override
@@ -61,7 +63,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage>
             onPressed: () {
               showDeletionDialog(
                 context,
-                onConfirm: deletePastGames,
+                onConfirm: deleteAllData,
               );
             },
           ),

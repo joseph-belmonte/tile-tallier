@@ -24,6 +24,11 @@ class PlayersTab extends ConsumerWidget {
         ],
       ),
       data: (List<Player> players) {
+        if (players.isEmpty) {
+          return const Center(
+            child: Text('No players found.'),
+          );
+        }
         return ListView.builder(
           itemCount: players.length,
           itemBuilder: (context, index) {
