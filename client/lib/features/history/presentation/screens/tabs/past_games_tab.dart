@@ -7,7 +7,7 @@ import '../../widgets/past_game_list.dart';
 
 /// Displays all past games.
 class PastGamesTab extends ConsumerWidget {
-  // ignore: public_member_api_docs
+  /// Creates a new [PastGamesTab] instance.
   const PastGamesTab({super.key});
 
   @override
@@ -15,10 +15,11 @@ class PastGamesTab extends ConsumerWidget {
     final pastGamesAsync = ref.watch(pastGamesProvider);
 
     return pastGamesAsync.when(
+      skipLoadingOnReload: true,
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stack) => Column(
         mainAxisSize: MainAxisSize.min,
-        children: const [
+        children: const <Widget>[
           Text('An error occurred while fetching past games.'),
           Center(
             child: Text('Error fetching past games, please try again.'),
