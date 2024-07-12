@@ -8,8 +8,6 @@ import 'tabs/past_games_tab.dart';
 import 'tabs/players_tab.dart';
 
 // TODO: write tests for methods involving the database and history feature
-// - note that when updating a player name, the player name should be updated in the database
-// for every game that the player has played
 
 /// A page that displays past games, favorite games, and players.
 class HistoryPage extends ConsumerStatefulWidget {
