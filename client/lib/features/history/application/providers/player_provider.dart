@@ -9,14 +9,9 @@
 //   final historyRepository = ref.watch(historyRepositoryProvider);
 //   final db = await historyRepository.database;
 
-//   await db.transaction((txn) {
-
-//   final player = await historyRepository.fetchPlayer(playerId);
-
+//   return await db.transaction((txn) async {
+//     return historyRepository.fetchPlayer(playerId, txn);
 //   });
 
-//   if (player == null) {
-//     throw Exception('Player not found');
-//   }
-//   return player;
+
 // });

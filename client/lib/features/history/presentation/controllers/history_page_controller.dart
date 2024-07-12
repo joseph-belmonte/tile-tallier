@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/domain/models/game.dart';
 import '../../application/providers/history_repository_provider.dart';
+
 import '../../domain/models/player.dart';
 
 /// The state of the history page.
@@ -11,6 +12,9 @@ class HistoryPageState {
 
   /// The list of games.
   final List<Game> games;
+
+  /// The list of favorite games.
+  final List<Game> favoriteGames;
 
   /// The list of players.
   final List<Player> players;
@@ -22,6 +26,7 @@ class HistoryPageState {
   HistoryPageState({
     this.isLoading = true,
     this.games = const [],
+    this.favoriteGames = const [],
     this.players = const [],
     this.errorMessage,
   });
@@ -37,6 +42,7 @@ class HistoryPageState {
     return HistoryPageState(
       isLoading: isLoading ?? this.isLoading,
       games: games ?? this.games,
+      favoriteGames: favoriteGames ?? this.favoriteGames,
       players: players ?? this.players,
       errorMessage: errorMessage ?? this.errorMessage,
     );
@@ -45,7 +51,7 @@ class HistoryPageState {
 
 /// A controller for the history page.
 class HistoryPageController extends StateNotifier<HistoryPageState> {
-  /// A reference to the hitsory repository provider.
+  /// A reference to the history repository provider.
   final Ref ref;
 
   /// Creates a new [HistoryPageController] instance.
@@ -63,8 +69,19 @@ class HistoryPageController extends StateNotifier<HistoryPageState> {
     state = state.copyWith(isLoading: true);
     try {
       final games = await ref.read(historyRepositoryProvider).fetchGames();
-
       state = state.copyWith(games: games, isLoading: false);
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString(), isLoading: false);
+    }
+  }
+
+  /// Fetches all favorite games.
+  Future<void> fetchFavoriteGames() async {
+    state = state.copyWith(isLoading: true);
+    try {
+      final games = await ref.read(historyRepositoryProvider).fetchGames();
+      final favoriteGames = games.where((game) => game.isFavorite).toList();
+      state = state.copyWith(favoriteGames: favoriteGames, isLoading: false);
     } catch (e) {
       state = state.copyWith(errorMessage: e.toString(), isLoading: false);
     }
@@ -72,12 +89,13 @@ class HistoryPageController extends StateNotifier<HistoryPageState> {
 
   /// Fetches all players.
   Future<void> fetchPlayers() async {
+    state = state.copyWith(isLoading: true);
     try {
       final players =
           await ref.read(historyRepositoryProvider).fetchAllPlayers();
-      state = state.copyWith(players: players);
+      state = state.copyWith(players: players, isLoading: false);
     } catch (e) {
-      state = state.copyWith(errorMessage: e.toString());
+      state = state.copyWith(errorMessage: e.toString(), isLoading: false);
     }
   }
 
@@ -105,14 +123,15 @@ class HistoryPageController extends StateNotifier<HistoryPageState> {
     await fetchGames();
   }
 
-  /// Updates the name of a player.
+  /// Updates a player's name.
   Future<void> updatePlayerName({
     required String playerId,
     required String newName,
   }) async {
-    await ref
-        .read(historyRepositoryProvider)
-        .updatePlayerName(playerId: playerId, newName: newName);
+    await ref.read(historyRepositoryProvider).updatePlayerName(
+          playerId: playerId,
+          newName: newName,
+        );
     await fetchPlayers();
   }
 }

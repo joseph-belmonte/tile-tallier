@@ -19,10 +19,6 @@ class PlayersTab extends ConsumerWidget {
       );
     }
 
-    for (var player in players) {
-      logger.d('Player: ${player.name}');
-    }
-
     return ListView.builder(
       itemCount: players.length,
       itemBuilder: (context, index) {
@@ -37,7 +33,7 @@ class PlayersTab extends ConsumerWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) {
-                    return SinglePlayerHistoryPage(player: player);
+                    return SinglePlayerHistoryPage(playerId: player.id);
                   },
                 ),
               );

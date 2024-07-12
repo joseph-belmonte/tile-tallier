@@ -34,6 +34,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage>
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: myTabs.length);
+    _tabController.addListener(_handleTabSelection);
     Future.microtask(() {
       ref.read(historyPageControllerProvider.notifier).fetchGames();
       ref.read(historyPageControllerProvider.notifier).fetchPlayers();
@@ -42,8 +43,19 @@ class _HistoryPageState extends ConsumerState<HistoryPage>
 
   @override
   void dispose() {
+    _tabController.removeListener(_handleTabSelection);
     _tabController.dispose();
     super.dispose();
+  }
+
+  void _handleTabSelection() {
+    if (_tabController.index == 0) {
+      ref.read(historyPageControllerProvider.notifier).fetchGames();
+    } else if (_tabController.index == 1) {
+      ref.read(historyPageControllerProvider.notifier).fetchGames();
+    } else if (_tabController.index == 2) {
+      ref.read(historyPageControllerProvider.notifier).fetchPlayers();
+    }
   }
 
   /// Deletes all games from the database and updates the state.
@@ -61,7 +73,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage>
     Widget content;
 
     if (historyPageState.isLoading) {
-      content = Center(child: CircularProgressIndicator());
+      content = const Center(child: CircularProgressIndicator());
     }
 
     if (historyPageState.errorMessage != null) {
