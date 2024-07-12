@@ -1,8 +1,8 @@
 import 'package:sqflite/sqflite.dart';
 
+import '../../../../utils/logger.dart';
 import '../../../core/domain/models/game.dart';
 import '../../data/helpers/games_table_helper.dart';
-import '../../data/helpers/master_database_helper.dart';
 import '../../data/helpers/players_table_helper.dart';
 import '../models/player.dart';
 
@@ -10,16 +10,18 @@ import '../models/player.dart';
 class HistoryRepository {
   final GameTableHelper _gameTableHelper = GameTableHelper();
   final PlayerTableHelper _playerTableHelper = PlayerTableHelper();
+  late final Future<Database> _databaseFuture;
+
+  /// Creates a new [HistoryRepository] instance.
+  HistoryRepository(this._databaseFuture);
+
+  /// Gets the database.
+  Future<Database> get database async => await _databaseFuture;
 
   // Region: 'games' table methods
   /// Saves a game to the database.
   Future<void> saveGame(Game game, Transaction txn) async {
-    try {
-      await _gameTableHelper.insertGame(game, txn);
-    } catch (e) {
-      // Handle or rethrow the error as needed
-      throw Exception('Failed to save game: $e');
-    }
+    await _gameTableHelper.insertGame(game, txn);
   }
 
   /// Deletes a specific game from the database.
@@ -65,12 +67,14 @@ class HistoryRepository {
   }
 
   /// Updates a player's name in the database.
-  Future<void> updatePlayerName(
-    Transaction txn, {
+  Future<void> updatePlayerName({
     required String playerId,
     required String newName,
   }) async {
-    await _playerTableHelper.updatePlayerName(txn, playerId, newName);
+    final db = await database;
+    await db.transaction((txn) async {
+      await _playerTableHelper.updatePlayerName(playerId, newName, txn);
+    });
   }
 
   /// Deletes a player from the database.
@@ -87,23 +91,40 @@ class HistoryRepository {
 
   /// Gets all games played by a specific player.
   Future<List<Game>> fetchGamesByPlayerId(String playerId) async {
-    final db = await MasterDatabaseHelper.instance.database;
-    final result = await db.rawQuery(
-      '''
-      SELECT g.* 
-      FROM games g
-      JOIN game_players gp ON g.id = gp.gameId
-      WHERE gp.playerId = ?
-    ''',
-      [playerId],
-    );
+    final games = await _gameTableHelper.fetchGamesByPlayerId(playerId);
 
-    final games = await Future.wait(
-      result.map((gameMap) async {
-        return await _gameTableHelper.assembleGame(gameMap);
-      }).toList(),
-    );
+    logger.d('Games played by player $playerId: ${games.length}');
+
+    for (var game in games) {
+      for (var gamePlayer in game.players) {
+        if (gamePlayer.id == playerId) {
+          logger.d('Player $playerId has name: ${gamePlayer.name}');
+        }
+      }
+    }
 
     return games;
+  }
+
+  /// Submit game results and player data
+  Future<void> submitGameData(Game completedGame) async {
+    final db = await database;
+    await db.transaction((txn) async {
+      // Save the game
+      await saveGame(completedGame, txn);
+
+      // Save the Players
+      for (var gamePlayer in completedGame.players) {
+        // Check if the player already exists in the database
+        final player = await fetchPlayer(gamePlayer.playerId, txn);
+
+        // If the player does not exist, save them to the database
+        if (player == null) {
+          final newPlayer =
+              Player(name: gamePlayer.name, id: gamePlayer.playerId);
+          await savePlayer(newPlayer, txn);
+        }
+      }
+    });
   }
 }

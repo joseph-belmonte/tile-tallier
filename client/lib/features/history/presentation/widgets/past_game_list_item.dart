@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../utils/toast.dart';
 import '../../../core/domain/models/game.dart';
-import '../../application/providers/past_games_provider.dart';
+import '../controllers/history_page_controller.dart';
 import '../screens/past_game.dart';
 
 /// A widget that displays one past game in a dismissible list.
@@ -30,7 +30,7 @@ class PastGameListItem extends ConsumerWidget {
     return Dismissible(
       key: Key(game.id),
       onDismissed: (direction) {
-        ref.read(pastGamesProvider.notifier).deleteGame(game.id);
+        ref.read(historyPageControllerProvider.notifier).deleteGame(game.id);
         ToastService.message(context, 'Game deleted successfully!');
       },
       direction: DismissDirection.startToEnd,

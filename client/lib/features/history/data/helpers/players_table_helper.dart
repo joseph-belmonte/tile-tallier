@@ -1,4 +1,5 @@
 import 'package:sqflite/sqflite.dart';
+import '../../../../utils/logger.dart';
 import '../../domain/models/database_helper.dart';
 import '../../domain/models/player.dart';
 
@@ -47,17 +48,28 @@ class PlayerTableHelper extends DatabaseHelper {
 
   /// Updates a player's name in the database, given their ID.
   Future<void> updatePlayerName(
-    Transaction txn,
     String playerId,
     String newName,
+    Transaction txn,
   ) async {
-    final db = await database;
-    await db.update(
-      'players',
-      {'name': newName},
-      where: 'id = ?',
-      whereArgs: [playerId],
-    );
+    try {
+      // First, update the player's name in the 'players' table
+      await txn.update(
+        'players',
+        {'name': newName},
+        where: 'id = ?',
+        whereArgs: [playerId],
+      );
+      // Next, update the player's name in the 'game_players' table
+      await txn.update(
+        'game_players',
+        {'name': newName},
+        where: 'playerId = ?',
+        whereArgs: [playerId],
+      );
+    } on Exception catch (e) {
+      logger.e('Error updating player name: $e');
+    }
   }
 
   /// Fetches a player from the database by their name

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../application/providers/past_games_provider.dart';
-import '../../application/providers/players_provider.dart'; // Ensure the path is correct
-
+import '../controllers/history_page_controller.dart';
 import '../widgets/deletion_dialog.dart';
 import 'tabs/favorite_games_tab.dart';
 import 'tabs/past_games_tab.dart';
 import 'tabs/players_tab.dart';
+
+// TODO: write tests for methods involving the database and history feature
+// - note that when updating a player name, the player name should be updated in the database
+// for every game that the player has played
 
 /// A page that displays past games, favorite games, and players.
 class HistoryPage extends ConsumerStatefulWidget {
@@ -23,7 +25,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage>
   late TabController _tabController;
 
   static const List<Tab> myTabs = <Tab>[
-    Tab(text: 'Past Games'),
+    Tab(text: 'All Games'),
     Tab(text: 'Favorites'),
     Tab(text: 'Players'),
   ];
@@ -32,10 +34,10 @@ class _HistoryPageState extends ConsumerState<HistoryPage>
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: myTabs.length);
-    // Fetch games when the widget is first built
-    Future.microtask(() => ref.read(pastGamesProvider.notifier).fetchGames());
-    // Fetch players when the widget is first built
-    Future.microtask(() => ref.read(playersProvider.notifier).fetchPlayers());
+    Future.microtask(() {
+      ref.read(historyPageControllerProvider.notifier).fetchGames();
+      ref.read(historyPageControllerProvider.notifier).fetchPlayers();
+    });
   }
 
   @override
@@ -46,14 +48,35 @@ class _HistoryPageState extends ConsumerState<HistoryPage>
 
   /// Deletes all games from the database and updates the state.
   Future<void> deleteAllData() async {
-    await ref.read(pastGamesProvider.notifier).deleteAllGames();
-    await ref.read(playersProvider.notifier).deleteAllPlayers();
-    ref.read(pastGamesProvider.notifier).fetchGames();
-    ref.read(playersProvider.notifier).fetchPlayers();
+    await ref.read(historyPageControllerProvider.notifier).deleteAllGames();
+    await ref.read(historyPageControllerProvider.notifier).deleteAllPlayers();
+    await ref.read(historyPageControllerProvider.notifier).fetchGames();
+    await ref.read(historyPageControllerProvider.notifier).fetchPlayers();
   }
 
   @override
   Widget build(BuildContext context) {
+    final historyPageState = ref.watch(historyPageControllerProvider);
+
+    Widget content;
+
+    if (historyPageState.isLoading) {
+      content = Center(child: CircularProgressIndicator());
+    }
+
+    if (historyPageState.errorMessage != null) {
+      content = Center(child: Text('Error: ${historyPageState.errorMessage}'));
+    } else {
+      content = TabBarView(
+        controller: _tabController,
+        children: const <Widget>[
+          PastGamesTab(),
+          FavoriteGamesTab(),
+          PlayersTab(),
+        ],
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('History'),
@@ -73,14 +96,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage>
           tabs: myTabs,
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: const <Widget>[
-          PastGamesTab(),
-          FavoriteGamesTab(),
-          PlayersTab(),
-        ],
-      ),
+      body: content,
     );
   }
 }

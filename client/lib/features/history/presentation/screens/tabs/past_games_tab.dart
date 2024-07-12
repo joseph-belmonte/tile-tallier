@@ -12,30 +12,14 @@ class PastGamesTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pastGamesAsync = ref.watch(pastGamesProvider);
+    final games = ref.watch(pastGamesProvider);
 
-    return pastGamesAsync.when(
-      skipLoadingOnReload: true,
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stack) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: const <Widget>[
-          Text('An error occurred while fetching past games.'),
-          Center(
-            child: Text('Error fetching past games, please try again.'),
-          ),
-          Divider(),
-        ],
-      ),
-      data: (games) {
-        if (games.isEmpty) {
-          return const Center(
-            child: Text('No past games found.'),
-          );
-        } else {
-          return PastGameList(games: games);
-        }
-      },
-    );
+    if (games.isEmpty) {
+      return const Center(
+        child: Text('No past games found.'),
+      );
+    } else {
+      return PastGameList(games: games);
+    }
   }
 }

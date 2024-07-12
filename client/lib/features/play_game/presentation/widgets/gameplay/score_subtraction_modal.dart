@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sqflite/sqflite.dart';
 
 import '../../../../../utils/game_play_storage.dart';
-import '../../../../../utils/logger.dart';
 import '../../../../core/domain/models/game.dart';
 import '../../../../history/application/providers/history_repository_provider.dart';
-import '../../../../history/data/helpers/master_database_helper.dart';
-import '../../../../history/domain/models/player.dart';
+
 import '../../../application/providers/active_game.dart';
 import '../../screens/results.dart';
 
@@ -47,14 +44,10 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
   }
 
   void _submitGameRacks() async {
-    final db = await MasterDatabaseHelper.instance.database;
-
     if (_formKey.currentState!.validate()) {
       _updateGameRacks();
 
       await GamePlayStorage.setPlayedToday();
-
-      if (!context.mounted) return;
 
       // Save the game to the database:
       final completedGame = ref.read(activeGameProvider);
@@ -63,44 +56,19 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
         return;
       }
 
-      await _submitDataToDatabase(db, completedGame);
-
+      await _submitDataToDatabase(completedGame);
+      if (!context.mounted) return;
       // ignore: use_build_context_synchronously
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => ResultsPage(game: ref.read(activeGameProvider)),
         ),
       );
-      logger.d('Navigated to results page');
     }
   }
 
-  Future<void> _submitDataToDatabase(Database db, Game completedGame) async {
-    await db.transaction((txn) async {
-      // Save the game
-      await ref.read(historyRepositoryProvider).saveGame(completedGame, txn);
-      logger.d('Saved game to database');
-
-      // Save the Players
-      for (var gamePlayer in completedGame.players) {
-        // Check if the player already exists in the database
-        final player = await ref
-            .read(historyRepositoryProvider)
-            .fetchPlayer(gamePlayer.playerId, txn);
-
-        if (player != null) {
-          logger.d('Player already exists in database');
-        }
-
-        // If the player does not exist, save them to the database
-        if (player == null) {
-          final newPlayer =
-              Player(name: gamePlayer.name, id: gamePlayer.playerId);
-          await ref.read(historyRepositoryProvider).savePlayer(newPlayer, txn);
-          logger.d('Saved player to database');
-        }
-      }
-    });
+  Future<void> _submitDataToDatabase(Game completedGame) async {
+    await ref.read(historyRepositoryProvider).submitGameData(completedGame);
   }
 
   void _updateGameRacks() {
