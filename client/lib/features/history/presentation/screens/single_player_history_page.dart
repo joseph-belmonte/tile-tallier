@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../controllers/history_page_controller.dart';
 import '../controllers/single_player_history_page_controller.dart';
 import '../widgets/past_game_list.dart';
 
@@ -32,6 +33,7 @@ class _SinglePlayerHistoryPageState
       ref
           .read(singlePlayerHistoryPageControllerProvider.notifier)
           .fetchPlayerGames(widget.playerId);
+      ref.read(historyPageControllerProvider.notifier).fetchPlayers();
     });
   }
 
@@ -133,6 +135,9 @@ class _SinglePlayerHistoryPageState
                                 newName: controller.text.trim(),
                               );
                           Navigator.of(context).pop();
+                          ref
+                              .read(historyPageControllerProvider.notifier)
+                              .fetchPlayers();
                         },
                         child: Text(
                           'Save',
