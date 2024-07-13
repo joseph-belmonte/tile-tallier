@@ -18,8 +18,7 @@ class PastGamesTab extends ConsumerWidget {
       return const Center(
         child: Text('No past games found.'),
       );
-    } else {
-      return PastGameList(games: games);
     }
+    return PastGameList(games: games);
   }
 }
