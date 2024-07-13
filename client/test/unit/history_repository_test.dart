@@ -1,188 +1,208 @@
-// import 'dart:io';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:tile_tally/features/core/domain/models/game.dart';
+import 'package:tile_tally/features/history/domain/models/player.dart';
+import 'package:tile_tally/features/history/domain/repositories/history_repository.dart';
+import 'package:tile_tally/utils/logger.dart';
 
-// import 'package:flutter/services.dart';
-// import 'package:flutter_test/flutter_test.dart';
-// import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-// import 'package:tile_tally/features/core/domain/models/game.dart';
-// import 'package:tile_tally/features/core/domain/models/game_player.dart';
-// import 'package:tile_tally/features/core/domain/models/letter.dart';
-// import 'package:tile_tally/features/core/domain/models/play.dart';
-// import 'package:tile_tally/features/core/domain/models/word.dart';
-// import 'package:tile_tally/features/view_past_games/data/helpers/master_database_helper.dart';
+void main() {
+  sqfliteFfiInit();
 
-// import 'package:tile_tally/features/view_past_games/domain/models/player.dart';
-// import 'package:tile_tally/features/view_past_games/domain/repositories/history_repository.dart';
-// import 'package:uuid/uuid.dart';
+  late Database database;
+  late HistoryRepository historyRepository;
 
-// Future<void> main() async {
-//   TestWidgetsFlutterBinding.ensureInitialized();
-//   // Mocking the path_provider
-//   TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-//       .setMockMethodCallHandler(
-//     const MethodChannel('plugins.flutter.io/path_provider'),
-//     (MethodCall methodCall) async => '.',
-//   );
+  setUpAll(() async {
+    databaseFactory = databaseFactoryFfi;
 
-//   // Initialize FFI
-//   sqfliteFfiInit();
-//   databaseFactory = databaseFactoryFfi;
+    database = await openDatabase(
+      inMemoryDatabasePath,
+      version: 1,
+      onCreate: (db, version) async {
+        await db.execute('''
+          CREATE TABLE games (
+            id TEXT PRIMARY KEY,
+            isFavorite INTEGER
+          )
+        ''');
+        await db.execute('''
+          CREATE TABLE players (
+            id TEXT PRIMARY KEY,
+            name TEXT
+          )
+        ''');
+        await db.execute('''
+          CREATE TABLE game_players (
+            id TEXT PRIMARY KEY,
+            playerId TEXT,
+            gameId TEXT,
+            name TEXT,
+            FOREIGN KEY (playerId) REFERENCES players (id),
+            FOREIGN KEY (gameId) REFERENCES games (id)
+          )
+        ''');
+      },
+    );
 
-//   group('HistoryRepository tests', () {
-//     late Database db; // Database instance
-//     late Directory tempDir; // Temp directory used for testing
-//     late HistoryRepository historyRepository;
+    historyRepository = HistoryRepository(Future.value(database));
+  });
 
-//     setUp(() async {
-//       tempDir = await Directory.systemTemp.createTemp('tile_tally');
-//       final dbPath = '${tempDir.path}/game_database_test.db';
+  tearDownAll(() async {
+    await database.close();
+  });
 
-//       db = await openDatabase(
-//         dbPath,
-//         version: 1,
-//         onCreate: (db, version) async {
-//           await MasterDatabaseHelper.instance.testCreateDB(db, version);
-//         },
-//       );
+  group('HistoryRepository Tests', () {
+    test('Save and fetch game', () async {
+      final game = Game(
+        id: 'game1',
+        isFavorite: false,
+        players: [],
+        currentPlay: null,
+        currentWord: null,
+      );
+      await database.transaction((txn) async {
+        await historyRepository.saveGame(game, txn);
+      });
 
-//       MasterDatabaseHelper.testConstructor(db);
-//       historyRepository = HistoryRepository();
+      logger.d(
+        await database.transaction((txn) async {
+          return await txn.query('games');
+        }),
+      );
 
-//       final tables = await db
-//           .rawQuery('SELECT name FROM sqlite_master WHERE type = "table"');
-//       print('Tables: $tables');
-//     });
+      final fetchedGame = await historyRepository.fetchGame('game1');
+      expect(fetchedGame.id, equals('game1'));
+    });
 
-//     test('Insert a game with plays into the database and fetch it', () async {
-//       final player1play = <Play>[
-//         Play.createNew(gameId: Uuid().v4()).copyWith(
-//           isBingo: true,
-//           playedWords: [
-//             Word.createNew().copyWith(
-//               playedLetters: <Letter>[
-//                 Letter.createNew(letter: 'O'),
-//                 Letter.createNew(letter: 'N'),
-//                 Letter.createNew(letter: 'E'),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ];
+    test('Delete game', () async {
+      final game = Game(
+        id: 'game2',
+        isFavorite: false,
+        players: [],
+        currentPlay: null,
+        currentWord: null,
+      );
+      await database.transaction((txn) async {
+        await historyRepository.saveGame(game, txn);
+      });
 
-//       final player2play = <Play>[
-//         Play.createNew(gameId: Uuid().v4()).copyWith(
-//           isBingo: false,
-//           playedWords: [
-//             Word.createNew().copyWith(
-//               playedLetters: <Letter>[
-//                 Letter.createNew(letter: 'T'),
-//                 Letter.createNew(letter: 'W'),
-//                 Letter.createNew(letter: 'O'),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ];
+      await historyRepository.deleteGame('game2');
 
-//       final gameId = Uuid().v4();
+      final fetchedGame = await historyRepository.fetchGame('game2');
+      expect(fetchedGame, isNull);
+    });
 
-//       final game = Game(
-//         id: gameId,
-//         players: [
-//           GamePlayer(
-//             id: Uuid().v4(),
-//             gameId: gameId,
-//             name: 'Player 1',
-//             plays: player1play,
-//             playerId: '',
-//             endRack: '',
-//           ),
-//           GamePlayer(
-//             id: Uuid().v4(),
-//             gameId: gameId,
-//             name: 'Player 2',
-//             plays: player2play,
-//             playerId: '',
-//             endRack: '',
-//           ),
-//         ],
-//         currentPlay: Play.createNew(gameId: gameId),
-//         currentWord: Word.createNew(),
-//       );
+    test('Toggle favorite', () async {
+      final game = Game(
+        id: 'game3',
+        isFavorite: false,
+        players: [],
+        currentPlay: null,
+        currentWord: null,
+      );
+      await database.transaction((txn) async {
+        await historyRepository.saveGame(game, txn);
+      });
 
-//       await db.transaction((txn) async {
-//         await historyRepository.saveGame(game, txn);
-//       });
+      await historyRepository.toggleFavorite('game3');
 
-//       final fetchedGames = await historyRepository.fetchGames();
-//       final fetchedGame = fetchedGames.firstWhere((g) => g.id == game.id);
+      final fetchedGame = await historyRepository.fetchGame('game3');
+      expect(fetchedGame.isFavorite, equals(true));
+    });
 
-//       expect(fetchedGame.id, game.id);
-//       expect(fetchedGame.players.length, game.players.length);
-//       expect(fetchedGame.players.first.name, game.players.first.name);
-//       expect(
-//         fetchedGame.players.first.plays.length,
-//         game.players.first.plays.length,
-//       );
-//       expect(fetchedGame.players.first.score, 53);
-//       expect(fetchedGame.players.last.score, 6);
-//     });
+    test('Save and fetch player', () async {
+      final player = Player(id: 'player1', name: 'John Doe');
+      await database.transaction((txn) async {
+        await historyRepository.savePlayer(player, txn);
+      });
 
-//     test('Delete a game from the database', () async {
-//       final gameId = Uuid().v4();
-//       final game = Game(
-//         id: gameId,
-//         players: <GamePlayer>[
-//           GamePlayer(
-//             id: Uuid().v4(),
-//             gameId: gameId,
-//             name: 'Player 1',
-//             playerId: '',
-//             plays: [],
-//             endRack: '',
-//           ),
-//           GamePlayer(
-//             id: Uuid().v4(),
-//             gameId: gameId,
-//             name: 'Player 2',
-//             playerId: '',
-//             plays: [],
-//             endRack: '',
-//           ),
-//         ],
-//         currentPlay: Play.createNew(gameId: gameId),
-//         currentWord: Word.createNew(),
-//       );
+      final fetchedPlayer = await database.transaction((txn) async {
+        return await historyRepository.fetchPlayer('player1', txn);
+      });
 
-//       await db.transaction((txn) async {
-//         await historyRepository.saveGame(game, txn);
-//         await historyRepository.deleteGame(game.id);
-//       });
+      expect(fetchedPlayer!.name, equals('John Doe'));
+    });
 
-//       final fetchedGames = await historyRepository.fetchGames();
-//       expect(fetchedGames.any((g) => g.id == game.id), false);
-//     });
+    test('Update player name', () async {
+      final player = Player(id: 'player2', name: 'Jane Doe');
+      await database.transaction((txn) async {
+        await historyRepository.savePlayer(player, txn);
+      });
 
-//     test('Update player name in the database', () async {
-//       final playerId = Uuid().v4();
-//       const playerName = 'Old Name';
-//       const newName = 'New Name';
+      await historyRepository.updatePlayerName(
+        playerId: 'player2',
+        newName: 'Jane Smith',
+      );
 
-//       final player = Player(id: playerId, name: playerName);
-//       await historyRepository.insertPlayer(player);
+      final fetchedPlayer = await database.transaction((txn) async {
+        return await historyRepository.fetchPlayer('player2', txn);
+      });
 
-//       await historyRepository.updatePlayerName(playerId, newName);
+      expect(fetchedPlayer!.name, equals('Jane Smith'));
+    });
 
-//       final players = await historyRepository.fetchAllPlayers();
-//       final updatedPlayer = players.firstWhere((p) => p.id == playerId);
+    test('Delete player', () async {
+      final player = Player(id: 'player3', name: 'Alice');
+      await database.transaction((txn) async {
+        await historyRepository.savePlayer(player, txn);
+      });
 
-//       expect(updatedPlayer.name, newName);
-//     });
+      await historyRepository.deletePlayer('player3');
 
-//     tearDown(() async {
-//       await db.close();
-//       if (await tempDir.exists()) {
-//         await tempDir.delete(recursive: true);
-//       }
-//     });
-//   });
-// }
+      final fetchedPlayer = await database.transaction((txn) async {
+        return await historyRepository.fetchPlayer('player3', txn);
+      });
+
+      expect(fetchedPlayer, isNull);
+    });
+
+    test('Fetch all players', () async {
+      final player1 = Player(id: 'player4', name: 'Bob');
+      final player2 = Player(id: 'player5', name: 'Charlie');
+      await database.transaction((txn) async {
+        await historyRepository.savePlayer(player1, txn);
+        await historyRepository.savePlayer(player2, txn);
+      });
+
+      final players = await historyRepository.fetchAllPlayers();
+      expect(players.length, equals(2));
+    });
+
+    test('Fetch games by player ID', () async {
+      final game = Game(
+        id: 'game4',
+        isFavorite: false,
+        players: [],
+        currentPlay: null,
+        currentWord: null,
+      );
+      final player = Player(id: 'player6', name: 'Dave');
+      await database.transaction((txn) async {
+        await historyRepository.saveGame(game, txn);
+        await historyRepository.savePlayer(player, txn);
+        await database.insert('game_players', {
+          'id': 'game4_player6',
+          'playerId': 'player6',
+          'gameId': 'game4',
+          'name': 'Dave',
+        });
+      });
+
+      final games = await historyRepository.fetchGamesByPlayerId('player6');
+      expect(games.length, equals(1));
+    });
+
+    test('Submit game data', () async {
+      final game = Game(
+        id: 'game5',
+        isFavorite: false,
+        players: [],
+        currentPlay: null,
+        currentWord: null,
+      );
+      await historyRepository.submitGameData(game);
+
+      final fetchedGame = await historyRepository.fetchGame('game5');
+      expect(fetchedGame.id, equals('game5'));
+    });
+  });
+}
