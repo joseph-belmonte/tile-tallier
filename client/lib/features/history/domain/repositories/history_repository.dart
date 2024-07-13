@@ -1,6 +1,5 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../../utils/logger.dart';
 import '../../../core/domain/models/game.dart';
 import '../../data/helpers/games_table_helper.dart';
 import '../../data/helpers/players_table_helper.dart';
@@ -92,17 +91,6 @@ class HistoryRepository {
   /// Gets all games played by a specific player.
   Future<List<Game>> fetchGamesByPlayerId(String playerId) async {
     final games = await _gameTableHelper.fetchGamesByPlayerId(playerId);
-
-    logger.d('Games played by player $playerId: ${games.length}');
-
-    for (var game in games) {
-      for (var gamePlayer in game.players) {
-        if (gamePlayer.id == playerId) {
-          logger.d('Player $playerId has name: ${gamePlayer.name}');
-        }
-      }
-    }
-
     return games;
   }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../../utils/logger.dart';
 import '../../../application/providers/players_provider.dart';
 import '../single_player_history_page.dart';
 
@@ -23,7 +22,7 @@ class PlayersTab extends ConsumerWidget {
       itemCount: players.length,
       itemBuilder: (context, index) {
         final player = players[index];
-        logger.i('Player: ${player.name}');
+
         return ListTile(
           title: Text(player.name),
           subtitle: Text(player.id.substring(0, 8)),

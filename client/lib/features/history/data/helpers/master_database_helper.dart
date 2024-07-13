@@ -4,8 +4,6 @@ library;
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../../../utils/logger.dart';
-
 /// A helper class for creating the database tables.
 class MasterDatabaseHelper {
   /// The singleton instance for the [MasterDatabaseHelper] class.
@@ -96,9 +94,6 @@ class MasterDatabaseHelper {
         FOREIGN KEY (wordId) REFERENCES words (id)
       )
     ''');
-    logger.d(
-      'Database created with tables: games, players, game_players, plays, words, playedLetters',
-    );
   }
 
   /// Closes the database.
