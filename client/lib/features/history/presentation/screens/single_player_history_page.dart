@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../controllers/history_page_controller.dart';
 import '../controllers/single_player_history_page_controller.dart';
 import '../widgets/past_game_list.dart';
@@ -26,10 +25,22 @@ class _SinglePlayerHistoryPageState
   void initState() {
     super.initState();
     controller = TextEditingController();
+    _fetchData();
+  }
+
+  void _fetchData() {
     Future.microtask(() {
       ref
           .read(singlePlayerHistoryPageControllerProvider.notifier)
-          .fetchPlayer(widget.playerId);
+          .fetchPlayer(widget.playerId)
+          .then((_) {
+        final playerHistoryState =
+            ref.read(singlePlayerHistoryPageControllerProvider);
+        if (playerHistoryState.player != null) {
+          controller.text = playerHistoryState.player!.name;
+        }
+      });
+
       ref
           .read(singlePlayerHistoryPageControllerProvider.notifier)
           .fetchPlayerGames(widget.playerId);
@@ -47,15 +58,6 @@ class _SinglePlayerHistoryPageState
   Widget build(BuildContext context) {
     final playerHistoryState =
         ref.watch(singlePlayerHistoryPageControllerProvider);
-
-    // Update the controller's text when the player's name changes
-    if (playerHistoryState.player != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          controller.text = playerHistoryState.player!.name;
-        }
-      });
-    }
 
     return Scaffold(
       appBar: AppBar(
