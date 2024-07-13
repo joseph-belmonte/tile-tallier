@@ -48,7 +48,11 @@ class _SinglePlayerHistoryPageState
 
     // Update the controller's text when the player's name changes
     if (playerHistoryState.player != null) {
-      controller.text = playerHistoryState.player!.name;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          controller.text = playerHistoryState.player!.name;
+        }
+      });
     }
 
     return Scaffold(
