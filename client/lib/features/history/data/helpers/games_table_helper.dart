@@ -27,7 +27,10 @@ class GameTableHelper extends DatabaseHelper {
   Future<void> insertGame(Game game, Transaction txn) async {
     await txn.insert(
       'games',
-      {'id': game.id},
+      {
+        'id': game.id,
+        'is_favorite': game.isFavorite ? 1 : 0,
+      },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
 
