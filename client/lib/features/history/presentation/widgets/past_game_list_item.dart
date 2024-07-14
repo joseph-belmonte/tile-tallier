@@ -34,7 +34,15 @@ class PastGameListItem extends ConsumerWidget {
         ToastService.message(context, 'Game deleted successfully!');
       },
       direction: DismissDirection.startToEnd,
-      background: Container(color: Colors.red),
+      background: Container(
+        alignment: Alignment.centerLeft,
+        color: Theme.of(context).colorScheme.error,
+        child: Icon(
+          Icons.delete,
+          color: Theme.of(context).colorScheme.onError,
+          size: 40,
+        ),
+      ),
       child: Container(
         padding: const EdgeInsets.all(8),
         color: Theme.of(context).listTileTheme.tileColor,
