@@ -19,6 +19,13 @@ class PastGamesTab extends ConsumerWidget {
         child: Text('No past games found.'),
       );
     }
+    games.sort(
+      (a, b) => b.plays[b.plays.length - 1].timestamp
+          .toLocal()
+          .compareTo(a.plays[a.plays.length - 1].timestamp.toLocal())
+          .toInt(),
+    );
+
     return PastGameList(games: games);
   }
 }
