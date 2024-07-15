@@ -7,6 +7,8 @@ class ToastService {
     String message, {
     bool isError = false,
   }) {
+    // First, clear any existing toasts
+    ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: isError ? Colors.red.shade600 : null,

@@ -5,6 +5,7 @@ import '../../application/providers/active_game.dart';
 import '../controllers/pre_game_controller.dart';
 import '../widgets/pregame/player_count_control.dart';
 import '../widgets/pregame/player_input_fields.dart';
+import '../widgets/pregame/player_selection_chips.dart';
 import '../widgets/pregame/start_game_button.dart';
 import 'play_input.dart';
 
@@ -59,18 +60,9 @@ class _PreGamePageState extends ConsumerState<PreGamePage> {
           key: _formKey,
           child: Column(
             children: <Widget>[
-              PlayerCountControl(
-                playerCount: preGameState.playerCount,
-                canAdd: preGameState.canAdd,
-                canRemove: preGameState.canRemove,
-                onAdd: preGameController.addPlayer,
-                onRemove: preGameController.removePlayer,
-              ),
-              PlayerInputFields(
-                playerCount: preGameState.playerCount,
-                controllers: preGameState.controllers,
-                onPlayerNameChange: preGameController.updatePlayerName,
-              ),
+              PlayerCountControl(),
+              PlayerSelectionChips(),
+              PlayerInputFields(),
               StartGameButton(
                 formKey: _formKey,
                 onPressed: preGameController.startGame,
