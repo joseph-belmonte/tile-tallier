@@ -18,7 +18,7 @@ class PastGameList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: games.length,
-      itemBuilder: (context, index) {
+      itemBuilder: (_, index) {
         return PastGameListItem(
           game: games[index],
         );
