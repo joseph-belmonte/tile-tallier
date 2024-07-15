@@ -1,4 +1,5 @@
 import 'package:sqflite/sqflite.dart';
+import '../../../../utils/logger.dart';
 import '../../../core/domain/models/game.dart';
 import '../../../core/domain/models/game_player.dart';
 import '../../../core/domain/models/letter.dart';
@@ -85,7 +86,7 @@ class GameTableHelper extends DatabaseHelper {
     final gameMap = await db.query('games', where: 'id = ?', whereArgs: [id]);
 
     if (gameMap.isEmpty) {
-      throw Exception('Game with id $id not found');
+      logger.e('Game not found in database');
     }
 
     return await assembleGame(gameMap.first);
