@@ -7,8 +7,6 @@ import 'tabs/favorite_games_tab.dart';
 import 'tabs/past_games_tab.dart';
 import 'tabs/players_tab.dart';
 
-// TODO: write tests for methods involving the database and history feature
-
 /// A page that displays past games, favorite games, and players.
 class HistoryPage extends ConsumerStatefulWidget {
   /// Creates a new [HistoryPage] instance.
