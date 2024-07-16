@@ -76,34 +76,50 @@ class PastGameScreen extends ConsumerWidget {
               ),
             ),
             SizedBox(height: 8),
-            // End Racks:
-            Text('End Racks:'),
-            Column(
-              children: game.players.map((player) {
-                return Text(
-                  '${player.name}: ${player.endRack.isEmpty ? 'Empty' : player.endRack}',
-                );
-              }).toList(),
-            ),
-            // Final Scores:
-            Text('Final Scores:'),
-            Column(
-              children: game.players.map((player) {
-                return GestureDetector(
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => PlayerResultsScreen(
-                        game: game,
-                        player: player,
-                      ),
+            Divider(),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    Text('End Racks:'),
+                    ...game.players.map((player) {
+                      return Text(
+                        '${player.name}: ${player.endRack.isEmpty ? 'Empty' : player.endRack}',
+                      );
+                    }),
+                  ],
+                ),
+                SizedBox(width: 16),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Text('Final Scores:'),
+                        ...game.sortedPlayers.map((player) {
+                          return GestureDetector(
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => PlayerResultsScreen(
+                                  game: game,
+                                  player: player,
+                                ),
+                              ),
+                            ),
+                            child: Text(
+                              '${player.name}: ${player.score}',
+                            ),
+                          );
+                        }),
+                      ],
                     ),
-                  ),
-                  child: Text(
-                    '${player.name}: ${player.score}',
-                  ),
-                );
-              }).toList(),
+                  ],
+                ),
+                // Final Scores:
+              ],
             ),
+            // End Racks:
           ],
         ),
       ),
