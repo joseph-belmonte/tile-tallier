@@ -27,13 +27,14 @@ jobs:
       - name: Lint client code
         # Change to the client directory and run the linter
         run: |
-          cd client 
           cd client
           dart format --output=none --set-exit-if-changed .
 
-        # Check for errors in the client code
       - name: Analyze project source
-        run: dart analyze --fatal-infos
+        # Change to the client directory and analyze the project source
+        run: |
+          cd client
+          flutter analyze
 
       - name: Run client tests
         # Change to the client directory and run the tests
