@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:tile_tally/features/core/domain/models/letter.dart';
 import 'package:tile_tally/features/core/domain/models/play.dart';
 import 'package:tile_tally/features/core/domain/models/word.dart';
