@@ -8,6 +8,7 @@ void main() {
   sqfliteFfiInit();
 
   late Database database;
+  // ignore: unused_local_variable
   late GameTableHelper gameTableHelper;
 
   setUpAll(() async {

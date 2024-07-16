@@ -3,7 +3,6 @@ import 'package:tile_tally/features/core/domain/models/game_player.dart';
 import 'package:tile_tally/features/core/domain/models/letter.dart';
 import 'package:tile_tally/features/core/domain/models/play.dart';
 import 'package:tile_tally/features/core/domain/models/word.dart';
-import 'package:tile_tally/features/history/domain/models/player.dart';
 
 final game1 = Game(
   id: 'game1',
