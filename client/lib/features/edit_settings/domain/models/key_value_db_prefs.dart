@@ -107,7 +107,8 @@ class KeyValueDbPrefs implements KeyValueDb {
   @override
   T get<T>(String key, T defaultValue) {
     if (T == ScrabbleEdition) {
-      final index = _prefs.getInt(key) ?? (defaultValue as ScrabbleEdition).index;
+      final index =
+          _prefs.getInt(key) ?? (defaultValue as ScrabbleEdition).index;
       return ScrabbleEdition.values[index] as T;
     }
     try {

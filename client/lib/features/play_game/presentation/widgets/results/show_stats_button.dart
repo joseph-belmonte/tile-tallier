@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../domain/models/game.dart';
+import '../../../../core/domain/models/game.dart';
 import 'stats_dialogue.dart';
 
 /// Shows the stats for the game. If the game was empty, displays a snackbar.

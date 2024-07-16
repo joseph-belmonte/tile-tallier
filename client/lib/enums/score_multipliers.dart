@@ -29,5 +29,6 @@ enum ScoreMultiplier {
   final String label;
 
   /// Returns the color for the letter score multiplier based on the edition.
-  Color editionColor(ScrabbleEdition edition) => scrabbleTileColors[edition]![this]!;
+  Color editionColor(ScrabbleEdition edition) =>
+      scrabbleTileColors[edition]![this]!;
 }

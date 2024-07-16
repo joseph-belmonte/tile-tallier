@@ -55,7 +55,8 @@ class ShowDialogToDismiss extends StatelessWidget {
           CupertinoDialogAction(
             isDefaultAction: true,
             child: Text(
-              buttonText[0].toUpperCase() + buttonText.substring(1).toLowerCase(),
+              buttonText[0].toUpperCase() +
+                  buttonText.substring(1).toLowerCase(),
             ),
             onPressed: () {
               Navigator.of(context).pop();

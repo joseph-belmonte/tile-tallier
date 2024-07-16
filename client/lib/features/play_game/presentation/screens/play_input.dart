@@ -93,8 +93,13 @@ class _PlayInputPageState extends ConsumerState<PlayInputPage> {
                   controller: _scrollController,
                   itemCount: ref.watch(activeGameProvider).plays.length,
                   itemBuilder: (_, int i) {
-                    final player = ref.watch(activeGameProvider).players.firstWhere(
-                          (player) => player.id == ref.watch(activeGameProvider).plays[i].playerId,
+                    final player = ref
+                        .watch(activeGameProvider)
+                        .players
+                        .firstWhere(
+                          (player) =>
+                              player.id ==
+                              ref.watch(activeGameProvider).plays[i].playerId,
                         );
 
                     return HistoricalPlay(

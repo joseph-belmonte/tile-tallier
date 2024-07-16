@@ -17,7 +17,7 @@
 - `domain` defines the core business entities.
 
   - `models` contains the data models used in the app.
-  - `repositories` provides an abstraction for data access, and can combine data from multiple sources if necessary.
+  - `repositories` provides an abstraction for data access, and can combine data from multiple sources if necessary. The repository pattern is used to abstract the data access logic from the business logic. It acts as an intermediary between your application and your data sources (like databases, APIs, etc.).
   - Example: `user_model.dart` defines the user entity, and `user_repository.dart` handles data operations related to the user.
 
 - `presentation` contains the UI components and screens.

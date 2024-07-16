@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../utils/game_play_storage.dart';
-import '../../../../view_past_games/data/game_storage_database_helper.dart';
+import '../../../../core/domain/models/game.dart';
+import '../../../../history/application/providers/history_repository_provider.dart';
+
 import '../../../application/providers/active_game.dart';
 import '../../screens/results.dart';
 
@@ -20,6 +22,7 @@ class ScoreSubtractionModal extends ConsumerStatefulWidget {
 class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
   final _formKey = GlobalKey<FormState>();
   late List<TextEditingController> _controllers;
+  final bool _isLoading = false;
 
   @override
   void initState() {
@@ -40,29 +43,21 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
     super.dispose();
   }
 
-  void _submitRacks() async {
+  void _submitGameRacks() async {
     if (_formKey.currentState!.validate()) {
-      final playerRacks =
-          _controllers.map((controller) => controller.text.trim()).toList();
-
-      final updatedPlayers =
-          ref.read(activeGameProvider).players.asMap().entries.map((entry) {
-        final index = entry.key;
-        final player = entry.value;
-
-        return player.copyWith(endRack: playerRacks[index]);
-      }).toList();
-
-      ref.read(activeGameProvider.notifier).updatePlayers(updatedPlayers);
+      _updateGameRacks();
 
       await GamePlayStorage.setPlayedToday();
 
-      if (!context.mounted) return;
-
       // Save the game to the database:
       final completedGame = ref.read(activeGameProvider);
-      await GameStorageDatabaseHelper.instance.insertGame(completedGame);
 
+      if (completedGame.plays.isEmpty) {
+        return;
+      }
+
+      await _submitDataToDatabase(completedGame);
+      if (!context.mounted) return;
       // ignore: use_build_context_synchronously
       Navigator.of(context).push(
         MaterialPageRoute(
@@ -70,6 +65,25 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
         ),
       );
     }
+  }
+
+  Future<void> _submitDataToDatabase(Game completedGame) async {
+    await ref.read(historyRepositoryProvider).submitGameData(completedGame);
+  }
+
+  void _updateGameRacks() {
+    final playerRacks =
+        _controllers.map((controller) => controller.text.trim()).toList();
+
+    final updatedPlayers =
+        ref.read(activeGameProvider).players.asMap().entries.map((entry) {
+      final index = entry.key;
+      final player = entry.value;
+
+      return player.copyWith(endRack: playerRacks[index]);
+    }).toList();
+
+    ref.read(activeGameProvider.notifier).updatePlayers(updatedPlayers);
   }
 
   @override
@@ -117,6 +131,11 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
                 ),
               ),
             ),
+            if (_isLoading)
+              const Padding(
+                padding: EdgeInsets.all(20.0),
+                child: LinearProgressIndicator(),
+              ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 20.0),
               child: Row(
@@ -141,7 +160,7 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
                     ),
                   ),
                   ElevatedButton.icon(
-                    onPressed: _submitRacks,
+                    onPressed: _submitGameRacks,
                     icon: Icon(
                       Icons.check,
                       color: Theme.of(context).colorScheme.onPrimaryContainer,

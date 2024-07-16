@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../enums/score_multipliers.dart';
 import '../enums/scrabble_edition.dart';
-import '../features/play_game/domain/models/letter.dart';
+import '../features/core/domain/models/letter.dart';
 
 import '../theme/constants/scrabble_tile_colors.dart';
 
@@ -48,7 +48,12 @@ List<String> generateWildcardWords(String word) {
 }
 
 /// Helper function to replace wildcards recursively
-Set<String> _replaceWildcards(String word, List<int> positions, int index, String currentPrefix) {
+Set<String> _replaceWildcards(
+  String word,
+  List<int> positions,
+  int index,
+  String currentPrefix,
+) {
   final currentResults = <String>{};
   if (index >= positions.length) {
     // Once all positions are replaced, return the completed word
@@ -63,8 +68,14 @@ Set<String> _replaceWildcards(String word, List<int> positions, int index, Strin
           : word.substring(positions[index - 1] + 1, currentPosition));
 
   for (var c = 'a'.codeUnitAt(0); c <= 'z'.codeUnitAt(0); c++) {
-    currentResults
-        .addAll(_replaceWildcards(word, positions, index + 1, prefix + String.fromCharCode(c)));
+    currentResults.addAll(
+      _replaceWildcards(
+        word,
+        positions,
+        index + 1,
+        prefix + String.fromCharCode(c),
+      ),
+    );
   }
 
   return currentResults;

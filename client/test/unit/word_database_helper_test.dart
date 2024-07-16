@@ -8,7 +8,8 @@ import 'package:tile_tally/features/play_game/data/word_database_helper.dart';
 Future main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   // Mocking the path_provider
-  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+      .setMockMethodCallHandler(
     const MethodChannel('plugins.flutter.io/path_provider'),
     (MethodCall methodCall) async => '.',
   );
@@ -38,21 +39,21 @@ Future main() async {
         },
       );
 
-      WordDatabaseHelper.testConstructor(db);
+      WordListDBHelper.testConstructor(db);
     });
 
     test('Insert and query words', () async {
-      await WordDatabaseHelper.instance.insert({'word': 'hello'});
-      await WordDatabaseHelper.instance.insert({'word': 'world'});
-      final rows = await WordDatabaseHelper.instance.queryAllRows();
+      await WordListDBHelper.instance.insert({'word': 'hello'});
+      await WordListDBHelper.instance.insert({'word': 'world'});
+      final rows = await WordListDBHelper.instance.queryAllRows();
       expect(rows, hasLength(2));
       expect(rows.first['word'], 'hello');
     });
 
     test('Delete all words', () async {
-      await WordDatabaseHelper.instance.insert({'word': 'world'});
-      await WordDatabaseHelper.instance.deleteAll();
-      final rows = await WordDatabaseHelper.instance.queryAllRows();
+      await WordListDBHelper.instance.insert({'word': 'world'});
+      await WordListDBHelper.instance.deleteAll();
+      final rows = await WordListDBHelper.instance.queryAllRows();
       expect(rows, isEmpty);
     });
 

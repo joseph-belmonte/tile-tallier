@@ -10,12 +10,12 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../enums/score_multipliers.dart';
 import '../../../../utils/helpers.dart';
+import '../../../core/domain/models/game.dart';
+import '../../../core/domain/models/game_player.dart';
+import '../../../core/domain/models/letter.dart';
+import '../../../core/domain/models/play.dart';
+import '../../../core/domain/models/word.dart';
 import '../../data/word_database_helper.dart';
-import '../../domain/models/game.dart';
-import '../../domain/models/letter.dart';
-import '../../domain/models/play.dart';
-import '../../domain/models/player.dart';
-import '../../domain/models/word.dart';
 
 /// A [StateNotifier] that manages the state of the active game.
 class ActiveGameNotifier extends StateNotifier<Game> {
@@ -28,8 +28,20 @@ class ActiveGameNotifier extends StateNotifier<Game> {
   /// * The list of passed in players
   void startGame(List<String> playerNames) {
     final newGameId = Uuid().v4();
-    final newPlayers = playerNames.map((name) => Player(name: name, id: Uuid().v4())).toList();
+    final newPlayers = playerNames
+        .map(
+          (name) => GamePlayer(
+            name: name,
+            id: Uuid().v4(),
+            gameId: newGameId,
+            playerId: Uuid().v4(),
+            plays: [],
+            endRack: '',
+          ),
+        )
+        .toList();
     final newPlay = Play(
+      gameId: newGameId,
       id: Uuid().v4(),
       timestamp: DateTime.now(),
     );
@@ -43,7 +55,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
   }
 
   /// Updates the players in the game.
-  void updatePlayers(List<Player> players) {
+  void updatePlayers(List<GamePlayer> players) {
     state = state.copyWith(players: players);
   }
 
@@ -53,7 +65,8 @@ class ActiveGameNotifier extends StateNotifier<Game> {
     final currentPlayer = state.players[state.currentPlayerIndex];
 
     // Ensure currentPlay has all necessary data before copying.
-    final completedPlay = state.currentPlay.copyWith(playerId: currentPlayer.id);
+    final completedPlay =
+        state.currentPlay!.copyWith(playerId: currentPlayer.id);
 
     // Update the current player with the new play.
     final updatedPlayer = currentPlayer.copyWith(
@@ -65,6 +78,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
     final nextPlayerId = state.players[nextIndex].id;
 
     final newPlay = Play(
+      gameId: state.id,
       id: Uuid().v4(),
       playerId: nextPlayerId,
       timestamp: DateTime.now(),
@@ -72,7 +86,8 @@ class ActiveGameNotifier extends StateNotifier<Game> {
     final newWord = Word(
       id: Uuid().v4(),
     );
-    final newPlayers = List<Player>.from(state.players)..[state.currentPlayerIndex] = updatedPlayer;
+    final newPlayers = List<GamePlayer>.from(state.players)
+      ..[state.currentPlayerIndex] = updatedPlayer;
 
     // Update state with changes for the next turn.
     state = state.copyWith(
@@ -91,16 +106,17 @@ class ActiveGameNotifier extends StateNotifier<Game> {
       return;
     } else {
       // First, clear any current words before undoing the turn.
-      if (state.currentPlay.playedWords.isNotEmpty) {
+      if (state.currentPlay!.playedWords.isNotEmpty) {
         state = state.copyWith(
-          currentPlay: state.currentPlay.copyWith(
+          currentPlay: state.currentPlay!.copyWith(
             playedWords: [],
           ),
         );
         return;
       } else {
         // Make the previous player the current player.
-        final newPlayerIndex = (state.currentPlayerIndex - 1) % state.players.length;
+        final newPlayerIndex =
+            (state.currentPlayerIndex - 1) % state.players.length;
         final newPlayer = state.players[newPlayerIndex];
 
         // Remove the last play from this player.
@@ -110,10 +126,12 @@ class ActiveGameNotifier extends StateNotifier<Game> {
 
         // Update the state with the changes:
         state = state.copyWith(
-          players: List<Player>.from(state.players)..[newPlayerIndex] = updatedPlayer,
+          players: List<GamePlayer>.from(state.players)
+            ..[newPlayerIndex] = updatedPlayer,
           currentPlayerIndex: newPlayerIndex,
           currentPlay: Play(
             id: Uuid().v4(),
+            gameId: state.id,
             playerId: newPlayer.id,
             timestamp: DateTime.now(),
           ),
@@ -134,14 +152,15 @@ class ActiveGameNotifier extends StateNotifier<Game> {
       final letter = Letter(
         id: Uuid().v4(),
         letter: char,
-        scoreMultiplier:
-            state.currentWord.playedLetters[newWord.playedLetters.length].scoreMultiplier,
+        scoreMultiplier: state.currentWord!
+            .playedLetters[newWord.playedLetters.length].scoreMultiplier,
       );
-      newWord = newWord.copyWith(playedLetters: [...newWord.playedLetters, letter]);
+      newWord =
+          newWord.copyWith(playedLetters: [...newWord.playedLetters, letter]);
     }
 
-    final updatedPlay = state.currentPlay.copyWith(
-      playedWords: [...state.currentPlay.playedWords, newWord],
+    final updatedPlay = state.currentPlay!.copyWith(
+      playedWords: [...state.currentPlay!.playedWords, newWord],
     );
 
     state = state.copyWith(
@@ -162,7 +181,8 @@ class ActiveGameNotifier extends StateNotifier<Game> {
         id: Uuid().v4(),
         letter: char,
       );
-      newWord = newWord.copyWith(playedLetters: [...newWord.playedLetters, letter]);
+      newWord =
+          newWord.copyWith(playedLetters: [...newWord.playedLetters, letter]);
     }
     state = state.copyWith(currentWord: newWord);
   }
@@ -171,14 +191,15 @@ class ActiveGameNotifier extends StateNotifier<Game> {
   void toggleScoreMultiplier(Word word, int index) {
     final letter = word.playedLetters[index];
     final currentMultiplier = letter.scoreMultiplier;
-    final newMultiplier =
-        ScoreMultiplier.values[(currentMultiplier.index + 1) % ScoreMultiplier.values.length];
+    final newMultiplier = ScoreMultiplier
+        .values[(currentMultiplier.index + 1) % ScoreMultiplier.values.length];
     final updatedLetter = letter.copyWith(
       scoreMultiplier: newMultiplier,
     );
 
     final updatedWord = word.copyWith(
-      playedLetters: List<Letter>.from(word.playedLetters)..[index] = updatedLetter,
+      playedLetters: List<Letter>.from(word.playedLetters)
+        ..[index] = updatedLetter,
     );
 
     state = state.copyWith(currentWord: updatedWord);
@@ -186,7 +207,8 @@ class ActiveGameNotifier extends StateNotifier<Game> {
 
   /// Toggles the current play's bingo status
   void toggleBingo() {
-    final updatedPlay = state.currentPlay.copyWith(isBingo: !state.currentPlay.isBingo);
+    final updatedPlay =
+        state.currentPlay!.copyWith(isBingo: !state.currentPlay!.isBingo);
     state = state.copyWith(currentPlay: updatedPlay);
   }
 
@@ -196,9 +218,18 @@ class ActiveGameNotifier extends StateNotifier<Game> {
     if (RegExp(' ').allMatches(word).length > 2) return false;
 
     final possibleWords = generateWildcardWords(word.toLowerCase());
-    final wordExists = await WordDatabaseHelper.instance.wordExistsInList(possibleWords);
+    final wordExists =
+        await WordListDBHelper.instance.wordExistsInList(possibleWords);
 
     return wordExists;
+  }
+
+  /// Ends the game by setting the current play and word to null
+  void endGame() {
+    state = state.copyWith(
+      currentPlay: null,
+      currentWord: null,
+    );
   }
 }
 
@@ -207,7 +238,7 @@ final activeGameProvider = StateNotifierProvider<ActiveGameNotifier, Game>(
   (ref) => ActiveGameNotifier(
     Game(
       id: Uuid().v4(),
-      currentPlay: Play.createNew(),
+      currentPlay: Play.createNew(gameId: Uuid().v4()),
       currentWord: Word.createNew(),
     ),
   ),

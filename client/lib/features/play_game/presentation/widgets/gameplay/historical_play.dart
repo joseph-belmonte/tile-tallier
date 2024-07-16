@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../domain/models/play.dart';
-import '../../../domain/models/player.dart';
+import '../../../../core/domain/models/game_player.dart';
+import '../../../../core/domain/models/play.dart';
+
 import 'scrabble_word.dart';
 
 /// A widget to display a historical play.
@@ -13,16 +14,22 @@ class HistoricalPlay extends StatelessWidget {
   final int index;
 
   /// The player who made the play.
-  final Player player;
+  final GamePlayer player;
 
   /// Creates a new [HistoricalPlay] instance.
-  const HistoricalPlay(this.index, {required this.player, required this.play, super.key});
+  const HistoricalPlay(
+    this.index, {
+    required this.player,
+    required this.play,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 1)),
+      decoration:
+          BoxDecoration(border: Border.all(color: Colors.black, width: 1)),
       margin: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,7 +44,8 @@ class HistoricalPlay extends StatelessWidget {
               Text('Score: ${play.score}'),
             ],
           ),
-          for (var word in play.playedWords) Center(child: ScrabbleWordWidget(word, (value) {})),
+          for (var word in play.playedWords)
+            Center(child: ScrabbleWordWidget(word, (value) {})),
           if (play.playedWords.isEmpty) Center(child: Text('Skipped')),
         ],
       ),

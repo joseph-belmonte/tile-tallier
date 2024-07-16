@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../domain/models/play.dart';
-import '../../../domain/models/player.dart';
+import '../../../../core/domain/models/game_player.dart';
+import '../../../../core/domain/models/play.dart';
 
 /// A widget to display the most recent turn for a player.
 class MostRecentTurnDisplay extends StatelessWidget {
@@ -9,7 +9,7 @@ class MostRecentTurnDisplay extends StatelessWidget {
   const MostRecentTurnDisplay(this.player, {super.key});
 
   /// The player to display.
-  final Player player;
+  final GamePlayer player;
 
   /// The last turn played by the player.
   Play get lastTurn => player.plays.last;
@@ -29,14 +29,19 @@ class MostRecentTurnDisplay extends StatelessWidget {
           ),
           if (lastTurn.playedWords.isNotEmpty)
             Text(
-              lastTurn.playedWords.map((e) => '${e.word} - ${e.score}').join('\n'),
+              lastTurn.playedWords
+                  .map((e) => '${e.word} - ${e.score}')
+                  .join('\n'),
               style: Theme.of(context).textTheme.bodySmall!,
               textAlign: TextAlign.start,
             )
           else
             Text(
               'Skipped',
-              style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.white70),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall!
+                  .copyWith(color: Colors.white70),
               textAlign: TextAlign.start,
             ),
         ],

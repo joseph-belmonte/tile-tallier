@@ -7,7 +7,8 @@ import '../../domain/models/used_key_value_db.dart';
 /// implementation is used.
 ///
 /// Used by UI widgets to select used [KeyValueDb] implementation.
-final StateProvider<UsedKeyValueDb> usedKeyValueDbProvider = StateProvider<UsedKeyValueDb>(
+final StateProvider<UsedKeyValueDb> usedKeyValueDbProvider =
+    StateProvider<UsedKeyValueDb>(
   (final StateProviderRef<UsedKeyValueDb> ref) => AppDb.keyValue,
   name: 'usedKeyValueDbProvider',
 );

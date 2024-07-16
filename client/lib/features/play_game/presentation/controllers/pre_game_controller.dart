@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../history/application/providers/history_repository_provider.dart';
+import '../../../history/domain/models/player.dart';
+import '../../../history/domain/repositories/history_repository.dart';
+
 /// Manages the state of the pre-game screen.
 class PreGameState {
   /// The number of players.
@@ -18,6 +22,15 @@ class PreGameState {
   /// Whether the user can navigate to the next screen.
   final bool canNavigate;
 
+  /// Known players
+  final List<Player> knownPlayers;
+
+  /// Selected players
+  final List<String> selectedPlayers;
+
+  /// Designates the active field index.
+  final int? activeFieldIndex; // Nullable to indicate no field is active
+
   /// Creates a new [PreGameState] instance.
   PreGameState({
     required this.playerCount,
@@ -25,6 +38,9 @@ class PreGameState {
     required this.canAdd,
     required this.canRemove,
     required this.canNavigate,
+    required this.knownPlayers,
+    required this.selectedPlayers,
+    this.activeFieldIndex,
   });
 
   /// Creates a copy of the state with the given changes.
@@ -34,6 +50,9 @@ class PreGameState {
     bool? canAdd,
     bool? canRemove,
     bool? canNavigate,
+    List<Player>? knownPlayers,
+    List<String>? selectedPlayers,
+    int? activeFieldIndex,
   }) {
     return PreGameState(
       playerCount: playerCount ?? this.playerCount,
@@ -41,14 +60,19 @@ class PreGameState {
       canAdd: canAdd ?? this.canAdd,
       canRemove: canRemove ?? this.canRemove,
       canNavigate: canNavigate ?? this.canNavigate,
+      knownPlayers: knownPlayers ?? this.knownPlayers,
+      selectedPlayers: selectedPlayers ?? this.selectedPlayers,
+      activeFieldIndex: activeFieldIndex ?? this.activeFieldIndex,
     );
   }
 }
 
 /// A provider that manages the state of the pre-game screen.
 class PreGamePageController extends StateNotifier<PreGameState> {
+  final HistoryRepository _historyRepository;
+
   /// Creates a new [PreGamePageController] instance.
-  PreGamePageController()
+  PreGamePageController(this._historyRepository)
       : super(
           PreGameState(
             playerCount: 2,
@@ -56,8 +80,51 @@ class PreGamePageController extends StateNotifier<PreGameState> {
             canAdd: true,
             canRemove: false,
             canNavigate: false,
+            knownPlayers: [],
+            selectedPlayers: [],
+            activeFieldIndex: null,
           ),
-        );
+        ) {
+    fetchKnownPlayers();
+  }
+
+  /// Fetches all players from the database.
+  Future<void> fetchKnownPlayers() async {
+    final players = await _historyRepository.fetchAllPlayers();
+    state = state.copyWith(knownPlayers: players);
+  }
+
+  /// Selects a player.
+  void selectPlayer(String playerName) {
+    if (state.activeFieldIndex != null) {
+      final index = state.activeFieldIndex!;
+      state.controllers[index].text = playerName;
+      state = state.copyWith(activeFieldIndex: null);
+      if (!state.selectedPlayers.contains(playerName)) {
+        final updatedPlayers = [...state.selectedPlayers, playerName];
+        state = state.copyWith(selectedPlayers: updatedPlayers);
+      }
+    }
+  }
+
+  /// Deselects a player.
+  void deselectPlayer(String playerName) {
+    if (state.selectedPlayers.contains(playerName)) {
+      final updatedPlayers =
+          state.selectedPlayers.where((name) => name != playerName).toList();
+      state = state.copyWith(selectedPlayers: updatedPlayers);
+    }
+  }
+
+  /// Sets the active field index.
+  void setActiveField(int index) {
+    state = state.copyWith(activeFieldIndex: index);
+  }
+
+  /// Clears the active field index.
+  void clearActiveField() {
+    state = state.copyWith(activeFieldIndex: null);
+  }
 
   /// Updates the text controllers based on the player count.
   void updateControllers() {
@@ -152,11 +219,19 @@ class PreGamePageController extends StateNotifier<PreGameState> {
       canAdd: true,
       canRemove: false,
       canNavigate: false,
+      knownPlayers: state.knownPlayers,
+      selectedPlayers: state.selectedPlayers,
     );
   }
 
   /// Gets the player count.
   int get playerCount => state.playerCount;
+
+  /// Exposes the text controllers
+  List<TextEditingController> get controllers => state.controllers;
+
+  /// Exposes the active field index.
+  int? get activeFieldIndex => state.activeFieldIndex;
 
   /// Gets the list of player names.
   List<String> get playerNames =>
@@ -166,5 +241,5 @@ class PreGamePageController extends StateNotifier<PreGameState> {
 /// A provider that exposes the [PreGamePageController].
 final preGameProvider =
     StateNotifierProvider<PreGamePageController, PreGameState>((ref) {
-  return PreGamePageController();
+  return PreGamePageController(ref.watch(historyRepositoryProvider));
 });

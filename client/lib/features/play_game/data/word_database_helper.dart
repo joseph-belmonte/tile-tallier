@@ -3,9 +3,10 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-/// A helper class to manage the database
-class WordDatabaseHelper {
-  static const _databaseName = 'WordDatabase.db';
+/// A helper class to manage the word_database file.
+/// It mainly contains the word_list table.
+class WordListDBHelper {
+  static const _databaseName = 'word_database.db';
   static const _databaseVersion = 1;
 
   /// The table name
@@ -17,10 +18,11 @@ class WordDatabaseHelper {
   /// The word column name
   static const columnWord = 'word';
 
-  WordDatabaseHelper._privateConstructor();
+  WordListDBHelper._privateConstructor();
 
   /// The singleton instance
-  static final WordDatabaseHelper instance = WordDatabaseHelper._privateConstructor();
+  static final WordListDBHelper instance =
+      WordListDBHelper._privateConstructor();
 
   static Database? _database;
 
@@ -67,7 +69,9 @@ class WordDatabaseHelper {
   /// Queries the number of rows in the table
   Future<int?> queryRowCount({Database? txn}) async {
     final db = txn ?? await instance.database;
-    return Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $table'));
+    return Sqflite.firstIntValue(
+      await db.rawQuery('SELECT COUNT(*) FROM $table'),
+    );
   }
 
   /// Delete all rows in the table
@@ -78,7 +82,8 @@ class WordDatabaseHelper {
 
   /// Loads the 2006 tournament word list.
   Future<void> importWordList() async {
-    final wordListString = await rootBundle.loadString('assets/txt/word_list.txt');
+    final wordListString =
+        await rootBundle.loadString('assets/txt/word_list.txt');
     final wordList = wordListString.split('\n');
     final batch = _database!.batch();
     for (var word in wordList) {
@@ -101,7 +106,8 @@ class WordDatabaseHelper {
   /// Whether the database is already populated
   Future<bool> isDatabasePopulated() async {
     final db = await database;
-    final count = Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $table'));
+    final count =
+        Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $table'));
     if (count != null && count > 0) {
       return true;
     } else {
