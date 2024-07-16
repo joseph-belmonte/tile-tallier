@@ -28,7 +28,8 @@ jobs:
         # Change to the client directory and run the linter
         run: |
           cd client 
-          run: dart format --output=none --set-exit-if-changed .
+          cd client
+          dart format --output=none --set-exit-if-changed .
 
         # Check for errors in the client code
       - name: Analyze project source
