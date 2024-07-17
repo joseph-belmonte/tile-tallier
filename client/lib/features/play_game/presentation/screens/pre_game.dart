@@ -27,6 +27,7 @@ class _PreGamePageState extends ConsumerState<PreGamePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final preGameController = ref.read(preGameProvider.notifier);
       preGameController.initializeControllers();
+      preGameController.clearSelectedPlayers();
     });
   }
 
@@ -36,6 +37,8 @@ class _PreGamePageState extends ConsumerState<PreGamePage> {
     final preGameController = ref.read(preGameProvider.notifier);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      preGameController.fetchKnownPlayers();
+
       if (preGameState.canNavigate) {
         preGameController.resetNavigation();
         final names = preGameController.playerNames;

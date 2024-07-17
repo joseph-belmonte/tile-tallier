@@ -116,6 +116,11 @@ class PreGamePageController extends StateNotifier<PreGameState> {
     }
   }
 
+  /// Clears all selected players.
+  void clearSelectedPlayers() {
+    state = state.copyWith(selectedPlayers: []);
+  }
+
   /// Sets the active field index.
   void setActiveField(int index) {
     state = state.copyWith(activeFieldIndex: index);
