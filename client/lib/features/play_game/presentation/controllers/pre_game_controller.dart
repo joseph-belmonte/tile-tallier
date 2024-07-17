@@ -150,8 +150,8 @@ class PreGamePageController extends StateNotifier<PreGameState> {
     }
   }
 
-  /// Adds a player.
-  void addPlayer() {
+  /// Increments the player count.
+  void addToPlayerCount() {
     if (state.playerCount < 4) {
       state = state.copyWith(
         playerCount: state.playerCount + 1,
@@ -162,8 +162,8 @@ class PreGamePageController extends StateNotifier<PreGameState> {
     }
   }
 
-  /// Removes a player.
-  void removePlayer() {
+  /// Decrements the player count.
+  void removeFromPlayerCount() {
     if (state.playerCount > 2) {
       state = state.copyWith(
         playerCount: state.playerCount - 1,

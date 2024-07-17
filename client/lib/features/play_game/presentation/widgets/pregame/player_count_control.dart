@@ -19,7 +19,7 @@ class PlayerCountControl extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.remove, semanticLabel: 'remove player'),
             onPressed: ref.read(preGameProvider).canRemove
-                ? ref.read(preGameProvider.notifier).removePlayer
+                ? ref.read(preGameProvider.notifier).removeFromPlayerCount
                 : null,
           ),
           Text(
@@ -29,7 +29,7 @@ class PlayerCountControl extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.add, semanticLabel: 'add player'),
             onPressed: ref.read(preGameProvider).canAdd
-                ? ref.read(preGameProvider.notifier).addPlayer
+                ? ref.read(preGameProvider.notifier).addToPlayerCount
                 : null,
           ),
         ],
