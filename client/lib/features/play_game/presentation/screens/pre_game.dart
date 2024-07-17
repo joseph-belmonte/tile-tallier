@@ -65,6 +65,17 @@ class _PreGamePageState extends ConsumerState<PreGamePage> {
             children: <Widget>[
               PlayerCountControl(),
               PlayerSelectionChips(),
+              Wrap(
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text(
+                      textAlign: TextAlign.center,
+                      'Select a player to add them to the game. Enter a name below to add someone new.',
+                    ),
+                  ),
+                ],
+              ),
               PlayerInputFields(),
               StartGameButton(
                 formKey: _formKey,
