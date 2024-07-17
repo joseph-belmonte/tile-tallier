@@ -8,12 +8,12 @@ import '../../application/providers/past_games_provider.dart';
 import '../controllers/history_page_controller.dart';
 
 /// A page that displays a past game.
-class PastGameScreen extends ConsumerWidget {
+class PastGamePage extends ConsumerWidget {
   /// The [Game] whose details are displayed.
   final String gameId;
 
-  /// Creates a new [PastGameScreen] instance.
-  const PastGameScreen({required this.gameId, super.key});
+  /// Creates a new [PastGamePage] instance.
+  const PastGamePage({required this.gameId, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -80,6 +80,7 @@ class PastGameScreen extends ConsumerWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                // End Racks:
                 Column(
                   children: <Widget>[
                     Text('End Racks:'),
@@ -94,6 +95,7 @@ class PastGameScreen extends ConsumerWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
+                    // Final Scores:
                     Column(
                       children: <Widget>[
                         Text('Final Scores:'),
@@ -116,10 +118,8 @@ class PastGameScreen extends ConsumerWidget {
                     ),
                   ],
                 ),
-                // Final Scores:
               ],
             ),
-            // End Racks:
           ],
         ),
       ),
