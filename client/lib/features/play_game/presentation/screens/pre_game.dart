@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../application/providers/active_game.dart';
 import '../controllers/pre_game_controller.dart';
+import '../widgets/pregame/input_instructions.dart';
 import '../widgets/pregame/player_count_control.dart';
 import '../widgets/pregame/player_input_fields.dart';
 import '../widgets/pregame/player_selection_chips.dart';
@@ -65,17 +66,7 @@ class _PreGamePageState extends ConsumerState<PreGamePage> {
             children: <Widget>[
               PlayerCountControl(),
               PlayerSelectionChips(),
-              Wrap(
-                children: const [
-                  Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      'Select a player to add them to the game. Enter a name below to add someone new.',
-                    ),
-                  ),
-                ],
-              ),
+              InputInstructions(),
               PlayerInputFields(),
               StartGameButton(
                 formKey: _formKey,

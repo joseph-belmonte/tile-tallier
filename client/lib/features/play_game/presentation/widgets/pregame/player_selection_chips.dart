@@ -19,9 +19,11 @@ class PlayerSelectionChips extends ConsumerWidget {
       Player player,
       bool selected,
     ) {
+      final notifier = ref.read(preGameProvider.notifier);
+
       if (selected) {
-        // First, check if the player is already in the game.
-        final playerNames = ref.read(preGameProvider).selectedPlayers;
+        // Check if the player is already in the game.
+        final playerNames = ref.watch(preGameProvider.notifier).playerNames;
         if (playerNames.contains(player.name)) {
           ToastService.error(
             context,
@@ -29,8 +31,9 @@ class PlayerSelectionChips extends ConsumerWidget {
           );
           return;
         }
-        // Next, check if the other text fields already have this name.
-        final controllers = ref.read(preGameProvider).controllers;
+
+        // Check if the text fields already have this name.
+        final controllers = ref.watch(preGameProvider).controllers;
         for (var i = 0; i < controllers.length; i++) {
           if (controllers[i].text == player.name) {
             ToastService.error(
@@ -40,8 +43,21 @@ class PlayerSelectionChips extends ConsumerWidget {
             return;
           }
         }
-        // Finally, add the player to the game.
-        ref.read(preGameProvider.notifier).selectPlayer(player.name);
+
+        // Set the player name in the first empty or active field.
+        final activeFieldIndex = ref.watch(preGameProvider).activeFieldIndex;
+        if (activeFieldIndex == null) {
+          for (var i = 0; i < controllers.length; i++) {
+            if (controllers[i].text.isEmpty) {
+              notifier.setActiveField(i);
+              notifier.updatePlayerName(i, player.name);
+              break;
+            }
+          }
+        } else {
+          notifier.updatePlayerName(activeFieldIndex, player.name);
+        }
+
         ToastService.message(
           context,
           '${player.name} added to game',
