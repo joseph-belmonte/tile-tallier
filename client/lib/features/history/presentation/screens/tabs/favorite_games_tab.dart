@@ -16,11 +16,14 @@ class FavoriteGamesTab extends ConsumerWidget {
     final favoriteGames =
         pastGamesAsync.where((game) => game.isFavorite).toList();
 
+    favoriteGames.sort(
+      (a, b) => b.plays[0].timestamp
+          .toLocal()
+          .compareTo(a.plays[0].timestamp.toLocal())
+          .toInt(),
+    );
+
     if (favoriteGames.isEmpty) {
-      return const Center(
-        child: Text('No games found.'),
-      );
-    } else if (favoriteGames.isEmpty) {
       return const Center(
         child: Text('No favorite games found.'),
       );
