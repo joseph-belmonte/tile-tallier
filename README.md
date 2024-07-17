@@ -7,7 +7,7 @@
 
 ## Backend Development -
 
-- [ ] User registration and authentication
+- [x] User registration and authentication
 - [ ] Track user purchase history/subscription status
 
 ## Game Logic Integration
@@ -21,7 +21,7 @@
 
 ## Testing and Quality Assurance
 
-- [ ] Conduct thorough testing of app's functionality, including gameplay and Firebase integration.
+- [ ] Conduct thorough testing of app's functionality, including gameplay.
 - [ ] Address and fix bugs or usability issues identified during testing.
 - [ ] Optimize app performance and user experience.
 
@@ -38,8 +38,8 @@
 
 ## Monetization Strategy
 
-- [ ] Determine app monetization strategy (e.g., one-time purchase, in-app purchases, ads).
-- [ ] Implement chosen monetization method within the app.
+- [ ] Complete RevenueCat integration to track purchases with our Django backend.
+- [ ] Confirm premium functionality works for a premium user.
 - [ ] Monitor revenue generation and adjust strategies as needed.
 
 ## Marketing and Promotion
