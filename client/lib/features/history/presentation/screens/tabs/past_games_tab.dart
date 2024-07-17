@@ -20,9 +20,9 @@ class PastGamesTab extends ConsumerWidget {
       );
     }
     games.sort(
-      (a, b) => b.plays[b.plays.length - 1].timestamp
+      (a, b) => b.plays[0].timestamp
           .toLocal()
-          .compareTo(a.plays[a.plays.length - 1].timestamp.toLocal())
+          .compareTo(a.plays[0].timestamp.toLocal())
           .toInt(),
     );
 

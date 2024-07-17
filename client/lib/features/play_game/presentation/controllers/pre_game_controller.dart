@@ -25,9 +25,6 @@ class PreGameState {
   /// Known players
   final List<Player> knownPlayers;
 
-  /// Selected players
-  final List<String> selectedPlayers;
-
   /// Designates the active field index.
   final int? activeFieldIndex; // Nullable to indicate no field is active
 
@@ -39,7 +36,6 @@ class PreGameState {
     required this.canRemove,
     required this.canNavigate,
     required this.knownPlayers,
-    required this.selectedPlayers,
     this.activeFieldIndex,
   });
 
@@ -61,7 +57,6 @@ class PreGameState {
       canRemove: canRemove ?? this.canRemove,
       canNavigate: canNavigate ?? this.canNavigate,
       knownPlayers: knownPlayers ?? this.knownPlayers,
-      selectedPlayers: selectedPlayers ?? this.selectedPlayers,
       activeFieldIndex: activeFieldIndex ?? this.activeFieldIndex,
     );
   }
@@ -81,7 +76,6 @@ class PreGamePageController extends StateNotifier<PreGameState> {
             canRemove: false,
             canNavigate: false,
             knownPlayers: [],
-            selectedPlayers: [],
             activeFieldIndex: null,
           ),
         ) {
@@ -94,26 +88,9 @@ class PreGamePageController extends StateNotifier<PreGameState> {
     state = state.copyWith(knownPlayers: players);
   }
 
-  /// Selects a player.
-  void selectPlayer(String playerName) {
-    if (state.activeFieldIndex != null) {
-      final index = state.activeFieldIndex!;
-      state.controllers[index].text = playerName;
-      state = state.copyWith(activeFieldIndex: null);
-      if (!state.selectedPlayers.contains(playerName)) {
-        final updatedPlayers = [...state.selectedPlayers, playerName];
-        state = state.copyWith(selectedPlayers: updatedPlayers);
-      }
-    }
-  }
-
-  /// Deselects a player.
-  void deselectPlayer(String playerName) {
-    if (state.selectedPlayers.contains(playerName)) {
-      final updatedPlayers =
-          state.selectedPlayers.where((name) => name != playerName).toList();
-      state = state.copyWith(selectedPlayers: updatedPlayers);
-    }
+  /// Clears all selected players.
+  void clearSelectedPlayers() {
+    state = state.copyWith(selectedPlayers: []);
   }
 
   /// Sets the active field index.
@@ -150,8 +127,8 @@ class PreGamePageController extends StateNotifier<PreGameState> {
     }
   }
 
-  /// Adds a player.
-  void addPlayer() {
+  /// Increments the player count.
+  void addToPlayerCount() {
     if (state.playerCount < 4) {
       state = state.copyWith(
         playerCount: state.playerCount + 1,
@@ -162,8 +139,8 @@ class PreGamePageController extends StateNotifier<PreGameState> {
     }
   }
 
-  /// Removes a player.
-  void removePlayer() {
+  /// Decrements the player count.
+  void removeFromPlayerCount() {
     if (state.playerCount > 2) {
       state = state.copyWith(
         playerCount: state.playerCount - 1,
@@ -220,7 +197,6 @@ class PreGamePageController extends StateNotifier<PreGameState> {
       canRemove: false,
       canNavigate: false,
       knownPlayers: state.knownPlayers,
-      selectedPlayers: state.selectedPlayers,
     );
   }
 
@@ -233,7 +209,10 @@ class PreGamePageController extends StateNotifier<PreGameState> {
   /// Exposes the active field index.
   int? get activeFieldIndex => state.activeFieldIndex;
 
-  /// Gets the list of player names.
+  /// Gets the list of known players.
+  List<Player> get knownPlayers => state.knownPlayers;
+
+  /// Gets the list of player names currently in the text controllers.
   List<String> get playerNames =>
       state.controllers.map((controller) => controller.text.trim()).toList();
 }

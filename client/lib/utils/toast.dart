@@ -9,9 +9,11 @@ class ToastService {
   }) {
     // First, clear any existing toasts
     ScaffoldMessenger.of(context).clearSnackBars();
+    // Then, show the new toast
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: isError ? Colors.red.shade600 : null,
+        duration: const Duration(milliseconds: 1200),
         content: Text(message),
       ),
     );

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../application/providers/active_game.dart';
 import '../controllers/pre_game_controller.dart';
+import '../widgets/pregame/input_instructions.dart';
 import '../widgets/pregame/player_count_control.dart';
 import '../widgets/pregame/player_input_fields.dart';
 import '../widgets/pregame/player_selection_chips.dart';
@@ -27,6 +28,7 @@ class _PreGamePageState extends ConsumerState<PreGamePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final preGameController = ref.read(preGameProvider.notifier);
       preGameController.initializeControllers();
+      preGameController.clearSelectedPlayers();
     });
   }
 
@@ -36,6 +38,8 @@ class _PreGamePageState extends ConsumerState<PreGamePage> {
     final preGameController = ref.read(preGameProvider.notifier);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      preGameController.fetchKnownPlayers();
+
       if (preGameState.canNavigate) {
         preGameController.resetNavigation();
         final names = preGameController.playerNames;
@@ -62,6 +66,7 @@ class _PreGamePageState extends ConsumerState<PreGamePage> {
             children: <Widget>[
               PlayerCountControl(),
               PlayerSelectionChips(),
+              InputInstructions(),
               PlayerInputFields(),
               StartGameButton(
                 formKey: _formKey,

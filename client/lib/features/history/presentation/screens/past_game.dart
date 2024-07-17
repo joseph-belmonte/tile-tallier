@@ -8,12 +8,12 @@ import '../../application/providers/past_games_provider.dart';
 import '../controllers/history_page_controller.dart';
 
 /// A page that displays a past game.
-class PastGameScreen extends ConsumerWidget {
+class PastGamePage extends ConsumerWidget {
   /// The [Game] whose details are displayed.
   final String gameId;
 
-  /// Creates a new [PastGameScreen] instance.
-  const PastGameScreen({required this.gameId, super.key});
+  /// Creates a new [PastGamePage] instance.
+  const PastGamePage({required this.gameId, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -76,33 +76,49 @@ class PastGameScreen extends ConsumerWidget {
               ),
             ),
             SizedBox(height: 8),
-            // End Racks:
-            Text('End Racks:'),
-            Column(
-              children: game.players.map((player) {
-                return Text(
-                  '${player.name}: ${player.endRack.isEmpty ? 'Empty' : player.endRack}',
-                );
-              }).toList(),
-            ),
-            // Final Scores:
-            Text('Final Scores:'),
-            Column(
-              children: game.players.map((player) {
-                return GestureDetector(
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => PlayerResultsScreen(
-                        game: game,
-                        player: player,
-                      ),
+            Divider(),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                // End Racks:
+                Column(
+                  children: <Widget>[
+                    Text('End Racks:'),
+                    ...game.players.map((player) {
+                      return Text(
+                        '${player.name}: ${player.endRack.isEmpty ? 'Empty' : player.endRack}',
+                      );
+                    }),
+                  ],
+                ),
+                SizedBox(width: 16),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    // Final Scores:
+                    Column(
+                      children: <Widget>[
+                        Text('Final Scores:'),
+                        ...game.sortedPlayers.map((player) {
+                          return GestureDetector(
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => PlayerResultsScreen(
+                                  game: game,
+                                  player: player,
+                                ),
+                              ),
+                            ),
+                            child: Text(
+                              '${player.name}: ${player.score}',
+                            ),
+                          );
+                        }),
+                      ],
                     ),
-                  ),
-                  child: Text(
-                    '${player.name}: ${player.score}',
-                  ),
-                );
-              }).toList(),
+                  ],
+                ),
+              ],
             ),
           ],
         ),

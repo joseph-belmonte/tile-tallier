@@ -56,7 +56,7 @@ class PastGameListItem extends ConsumerWidget {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => PastGameScreen(gameId: game.id),
+                      builder: (context) => PastGamePage(gameId: game.id),
                     ),
                   );
                 },
