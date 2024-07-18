@@ -1,14 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:share_plus/share_plus.dart';
 
-import '../../../../utils/share_utils.dart';
 import '../../../../utils/toast.dart';
 import '../../../play_game/presentation/screens/player_results.dart';
 import '../../../play_game/presentation/widgets/gameplay/historical_play.dart';
-import '../../../play_game/presentation/widgets/results/shareable.dart';
+import '../../../shared/presentation/widgets/share_modal.dart';
 import '../../application/providers/past_games_provider.dart';
 import '../controllers/history_page_controller.dart';
 
@@ -18,9 +14,7 @@ class PastGamePage extends ConsumerWidget {
   final String gameId;
 
   /// Creates a new [PastGamePage] instance.
-  PastGamePage({required this.gameId, super.key});
-
-  final GlobalKey _shareKey = GlobalKey();
+  const PastGamePage({required this.gameId, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,38 +27,6 @@ class PastGamePage extends ConsumerWidget {
       await ref
           .read(historyPageControllerProvider.notifier)
           .toggleFavorite(game.id);
-    }
-
-    void handleShare() async {
-      final imageBytes = await capturePng(_shareKey);
-      final imageFile = await saveImage(imageBytes);
-      final xFile = getXFile(imageFile);
-
-      // ignore: unused_local_variable
-      var platform = '';
-      var shareText = '';
-      if (Platform.isIOS) {
-        platform = 'iOS';
-      } else if (Platform.isAndroid) {
-        platform = 'Android';
-      }
-
-      shareText = 'Score with me next time: bit.ly';
-      // TODO: fix the subject line on share to just be the link to the app
-      // right now it says "1 file and document"
-      // - remove the widget from the visible pastgame page
-      // - shareable widget shouldn't even be visible; it should be a hidden widget
-      // and should only be copied to the clipboard when the share button is pressed
-      // - add the share button to the appbar for the immediate results page
-
-      await Share.shareXFiles(
-        [xFile],
-        text: shareText,
-        subject: 'TileTallier',
-      );
-
-      // Delete the image file
-      await imageFile.delete();
     }
 
     void handleFavorite() {
@@ -84,7 +46,7 @@ class PastGamePage extends ConsumerWidget {
         title: Text(date),
         actions: <Widget>[
           IconButton(
-            onPressed: handleShare,
+            onPressed: () => showShareModal(context, game),
             icon: Icon(Icons.share),
           ),
           IconButton(
@@ -166,10 +128,6 @@ class PastGamePage extends ConsumerWidget {
                   ],
                 ),
               ],
-            ),
-            RepaintBoundary(
-              key: _shareKey,
-              child: Shareable(game: game),
             ),
           ],
         ),

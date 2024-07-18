@@ -27,6 +27,10 @@ Future<File> saveImage(Uint8List bytes) async {
 /// Converts a file to an X file.
 XFile getXFile(File imageFile) {
   // Convert the file to an X file
-  final xFile = XFile(imageFile.path);
+  final xFile = XFile(
+    imageFile.path,
+    name: 'share_image.png',
+    mimeType: 'image/png',
+  );
   return xFile;
 }

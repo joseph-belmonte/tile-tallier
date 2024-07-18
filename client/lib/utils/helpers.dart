@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -28,7 +29,20 @@ Color getTileColor(Letter letter, ScrabbleEdition edition) {
   return scrabbleTileColors[edition]![letter.scoreMultiplier]!;
 }
 
-/// Generates a list of words with wildcards based on spaces
+/// Returns the icon color for the player at the given index.
+Color? getIconColor(int index) {
+  switch (index) {
+    case 0:
+      return Colors.yellow;
+    case 1:
+      return Color.fromRGBO(192, 192, 192, 1);
+    case 2:
+      return Colors.brown;
+    default:
+      return null;
+  }
+}
+
 /// Generates a list of words with wildcards based on spaces
 List<String> generateWildcardWords(String word) {
   final results = <String>{};
@@ -81,7 +95,7 @@ Set<String> _replaceWildcards(
   return currentResults;
 }
 
-/// Writes the screenshot to storage and returns the file path
+/// Writes the feedback screenshot to storage and returns the file path
 Future<String> writeImageToStorage(Uint8List feedbackScreenshot) async {
   final output = await getTemporaryDirectory();
   final screenshotFilePath = '${output.path}/feedback.png';

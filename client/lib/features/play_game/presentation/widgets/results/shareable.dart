@@ -1,6 +1,6 @@
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../utils/helpers.dart';
 import '../../../../core/domain/models/game.dart';
 import '../gameplay/scrabble_word.dart';
 
@@ -17,11 +17,11 @@ class Shareable extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: <Color>[
-            Colors.blue,
-            Colors.lightBlue.getShadeColor(),
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: const <Color>[
+            Colors.black87,
+            Colors.black12,
           ],
         ),
       ),
@@ -49,7 +49,8 @@ class Shareable extends StatelessWidget {
                       Icon(
                         Icons.emoji_events,
                         size: 24.0,
-                        color: index == 0 ? Colors.yellow : Colors.white,
+                        color: getIconColor(index) ??
+                            Theme.of(context).colorScheme.onSurface,
                       ),
                       SizedBox(width: 8.0),
                       Text(
@@ -71,14 +72,9 @@ class Shareable extends StatelessWidget {
             },
           ),
           SizedBox(height: 8.0),
-          Text(
-            'Highest Scoring Word:',
-          ),
+          Text('Highest Scoring Word:'),
           SizedBox(height: 8.0),
-          ScrabbleWordWidget(
-            game.highestScoringWord,
-            (_) {},
-          ),
+          ScrabbleWordWidget(game.highestScoringWord, (_) {}),
           SizedBox(height: 8.0),
           Text(
             '${game.highestScoringWord.score} points!',
