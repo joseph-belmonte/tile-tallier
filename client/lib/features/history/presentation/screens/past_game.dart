@@ -19,7 +19,7 @@ class PastGamePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final animationDuration = Duration(milliseconds: 300);
+    const animationDuration = Durations.medium1;
     final pastGamesState = ref.watch(pastGamesProvider);
 
     final game = pastGamesState.firstWhere((g) => g.id == gameId);
@@ -36,10 +36,7 @@ class PastGamePage extends ConsumerWidget {
       if (!game.isFavorite) {
         ToastService.message(context, 'Game added to favorites');
       } else {
-        ToastService.message(
-          context,
-          'Game removed from favorites',
-        );
+        ToastService.message(context, 'Game removed from favorites');
       }
     }
 
