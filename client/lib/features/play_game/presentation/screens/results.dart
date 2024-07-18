@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/domain/models/game.dart';
+import '../../../shared/presentation/widgets/share_modal.dart';
 import '../widgets/home_button.dart';
 import '../widgets/results/player_rankings.dart';
 import '../widgets/results/show_stats_button.dart';
@@ -21,6 +22,12 @@ class ResultsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('GAME OVER'),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () => showShareModal(context, _game),
+            icon: Icon(Icons.share),
+          ),
+        ],
       ),
       body: Center(
         child: SingleChildScrollView(

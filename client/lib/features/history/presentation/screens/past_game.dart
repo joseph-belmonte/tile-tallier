@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../utils/toast.dart';
 import '../../../play_game/presentation/screens/player_results.dart';
 import '../../../play_game/presentation/widgets/gameplay/historical_play.dart';
+import '../../../shared/presentation/widgets/share_modal.dart';
 import '../../application/providers/past_games_provider.dart';
 import '../controllers/history_page_controller.dart';
 
@@ -28,7 +29,7 @@ class PastGamePage extends ConsumerWidget {
           .toggleFavorite(game.id);
     }
 
-    void handleFavoriteButtonPressed() {
+    void handleFavorite() {
       toggleFavorite();
       if (!game.isFavorite) {
         ToastService.message(context, 'Game added to favorites');
@@ -42,13 +43,17 @@ class PastGamePage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Game on $date'),
+        title: Text(date),
         actions: <Widget>[
+          IconButton(
+            onPressed: () => showShareModal(context, game),
+            icon: Icon(Icons.share),
+          ),
           IconButton(
             icon: Icon(
               game.isFavorite ? Icons.favorite : Icons.favorite_border,
             ),
-            onPressed: handleFavoriteButtonPressed,
+            onPressed: handleFavorite,
           ),
         ],
       ),
@@ -57,6 +62,10 @@ class PastGamePage extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
+            Text('Players: ${game.players.map((p) => p.name).join(', ')}'),
+            Text(
+              'Winner: ${game.sortedPlayers.first.name} - ${game.sortedPlayers.first.score}',
+            ),
             Expanded(
               child: ListView.builder(
                 itemCount: game.plays.length,
