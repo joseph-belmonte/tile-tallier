@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,6 +15,8 @@ class PlayerInputFields extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final playerCount = ref.watch(preGameProvider).playerCount;
     final controllers = ref.watch(preGameProvider).controllers;
+    final activeFieldIndex = ref.watch(preGameProvider).activeFieldIndex;
+    final hasError = ref.watch(preGameProvider).hasError;
     final playerNames = [];
 
     for (var i = 0; i < controllers.length; i++) {
@@ -31,57 +34,72 @@ class PlayerInputFields extends ConsumerWidget {
               Focus(
                 onFocusChange: (hasFocus) {
                   if (hasFocus) {
-                    ref.read(preGameProvider.notifier).setActiveField(index);
+                    // Ensure state updates happen outside of the build method
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      ref.read(preGameProvider.notifier).setActiveField(index);
+                    });
                   }
                 },
-                child: TextFormField(
-                  controller: controllers[index],
-                  decoration: InputDecoration(
-                    labelText: 'Player ${index + 1} Name',
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.clear),
-                      onPressed: () {
-                        final name = controllers[index].text.trim();
+                child: ShakeX(
+                  duration: Durations.medium1,
+                  from: 40,
+                  animate: activeFieldIndex == index && hasError,
+                  child: TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    controller: controllers[index],
+                    decoration: InputDecoration(
+                      labelText: 'Player ${index + 1} Name',
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.clear),
+                        onPressed: () {
+                          final name = controllers[index].text.trim();
 
-                        if (name.isEmpty) return;
+                          if (name.isEmpty) return;
 
-                        // Clear the text controller
-                        controllers[index].clear();
-                        ToastService.message(
-                          context,
-                          '$name removed from game',
-                        );
-                      },
+                          // Clear the text controller
+                          controllers[index].clear();
+                          ToastService.message(
+                            context,
+                            '$name removed from game',
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  validator: (value) {
-                    return (value == null || value.trim().isEmpty)
-                        ? 'Please enter a name'
-                        : null;
-                  },
-                  onChanged: (value) {
-                    final notifier = ref.read(preGameProvider.notifier);
-                    final hasKnownPlayers = notifier.knownPlayers.isNotEmpty;
-                    final nameMatches = controllers
-                        .any((controller) => controller.text == value);
+                    validator: (value) {
+                      // Ensure state updates happen outside of the build method
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        final notifier = ref.read(preGameProvider.notifier);
 
-                    var alreadyUsed = false;
-                    for (var i = 0; i < controllers.length; i++) {
-                      if (i != index && controllers[i].text == value) {
-                        alreadyUsed = true;
-                        break;
-                      }
-                    }
+                        if (value == null || value.isEmpty) {
+                          notifier.setError(true);
+                        } else {
+                          final playerNames =
+                              controllers.map((c) => c.text).toList();
+                          if (playerNames.toSet().length !=
+                              playerNames.length) {
+                            notifier.setError(true);
+                          } else {
+                            notifier.setError(false);
+                          }
+                        }
+                      });
 
-                    if (hasKnownPlayers) {
-                      if (nameMatches || alreadyUsed) {
-                        ToastService.error(context, 'Player already selected');
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a name';
                       }
-                    } else {
+                      final playerNames =
+                          controllers.map((c) => c.text).toList();
+                      if (playerNames.toSet().length != playerNames.length) {
+                        return 'Duplicate names are not allowed';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      final notifier = ref.read(preGameProvider.notifier);
                       notifier.updatePlayerName(index, value);
-                    }
-                  },
-                  inputFormatters: [LengthLimitingTextInputFormatter(20)],
+                    },
+                    inputFormatters: [LengthLimitingTextInputFormatter(20)],
+                  ),
                 ),
               ),
             ],

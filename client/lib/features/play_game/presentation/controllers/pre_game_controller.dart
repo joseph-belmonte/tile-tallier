@@ -28,6 +28,9 @@ class PreGameState {
   /// Designates the active field index.
   final int? activeFieldIndex; // Nullable to indicate no field is active
 
+  /// Whether the form has an error
+  bool hasError = false;
+
   /// Creates a new [PreGameState] instance.
   PreGameState({
     required this.playerCount,
@@ -36,6 +39,7 @@ class PreGameState {
     required this.canRemove,
     required this.canNavigate,
     required this.knownPlayers,
+    required this.hasError,
     this.activeFieldIndex,
   });
 
@@ -47,6 +51,7 @@ class PreGameState {
     bool? canRemove,
     bool? canNavigate,
     List<Player>? knownPlayers,
+    bool? hasError,
     int? activeFieldIndex,
   }) {
     return PreGameState(
@@ -56,6 +61,7 @@ class PreGameState {
       canRemove: canRemove ?? this.canRemove,
       canNavigate: canNavigate ?? this.canNavigate,
       knownPlayers: knownPlayers ?? this.knownPlayers,
+      hasError: hasError ?? this.hasError,
       activeFieldIndex: activeFieldIndex ?? this.activeFieldIndex,
     );
   }
@@ -75,6 +81,7 @@ class PreGamePageController extends StateNotifier<PreGameState> {
             canRemove: false,
             canNavigate: false,
             knownPlayers: [],
+            hasError: false,
             activeFieldIndex: null,
           ),
         ) {
@@ -145,7 +152,7 @@ class PreGamePageController extends StateNotifier<PreGameState> {
     }
   }
 
-  /// Updates the player name at the given index.
+  /// Updates the text in the controller at the given index.
   void updatePlayerName(int index, String name) {
     final updatedControllers =
         List<TextEditingController>.from(state.controllers);
@@ -160,7 +167,9 @@ class PreGamePageController extends StateNotifier<PreGameState> {
         .where((name) => name.isNotEmpty)
         .toList();
 
-    if (playerNames.isNotEmpty) {
+    // Make sure that there are no duplicate names
+    if (playerNames.isNotEmpty &&
+        playerNames.toSet().length == playerNames.length) {
       state = state.copyWith(canNavigate: true);
     } else {
       state = state.copyWith(canNavigate: false);
@@ -190,8 +199,14 @@ class PreGamePageController extends StateNotifier<PreGameState> {
       canAdd: true,
       canRemove: false,
       canNavigate: false,
+      hasError: false,
       knownPlayers: state.knownPlayers,
     );
+  }
+
+  /// Sets the error state.
+  void setError(bool hasError) {
+    state = state.copyWith(hasError: hasError);
   }
 
   /// Gets the player count.
