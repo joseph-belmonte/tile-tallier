@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/domain/models/game.dart';
@@ -9,18 +10,22 @@ class PastGameList extends StatelessWidget {
   final List<Game> games;
 
   /// Creates a new [PastGameList] instance.
-  const PastGameList({
-    required this.games,
-    super.key,
-  });
+  const PastGameList({required this.games, super.key});
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: games.length,
       itemBuilder: (_, index) {
-        return PastGameListItem(
-          game: games[index],
+        final animationDuration = games.length == 1
+            ? Durations.medium4
+            : Durations.extralong1 ~/ (games.length - index);
+
+        return FadeInUp(
+          duration: animationDuration,
+          child: PastGameListItem(
+            game: games[index],
+          ),
         );
       },
     );

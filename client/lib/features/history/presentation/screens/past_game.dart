@@ -85,11 +85,18 @@ class PastGamePage extends ConsumerWidget {
                     (player) => player.id == play.playerId,
                   );
 
-                  return HistoricalPlay(
-                    key: ValueKey(play.id),
-                    player: player,
-                    play: play,
-                    i,
+                  final animationDuration = game.plays.length == 1
+                      ? Durations.medium4
+                      : Durations.extralong1 ~/ (game.plays.length - i);
+
+                  return FadeInUp(
+                    duration: animationDuration,
+                    child: HistoricalPlay(
+                      key: ValueKey(play.id),
+                      player: player,
+                      play: play,
+                      i,
+                    ),
                   );
                 },
               ),
