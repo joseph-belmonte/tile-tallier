@@ -74,7 +74,9 @@ class Shareable extends StatelessWidget {
           SizedBox(height: 8.0),
           Text('Highest Scoring Word:'),
           SizedBox(height: 8.0),
-          ScrabbleWordWidget(game.highestScoringWord, (_) {}),
+          FittedBox(
+            child: ScrabbleWordWidget(game.highestScoringWord, (_) {}),
+          ),
           SizedBox(height: 8.0),
           Text(
             '${game.highestScoringWord.score} points!',
