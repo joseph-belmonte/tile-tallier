@@ -47,7 +47,6 @@ class PreGameState {
     bool? canRemove,
     bool? canNavigate,
     List<Player>? knownPlayers,
-    List<String>? selectedPlayers,
     int? activeFieldIndex,
   }) {
     return PreGameState(
@@ -86,11 +85,6 @@ class PreGamePageController extends StateNotifier<PreGameState> {
   Future<void> fetchKnownPlayers() async {
     final players = await _historyRepository.fetchAllPlayers();
     state = state.copyWith(knownPlayers: players);
-  }
-
-  /// Clears all selected players.
-  void clearSelectedPlayers() {
-    state = state.copyWith(selectedPlayers: []);
   }
 
   /// Sets the active field index.

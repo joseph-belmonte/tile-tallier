@@ -28,7 +28,6 @@ class _PreGamePageState extends ConsumerState<PreGamePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final preGameController = ref.read(preGameProvider.notifier);
       preGameController.initializeControllers();
-      preGameController.clearSelectedPlayers();
     });
   }
 
