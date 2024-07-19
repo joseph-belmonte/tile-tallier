@@ -49,17 +49,15 @@ class PastGamePage extends ConsumerWidget {
             icon: Icon(Icons.share),
           ),
           game.isFavorite
-              ? FadeInDown(
+              ? Pulse(
                   duration: animationDuration,
-                  from: 10.0,
                   child: IconButton(
                     icon: Icon(Icons.favorite),
                     onPressed: handleFavorite,
                   ),
                 )
-              : FadeInUp(
+              : Pulse(
                   duration: animationDuration,
-                  from: 10.0,
                   child: IconButton(
                     icon: Icon(Icons.favorite_border),
                     onPressed: handleFavorite,
