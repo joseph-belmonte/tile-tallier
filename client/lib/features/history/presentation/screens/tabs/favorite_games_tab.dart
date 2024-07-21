@@ -11,10 +11,9 @@ class FavoriteGamesTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pastGamesAsync = ref.watch(pastGamesProvider);
+    final pastGames = ref.watch(pastGamesProvider);
 
-    final favoriteGames =
-        pastGamesAsync.where((game) => game.isFavorite).toList();
+    final favoriteGames = pastGames.where((game) => game.isFavorite).toList();
 
     favoriteGames.sort(
       (a, b) => b.plays[0].timestamp

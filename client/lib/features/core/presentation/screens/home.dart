@@ -32,15 +32,15 @@ class HomePage extends StatelessWidget {
             SizedBox(height: 24),
             ElevatedButton.icon(
               onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const HistoryPage()),
+                MaterialPageRoute(builder: (_) => const HistoryPage()),
               ),
-              icon: Icon(Icons.history_edu),
+              icon: Icon(Icons.history),
               label: Text('View History'),
             ),
             SizedBox(height: 24),
             ElevatedButton.icon(
               onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const SettingsPage()),
+                MaterialPageRoute(builder: (_) => const SettingsPage()),
               ),
               icon: Icon(Icons.settings),
               label: Text('Settings'),
@@ -58,7 +58,7 @@ class HomePage extends StatelessWidget {
     // if (!hasPlayed) {
     //   if (!context.mounted) return;
     //   Navigator.of(context).push(
-    //     MaterialPageRoute(builder: (context) => const PreGamePage()),
+    //     MaterialPageRoute(builder: (_) => const PreGamePage()),
     //   );
     //   return;
     // }
@@ -66,7 +66,7 @@ class HomePage extends StatelessWidget {
     // if (customerInfo.entitlements.active.isNotEmpty) {
     //   if (!context.mounted) return;
     //   Navigator.of(context).push(
-    //     MaterialPageRoute(builder: (context) => const PreGamePage()),
+    //     MaterialPageRoute(builder: (_) => const PreGamePage()),
     //   );
     // } else {
     //   try {
@@ -82,7 +82,7 @@ class HomePage extends StatelessWidget {
     //   }
     // }
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const PreGamePage()),
+      MaterialPageRoute(builder: (_) => const PreGamePage()),
     );
   }
 }

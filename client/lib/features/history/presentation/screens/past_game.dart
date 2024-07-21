@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,6 +19,7 @@ class PastGamePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    const animationDuration = Durations.medium1;
     final pastGamesState = ref.watch(pastGamesProvider);
 
     final game = pastGamesState.firstWhere((g) => g.id == gameId);
@@ -34,10 +36,7 @@ class PastGamePage extends ConsumerWidget {
       if (!game.isFavorite) {
         ToastService.message(context, 'Game added to favorites');
       } else {
-        ToastService.message(
-          context,
-          'Game removed from favorites',
-        );
+        ToastService.message(context, 'Game removed from favorites');
       }
     }
 
@@ -49,12 +48,21 @@ class PastGamePage extends ConsumerWidget {
             onPressed: () => showShareModal(context, game),
             icon: Icon(Icons.share),
           ),
-          IconButton(
-            icon: Icon(
-              game.isFavorite ? Icons.favorite : Icons.favorite_border,
-            ),
-            onPressed: handleFavorite,
-          ),
+          game.isFavorite
+              ? Pulse(
+                  duration: animationDuration,
+                  child: IconButton(
+                    icon: Icon(Icons.favorite),
+                    onPressed: handleFavorite,
+                  ),
+                )
+              : Pulse(
+                  duration: animationDuration,
+                  child: IconButton(
+                    icon: Icon(Icons.favorite_border),
+                    onPressed: handleFavorite,
+                  ),
+                ),
         ],
       ),
       body: SafeArea(
@@ -75,11 +83,18 @@ class PastGamePage extends ConsumerWidget {
                     (player) => player.id == play.playerId,
                   );
 
-                  return HistoricalPlay(
-                    key: ValueKey(play.id),
-                    player: player,
-                    play: play,
-                    i,
+                  final animationDuration = game.plays.length == 1
+                      ? Durations.medium4
+                      : Durations.extralong1 ~/ (game.plays.length - i);
+
+                  return FadeInUp(
+                    duration: animationDuration,
+                    child: HistoricalPlay(
+                      key: ValueKey(play.id),
+                      player: player,
+                      play: play,
+                      i,
+                    ),
                   );
                 },
               ),

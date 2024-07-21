@@ -31,10 +31,14 @@ class PlayerInputFields extends ConsumerWidget {
               Focus(
                 onFocusChange: (hasFocus) {
                   if (hasFocus) {
-                    ref.read(preGameProvider.notifier).setActiveField(index);
+                    // Ensure state updates happen outside of the build method
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      ref.read(preGameProvider.notifier).setActiveField(index);
+                    });
                   }
                 },
                 child: TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   controller: controllers[index],
                   decoration: InputDecoration(
                     labelText: 'Player ${index + 1} Name',
@@ -55,31 +59,35 @@ class PlayerInputFields extends ConsumerWidget {
                     ),
                   ),
                   validator: (value) {
-                    return (value == null || value.trim().isEmpty)
-                        ? 'Please enter a name'
-                        : null;
+                    // Ensure state updates happen outside of the build method
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      final notifier = ref.read(preGameProvider.notifier);
+
+                      if (value == null || value.isEmpty) {
+                        notifier.setError(true);
+                      } else {
+                        final playerNames =
+                            controllers.map((c) => c.text).toList();
+                        if (playerNames.toSet().length != playerNames.length) {
+                          notifier.setError(true);
+                        } else {
+                          notifier.setError(false);
+                        }
+                      }
+                    });
+
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a name';
+                    }
+                    final playerNames = controllers.map((c) => c.text).toList();
+                    if (playerNames.toSet().length != playerNames.length) {
+                      return 'Duplicate names are not allowed';
+                    }
+                    return null;
                   },
                   onChanged: (value) {
                     final notifier = ref.read(preGameProvider.notifier);
-                    final hasKnownPlayers = notifier.knownPlayers.isNotEmpty;
-                    final nameMatches = controllers
-                        .any((controller) => controller.text == value);
-
-                    var alreadyUsed = false;
-                    for (var i = 0; i < controllers.length; i++) {
-                      if (i != index && controllers[i].text == value) {
-                        alreadyUsed = true;
-                        break;
-                      }
-                    }
-
-                    if (hasKnownPlayers) {
-                      if (nameMatches || alreadyUsed) {
-                        ToastService.error(context, 'Player already selected');
-                      }
-                    } else {
-                      notifier.updatePlayerName(index, value);
-                    }
+                    notifier.updatePlayerName(index, value);
                   },
                   inputFormatters: [LengthLimitingTextInputFormatter(20)],
                 ),

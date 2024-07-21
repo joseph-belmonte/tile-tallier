@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -30,7 +31,12 @@ class AppearanceSettingsPage extends ConsumerWidget {
           ListTile(
             title: const Text('System Mode'),
             leading: const Icon(Icons.phone_android),
-            trailing: themeMode.index == 0 ? const Icon(Icons.check) : null,
+            trailing: themeMode.index == 0
+                ? ZoomIn(child: const Icon(Icons.check))
+                : ZoomOut(
+                    duration: Durations.short4,
+                    child: const Icon(Icons.check),
+                  ),
             onTap: () => ref
                 .read(Settings.themeModeProvider.notifier)
                 .set(ThemeMode.system),
@@ -38,7 +44,12 @@ class AppearanceSettingsPage extends ConsumerWidget {
           ListTile(
             title: const Text('Light Mode'),
             leading: const Icon(Icons.light_mode),
-            trailing: themeMode.index == 1 ? const Icon(Icons.check) : null,
+            trailing: themeMode.index == 1
+                ? ZoomIn(child: const Icon(Icons.check))
+                : ZoomOut(
+                    duration: Durations.short4,
+                    child: const Icon(Icons.check),
+                  ),
             onTap: () => ref
                 .read(Settings.themeModeProvider.notifier)
                 .set(ThemeMode.light),
@@ -46,7 +57,12 @@ class AppearanceSettingsPage extends ConsumerWidget {
           ListTile(
             title: const Text('Dark Mode'),
             leading: const Icon(Icons.dark_mode),
-            trailing: themeMode.index == 2 ? const Icon(Icons.check) : null,
+            trailing: themeMode.index == 2
+                ? ZoomIn(child: const Icon(Icons.check))
+                : ZoomOut(
+                    duration: Durations.short4,
+                    child: const Icon(Icons.check),
+                  ),
             onTap: () => ref
                 .read(Settings.themeModeProvider.notifier)
                 .set(ThemeMode.dark),
@@ -74,8 +90,11 @@ class AppearanceSettingsPage extends ConsumerWidget {
             title: const Text('Classic'),
             leading: const Icon(Icons.format_color_text),
             trailing: scarbbleEdition == ScrabbleEdition.classic
-                ? const Icon(Icons.check)
-                : null,
+                ? ZoomIn(child: const Icon(Icons.check))
+                : ZoomOut(
+                    duration: Durations.short4,
+                    child: const Icon(Icons.check),
+                  ),
             onTap: () => ref.read(scrabbleEditionProvider.notifier).state =
                 ScrabbleEdition.classic,
           ),
@@ -83,8 +102,11 @@ class AppearanceSettingsPage extends ConsumerWidget {
             title: const Text('Hasbro'),
             leading: const Icon(Icons.format_color_text),
             trailing: scarbbleEdition == ScrabbleEdition.hasbro
-                ? const Icon(Icons.check)
-                : null,
+                ? ZoomIn(child: const Icon(Icons.check))
+                : ZoomOut(
+                    duration: Durations.short4,
+                    child: const Icon(Icons.check),
+                  ),
             onTap: () => ref.read(scrabbleEditionProvider.notifier).state =
                 ScrabbleEdition.hasbro,
           ),
