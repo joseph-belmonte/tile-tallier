@@ -55,6 +55,8 @@ class _PlayInputPageState extends ConsumerState<PlayInputPage> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToEnd());
+    final minPlaysCompleted = ref.watch(activeGameProvider).plays.length <
+        ref.read(activeGameProvider).players.length;
     return PopScope(
       canPop: false,
       onPopInvoked: (bool willPop) async {
@@ -75,8 +77,7 @@ class _PlayInputPageState extends ConsumerState<PlayInputPage> {
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.flag_rounded, semanticLabel: 'End Game'),
-              onPressed: (ref.watch(activeGameProvider).plays.length <
-                      ref.read(activeGameProvider).players.length)
+              onPressed: minPlaysCompleted
                   ? null
                   : () {
                       showModalBottomSheet<void>(
