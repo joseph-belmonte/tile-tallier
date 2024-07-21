@@ -75,11 +75,16 @@ class _PlayInputPageState extends ConsumerState<PlayInputPage> {
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.flag_rounded, semanticLabel: 'End Game'),
-              onPressed: () => showModalBottomSheet<void>(
-                isScrollControlled: true,
-                context: context,
-                builder: (context) => ScoreSubtractionModal(),
-              ),
+              onPressed: (ref.watch(activeGameProvider).plays.length <
+                      ref.read(activeGameProvider).players.length)
+                  ? null
+                  : () {
+                      showModalBottomSheet<void>(
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (_) => ScoreSubtractionModal(),
+                      );
+                    },
             ),
           ],
         ),
