@@ -92,12 +92,10 @@ class SinglePlayerHistoryPageController
             playerId: playerId,
             newName: newName,
           );
-      await fetchPlayer(
-        playerId,
-      ); // Fetch the updated player data to refresh the UI
-      await fetchPlayerGames(
-        playerId,
-      ); // Fetch the updated games list to refresh the UI
+      // Fetch the updated player data to refresh the UI
+      await fetchPlayer(playerId);
+      // Fetch the updated games list to refresh the UI
+      await fetchPlayerGames(playerId);
     } catch (e) {
       state = state.copyWith(errorMessage: e.toString());
     }
