@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../edit_settings/presentation/screens/settings.dart';
+import '../../../gemini_coach/presentation/screens/coaching_page.dart';
 import '../../../history/presentation/screens/history_page.dart';
 import '../../../play_game/presentation/screens/pre_game.dart';
 import '../widgets/pre_paywall_dialog.dart';
@@ -36,6 +37,14 @@ class HomePage extends StatelessWidget {
               ),
               icon: Icon(Icons.history),
               label: Text('View History'),
+            ),
+            SizedBox(height: 24),
+            ElevatedButton.icon(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const CoachingPage()),
+              ),
+              icon: Icon(Icons.school),
+              label: Text('Coaching'),
             ),
             SizedBox(height: 24),
             ElevatedButton.icon(
