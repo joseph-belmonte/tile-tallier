@@ -12,7 +12,7 @@ class HomeButton extends StatelessWidget {
     return ElevatedButton.icon(
       onPressed: () => Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => HomePage(),
+          builder: (_) => HomePage(),
         ),
       ),
       icon: Icon(
