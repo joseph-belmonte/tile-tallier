@@ -6,7 +6,7 @@ import 'package:tile_tally/features/auth/data/sources/network/auth_service.dart'
 
 @GenerateMocks(
   [
-    ApiService,
+    AuthApiService,
     AuthService,
     LocalStorageService,
     FlutterSecureStorage,

@@ -38,11 +38,11 @@ class _FakeFlutterSecureStorage_0 extends _i1.SmartFake
         );
 }
 
-/// A class which mocks [ApiService].
+/// A class which mocks [AuthApiService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockApiService extends _i1.Mock implements _i3.ApiService {
-  MockApiService() {
+class MockAuthApiService extends _i1.Mock implements _i3.AuthApiService {
+  MockAuthApiService() {
     _i1.throwOnMissingStub(this);
   }
 
