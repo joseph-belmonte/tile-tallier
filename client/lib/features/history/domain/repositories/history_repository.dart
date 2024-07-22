@@ -1,8 +1,8 @@
 import 'package:sqflite/sqflite.dart';
 
 import '../../../core/domain/models/game.dart';
-import '../../data/helpers/games_table_helper.dart';
-import '../../data/helpers/players_table_helper.dart';
+import '../../../shared/data/helpers/games_table_helper.dart';
+import '../../../shared/data/helpers/players_table_helper.dart';
 import '../models/player.dart';
 
 /// A repository for interacting with the game storage database.
