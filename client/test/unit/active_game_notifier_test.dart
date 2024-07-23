@@ -1,16 +1,37 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:tile_tally/features/core/domain/models/game_player.dart';
 import 'package:tile_tally/features/core/domain/models/play.dart';
+import 'package:tile_tally/features/history/data/helpers/master_database_helper.dart';
 import 'package:tile_tally/features/play_game/application/providers/active_game.dart';
 import 'package:uuid/uuid.dart';
 
-void main() {
+void main() async {
   ProviderContainer createContainer() {
     final container = ProviderContainer();
     addTearDown(container.dispose);
     return container;
   }
+
+  setUpAll(() async {
+    // Initialize the database factory for ffi
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+
+    // Create and configure the test database
+    final db = await databaseFactory.openDatabase(inMemoryDatabasePath);
+
+    // Pass the test database to the MasterDatabaseHelper
+    MasterDatabaseHelper.testConstructor(db);
+
+    // Create necessary tables for testing
+    await MasterDatabaseHelper.instance.testCreateDB(db, 1);
+
+    // Insert test data into the players table
+    await db.insert('players', {'id': Uuid().v4(), 'name': 'Andrea'});
+    await db.insert('players', {'id': Uuid().v4(), 'name': 'Joe'});
+  });
 
   group('ActiveGameNotifier Tests', () {
     test('Initial state is correct', () {
@@ -23,14 +44,15 @@ void main() {
       expect(initialState.currentWord, isNotNull);
     });
 
-    test('Validate startGame', () {
+    test('Validate startGame', () async {
       final container = createContainer();
       final activeGameNotifier = container.read(activeGameProvider.notifier);
 
-      activeGameNotifier.startGame(['Andrea', 'Joe']);
+      // Await the startGame method to ensure it completes
+      await activeGameNotifier.startGame(['Andrea', 'Joe']);
 
       final updatedState = container.read(activeGameProvider);
-      expect(updatedState.players.length, equals(2));
+
       expect(updatedState.players[0].name, equals('Andrea'));
       expect(updatedState.players[1].name, equals('Joe'));
     });

@@ -10,11 +10,13 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../enums/score_multipliers.dart';
 import '../../../../utils/helpers.dart';
+import '../../../../utils/logger.dart';
 import '../../../core/domain/models/game.dart';
 import '../../../core/domain/models/game_player.dart';
 import '../../../core/domain/models/letter.dart';
 import '../../../core/domain/models/play.dart';
 import '../../../core/domain/models/word.dart';
+import '../../../history/data/helpers/players_table_helper.dart';
 import '../../data/word_database_helper.dart';
 
 /// A [StateNotifier] that manages the state of the active game.
@@ -22,24 +24,47 @@ class ActiveGameNotifier extends StateNotifier<Game> {
   /// Creates a new [ActiveGameNotifier] with a new game
   ActiveGameNotifier(super.game);
 
+  final PlayerTableHelper _playerTableHelper = PlayerTableHelper();
+
   /// Creates a new game instance with:
   /// * A new UUID
   /// * A new play with the current timestamp
   /// * The list of passed in players
-  void startGame(List<String> playerNames) {
+  Future<void> startGame(List<String> playerNames) async {
     final newGameId = Uuid().v4();
-    final newPlayers = playerNames
-        .map(
-          (name) => GamePlayer(
+
+    final newPlayers = await Future.wait(
+      playerNames.map(
+        (name) async {
+          // ignore: unused_local_variable
+          var isExistingPlayer = false;
+          var playerId = '';
+          try {
+            final player = await _playerTableHelper.findPlayer(name: name);
+            if (player != null) {
+              isExistingPlayer = true;
+              playerId = player.id;
+            } else {
+              isExistingPlayer = false;
+              playerId = Uuid().v4();
+            }
+          } catch (e) {
+            isExistingPlayer = false;
+            logger.e('Error fetching player: $e');
+            playerId = Uuid().v4();
+          }
+          return GamePlayer(
             name: name,
             id: Uuid().v4(),
             gameId: newGameId,
-            playerId: Uuid().v4(),
+            playerId: playerId,
             plays: [],
             endRack: '',
-          ),
-        )
-        .toList();
+          );
+        },
+      ).toList(),
+    );
+
     final newPlay = Play(
       gameId: newGameId,
       id: Uuid().v4(),

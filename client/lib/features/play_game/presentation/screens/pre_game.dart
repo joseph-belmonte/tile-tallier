@@ -45,9 +45,7 @@ class _PreGamePageState extends ConsumerState<PreGamePage> {
         ref.read(activeGameProvider.notifier).startGame(names);
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) => const PlayInputPage(),
-          ),
+          MaterialPageRoute(builder: (_) => const PlayInputPage()),
         ).then((_) {
           preGameController.initializeControllers();
         });
