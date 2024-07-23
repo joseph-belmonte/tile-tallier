@@ -30,7 +30,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
   /// * A new UUID
   /// * A new play with the current timestamp
   /// * The list of passed in players
-  void startGame(List<String> playerNames) async {
+  Future<void> startGame(List<String> playerNames) async {
     final newGameId = Uuid().v4();
 
     final newPlayers = await Future.wait(
