@@ -14,16 +14,32 @@ class QuitGameAlert extends StatelessWidget {
       content: const Text('Are you sure you want to quit the game?'),
       actions: <Widget>[
         TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+          ),
           onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('No'),
+          child: Text(
+            'No',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+            ),
+          ),
         ),
         TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.errorContainer,
+          ),
           onPressed: () {
             Navigator.of(context).pushReplacement<void, void>(
               MaterialPageRoute(builder: (context) => HomePage()),
             );
           },
-          child: const Text('Yes'),
+          child: Text(
+            'Yes',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onErrorContainer,
+            ),
+          ),
         ),
       ],
     );
