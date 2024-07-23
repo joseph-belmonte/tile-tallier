@@ -33,7 +33,7 @@ class Game with _$Game {
     );
   }
 
-  /// Converts the game to a map.
+  /// Accepts a JSON map and returns a new [Game] instance.
   factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
 
   // Private constructor for computed properties and methods.
