@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../../../../gemini_coach/domain/models/player_advice.dart';
+import '../../../../gemini_coach/domain/models/stored_advice.dart';
 
 /// The [LocalStorageService] class is responsible for handling secure storage
 class LocalStorageService {
@@ -51,7 +51,7 @@ class LocalStorageService {
   /// Writes the advice to secure storage
   Future<void> saveAdvice(StoredAdvice advice) async {
     final adviceData = await _getAdviceData();
-    adviceData[advice.playerId] = advice.toMap();
+    adviceData[advice.playerId] = advice.toJson();
 
     final adviceJson = jsonEncode(adviceData);
     await secureStorage.write(key: 'advice', value: adviceJson);
@@ -70,7 +70,7 @@ class LocalStorageService {
   Future<StoredAdvice?> getAdvice(String playerId) async {
     final adviceData = await _getAdviceData();
     if (adviceData.containsKey(playerId)) {
-      return StoredAdvice.fromMap(adviceData[playerId]);
+      return StoredAdvice.fromJson(adviceData[playerId]);
     } else {
       return null;
     }

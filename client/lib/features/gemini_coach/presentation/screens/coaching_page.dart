@@ -11,7 +11,7 @@ import '../../../shared/data/helpers/games_table_helper.dart';
 import '../../../shared/data/helpers/players_table_helper.dart';
 import '../../../shared/data/sources/local/local_storage_service.dart';
 import '../../data/sources/network/gemini_api_service.dart';
-import '../../domain/models/player_advice.dart';
+import '../../domain/models/stored_advice.dart';
 import '../widgets/ai_intro.dart';
 
 /// A page for coaching users on how to play the game using the gemini API.
