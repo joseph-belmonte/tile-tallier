@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "common.apps.CommonConfig",
     "content.apps.ContentConfig",
     "api.apps.ApiConfig",
+    "gemini.apps.GeminiConfig",
 ]
 
 # REST framework settings
