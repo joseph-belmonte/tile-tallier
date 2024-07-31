@@ -18,6 +18,7 @@ import '../../../core/domain/models/play.dart';
 import '../../../core/domain/models/word.dart';
 
 import '../../../shared/data/helpers/players_table_helper.dart';
+
 import '../../data/word_database_helper.dart';
 
 /// A [StateNotifier] that manages the state of the active game.
@@ -25,7 +26,9 @@ class ActiveGameNotifier extends StateNotifier<Game> {
   /// Creates a new [ActiveGameNotifier] with a new game
   ActiveGameNotifier(super.game);
 
+
   final _playerTableHelper = PlayerTableHelper();
+
 
   /// Creates a new game instance with:
   /// * A new UUID
