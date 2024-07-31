@@ -127,6 +127,27 @@ class GameTableHelper extends DatabaseHelper {
     return games;
   }
 
+  /// Fetches the games by player name:
+  Future<List<Game>> fetchGamesByPlayerName(String playerName) async {
+    final db = await database;
+    final result = await db.rawQuery(
+      '''
+      SELECT g.* 
+      FROM games g
+      JOIN game_players gp ON g.id = gp.gameId
+      WHERE gp.name = ?
+      ''',
+      [playerName],
+    );
+
+    final games = await Future.wait(
+      result.map((gameMap) async {
+        return await assembleGame(gameMap);
+      }).toList(),
+    );
+    return games;
+  }
+
   /// Toggles the favorite status of a game in the database.
   Future<void> toggleFavorite(String id) async {
     final db = await database;
