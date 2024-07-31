@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-import 'package:tile_tally/features/auth/data/sources/local_storage/local_storage_service.dart';
+import 'package:tile_tally/features/shared/data/sources/local/local_storage_service.dart';
 
 import '../mocks/mocks.mocks.dart';
 

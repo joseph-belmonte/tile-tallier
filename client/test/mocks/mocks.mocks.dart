@@ -7,7 +7,7 @@ import 'dart:async' as _i4;
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:tile_tally/features/auth/data/sources/local_storage/local_storage_service.dart'
+import 'package:tile_tally/features/shared/data/sources/local/local_storage_service.dart'
     as _i6;
 import 'package:tile_tally/features/auth/data/sources/network/api_service.dart'
     as _i3;

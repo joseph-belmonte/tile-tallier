@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
-import '../local_storage/local_storage_service.dart';
+import '../../../../shared/data/sources/local/local_storage_service.dart';
 
 /// The [AuthService] class is responsible for handling authentication requests, managing
 /// tokens, and refreshing tokens.

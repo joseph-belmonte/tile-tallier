@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import '../../../../gemini_coach/domain/models/player_advice.dart';
 
 /// The [LocalStorageService] class is responsible for handling secure storage
 class LocalStorageService {
@@ -8,6 +12,7 @@ class LocalStorageService {
   /// Creates a new [LocalStorageService] instance
   LocalStorageService({required this.secureStorage});
 
+  // Begin region: auth
   /// Deletes the stored authentication tokens
   Future<void> deleteAuthTokens() async {
     await secureStorage.delete(key: 'access_token');
@@ -40,4 +45,36 @@ class LocalStorageService {
       await secureStorage.write(key: 'refresh_token', value: refreshToken);
     }
   }
+
+  // End region: auth
+  // Begin region: advice
+  /// Writes the advice to secure storage
+  Future<void> saveAdvice(StoredAdvice advice) async {
+    final adviceData = await _getAdviceData();
+    adviceData[advice.playerId] = advice.toMap();
+
+    final adviceJson = jsonEncode(adviceData);
+    await secureStorage.write(key: 'advice', value: adviceJson);
+  }
+
+  Future<Map<String, dynamic>> _getAdviceData() async {
+    final adviceJson = await secureStorage.read(key: 'advice');
+    if (adviceJson != null) {
+      return jsonDecode(adviceJson) as Map<String, dynamic>;
+    } else {
+      return {};
+    }
+  }
+
+  /// Retrieves the advice from secure storage
+  Future<StoredAdvice?> getAdvice(String playerId) async {
+    final adviceData = await _getAdviceData();
+    if (adviceData.containsKey(playerId)) {
+      return StoredAdvice.fromMap(adviceData[playerId]);
+    } else {
+      return null;
+    }
+  }
+
+  // End region: advice
 }
