@@ -1,17 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-import '../../../../utils/logger.dart';
-import '../../../../utils/toast.dart';
-import '../../../auth/application/providers/auth_provider.dart';
-import '../../../core/domain/models/game.dart';
 import '../../../history/domain/models/player.dart';
-import '../../../shared/data/helpers/games_table_helper.dart';
-import '../../../shared/data/helpers/players_table_helper.dart';
-import '../../../shared/data/sources/local/local_storage_service.dart';
-import '../../data/sources/network/gemini_api_service.dart';
-import '../../domain/models/stored_advice.dart';
+import '../controllers/coaching_page_controller.dart';
 import '../widgets/ai_intro.dart';
 
 /// A page for coaching users on how to play the game using the gemini API.
@@ -24,113 +14,19 @@ class CoachingPage extends ConsumerStatefulWidget {
 }
 
 class _CoachingPageState extends ConsumerState<CoachingPage> {
-  final GeminiApiService _apiService = GeminiApiService();
-  final GameTableHelper _gamesTableHelper = GameTableHelper();
-  final PlayerTableHelper _playersTableHelper = PlayerTableHelper();
-  final LocalStorageService _localStorageService = LocalStorageService(
-    secureStorage: FlutterSecureStorage(),
-  );
-
-  String? _playerId;
-  List<Player> players = [];
-  List<Game> games = [];
-  String advice = '';
-  bool isLoading = false;
-  late bool isAuthenticated;
-
   @override
   void initState() {
     super.initState();
-    isAuthenticated = ref.read(authProvider).isAuthenticated;
-    _init();
-  }
-
-  Future<void> _init() async {
-    setState(() => isLoading = true);
-    try {
-      players = await _playersTableHelper.fetchAllPlayers();
-    } catch (e) {
-      logger.e('Error fetching players: $e');
-    } finally {
-      setState(() => isLoading = false);
-    }
-  }
-
-  void _onSelectPlayer(String? playerId) {
-    if (playerId == null) return;
-
-    _setSelectedPlayer(playerId);
-    final name = _getPlayerNameById(playerId);
-
-    _fetchAndSetGames(name);
-    _handleAuthAndFetchAdvice(playerId);
-  }
-
-  void _setSelectedPlayer(String playerId) {
-    setState(() => _playerId = playerId);
-  }
-
-  String _getPlayerNameById(String playerId) {
-    return players.firstWhere((player) => player.id == playerId).name;
-  }
-
-  Future<void> _fetchAndSetGames(String playerName) async {
-    try {
-      final fetchedGames =
-          await _gamesTableHelper.fetchGamesByPlayerName(playerName);
-      setState(() => games = fetchedGames);
-    } catch (e) {
-      logger.e('Error fetching games: $e');
-    }
-  }
-
-  Future<void> _handleAuthAndFetchAdvice(String playerId) async {
-    final localAdvice = await _localStorageService.getAdvice(playerId);
-    if (localAdvice != null &&
-        DateTime.now().difference(localAdvice.lastFetched).inDays < 7) {
-      setState(() => advice = localAdvice.adviceText);
-      if (context.mounted) {
-        _showSnackbar(
-          // ignore: use_build_context_synchronously
-          context,
-          'Get new advice in ${7 - DateTime.now().difference(localAdvice.lastFetched).inDays} days',
-        );
-      }
-      return;
-    }
-    _fetchAndSetAdvice(playerId);
-  }
-
-  Future<void> _fetchAndSetAdvice(String playerId) async {
-    setState(() => isLoading = true);
-    try {
-      final response = await _apiService.fetchAdvice(playerId);
-      final adviceText = response['advice'];
-      setState(() {
-        advice = adviceText;
-        isLoading = false;
-      });
-      final storedAdvice = StoredAdvice(
-        playerId: playerId,
-        adviceText: adviceText,
-        lastFetched: DateTime.now(),
-      );
-      await _localStorageService.saveAdvice(storedAdvice);
-    } catch (e) {
-      logger.e('Error fetching advice: $e');
-      setState(() {
-        advice = 'Error fetching advice';
-        isLoading = false;
-      });
-    }
-  }
-
-  void _showSnackbar(BuildContext context, String message) {
-    ToastService.message(context, message);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(coachingControllerProvider.notifier).init();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(coachingControllerProvider);
+    final controller = ref.read(coachingControllerProvider.notifier);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Coaching')),
       body: Stack(
@@ -145,18 +41,27 @@ class _CoachingPageState extends ConsumerState<CoachingPage> {
                   ),
                 ],
               ),
-              _buildPlayerSelection(context),
+              if (!state.isAuthenticated)
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text('You must be signed in to select a player'),
+                ),
+              _buildPlayerSelection(context, state, controller),
               Visibility(
-                visible: !isLoading,
+                visible: !state.isLoading,
                 replacement: const Center(child: CircularProgressIndicator()),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Text(advice),
+                  child: Text(state.advice),
                 ),
               ),
-              const Padding(
+              // Display the days until the next advice
+               Padding(
                 padding: EdgeInsets.all(16.0),
-                child: Text('Check back next week for more advice!'),
+                child: Text(
+                  'Days until next advice: ${state.daysUntilNextAdvice.toString()}',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
               ),
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
@@ -171,21 +76,25 @@ class _CoachingPageState extends ConsumerState<CoachingPage> {
     );
   }
 
-  Widget _buildPlayerSelection(BuildContext context) {
+  Widget _buildPlayerSelection(
+    BuildContext context,
+    CoachingPageState state,
+    CoachingController controller,
+  ) {
     return Row(
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
             'Select a player:',
-            style: Theme.of(context).textTheme.headlineSmall,
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
         ),
         const SizedBox(width: 24.0),
         DropdownButton<String>(
-          value: _playerId,
-          onChanged: isAuthenticated ? _onSelectPlayer : null,
-          items: players.map((Player player) {
+          value: state.playerId,
+          onChanged: state.isAuthenticated ? controller.selectPlayer : null,
+          items: state.players.map((Player player) {
             return DropdownMenuItem<String>(
               value: player.id,
               child: Text(
