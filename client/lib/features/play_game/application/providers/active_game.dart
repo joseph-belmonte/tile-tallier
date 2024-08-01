@@ -26,9 +26,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
   /// Creates a new [ActiveGameNotifier] with a new game
   ActiveGameNotifier(super.game);
 
-
   final _playerTableHelper = PlayerTableHelper();
-
 
   /// Creates a new game instance with:
   /// * A new UUID

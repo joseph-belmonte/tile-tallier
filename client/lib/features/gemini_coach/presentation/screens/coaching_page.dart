@@ -56,7 +56,7 @@ class _CoachingPageState extends ConsumerState<CoachingPage> {
                 ),
               ),
               // Display the days until the next advice
-               Padding(
+              Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Text(
                   'Days until next advice: ${state.daysUntilNextAdvice.toString()}',
