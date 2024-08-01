@@ -8,7 +8,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../enums/score_multipliers.dart';
+import '../../../../enums/score_multiplier.dart';
 import '../../../../utils/helpers.dart';
 import '../../../../utils/logger.dart';
 import '../../../core/domain/models/game.dart';

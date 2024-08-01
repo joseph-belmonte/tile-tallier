@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../enums/score_multipliers.dart';
+import '../../enums/score_multiplier.dart';
 import '../../enums/scrabble_edition.dart';
 
 /// A map of colors for each edition of Scrabble.
