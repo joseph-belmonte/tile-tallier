@@ -10,3 +10,6 @@ test.dart:
 clean_and_get:
 	flutter clean
 	flutter pub get
+
+update_icon:
+	dart run flutter_launcher_icons
