@@ -60,6 +60,13 @@ class ErrorPage extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'If you believe this is a bug, please report it from the settings page.',
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Wrap(
                         children: <Widget>[
                           Text(
