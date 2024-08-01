@@ -10,6 +10,13 @@ jobs:
   flutter_test:
     runs-on: ubuntu-latest # Specifies the runner environment
 
+    env:
+      # Reference the GitHub Secrets
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      ACCESS_TOKEN_LIFETIME: ${{ secrets.ACCESS_TOKEN_LIFETIME }}
+      REFRESH_TOKEN_LIFETIME: ${{ secrets.REFRESH_TOKEN_LIFETIME }}
+      AUTH_TOKEN_SECRET: ${{ secrets.AUTH_TOKEN_SECRET }}
+
     steps:
       - uses: actions/checkout@v4 # Checks out your repository under $GITHUB_WORKSPACE
 
