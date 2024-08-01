@@ -84,14 +84,13 @@ jobs:
       - name: Run server tests
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          ACCESS_TOKEN_LIFETIME: ${{ secrets.ACCESS_TOKEN_LIFETIME }}
+          REFRESH_TOKEN_LIFETIME: ${{ secrets.REFRESH_TOKEN_LIFETIME }}
+          AUTH_TOKEN_SECRET: ${{ secrets.AUTH_TOKEN_SECRET }}
+
         run: |
           source venv/bin/activate
-          # Export environment variables to be accessible by tests
-          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
-          echo "ACCESS_TOKEN_LIFETIME=${{ secrets.ACCESS_TOKEN_LIFETIME }}" >> $GITHUB_ENV
-          echo "REFRESH_TOKEN_LIFETIME=${{ secrets.REFRESH_TOKEN_LIFETIME }}" >> $GITHUB_ENV
-          echo "AUTH_TOKEN_SECRET=${{ secrets.AUTH_TOKEN_SECRET }}" >> $GITHUB_ENV
-
           cd server/tt_backend
           python manage.py makemigrations
           python manage.py migrate
