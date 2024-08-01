@@ -1,22 +1,53 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'features/shared/presentation/screens/error_page.dart';
 import 'theme/theme_wrapper.dart';
 import 'utils/start/app_initializations.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+/// The key for the navigator.
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  final settingsContainer = ProviderContainer();
+void main() {
+  BindingBase.debugZoneErrorsAreFatal = true; // Make zone errors fatal
 
-  await initializeApp(settingsContainer);
+  runZonedGuarded<Future<void>>(() async {
+    WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(
-    UncontrolledProviderScope(
-      container: settingsContainer,
-      child: ProviderScope(
-        child: const ThemeWrapper(),
+    final settingsContainer = ProviderContainer();
+
+    await initializeApp(settingsContainer);
+
+    FlutterError.onError = (FlutterErrorDetails details) {
+      FlutterError.presentError(details);
+      _handleError(details.exceptionAsString(), details.stack.toString());
+    };
+
+    runApp(
+      UncontrolledProviderScope(
+        container: settingsContainer,
+        child: ProviderScope(
+          child: const ThemeWrapper(),
+        ),
       ),
-    ),
-  );
+    );
+  }, (error, stack) {
+    _handleError(error.toString(), stack.toString());
+  });
+}
+
+void _handleError(String error, String stackTrace) {
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    navigatorKey.currentState?.push(
+      MaterialPageRoute(
+        builder: (context) => ErrorPage(
+          errorMessage: error,
+          stackTrace: stackTrace,
+        ),
+      ),
+    );
+  });
 }

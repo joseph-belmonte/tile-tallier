@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../features/core/presentation/screens/home.dart';
 import '../features/edit_settings/presentation/controllers/settings_controller.dart';
+import '../main.dart';
 import 'controllers/theme_providers.dart';
 
 /// A theming wrapper for the app.
@@ -35,6 +36,7 @@ class _ThemingAppState extends ConsumerState<ThemeWrapper>
   Widget build(BuildContext context) {
     return BetterFeedback(
       child: MaterialApp(
+        navigatorKey: navigatorKey, // Add navigatorKey here
         debugShowCheckedModeBanner: false,
         theme: ref.watch(lightThemeProvider),
         darkTheme: ref.watch(darkThemeProvider),

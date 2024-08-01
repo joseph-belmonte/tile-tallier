@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:tile_tally/features/core/domain/models/game_player.dart';
 import 'package:tile_tally/features/core/domain/models/play.dart';
-import 'package:tile_tally/features/history/data/helpers/master_database_helper.dart';
 import 'package:tile_tally/features/play_game/application/providers/active_game.dart';
+import 'package:tile_tally/features/shared/data/helpers/master_database_helper.dart';
 import 'package:uuid/uuid.dart';
 
 void main() async {

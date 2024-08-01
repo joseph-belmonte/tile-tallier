@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:tile_tally/features/history/data/helpers/games_table_helper.dart';
+import 'package:tile_tally/features/shared/data/helpers/games_table_helper.dart';
 
-import 'package:tile_tally/features/history/data/helpers/master_database_helper.dart';
+import 'package:tile_tally/features/shared/data/helpers/master_database_helper.dart';
 
 void main() {
   sqfliteFfiInit();

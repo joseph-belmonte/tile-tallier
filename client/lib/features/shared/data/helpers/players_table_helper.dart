@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import '../../../../utils/logger.dart';
-import '../../domain/models/database_helper.dart';
-import '../../domain/models/player.dart';
+import '../../../history/domain/models/database_helper.dart';
+import '../../../history/domain/models/player.dart';
 
 /// A helper class for interacting with the 'players' table in the database.
 class PlayerTableHelper extends DatabaseHelper {

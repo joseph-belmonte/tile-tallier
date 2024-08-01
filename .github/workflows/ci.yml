@@ -10,6 +10,14 @@ jobs:
   flutter_test:
     runs-on: ubuntu-latest # Specifies the runner environment
 
+    env:
+      # Reference the GitHub Secrets
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      ACCESS_TOKEN_LIFETIME: ${{ secrets.ACCESS_TOKEN_LIFETIME }}
+      REFRESH_TOKEN_LIFETIME: ${{ secrets.REFRESH_TOKEN_LIFETIME }}
+      AUTH_TOKEN_SECRET: ${{ secrets.AUTH_TOKEN_SECRET }}
+      GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+
     steps:
       - uses: actions/checkout@v4 # Checks out your repository under $GITHUB_WORKSPACE
 
@@ -64,7 +72,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11" # Specify the Python version
 
@@ -77,6 +85,12 @@ jobs:
       - name: Run server tests
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          ACCESS_TOKEN_LIFETIME: ${{ secrets.ACCESS_TOKEN_LIFETIME }}
+          REFRESH_TOKEN_LIFETIME: ${{ secrets.REFRESH_TOKEN_LIFETIME }}
+          AUTH_TOKEN_SECRET: ${{ secrets.AUTH_TOKEN_SECRET }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+
         run: |
           source venv/bin/activate
           cd server/tt_backend

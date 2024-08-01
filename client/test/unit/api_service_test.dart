@@ -5,10 +5,10 @@ import '../mocks/mocks.mocks.dart';
 
 void main() {
   group('ApiService', () {
-    late MockApiService mockApiService;
+    late MockAuthApiService mockApiService;
 
     setUp(() {
-      mockApiService = MockApiService();
+      mockApiService = MockAuthApiService();
     });
 
     test('getUserInfo returns user data', () async {

@@ -7,7 +7,17 @@ import '../../../edit_settings/presentation/screens/settings.dart';
 /// A page to display when an error occurs.
 class ErrorPage extends StatelessWidget {
   /// Creates a new [ErrorPage] instance.
-  const ErrorPage({super.key});
+  const ErrorPage({
+    required this.errorMessage,
+    required this.stackTrace,
+    super.key,
+  });
+
+  /// The error message to display.
+  final String errorMessage;
+
+  /// The stack trace to display.
+  final String stackTrace;
 
   @override
   Widget build(BuildContext context) {
@@ -20,29 +30,46 @@ class ErrorPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              ZoomIn(
-                duration: Durations.extralong4,
-                child: Icon(
-                  Icons.error,
-                  size: 100,
-                  color: Theme.of(context).colorScheme.error,
-                ),
-              ),
-              SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'An error occurred.',
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Please let us know if this issue persists by submitting a bug report from the settings page.',
-                  textAlign: TextAlign.center,
+              Expanded(
+                child: ListView(
+                  children: <Widget>[
+                    ZoomIn(
+                      duration: const Duration(seconds: 2),
+                      child: Icon(
+                        Icons.error,
+                        size: 100,
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'An error occurred.',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        errorMessage,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Wrap(
+                        children: <Widget>[
+                          Text(
+                            stackTrace,
+                            textAlign: TextAlign.left,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Padding(
@@ -53,8 +80,8 @@ class ErrorPage extends StatelessWidget {
                       MaterialPageRoute(builder: (_) => const HomePage()),
                     );
                   },
-                  label: Text('Go Home'),
-                  icon: Icon(Icons.home),
+                  label: const Text('Go Home'),
+                  icon: const Icon(Icons.home),
                 ),
               ),
               Padding(
@@ -62,11 +89,13 @@ class ErrorPage extends StatelessWidget {
                 child: ElevatedButton.icon(
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const SettingsPage()),
+                      MaterialPageRoute(
+                        builder: (_) => const SettingsPage(),
+                      ),
                     );
                   },
-                  label: Text('Settings'),
-                  icon: Icon(Icons.settings),
+                  label: const Text('Settings'),
+                  icon: const Icon(Icons.settings),
                 ),
               ),
             ],

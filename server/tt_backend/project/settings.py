@@ -10,14 +10,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-from datetime import timedelta
 from pathlib import Path
-import sys
+from .utils import *
 
+import sys
 import environ
 import os
 
+
+# Initialize environment variables
 env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-$hz)me55g4zm_5a6!9ihe=)fb4dbah!7a88y%)$$t+*y#$6$85"
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -56,6 +59,7 @@ INSTALLED_APPS = [
     "common.apps.CommonConfig",
     "content.apps.ContentConfig",
     "api.apps.ApiConfig",
+    "gemini.apps.GeminiConfig",
 ]
 
 # REST framework settings
@@ -67,10 +71,18 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 10,
 }
 
+# Read the environment variables as strings
+access_token_lifetime_str = env("ACCESS_TOKEN_LIFETIME", default="60m")
+refresh_token_lifetime_str = env("REFRESH_TOKEN_LIFETIME", default="1d")
+
+# Convert the strings to timedelta objects
+access_token_lifetime = str_to_timedelta(access_token_lifetime_str)
+refresh_token_lifetime = str_to_timedelta(refresh_token_lifetime_str)
+
 # Can set this in the environment if desired
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ACCESS_TOKEN_LIFETIME": access_token_lifetime,
+    "REFRESH_TOKEN_LIFETIME": refresh_token_lifetime,
     "BLACKLIST_AFTER_ROTATION": True,
     "AUTH_HEADER_TYPES": ("Bearer",),
     "USER_ID_FIELD": "uuid",
@@ -79,11 +91,10 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL = "accounts.User"
 
 AUTH_TOKEN_TIMEOUT = 2592000
-AUTH_TOKEN_SECRET = "auth_token_secretsecret"
+AUTH_TOKEN_SECRET = env("AUTH_TOKEN_SECRET")
 
-
-API_DEFAULT_PAGE_SIZE = 10
-API_MAX_PAGE_SIZE = 100
+API_DEFAULT_PAGE_SIZE = env("API_DEFAULT_PAGE_SIZE", default=10)
+API_MAX_PAGE_SIZE = env("API_MAX_PAGE_SIZE", default=100)
 
 
 MIDDLEWARE = [

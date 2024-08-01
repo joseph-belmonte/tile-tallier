@@ -7,12 +7,14 @@ import 'dart:async' as _i4;
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:tile_tally/features/auth/data/sources/local_storage/local_storage_service.dart'
-    as _i6;
 import 'package:tile_tally/features/auth/data/sources/network/api_service.dart'
     as _i3;
 import 'package:tile_tally/features/auth/data/sources/network/auth_service.dart'
     as _i5;
+import 'package:tile_tally/features/gemini_coach/domain/models/stored_advice.dart'
+    as _i7;
+import 'package:tile_tally/features/shared/data/sources/local/local_storage_service.dart'
+    as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -38,11 +40,11 @@ class _FakeFlutterSecureStorage_0 extends _i1.SmartFake
         );
 }
 
-/// A class which mocks [ApiService].
+/// A class which mocks [AuthApiService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockApiService extends _i1.Mock implements _i3.ApiService {
-  MockApiService() {
+class MockAuthApiService extends _i1.Mock implements _i3.AuthApiService {
+  MockAuthApiService() {
     _i1.throwOnMissingStub(this);
   }
 
@@ -275,6 +277,26 @@ class MockLocalStorageService extends _i1.Mock
         returnValue: _i4.Future<void>.value(),
         returnValueForMissingStub: _i4.Future<void>.value(),
       ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> saveAdvice(_i7.StoredAdvice? advice) => (super.noSuchMethod(
+        Invocation.method(
+          #saveAdvice,
+          [advice],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<_i7.StoredAdvice?> getAdvice(String? playerId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAdvice,
+          [playerId],
+        ),
+        returnValue: _i4.Future<_i7.StoredAdvice?>.value(),
+      ) as _i4.Future<_i7.StoredAdvice?>);
 }
 
 /// A class which mocks [FlutterSecureStorage].

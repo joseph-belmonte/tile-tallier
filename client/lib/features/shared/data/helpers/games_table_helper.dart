@@ -5,7 +5,7 @@ import '../../../core/domain/models/game_player.dart';
 import '../../../core/domain/models/letter.dart';
 import '../../../core/domain/models/play.dart';
 import '../../../core/domain/models/word.dart';
-import '../../domain/models/database_helper.dart';
+import '../../../history/domain/models/database_helper.dart';
 
 import 'plays_table_helper.dart';
 
@@ -117,6 +117,27 @@ class GameTableHelper extends DatabaseHelper {
       WHERE gp.playerId = ?
       ''',
       [playerId],
+    );
+
+    final games = await Future.wait(
+      result.map((gameMap) async {
+        return await assembleGame(gameMap);
+      }).toList(),
+    );
+    return games;
+  }
+
+  /// Fetches the games by player name:
+  Future<List<Game>> fetchGamesByPlayerName(String playerName) async {
+    final db = await database;
+    final result = await db.rawQuery(
+      '''
+      SELECT g.* 
+      FROM games g
+      JOIN game_players gp ON g.id = gp.gameId
+      WHERE gp.name = ?
+      ''',
+      [playerName],
     );
 
     final games = await Future.wait(
