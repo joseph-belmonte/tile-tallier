@@ -10,6 +10,8 @@ import '../../../../theme/models/app_theme.dart';
 import '../../../../utils/show_paywall.dart';
 import '../../../manage_purchases/data/constants/revenue_cat.dart';
 import '../../../manage_purchases/presentation/widgets/dismiss_dialog.dart';
+import '../../../shared/presentation/widgets/animate_in_check_icon.dart';
+import '../../../shared/presentation/widgets/animate_out_check_icon.dart';
 import '../controllers/settings_controller.dart';
 
 /// A page that displays a list of theme options for the app
@@ -81,8 +83,8 @@ class _ThemeScreenState extends ConsumerState<ThemeScreen> {
                         : const Icon(Icons.palette),
                     trailing: ref.watch(Settings.schemeIndexProvider) ==
                             AppTheme.schemes.indexOf(scheme)
-                        ? const Icon(Icons.check)
-                        : null,
+                        ? AnimateInCheckIcon()
+                        : AnimateOutCheckIcon(),
                     onTap: () async {
                       final index = AppTheme.schemes.indexOf(scheme);
                       final isPremium =
