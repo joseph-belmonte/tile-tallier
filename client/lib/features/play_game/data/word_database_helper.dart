@@ -9,8 +9,8 @@ class WordListDBHelper {
   static const _databaseName = 'word_database.db';
   static const _databaseVersion = 1;
 
-  /// The table name
-  static const table = 'word_list';
+  /// The default table name
+  static const defaultTable = 'word_list';
 
   /// The id column name
   static const columnId = 'id';
@@ -47,7 +47,7 @@ class WordListDBHelper {
   // SQL code to create the database table
   Future _onCreate(Database db, int version) async {
     await db.execute('''
-          CREATE TABLE $table (
+          CREATE TABLE $defaultTable (
             $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
             $columnWord TEXT NOT NULL
           )
@@ -57,27 +57,27 @@ class WordListDBHelper {
   /// Insert a row into the database
   Future<int> insert(Map<String, dynamic> row, {Database? txn}) async {
     final db = txn ?? await instance.database;
-    return await db.insert(table, row);
+    return await db.insert(defaultTable, row);
   }
 
   /// Query all rows in the table
   Future<List<Map<String, dynamic>>> queryAllRows({Database? txn}) async {
     final db = txn ?? await instance.database;
-    return await db.query(table);
+    return await db.query(defaultTable);
   }
 
   /// Queries the number of rows in the table
   Future<int?> queryRowCount({Database? txn}) async {
     final db = txn ?? await instance.database;
     return Sqflite.firstIntValue(
-      await db.rawQuery('SELECT COUNT(*) FROM $table'),
+      await db.rawQuery('SELECT COUNT(*) FROM $defaultTable'),
     );
   }
 
   /// Delete all rows in the table
   Future<int> deleteAll({Database? txn}) async {
     final db = txn ?? await instance.database;
-    return await db.delete(table);
+    return await db.delete(defaultTable);
   }
 
   /// Loads the 2006 tournament word list.
@@ -88,7 +88,7 @@ class WordListDBHelper {
     final batch = _database!.batch();
     for (var word in wordList) {
       if (word.trim().isNotEmpty) {
-        batch.insert(table, {columnWord: word});
+        batch.insert(defaultTable, {columnWord: word});
       }
     }
     await batch.commit(noResult: true);
@@ -98,7 +98,7 @@ class WordListDBHelper {
   Future<bool> wordExistsInList(List<String> words) async {
     final db = await database;
     final placeholders = List.filled(words.length, '?').join(', ');
-    final query = 'SELECT 1 FROM $table WHERE word IN ($placeholders) LIMIT 1';
+    final query = 'SELECT 1 FROM $defaultTable WHERE word IN ($placeholders) LIMIT 1';
     final results = await db.rawQuery(query, words);
     return results.isNotEmpty;
   }
@@ -107,7 +107,7 @@ class WordListDBHelper {
   Future<bool> isDatabasePopulated() async {
     final db = await database;
     final count =
-        Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $table'));
+        Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $defaultTable'));
     if (count != null && count > 0) {
       return true;
     } else {
