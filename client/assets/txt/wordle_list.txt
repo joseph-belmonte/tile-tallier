@@ -68,7 +68,7 @@ alpha
 altar
 alter
 amass
-amaze
+amaze
 amber
 amble
 amend
@@ -138,7 +138,7 @@ awful
 awoke
 axial
 axiom
-axion
+axion
 azure
 bacon
 badge
@@ -208,7 +208,7 @@ blade
 blame
 bland
 blank
-blare
+blare
 blast
 blaze
 bleak
@@ -277,7 +277,7 @@ brick
 bride
 brief
 brine
-bring
+bring
 brink
 briny
 brisk
@@ -346,7 +346,7 @@ caulk
 cause
 cavil
 cease
-cedar
+cedar
 cello
 chafe
 
@@ -416,7 +416,7 @@ clink
 cloak
 clock
 clone
-close
+close
 cloth
 cloud
 clout
@@ -486,7 +486,7 @@ crime
 crimp
 crisp
 croak
-crock
+crock
 crone
 crony
 crook
@@ -556,7 +556,7 @@ digit
 dilly
 dimly
 diner
-dingo
+dingo
 dingy
 diode
 dirge
@@ -626,7 +626,7 @@ dwelt
 dying
 eager
 eagle
-early
+early
 earth
 easel
 eaten
@@ -696,7 +696,7 @@ extol
 extra
 exult
 eying
-fable
+fable
 facet
 faint
 fairy
@@ -765,7 +765,7 @@ flick
 flier
 fling
 flint
-flirt
+flirt
 float
 flock
 flood
@@ -835,7 +835,7 @@ fussy
 fuzzy
 gaffe
 gaily
-gamer
+gamer
 gamma
 gamut
 gassy
@@ -905,7 +905,7 @@ grape
 graph
 grasp
 grass
-grate
+grate
 grave
 gravy
 graze
@@ -975,7 +975,7 @@ heath
 heave
 heavy
 hedge
-hefty
+hefty
 heist
 helix
 hello
@@ -1045,7 +1045,7 @@ inner
 input
 inter
 intro
-ionic
+ionic
 irate
 irony
 islet
@@ -1115,7 +1115,7 @@ leafy
 leaky
 leant
 leapt
-learn
+learn
 lease
 leash
 least
@@ -1185,7 +1185,7 @@ macho
 macro
 madam
 madly
-mafia
+mafia
 magic
 magma
 maize
@@ -1253,7 +1253,7 @@ mogul
 moist
 molar
 moldy
-money
+money
 month
 moody
 moose
@@ -1323,7 +1323,7 @@ novel
 nudge
 nurse
 nutty
-nylon
+nylon
 nymph
 oaken
 obese
@@ -1393,7 +1393,7 @@ pause
 payee
 payer
 peace
-peach
+peach
 pearl
 pecan
 pedal
@@ -1463,7 +1463,7 @@ poser
 posit
 posse
 pouch
-pound
+pound
 pouty
 power
 prank
@@ -1533,7 +1533,7 @@ quota
 quote
 quoth
 rabbi
-rabid
+rabid
 racer
 radar
 radii
@@ -1603,7 +1603,7 @@ rinse
 ripen
 riper
 risen
-riser
+riser
 risky
 rival
 river
@@ -1672,7 +1672,7 @@ scary
 scene
 scent
 scion
-scoff
+scoff
 scold
 scone
 scoop
@@ -1741,7 +1741,7 @@ shock
 shone
 shook
 shoot
-shore
+shore
 shorn
 short
 shout
@@ -1811,7 +1811,7 @@ small
 smart
 smash
 smear
-smell
+smell
 smelt
 smile
 smirk
@@ -1881,7 +1881,7 @@ spilt
 spine
 spiny
 spire
-spite
+spite
 splat
 split
 spoil
@@ -1951,7 +1951,7 @@ stoop
 store
 stork
 storm
-story
+story
 stout
 stove
 strap
@@ -2021,7 +2021,7 @@ tango
 tangy
 taper
 tapir
-tardy
+tardy
 tarot
 taste
 tasty
@@ -2091,7 +2091,7 @@ topaz
 topic
 torch
 torso
-torus
+torus
 total
 totem
 touch
@@ -2160,7 +2160,7 @@ ultra
 umbra
 uncle
 uncut
-under
+under
 undid
 undue
 unfed
@@ -2230,7 +2230,7 @@ vomit
 voter
 vouch
 vowel
-vying
+vying
 wacky
 wafer
 wager
@@ -2300,7 +2300,7 @@ worry
 worse
 worst
 worth
-would
+would
 wound
 woven
 wrack
@@ -2324,4 +2324,3 @@ youth
 zebra
 zesty
 zonal
-
