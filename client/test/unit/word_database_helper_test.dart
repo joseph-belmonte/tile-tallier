@@ -22,6 +22,8 @@ Future main() async {
     late Database db; // Database instance
     late Directory tempDir; // Temp directory used for testing
 
+    const testTableName = 'test_word_list';
+
     setUp(() async {
       tempDir = await Directory.systemTemp.createTemp('tile_tally');
       final dbPath = '${tempDir.path}/word_db_test.db';
@@ -31,7 +33,7 @@ Future main() async {
         version: 1,
         onCreate: (db, version) {
           return db.execute('''
-          CREATE TABLE word_list (
+          CREATE TABLE $testTableName (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             word TEXT NOT NULL
           )
@@ -43,17 +45,30 @@ Future main() async {
     });
 
     test('Insert and query words', () async {
-      await WordListDBHelper.instance.insert({'word': 'hello'});
-      await WordListDBHelper.instance.insert({'word': 'world'});
-      final rows = await WordListDBHelper.instance.queryAllRows();
+      await WordListDBHelper.instance.insert(
+        row: {'word': 'hello'},
+        tableName: testTableName,
+      );
+      await WordListDBHelper.instance.insert(
+        row: {'word': 'world'},
+        tableName: testTableName,
+      );
+      final rows = await WordListDBHelper.instance.queryAllRows(
+        tableName: testTableName,
+      );
       expect(rows, hasLength(2));
       expect(rows.first['word'], 'hello');
     });
 
     test('Delete all words', () async {
-      await WordListDBHelper.instance.insert({'word': 'world'});
-      await WordListDBHelper.instance.deleteAll();
-      final rows = await WordListDBHelper.instance.queryAllRows();
+      await WordListDBHelper.instance.insert(
+        row: {'word': 'world'},
+        tableName: testTableName,
+      );
+      await WordListDBHelper.instance.deleteAll(tableName: testTableName);
+      final rows = await WordListDBHelper.instance.queryAllRows(
+        tableName: testTableName,
+      );
       expect(rows, isEmpty);
     });
 

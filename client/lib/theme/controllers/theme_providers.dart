@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../enums/scrabble_edition.dart';
+import '../../enums/word_theme.dart';
 import '../../features/edit_settings/presentation/controllers/settings_controller.dart';
 
 import '../models/app_theme.dart';
@@ -71,3 +72,7 @@ final Provider<ThemeData> darkThemeProvider = Provider<ThemeData>(
 /// The [ScrabbleEdition] provider.
 final scrabbleEditionProvider =
     StateProvider<ScrabbleEdition>((ref) => ScrabbleEdition.classic);
+
+/// The word theme provider.
+final wordThemeProvider = StateProvider<WordTheme>((ref) => WordTheme.basic);
+
