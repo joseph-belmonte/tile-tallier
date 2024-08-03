@@ -85,8 +85,8 @@ class WordListDBHelper {
     });
   }
 
-  // Method to get table name and path based on the theme
-  Map<String, String> _getTableNameAndPath(WordTheme theme) {
+  /// Returns the table name and path for a given theme
+  Map<String, String> getTableNameAndPath(WordTheme theme) {
     switch (theme) {
       case WordTheme.basic:
         return {'tableName': defaultTable, 'path': WordTheme.basic.path};
@@ -129,7 +129,7 @@ class WordListDBHelper {
     final db = txn ?? await instance.database;
 
     // Given the theme, find the tableName
-    final tableName = _getTableNameAndPath(theme)['tableName']!;
+    final tableName = getTableNameAndPath(theme)['tableName']!;
 
     return Sqflite.firstIntValue(
       await db.rawQuery('SELECT COUNT(*) FROM $tableName'),
@@ -144,7 +144,7 @@ class WordListDBHelper {
 
   /// Loads the word list at a given path and inserts it into the 'word_database.db
   Future<void> populateTable({required WordTheme theme}) async {
-    final tableInfo = _getTableNameAndPath(theme);
+    final tableInfo = getTableNameAndPath(theme);
     final path = tableInfo['path']!;
     final tableName = tableInfo['tableName']!;
 
@@ -163,7 +163,7 @@ class WordListDBHelper {
   Future<List<String>> getWordList(WordTheme theme) async {
     final db = await database;
 
-    final tableName = _getTableNameAndPath(theme)['tableName']!;
+    final tableName = getTableNameAndPath(theme)['tableName']!;
 
     final results = await db.query(tableName, columns: [columnWord]);
     return results.map((row) => row[columnWord] as String).toList();

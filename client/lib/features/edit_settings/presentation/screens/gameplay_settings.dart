@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../enums/word_theme.dart';
 import '../controllers/settings_controller.dart';
 import 'theme_wordlist_settings.dart';
 
@@ -26,6 +27,11 @@ class GameplaySettingsPage extends ConsumerWidget {
               value: ref.watch(Settings.isWordCheckProvider),
               onChanged: (bool value) {
                 ref.read(Settings.isWordCheckProvider.notifier).set(value);
+                if (!value) {
+                  ref
+                      .read(Settings.wordThemeProvider.notifier)
+                      .set(WordTheme.basic.name);
+                }
               },
             ),
             ListTile(
