@@ -4,7 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../application/providers/active_game.dart';
 
-/// A widget to display the current turn information.
+/// A widget to display the current turn information:
+/// - The current player's name
+/// - The current word's score
+/// - The current play's score (if it's a bingo)
 class TurnHUD extends ConsumerWidget {
   /// Creates a new [TurnHUD] instance.
   const TurnHUD({super.key});
@@ -63,20 +66,6 @@ class TurnHUD extends ConsumerWidget {
                         ),
                       ),
                 iconSize: 44.0,
-              ),
-              Visibility.maintain(
-                visible: game.currentPlay?.playedWords.isNotEmpty ?? false,
-                child: Column(
-                  children: <Widget>[
-                    const SizedBox(height: 8.0),
-                    Text('Played Words:'),
-                    Text(
-                      game.currentPlay!.playedWords
-                          .map((word) => word.word)
-                          .join(', '),
-                    ),
-                  ],
-                ),
               ),
             ],
           ),
