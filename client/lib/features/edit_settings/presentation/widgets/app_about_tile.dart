@@ -8,7 +8,11 @@ class AppAboutTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AboutListTile(
-      applicationIcon: const FlutterLogo(size: 56),
+      applicationIcon: Image.asset(
+        'assets/icon/app-icon.png',
+        width: 48,
+        height: 48,
+      ),
       icon: const Icon(Icons.info),
       applicationName: 'Scrabble Score Keeper',
       applicationVersion: '1.0.0',

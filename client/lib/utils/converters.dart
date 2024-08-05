@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../enums/score_multipliers.dart';
+import '../enums/score_multiplier.dart';
 
 /// A class with two methods that convert bools/ints to/from JSON.
 class BoolIntConverter implements JsonConverter<bool, int> {

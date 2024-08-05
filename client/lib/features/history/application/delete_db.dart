@@ -2,10 +2,14 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-/// Deletes the database file.
+/// The name of the database file to delete.
+// const deletedDb = 'game_database.db';
+const deletedDb = 'word_database.db';
+
+/// Deletes the [deletedDb] database file.
 Future<void> deleteDatabaseFile() async {
   final dbPath = await getDatabasesPath();
-  final path = join(dbPath, 'game_database.db');
+  final path = join(dbPath, deletedDb);
   final file = File(path);
 
   if (await file.exists()) {

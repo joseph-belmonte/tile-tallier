@@ -598,4 +598,40 @@ class Settings {
     },
     name: 'isWordCheckProvider',
   );
+
+  /// Key used for storing the current word list theme.
+  static final wordThemeProvider =
+      NotifierProvider<SettingsEntry<String>, String>(
+    () {
+      return SettingsEntry<String>(
+        defaultValue: 'Basic (No Theme)',
+        key: 'wordTheme',
+      );
+    },
+    name: 'wordThemeProvider',
+  );
+
+  /// Key used for storing if the timer is enabled.
+  static final NotifierProvider<SettingsEntry<bool>, bool>
+      isTimerEnabledProvider = NotifierProvider<SettingsEntry<bool>, bool>(
+    () {
+      return SettingsEntry<bool>(
+        defaultValue: true,
+        key: 'isTimerEnabled',
+      );
+    },
+    name: 'isTimerEnabledProvider',
+  );
+
+  /// Key used for storing the timer duration.
+  static final NotifierProvider<SettingsEntry<int?>, int?>
+      timerDurationProvider = NotifierProvider<SettingsEntry<int?>, int?>(
+    () {
+      return SettingsEntry<int?>(
+        defaultValue: null,
+        key: 'timerDuration',
+      );
+    },
+    name: 'timerDurationProvider',
+  );
 }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../enums/score_multipliers.dart';
+import '../enums/score_multiplier.dart';
 import '../enums/scrabble_edition.dart';
 import '../features/core/domain/models/letter.dart';
 

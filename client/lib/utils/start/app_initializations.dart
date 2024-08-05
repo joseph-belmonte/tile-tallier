@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../enums/word_theme.dart';
 import '../../features/edit_settings/application/providers/key_value_db_listener.dart';
 import '../../features/edit_settings/application/providers/key_value_db_provider.dart';
 import '../../features/manage_purchases/application/configure_rc_sdk.dart';
@@ -8,8 +9,17 @@ import '../../features/play_game/data/word_database_helper.dart';
 
 /// Checks if the database is populated. If not, import the word list.
 Future<void> initWordDatabase() async {
-  if (!await WordListDBHelper.instance.isDatabasePopulated()) {
-    await WordListDBHelper.instance.importWordList();
+  try {
+    await WordListDBHelper.instance.database;
+    final isPopulated = await WordListDBHelper.instance.isDatabasePopulated();
+
+    if (!isPopulated) {
+      for (var theme in WordTheme.values) {
+        await WordListDBHelper.instance.populateTable(theme: theme);
+      }
+    }
+  } catch (e) {
+    throw Exception('Error initializing word database: $e');
   }
 }
 

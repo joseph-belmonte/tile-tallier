@@ -8,7 +8,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../enums/score_multipliers.dart';
+import '../../../../enums/score_multiplier.dart';
+import '../../../../enums/word_theme.dart';
 import '../../../../utils/helpers.dart';
 import '../../../../utils/logger.dart';
 import '../../../core/domain/models/game.dart';
@@ -17,6 +18,7 @@ import '../../../core/domain/models/letter.dart';
 import '../../../core/domain/models/play.dart';
 import '../../../core/domain/models/word.dart';
 
+import '../../../edit_settings/presentation/controllers/settings_controller.dart';
 import '../../../shared/data/helpers/players_table_helper.dart';
 
 import '../../data/word_database_helper.dart';
@@ -24,7 +26,10 @@ import '../../data/word_database_helper.dart';
 /// A [StateNotifier] that manages the state of the active game.
 class ActiveGameNotifier extends StateNotifier<Game> {
   /// Creates a new [ActiveGameNotifier] with a new game
-  ActiveGameNotifier(super.game);
+  ActiveGameNotifier(this.ref, super.game);
+
+  /// A reference to the global provider container
+  final Ref ref;
 
   final _playerTableHelper = PlayerTableHelper();
 
@@ -243,10 +248,19 @@ class ActiveGameNotifier extends StateNotifier<Game> {
   Future<bool> isValidWord(String word) async {
     // If greater than 2 spaces, return false
     if (RegExp(' ').allMatches(word).length > 2) return false;
-
     final possibleWords = generateWildcardWords(word.toLowerCase());
-    final wordExists =
-        await WordListDBHelper.instance.wordExistsInList(possibleWords);
+
+    final activeTheme = WordTheme.values.firstWhere(
+      (theme) => theme.name == ref.watch(Settings.wordThemeProvider),
+    );
+
+    final tableName = WordListDBHelper.instance
+        .getTableNameAndPath(activeTheme)['tableName']!;
+
+    final wordExists = await WordListDBHelper.instance.wordExistsInList(
+      possibleWords,
+      tableName: tableName,
+    );
 
     return wordExists;
   }
@@ -263,6 +277,7 @@ class ActiveGameNotifier extends StateNotifier<Game> {
 /// A provider that exposes the [ActiveGameNotifier] to the UI
 final activeGameProvider = StateNotifierProvider<ActiveGameNotifier, Game>(
   (ref) => ActiveGameNotifier(
+    ref,
     Game(
       id: Uuid().v4(),
       currentPlay: Play.createNew(gameId: Uuid().v4()),

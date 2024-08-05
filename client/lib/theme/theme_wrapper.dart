@@ -4,7 +4,7 @@ import 'package:feedback/feedback.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../features/core/presentation/screens/home.dart';
+import '../features/core/presentation/screens/splash.dart';
 import '../features/edit_settings/presentation/controllers/settings_controller.dart';
 import '../main.dart';
 import 'controllers/theme_providers.dart';
@@ -46,7 +46,7 @@ class _ThemingAppState extends ConsumerState<ThemeWrapper>
         //   checkFontOverflows: true,
         //   child: child,
         // ),
-        home: HomePage(),
+        home: SplashScreen(),
       ),
     );
   }

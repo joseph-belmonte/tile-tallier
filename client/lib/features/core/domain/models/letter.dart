@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../enums/score_multipliers.dart';
+import '../../../../enums/score_multiplier.dart';
 import '../../../../utils/converters.dart';
 import '../../../play_game/data/letter_scores.dart';
 

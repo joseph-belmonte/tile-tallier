@@ -1,11 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../../utils/toast.dart';
 import '../../../../edit_settings/presentation/controllers/settings_controller.dart';
 import '../../../application/providers/active_game.dart';
-
 import 'scrabble_word.dart';
 import 'turn_hud.dart';
 
@@ -21,15 +22,53 @@ class WritingZone extends ConsumerStatefulWidget {
 class _WritingZoneState extends ConsumerState<WritingZone> {
   final _textController = TextEditingController();
   final _scrollController = ScrollController();
-
+  Timer? _timer;
+  int timerDuration = 0;
+  int remainingTime = 0;
   bool canUndo = false;
   bool canSubmit = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeTimer();
+  }
 
   @override
   void dispose() {
     _textController.dispose();
     _scrollController.dispose();
+    _timer?.cancel();
     super.dispose();
+  }
+
+  void _initializeTimer() {
+    final duration = ref.read(Settings.timerDurationProvider) ?? 0;
+    setState(() {
+      timerDuration = duration;
+      remainingTime = duration;
+    });
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        if (remainingTime > 0) {
+          remainingTime--;
+        } else {
+          timer.cancel();
+        }
+      });
+    });
+  }
+
+  void _resetTimer() {
+    _timer?.cancel();
+    setState(() {
+      remainingTime = timerDuration;
+    });
+    _startTimer();
   }
 
   void _scrollToEnd() {
@@ -46,7 +85,6 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
 
   /// Submits the word in the input field to the active play.
   Future<void> _handleWordSubmit(String value) async {
-    // if word check is enabled:
     final wordCheckEnabled = ref.watch(Settings.isWordCheckProvider);
 
     if (wordCheckEnabled) {
@@ -55,24 +93,19 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
 
       if (!isValid) {
         if (RegExp(' ').allMatches(value).length > 2) {
-          _showInvalidWordSnackBar('Too many blank tiles!');
+          if (!context.mounted) return;
+          // ignore: use_build_context_synchronously
+          ToastService.error(context, 'Too many blank tiles!');
         } else {
-          _showInvalidWordSnackBar('$value is not a valid word.');
+          if (!context.mounted) return;
+          // ignore: use_build_context_synchronously
+          ToastService.error(context, '$value is not a valid word.');
         }
         return;
       }
     }
     ref.read(activeGameProvider.notifier).addWordToCurrentPlay(value);
     _textController.clear();
-  }
-
-  void _showInvalidWordSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: const Duration(milliseconds: 1500),
-      ),
-    );
   }
 
   /// Ends the current turn and advances to the next player.
@@ -88,24 +121,50 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
       ref.read(activeGameProvider.notifier).endTurn();
     }
     if (ref.read(activeGameProvider).plays.isNotEmpty) {
-      canUndo = true;
+      setState(() {
+        canUndo = true;
+      });
     }
+
+    if (ref.read(Settings.isTimerEnabledProvider)) {
+      if (ref.read(Settings.timerDurationProvider) != null) {
+        setState(() {
+          timerDuration = ref.read(Settings.timerDurationProvider)!;
+        });
+      }
+    }
+
     FocusManager.instance.primaryFocus?.unfocus();
+    _resetTimer();
   }
 
   void _handleUndoTurn() {
     ref.read(activeGameProvider.notifier).undoTurn();
     if (ref.read(activeGameProvider).plays.isEmpty) {
-      canUndo = false;
+      setState(() {
+        canUndo = false;
+      });
     }
+    if (ref.read(Settings.isTimerEnabledProvider)) {
+      if (ref.read(Settings.timerDurationProvider) != null) {
+        setState(() {
+          timerDuration = ref.read(Settings.timerDurationProvider)!;
+        });
+      }
+    }
+    _resetTimer();
   }
 
   void _handleWordUpdate(String value) {
     if (value.isNotEmpty) {
-      canSubmit = true;
+      setState(() {
+        canSubmit = true;
+      });
       _scrollToEnd();
-    } else if (value.isEmpty) {
-      canSubmit = false;
+    } else {
+      setState(() {
+        canSubmit = false;
+      });
     }
 
     ref.read(activeGameProvider.notifier).updateCurrentWord(value);
@@ -115,9 +174,35 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
   Widget build(BuildContext context) {
     final gameNotifier = ref.read(activeGameProvider.notifier);
     final game = ref.watch(activeGameProvider);
+    final timerDuration = ref.watch(Settings.timerDurationProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        if (timerDuration != null)
+          Column(
+            children: <Widget>[
+              remainingTime == 0
+                  ? Text(
+                      'Time\'s up!',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    )
+                  : Text(
+                      '$remainingTime seconds remaining',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: LinearProgressIndicator(
+                  value: remainingTime / timerDuration,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    Theme.of(context).colorScheme.primary,
+                  ),
+                  backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                ),
+              ),
+            ],
+          ),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
