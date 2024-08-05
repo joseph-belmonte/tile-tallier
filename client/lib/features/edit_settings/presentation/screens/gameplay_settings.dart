@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../enums/word_theme.dart';
+
 import '../controllers/settings_controller.dart';
 import 'theme_wordlist_settings.dart';
 
@@ -21,9 +22,7 @@ class GameplaySettingsPage extends ConsumerWidget {
           children: <Widget>[
             SwitchListTile(
               title: Text('Word Check'),
-              subtitle: Text(
-                'Check words against an open-source word list.',
-              ),
+              subtitle: Text('Check words against an open-source word list.'),
               value: ref.watch(Settings.isWordCheckProvider),
               onChanged: (bool value) {
                 ref.read(Settings.isWordCheckProvider.notifier).set(value);
@@ -52,6 +51,45 @@ class GameplaySettingsPage extends ConsumerWidget {
                         );
                       },
                     ),
+            ),
+            SwitchListTile(
+              title: Text('Display Timer'),
+              subtitle: Text('Display a timer during gameplay.'),
+              value: ref.watch(Settings.isTimerEnabledProvider),
+              onChanged: (bool value) {
+                ref.read(Settings.isTimerEnabledProvider.notifier).set(value);
+                if (value) {
+                  ref.read(Settings.timerDurationProvider.notifier).set(60);
+                } else {
+                  ref.read(Settings.timerDurationProvider.notifier).set(null);
+                }
+              },
+            ),
+            ListTile(
+              title: const Text('Timer Duration'),
+              subtitle: const Text(
+                'Set the duration of the timer display, in seconds.',
+              ),
+              enabled: ref.watch(Settings.isTimerEnabledProvider),
+              trailing: SizedBox(
+                width: 120,
+                child: Slider(
+                  value: ref.watch(Settings.timerDurationProvider) == null
+                      ? 60
+                      : ref.watch(Settings.timerDurationProvider)!.toDouble(),
+                  onChanged: ref.watch(Settings.isTimerEnabledProvider)
+                      ? (double value) {
+                          ref
+                              .read(Settings.timerDurationProvider.notifier)
+                              .set(value.toInt());
+                        }
+                      : null,
+                  min: 30,
+                  max: 120,
+                  divisions: 3,
+                  label: ref.watch(Settings.timerDurationProvider).toString(),
+                ),
+              ),
             ),
           ],
         ),

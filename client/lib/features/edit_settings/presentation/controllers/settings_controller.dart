@@ -622,4 +622,16 @@ class Settings {
     },
     name: 'isTimerEnabledProvider',
   );
+
+  /// Key used for storing the timer duration.
+  static final NotifierProvider<SettingsEntry<int?>, int?>
+      timerDurationProvider = NotifierProvider<SettingsEntry<int?>, int?>(
+    () {
+      return SettingsEntry<int?>(
+        defaultValue: null,
+        key: 'timerDuration',
+      );
+    },
+    name: 'timerDurationProvider',
+  );
 }
