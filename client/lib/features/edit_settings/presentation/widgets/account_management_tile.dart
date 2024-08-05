@@ -25,13 +25,11 @@ class AccountManagementTile extends ConsumerWidget {
       onTap: () {
         if (authState.isAuthenticated) {
           Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const AccountManagementScreen(),
-            ),
+            MaterialPageRoute(builder: (_) => const AccountManagementScreen()),
           );
         } else {
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => AuthScreen()),
+            MaterialPageRoute(builder: (_) => AuthScreen()),
           );
         }
       },

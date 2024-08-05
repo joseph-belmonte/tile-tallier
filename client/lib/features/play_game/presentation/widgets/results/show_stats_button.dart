@@ -17,7 +17,7 @@ class StatsButton extends StatelessWidget {
   Future<void> _showStatsDialog(BuildContext context) {
     return showDialog(
       context: context,
-      builder: (context) => StatsDialog(game: game),
+      builder: (_) => StatsDialog(game: game),
     );
   }
 

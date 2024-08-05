@@ -48,7 +48,7 @@ class _PlayInputPageState extends ConsumerState<PlayInputPage> {
   Future<bool?> _showQuitDialog(BuildContext context) async {
     return showDialog<bool>(
       context: context,
-      builder: (context) => QuitGameAlert(),
+      builder: (_) => QuitGameAlert(),
     );
   }
 

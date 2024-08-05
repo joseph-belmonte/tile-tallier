@@ -34,7 +34,7 @@ class SettingsPage extends ConsumerWidget {
               trailing: Icon(Icons.arrow_forward_sharp),
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const AppearanceSettingsPage(),
+                  builder: (_) => const AppearanceSettingsPage(),
                 ),
               ),
             ),
@@ -47,7 +47,7 @@ class SettingsPage extends ConsumerWidget {
               trailing: Icon(Icons.arrow_forward),
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const TermsAndConditions(),
+                  builder: (_) => const TermsAndConditions(),
                 ),
               ),
             ),
@@ -57,7 +57,7 @@ class SettingsPage extends ConsumerWidget {
               leading: Icon(Icons.privacy_tip_outlined),
               trailing: Icon(Icons.arrow_forward),
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const PrivacyPolicy()),
+                MaterialPageRoute(builder: (_) => const PrivacyPolicy()),
               ),
             ),
             ListTile(
@@ -66,9 +66,7 @@ class SettingsPage extends ConsumerWidget {
               leading: Icon(Icons.sports_esports),
               trailing: Icon(Icons.arrow_forward),
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const GameplaySettingsPage(),
-                ),
+                MaterialPageRoute(builder: (_) => const GameplaySettingsPage()),
               ),
             ),
             AppAboutTile(),

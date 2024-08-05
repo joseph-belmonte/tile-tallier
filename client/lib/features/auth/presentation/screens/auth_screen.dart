@@ -31,9 +31,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   void _navigateToAccountManagement(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const AccountManagementScreen(),
-        ),
+        MaterialPageRoute(builder: (_) => const AccountManagementScreen()),
       );
     });
   }

@@ -61,7 +61,7 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
       // ignore: use_build_context_synchronously
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => ResultsPage(game: ref.read(activeGameProvider)),
+          builder: (_) => ResultsPage(game: ref.read(activeGameProvider)),
         ),
       );
     }

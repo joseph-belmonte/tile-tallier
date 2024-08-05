@@ -46,7 +46,7 @@ class GameplaySettingsPage extends ConsumerWidget {
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => ThemedGameplaySettingsPage(),
+                            builder: (_) => ThemedGameplaySettingsPage(),
                           ),
                         );
                       },

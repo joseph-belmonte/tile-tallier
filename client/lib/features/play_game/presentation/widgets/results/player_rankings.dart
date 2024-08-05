@@ -30,7 +30,7 @@ class PlayerRankings extends StatelessWidget {
               // Navigate to player results for this player
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) {
+                  builder: (_) {
                     return PlayerResultsScreen(
                       game: _game,
                       player: player,

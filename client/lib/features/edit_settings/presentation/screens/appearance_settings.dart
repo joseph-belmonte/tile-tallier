@@ -67,9 +67,7 @@ class AppearanceSettingsPage extends ConsumerWidget {
             trailing: const Icon(Icons.arrow_forward_sharp),
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => ThemeScreen(),
-              ),
+              MaterialPageRoute(builder: (_) => ThemeScreen()),
             ),
           ),
           Divider(),
