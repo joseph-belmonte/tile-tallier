@@ -106,6 +106,9 @@ class _WritingZoneState extends ConsumerState<WritingZone> {
     }
     ref.read(activeGameProvider.notifier).addWordToCurrentPlay(value);
     _textController.clear();
+    setState(() {
+      canSubmit = false;
+    });
   }
 
   /// Ends the current turn and advances to the next player.
