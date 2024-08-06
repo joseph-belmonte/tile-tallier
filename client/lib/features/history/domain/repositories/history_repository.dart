@@ -1,6 +1,5 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../../utils/logger.dart';
 import '../../../core/domain/models/game.dart';
 import '../../../shared/data/helpers/games_table_helper.dart';
 import '../../../shared/data/helpers/players_table_helper.dart';
@@ -122,11 +121,10 @@ class HistoryRepository {
   /// Submit game results and player data
   Future<void> submitGameData(Game completedGame) async {
     final db = await database;
-    logger.d('Before submission transaction');
+
     await db.transaction((txn) async {
       // Save the game
       await _saveGame(completedGame, txn);
-      logger.d('Game saved: ${completedGame.id}');
 
       // transaction is locking here.
 
@@ -135,7 +133,6 @@ class HistoryRepository {
         // Check if the player already exists in the database
         final player =
             await fetchPlayer(txn: txn, playerId: gamePlayer.playerId);
-        logger.d('Player fetched: ${gamePlayer.playerId}');
 
         // If the player does not exist, save them to the database
         if (player == null) {
@@ -145,6 +142,5 @@ class HistoryRepository {
         }
       }
     });
-    logger.d('After submission transaction');
   }
 }
