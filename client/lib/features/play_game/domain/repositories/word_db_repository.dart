@@ -28,8 +28,8 @@ class WordDbRepository {
   /// Whether a word exists in the theme's table.
   Future<bool> isWordValid(String word, WordTheme theme) async {
     final tableName = _getTableName(theme);
-    final isValid = await _wordListDBHelper.wordExistsInList(
-      [word],
+    final isValid = await _wordListDBHelper.wordExists(
+      word,
       tableName: tableName,
     );
 
