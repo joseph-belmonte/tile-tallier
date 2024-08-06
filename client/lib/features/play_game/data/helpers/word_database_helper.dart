@@ -3,7 +3,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../../enums/word_theme.dart';
+import '../../../../enums/word_theme.dart';
 
 /// A helper class to manage the word_database file.
 /// It mainly contains the word_list table.

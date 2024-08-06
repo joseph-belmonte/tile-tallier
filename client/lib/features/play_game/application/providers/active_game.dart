@@ -21,7 +21,7 @@ import '../../../core/domain/models/word.dart';
 import '../../../edit_settings/presentation/controllers/settings_controller.dart';
 import '../../../shared/data/helpers/players_table_helper.dart';
 
-import '../../data/word_database_helper.dart';
+import 'word_db_repository.dart';
 
 /// A [StateNotifier] that manages the state of the active game.
 class ActiveGameNotifier extends StateNotifier<Game> {
@@ -254,15 +254,17 @@ class ActiveGameNotifier extends StateNotifier<Game> {
       (theme) => theme.name == ref.watch(Settings.wordThemeProvider),
     );
 
-    final tableName = WordListDBHelper.instance
-        .getTableNameAndPath(activeTheme)['tableName']!;
+    // Check if the word exists in the database, using the repository provider
+    final wordDbRepository = ref.read(wordDatabaseProvider);
+    for (final possibleWord in possibleWords) {
+      final wordExists =
+          await wordDbRepository.isWordValid(possibleWord, activeTheme);
+      if (wordExists) {
+        return true;
+      }
+    }
 
-    final wordExists = await WordListDBHelper.instance.wordExistsInList(
-      possibleWords,
-      tableName: tableName,
-    );
-
-    return wordExists;
+    return false;
   }
 
   /// Ends the game by setting the current play and word to null

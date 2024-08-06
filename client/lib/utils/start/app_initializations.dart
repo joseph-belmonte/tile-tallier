@@ -5,7 +5,8 @@ import '../../features/edit_settings/application/providers/key_value_db_listener
 import '../../features/edit_settings/application/providers/key_value_db_provider.dart';
 import '../../features/manage_purchases/application/configure_rc_sdk.dart';
 import '../../features/manage_purchases/application/providers/customer_info_provider.dart';
-import '../../features/play_game/data/word_database_helper.dart';
+
+import '../../features/play_game/data/helpers/word_database_helper.dart';
 
 /// Checks if the database is populated. If not, import the word list.
 Future<void> initWordDatabase() async {

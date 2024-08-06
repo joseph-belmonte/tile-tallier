@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../enums/word_theme.dart';
-import '../../../play_game/data/word_database_helper.dart';
+import '../../../play_game/application/providers/word_db_repository.dart';
+
 import '../../../shared/presentation/widgets/animate_flip_counter.dart';
 import '../../../shared/presentation/widgets/loading_spinner.dart';
 
 /// Displays the words for a given theme.
-class WordListDisplayPage extends StatefulWidget {
+class WordListDisplayPage extends ConsumerStatefulWidget {
   /// The name of the theme to display words for.
   final String themeName;
 
@@ -14,10 +16,11 @@ class WordListDisplayPage extends StatefulWidget {
   const WordListDisplayPage({required this.themeName, super.key});
 
   @override
-  State<WordListDisplayPage> createState() => _WordListDisplayPageState();
+  ConsumerState<WordListDisplayPage> createState() =>
+      _WordListDisplayPageState();
 }
 
-class _WordListDisplayPageState extends State<WordListDisplayPage> {
+class _WordListDisplayPageState extends ConsumerState<WordListDisplayPage> {
   final TextEditingController controller = TextEditingController();
   List<String> filteredWords = [];
   int digitCount = 0;
@@ -29,8 +32,9 @@ class _WordListDisplayPageState extends State<WordListDisplayPage> {
   }
 
   Future<void> _loadWordList() async {
+    final wordDbRepository = ref.read(wordDatabaseProvider);
     final theme = getWordTheme(widget.themeName);
-    final words = await WordListDBHelper.instance.getWordList(theme);
+    final words = await wordDbRepository.getWordList(theme);
     setState(() {
       filteredWords = words;
       digitCount = words.length.toString().length;
@@ -38,8 +42,9 @@ class _WordListDisplayPageState extends State<WordListDisplayPage> {
   }
 
   void _filterWords(String query) {
+    final wordDbRepository = ref.read(wordDatabaseProvider);
     final theme = getWordTheme(widget.themeName);
-    WordListDBHelper.instance.getWordList(theme).then((words) {
+    wordDbRepository.getWordList(theme).then((words) {
       setState(() {
         filteredWords =
             words.where((word) => word.contains(query.trim())).toList();
@@ -49,6 +54,7 @@ class _WordListDisplayPageState extends State<WordListDisplayPage> {
 
   @override
   Widget build(BuildContext context) {
+    final wordDbRepository = ref.read(wordDatabaseProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text('${widget.themeName} Word List'),
@@ -83,8 +89,8 @@ class _WordListDisplayPageState extends State<WordListDisplayPage> {
           ),
           Expanded(
             child: FutureBuilder<List<String>>(
-              future: WordListDBHelper.instance
-                  .getWordList(getWordTheme(widget.themeName)),
+              future:
+                  wordDbRepository.getWordList(getWordTheme(widget.themeName)),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return LoadingSpinner();
