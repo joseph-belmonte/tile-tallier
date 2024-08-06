@@ -19,28 +19,39 @@ class HistoryRepository {
 
   // Region: 'games' table methods
   /// Saves a game to the database.
-  Future<void> saveGame(Game game, Transaction txn) async {
-    await _gameTableHelper.insertGame(game, txn);
-  }
 
   /// Deletes a specific game from the database.
-  Future<void> deleteGame(String id) async {
-    await _gameTableHelper.deleteGame(id);
+  Future<void> deleteGame(String gameId) async {
+    await _gameTableHelper.deleteGame(gameId);
   }
 
   /// Toggles the favorite status of a game in the database.
-  Future<void> toggleFavorite(String id) async {
-    await _gameTableHelper.toggleFavorite(id);
+  Future<void> toggleFavorite(String gameId) async {
+    await _gameTableHelper.toggleFavorite(gameId);
   }
 
   /// Fetches a game from the database.
-  Future<Game> fetchGame(String id) async {
-    return await _gameTableHelper.fetchGame(id);
+  Future<Game> fetchGame(String gameId) async {
+    return await _gameTableHelper.fetchGame(gameId);
   }
 
   /// Loads all games from the database.
-  Future<List<Game>> fetchGames() async {
-    return await _gameTableHelper.fetchGames();
+  Future<List<Game>> fetchGames({String? playerId, String? playerName}) async {
+    try {
+      if (playerId != null) {
+        return await _gameTableHelper.fetchGames(playerId: playerId);
+      } else if (playerName != null) {
+        return await _gameTableHelper.fetchGames(playerName: playerName);
+      } else {
+        return await _gameTableHelper.fetchGames();
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> _saveGame(Game game, Transaction txn) async {
+    await _gameTableHelper.insertGame(game: game, txn: txn);
   }
 
   /// Deletes all games from the database.
@@ -51,13 +62,32 @@ class HistoryRepository {
 
   // Region: 'players' table methods
   /// Inserts a player into the database.
-  Future<void> savePlayer(Player player, Transaction txn) async {
+  Future<void> savePlayer(Transaction txn, Player player) async {
     await _playerTableHelper.insertPlayer(player, txn);
   }
 
   /// Fetches a player from the database.
-  Future<Player?> fetchPlayer(String playerId, Transaction txn) async {
-    return await _playerTableHelper.fetchPlayer(playerId, txn);
+  Future<Player?> fetchPlayer({
+    Transaction? txn,
+    String? playerId,
+    String? playerName,
+  }) async {
+    if (txn != null) {
+      return await _playerTableHelper.fetchPlayer(
+        txn,
+        playerId: playerId,
+        playerName: playerName,
+      );
+    } else {
+      final db = await database;
+      return await db.transaction((txn) async {
+        return await _playerTableHelper.fetchPlayer(
+          txn,
+          playerId: playerId,
+          playerName: playerName,
+        );
+      });
+    }
   }
 
   /// Fetches all players from the database.
@@ -88,29 +118,27 @@ class HistoryRepository {
 
   // End region
 
-  /// Gets all games played by a specific player.
-  Future<List<Game>> fetchGamesByPlayerId(String playerId) async {
-    final games = await _gameTableHelper.fetchGamesByPlayerId(playerId);
-    return games;
-  }
-
   /// Submit game results and player data
   Future<void> submitGameData(Game completedGame) async {
     final db = await database;
+
     await db.transaction((txn) async {
       // Save the game
-      await saveGame(completedGame, txn);
+      await _saveGame(completedGame, txn);
+
+      // transaction is locking here.
 
       // Save the Players
       for (var gamePlayer in completedGame.players) {
         // Check if the player already exists in the database
-        final player = await fetchPlayer(gamePlayer.playerId, txn);
+        final player =
+            await fetchPlayer(txn: txn, playerId: gamePlayer.playerId);
 
         // If the player does not exist, save them to the database
         if (player == null) {
           final newPlayer =
               Player(name: gamePlayer.name, id: gamePlayer.playerId);
-          await savePlayer(newPlayer, txn);
+          await savePlayer(txn, newPlayer);
         }
       }
     });

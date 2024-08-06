@@ -3,17 +3,16 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../../auth/data/sources/network/auth_service.dart';
-import '../../../../shared/data/helpers/games_table_helper.dart';
+import '../../../../core/domain/models/game.dart';
 import '../../../../shared/data/urls.dart';
 
 /// Sends a request to the backend to fetch advice.
 /// The request body contains a player's plays.
 class GeminiApiService {
   final AuthService _authService = AuthService();
-  final GameTableHelper _gamesTableHelper = GameTableHelper();
 
   /// Accepts a playerId and sends a request for personalized advice.
-  Future<Map<String, dynamic>> fetchAdvice(String playerId) async {
+  Future<Map<String, dynamic>> fetchAdvice(String playerId, List<Game> games) async {
     // Verify the user is authenticated
     final accessToken = await _authService.getAccessToken();
     if (accessToken == null) {
@@ -36,10 +35,6 @@ class GeminiApiService {
 
     // Get the body
     // The body should be equal to the serialized game history for the given player
-
-    // Fetch the game history for the player
-    final games = await _gamesTableHelper.fetchGamesByPlayerId(playerId);
-
     // Use the games and playerId to create the body
     final body = json.encode({
       'player_id': playerId,

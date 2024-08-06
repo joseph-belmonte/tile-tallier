@@ -56,12 +56,10 @@ class SinglePlayerHistoryPageController
   Future<void> fetchPlayer(String playerId) async {
     state = state.copyWith(isLoading: true);
     try {
-      final db = await ref.read(historyRepositoryProvider).database;
-      final player = await db.transaction((txn) async {
-        return await ref
-            .read(historyRepositoryProvider)
-            .fetchPlayer(playerId, txn);
-      });
+      final player = await ref.read(historyRepositoryProvider).fetchPlayer(
+            playerId: playerId,
+          );
+      ;
 
       state = state.copyWith(player: player, isLoading: false);
     } catch (e) {
@@ -75,7 +73,7 @@ class SinglePlayerHistoryPageController
     try {
       final games = await ref
           .read(historyRepositoryProvider)
-          .fetchGamesByPlayerId(playerId);
+          .fetchGames(playerId: playerId);
       state = state.copyWith(games: games, isLoading: false);
     } catch (e) {
       state = state.copyWith(errorMessage: e.toString(), isLoading: false);
