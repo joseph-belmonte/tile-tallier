@@ -3,9 +3,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../../utils/logger.dart';
 import '../../../auth/application/providers/auth_provider.dart';
 import '../../../core/domain/models/game.dart';
+import '../../../history/application/providers/history_repository_provider.dart';
 import '../../../history/domain/models/player.dart';
-import '../../../shared/data/helpers/games_table_helper.dart';
-import '../../../shared/data/helpers/players_table_helper.dart';
 import '../../../shared/data/sources/local/local_storage_service.dart';
 import '../../data/sources/network/gemini_api_service.dart';
 import '../../domain/models/stored_advice.dart';
@@ -15,8 +14,6 @@ class CoachingController extends StateNotifier<CoachingPageState> {
   /// Creates a new [CoachingController] instance.
   CoachingController(this._ref)
       : _apiService = GeminiApiService(),
-        _gamesTableHelper = GameTableHelper(),
-        _playersTableHelper = PlayerTableHelper(),
         _localStorageService = LocalStorageService(
           secureStorage: const FlutterSecureStorage(),
         ),
@@ -25,18 +22,17 @@ class CoachingController extends StateNotifier<CoachingPageState> {
   /// A reference to the current provider.
   final StateNotifierProviderRef _ref;
   final GeminiApiService _apiService;
-  final GameTableHelper _gamesTableHelper;
-  final PlayerTableHelper _playersTableHelper;
   final LocalStorageService _localStorageService;
 
   /// Initializes the controller.
   void init() async {
+    final historyRepository = _ref.read(historyRepositoryProvider);
     state = state.copyWith(
       isLoading: true,
       isAuthenticated: _ref.read(authProvider).isAuthenticated,
     );
     try {
-      final players = await _playersTableHelper.fetchAllPlayers();
+      final players = await historyRepository.fetchAllPlayers();
       state = state.copyWith(players: players, isLoading: false);
     } catch (e) {
       logger.e('Error fetching players: $e');
@@ -53,9 +49,10 @@ class CoachingController extends StateNotifier<CoachingPageState> {
   }
 
   void _fetchAndSetGames(String playerId) async {
+    final historyRepository = _ref.read(historyRepositoryProvider);
     try {
       final fetchedGames =
-          await _gamesTableHelper.fetchGamesByPlayerName(playerId);
+          await historyRepository.fetchGames(playerId: playerId);
       state = state.copyWith(games: fetchedGames);
     } catch (e) {
       logger.e('Error fetching games: $e');
@@ -78,8 +75,9 @@ class CoachingController extends StateNotifier<CoachingPageState> {
 
   void _fetchAndSetAdvice(String playerId) async {
     state = state.copyWith(isLoading: true);
+    final games = state.games;
     try {
-      final response = await _apiService.fetchAdvice(playerId);
+      final response = await _apiService.fetchAdvice(playerId, games);
       final adviceText = response['advice'];
       state = state.copyWith(advice: adviceText, isLoading: false);
       final storedAdvice = StoredAdvice(
