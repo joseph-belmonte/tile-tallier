@@ -25,7 +25,10 @@ class GameTableHelper extends DatabaseHelper {
   }
 
   /// Inserts a game into the database.
-  Future<void> insertGame(Game game, Transaction txn) async {
+  Future<void> insertGame({
+    required Game game,
+    required Transaction txn,
+  }) async {
     await txn.insert(
       'games',
       {
@@ -93,59 +96,54 @@ class GameTableHelper extends DatabaseHelper {
   }
 
   /// Fetches all games from the database.
-  Future<List<Game>> fetchGames() async {
+  Future<List<Game>> fetchGames({String? playerId, String? playerName}) async {
     final db = await database;
-    final gamesMap = await db.query('games');
 
-    final games = await Future.wait(
-      gamesMap.map((gameMap) async {
-        return await assembleGame(gameMap);
-      }).toList(),
-    );
-
-    return games;
-  }
-
-  /// Fetches the games by player Id:
-  Future<List<Game>> fetchGamesByPlayerId(String playerId) async {
-    final db = await database;
-    final result = await db.rawQuery(
-      '''
+    if (playerId != null) {
+      final result = await db.rawQuery(
+        '''
       SELECT g.* 
       FROM games g
       JOIN game_players gp ON g.id = gp.gameId
       WHERE gp.playerId = ?
       ''',
-      [playerId],
-    );
+        [playerId],
+      );
 
-    final games = await Future.wait(
-      result.map((gameMap) async {
-        return await assembleGame(gameMap);
-      }).toList(),
-    );
-    return games;
-  }
-
-  /// Fetches the games by player name:
-  Future<List<Game>> fetchGamesByPlayerName(String playerName) async {
-    final db = await database;
-    final result = await db.rawQuery(
-      '''
+      final games = await Future.wait(
+        result.map((gameMap) async {
+          return await assembleGame(gameMap);
+        }).toList(),
+      );
+      return games;
+    } else if (playerName != null) {
+      final result = await db.rawQuery(
+        '''
       SELECT g.* 
       FROM games g
       JOIN game_players gp ON g.id = gp.gameId
       WHERE gp.name = ?
       ''',
-      [playerName],
-    );
+        [playerName],
+      );
 
-    final games = await Future.wait(
-      result.map((gameMap) async {
-        return await assembleGame(gameMap);
-      }).toList(),
-    );
-    return games;
+      final games = await Future.wait(
+        result.map((gameMap) async {
+          return await assembleGame(gameMap);
+        }).toList(),
+      );
+      return games;
+    } else {
+      final gamesMap = await db.query('games');
+
+      final games = await Future.wait(
+        gamesMap.map((gameMap) async {
+          return await assembleGame(gameMap);
+        }).toList(),
+      );
+
+      return games;
+    }
   }
 
   /// Toggles the favorite status of a game in the database.
