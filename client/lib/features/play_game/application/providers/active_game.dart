@@ -19,9 +19,9 @@ import '../../../core/domain/models/play.dart';
 import '../../../core/domain/models/word.dart';
 
 import '../../../edit_settings/presentation/controllers/settings_controller.dart';
-import '../../../shared/data/helpers/players_table_helper.dart';
 
-import '../../data/word_database_helper.dart';
+import '../../../history/application/providers/history_repository_provider.dart';
+import 'word_db_repository.dart';
 
 /// A [StateNotifier] that manages the state of the active game.
 class ActiveGameNotifier extends StateNotifier<Game> {
@@ -31,13 +31,12 @@ class ActiveGameNotifier extends StateNotifier<Game> {
   /// A reference to the global provider container
   final Ref ref;
 
-  final _playerTableHelper = PlayerTableHelper();
-
   /// Creates a new game instance with:
   /// * A new UUID
   /// * A new play with the current timestamp
   /// * The list of passed in players
   Future<void> startGame(List<String> playerNames) async {
+    final historyRepository = ref.read(historyRepositoryProvider);
     final newGameId = Uuid().v4();
 
     final newPlayers = await Future.wait(
@@ -47,7 +46,8 @@ class ActiveGameNotifier extends StateNotifier<Game> {
           var isExistingPlayer = false;
           var playerId = '';
           try {
-            final player = await _playerTableHelper.findPlayer(name: name);
+            final player =
+                await historyRepository.fetchPlayer(playerName: name);
             if (player != null) {
               isExistingPlayer = true;
               playerId = player.id;
@@ -254,15 +254,17 @@ class ActiveGameNotifier extends StateNotifier<Game> {
       (theme) => theme.name == ref.watch(Settings.wordThemeProvider),
     );
 
-    final tableName = WordListDBHelper.instance
-        .getTableNameAndPath(activeTheme)['tableName']!;
+    // Check if the word exists in the database, using the repository provider
+    final wordDbRepository = ref.read(wordDatabaseProvider);
+    for (final possibleWord in possibleWords) {
+      final wordExists =
+          await wordDbRepository.isWordValid(possibleWord, activeTheme);
+      if (wordExists) {
+        return true;
+      }
+    }
 
-    final wordExists = await WordListDBHelper.instance.wordExistsInList(
-      possibleWords,
-      tableName: tableName,
-    );
-
-    return wordExists;
+    return false;
   }
 
   /// Ends the game by setting the current play and word to null

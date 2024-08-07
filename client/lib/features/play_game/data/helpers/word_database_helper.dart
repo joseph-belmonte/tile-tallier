@@ -3,7 +3,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../../enums/word_theme.dart';
+import '../../../../enums/word_theme.dart';
 
 /// A helper class to manage the word_database file.
 /// It mainly contains the word_list table.
@@ -169,16 +169,14 @@ class WordListDBHelper {
     return results.map((row) => row[columnWord] as String).toList();
   }
 
-  /// Whether any of the given words exist in the database
-  Future<bool> wordExistsInList(
-    List<String> words, {
+  /// Whether a word exists in the given database
+  Future<bool> wordExists(
+    String word, {
     String tableName = defaultTable,
   }) async {
     final db = await database;
-    final placeholders = List.filled(words.length, '?').join(', ');
-    final query =
-        'SELECT 1 FROM $tableName WHERE word IN ($placeholders) LIMIT 1';
-    final results = await db.rawQuery(query, words);
+    final results = await db
+        .rawQuery('SELECT 1 FROM $tableName WHERE $columnWord = ?', [word]);
     return results.isNotEmpty;
   }
 

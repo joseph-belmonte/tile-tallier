@@ -31,7 +31,7 @@ class QuitGameAlert extends StatelessWidget {
           ),
           onPressed: () {
             Navigator.of(context).pushReplacement<void, void>(
-              MaterialPageRoute(builder: (context) => HomePage()),
+              MaterialPageRoute(builder: (_) => HomePage()),
             );
           },
           child: Text(

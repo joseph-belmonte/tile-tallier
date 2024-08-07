@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'features/shared/presentation/screens/error_page.dart';
 import 'theme/theme_wrapper.dart';
+import 'utils/errors.dart';
 import 'utils/start/app_initializations.dart';
 
 /// The key for the navigator.
@@ -23,7 +23,7 @@ void main() {
 
     FlutterError.onError = (FlutterErrorDetails details) {
       FlutterError.presentError(details);
-      _handleError(details.exceptionAsString(), details.stack.toString());
+      handleError(details.exceptionAsString(), details.stack.toString());
     };
 
     runApp(
@@ -35,19 +35,6 @@ void main() {
       ),
     );
   }, (error, stack) {
-    _handleError(error.toString(), stack.toString());
-  });
-}
-
-void _handleError(String error, String stackTrace) {
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    navigatorKey.currentState?.push(
-      MaterialPageRoute(
-        builder: (context) => ErrorPage(
-          errorMessage: error,
-          stackTrace: stackTrace,
-        ),
-      ),
-    );
+    handleError(error.toString(), stack.toString());
   });
 }

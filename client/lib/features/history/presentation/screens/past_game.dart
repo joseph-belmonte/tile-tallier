@@ -127,7 +127,7 @@ class PastGamePage extends ConsumerWidget {
                           return GestureDetector(
                             onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => PlayerResultsScreen(
+                                builder: (_) => PlayerResultsScreen(
                                   game: game,
                                   player: player,
                                 ),

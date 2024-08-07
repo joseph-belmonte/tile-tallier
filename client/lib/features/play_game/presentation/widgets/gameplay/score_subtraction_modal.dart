@@ -3,9 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../utils/game_play_storage.dart';
-import '../../../../core/domain/models/game.dart';
 import '../../../../history/application/providers/history_repository_provider.dart';
-
 import '../../../application/providers/active_game.dart';
 import '../../screens/results.dart';
 
@@ -45,6 +43,7 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
 
   void _submitGameRacks() async {
     if (_formKey.currentState!.validate()) {
+      final historyProvider = ref.read(historyRepositoryProvider);
       _updateGameRacks();
 
       await GamePlayStorage.setPlayedToday();
@@ -56,19 +55,16 @@ class _ScoreSubtractionModalState extends ConsumerState<ScoreSubtractionModal> {
         return;
       }
 
-      await _submitDataToDatabase(completedGame);
+      await historyProvider.submitGameData(completedGame);
+
       if (!context.mounted) return;
       // ignore: use_build_context_synchronously
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => ResultsPage(game: ref.read(activeGameProvider)),
+          builder: (_) => ResultsPage(game: ref.read(activeGameProvider)),
         ),
       );
     }
-  }
-
-  Future<void> _submitDataToDatabase(Game completedGame) async {
-    await ref.read(historyRepositoryProvider).submitGameData(completedGame);
   }
 
   void _updateGameRacks() {

@@ -100,7 +100,7 @@ class _SinglePlayerHistoryPageState
   Future<void> _showEditNameModal(BuildContext context) {
     return showModalBottomSheet(
       context: context,
-      builder: (context) {
+      builder: (_) {
         return SingleChildScrollView(
           child: Padding(
             padding:

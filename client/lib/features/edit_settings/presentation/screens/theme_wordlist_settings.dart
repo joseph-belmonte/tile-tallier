@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../enums/word_theme.dart';
-import '../../../play_game/data/word_database_helper.dart';
+import '../../../play_game/application/providers/word_db_repository.dart';
+
 import '../../../shared/presentation/widgets/animate_in_check_icon.dart';
 import '../../../shared/presentation/widgets/animate_out_check_icon.dart';
 import '../controllers/settings_controller.dart';
@@ -18,9 +19,9 @@ class ThemedGameplaySettingsPage extends ConsumerWidget {
     final currentTheme = ref.watch(Settings.wordThemeProvider);
 
     void handleNavigation(WordTheme wordTheme) async {
-      if (await WordListDBHelper.instance.queryRowCount(theme: wordTheme) ==
-          0) {
-        await WordListDBHelper.instance.populateTable(theme: wordTheme);
+      final wordDbRepository = ref.read(wordDatabaseProvider);
+      if (await wordDbRepository.queryRowCount(theme: wordTheme) == 0) {
+        await wordDbRepository.populateTable(theme: wordTheme);
       }
       if (context.mounted) {
         Navigator.of(context).push(

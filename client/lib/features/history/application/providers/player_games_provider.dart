@@ -6,5 +6,5 @@ import 'history_repository_provider.dart';
 final playerGamesProvider =
     FutureProvider.family<List<Game>, String>((ref, playerId) async {
   final historyRepository = ref.watch(historyRepositoryProvider);
-  return historyRepository.fetchGamesByPlayerId(playerId);
+  return historyRepository.fetchGames(playerId: playerId);
 });

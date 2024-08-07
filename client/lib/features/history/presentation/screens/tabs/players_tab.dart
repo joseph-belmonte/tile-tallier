@@ -38,9 +38,8 @@ class PlayersTab extends ConsumerWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) {
-                      return SinglePlayerHistoryPage(playerId: player.id);
-                    },
+                    builder: (_) =>
+                        SinglePlayerHistoryPage(playerId: player.id),
                   ),
                 );
               },
