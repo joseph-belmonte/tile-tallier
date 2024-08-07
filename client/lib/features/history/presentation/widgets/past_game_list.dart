@@ -23,9 +23,7 @@ class PastGameList extends StatelessWidget {
 
         return FadeInUp(
           duration: animationDuration,
-          child: PastGameListItem(
-            game: games[index],
-          ),
+          child: PastGameListItem(game: games[index]),
         );
       },
     );
