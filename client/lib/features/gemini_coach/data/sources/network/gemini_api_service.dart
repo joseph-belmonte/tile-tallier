@@ -12,7 +12,10 @@ class GeminiApiService {
   final AuthService _authService = AuthService();
 
   /// Accepts a playerId and sends a request for personalized advice.
-  Future<Map<String, dynamic>> fetchAdvice(String playerId, List<Game> games) async {
+  Future<Map<String, dynamic>> fetchAdvice(
+    String playerId,
+    List<Game> games,
+  ) async {
     // Verify the user is authenticated
     final accessToken = await _authService.getAccessToken();
     if (accessToken == null) {
