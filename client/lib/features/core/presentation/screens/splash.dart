@@ -1,107 +1,77 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../play_game/data/helpers/word_database_helper.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../shared/presentation/widgets/loading_spinner.dart';
+
+import '../../application/providers/daily_word_provider.dart';
 import 'home.dart';
 
 /// The splash screen to display during app initialization.
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   /// Creates a new splash screen.
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
-  late WordListDBHelper _wordListDBHelper;
-  late String word = '';
-
+class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _wordListDBHelper = WordListDBHelper.instance;
-    _loadWordOfTheDay();
-
-    // Delay by [Durations] before navigating to the home page
-    Future.delayed(Durations.extralong1, () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => HomePage(),
-        ),
-      );
-    });
+    _autoNavigate();
   }
 
-  Future<void> _loadWordOfTheDay() async {
-    final prefs = await SharedPreferences.getInstance();
-    final today = DateTime.now().toIso8601String().split('T').first;
-    final savedDate = prefs.getString('wordOfTheDayDate');
-    final savedWord = prefs.getString('wordOfTheDay');
-
-    if (savedDate == today && savedWord != null) {
-      // If the word of the day is already fetched for today, use it
-      setState(() {
-        word = savedWord;
-      });
-    } else {
-      // Fetch a random word from the database
-      final wordList = await _wordListDBHelper.queryAllRows(
-        tableName: WordListDBHelper.defaultTable,
-      );
-      final randomWord = wordList.isNotEmpty
-          ? wordList[Random().nextInt(wordList.length)]
-              [WordListDBHelper.columnWord]
-          : 'Flutter';
-
-      // Save the word and date
-      prefs.setString('wordOfTheDayDate', today);
-      prefs.setString('wordOfTheDay', randomWord);
-
-      setState(() {
-        word = randomWord;
-      });
-    }
+  Future<void> _autoNavigate() async {
+    // Wait until the word is loaded, then delay and navigate
+    await ref.read(wordOfTheDayProvider.future);
+    Future.delayed(Durations.extralong1, () {
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => HomePage()),
+        );
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final wordAsyncValue = ref.watch(wordOfTheDayProvider);
+
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            LoadingSpinner(),
-            SizedBox(height: 40),
-            Text(
-              'Welcome to TileTallier',
-              style: Theme.of(context).textTheme.titleLarge,
+            const LoadingSpinner(),
+            const SizedBox(height: 20),
+            const Text('Initializing App...'),
+            const SizedBox(height: 60),
+            wordAsyncValue.when(
+              data: (word) => Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      'The word of the day is ',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      word,
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+              loading: () => const LinearProgressIndicator(),
+              error: (_, __) => const Text('Error loading word of the day'),
             ),
-            SizedBox(height: 20),
-            if (word.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'The word of the day is',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            if (word.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  word,
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
+            const SizedBox(height: 40),
           ],
         ),
       ),
