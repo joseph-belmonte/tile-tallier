@@ -7,12 +7,12 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import '../../../../theme/constants/premium_themes.dart';
 import '../../../../theme/models/app_theme.dart';
 
-import '../../../../utils/show_paywall.dart';
 import '../../../manage_purchases/data/constants/revenue_cat.dart';
 import '../../../manage_purchases/presentation/widgets/dismiss_dialog.dart';
 import '../../../shared/presentation/widgets/animate_in_check_icon.dart';
 import '../../../shared/presentation/widgets/animate_out_check_icon.dart';
 import '../controllers/settings_controller.dart';
+import '../widgets/theme_previews.dart';
 
 /// A page that displays a list of theme options for the app
 class ThemeScreen extends ConsumerStatefulWidget {
@@ -55,6 +55,23 @@ class _ThemeScreenState extends ConsumerState<ThemeScreen> {
     setState(() => _isLoading = false);
   }
 
+  void _handleThemeSelection(FlexSchemeData scheme) async {
+    final index = AppTheme.schemes.indexOf(scheme);
+    final isPremium = AppTheme.premiumSchemes.contains(scheme);
+
+    if (isPremium && !_isSubscribed) {
+      showThemePreviews(context);
+      // Final swipe of the carousel should trigger the paywall
+    } else {
+      ref.read(Settings.schemeIndexProvider.notifier).set(index);
+      ref.read(Settings.isPremiumThemeProvider.notifier).set(isPremium);
+      final premiumIdx = index - AppTheme.defaultSchemes.length;
+      ref.read(Settings.premiumThemeProvider.notifier).set(
+            isPremium ? PremiumTheme.values[premiumIdx] : null,
+          );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,28 +102,8 @@ class _ThemeScreenState extends ConsumerState<ThemeScreen> {
                             AppTheme.schemes.indexOf(scheme)
                         ? AnimateInCheckIcon()
                         : AnimateOutCheckIcon(),
-                    onTap: () async {
-                      final index = AppTheme.schemes.indexOf(scheme);
-                      final isPremium =
-                          AppTheme.premiumSchemes.contains(scheme);
-
-                      if (isPremium && !_isSubscribed) {
-                        await showPaywall(context);
-                      } else {
-                        ref
-                            .read(Settings.schemeIndexProvider.notifier)
-                            .set(index);
-                        ref
-                            .read(Settings.isPremiumThemeProvider.notifier)
-                            .set(isPremium);
-                        final premiumIdx =
-                            index - AppTheme.defaultSchemes.length;
-                        ref.read(Settings.premiumThemeProvider.notifier).set(
-                              isPremium
-                                  ? PremiumTheme.values[premiumIdx]
-                                  : null,
-                            );
-                      }
+                    onTap: () {
+                      _handleThemeSelection(scheme);
                     },
                   ),
                 ),
