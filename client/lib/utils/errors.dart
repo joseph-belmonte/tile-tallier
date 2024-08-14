@@ -28,7 +28,7 @@ class ValidationException extends AppException {
   ValidationException(super.message);
 }
 
-/// Handles the error and navigates to the error page with a "melting" transition.
+/// Handles the error and navigates to the error page with a "scaling" transition.
 void handleError(String error, String stackTrace) {
   WidgetsBinding.instance.addPostFrameCallback((_) {
     navigatorKey.currentState?.push(
