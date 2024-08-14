@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import '../features/shared/presentation/screens/error_page.dart';
+import '../features/shared/presentation/screens/error_transition.dart';
 import '../main.dart';
 
 class AppException implements Exception {
@@ -27,12 +28,12 @@ class ValidationException extends AppException {
   ValidationException(super.message);
 }
 
-/// Handles the error and navigates to the error page.
+/// Handles the error and navigates to the error page with a "scaling" transition.
 void handleError(String error, String stackTrace) {
   WidgetsBinding.instance.addPostFrameCallback((_) {
     navigatorKey.currentState?.push(
-      MaterialPageRoute(
-        builder: (_) => ErrorPage(
+      createErrorRoute(
+        ErrorPage(
           errorMessage: error,
           stackTrace: stackTrace,
         ),
