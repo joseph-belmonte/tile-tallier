@@ -37,7 +37,8 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             child: TextFormField(
               controller: _emailController,
               onSaved: (value) => _emailController.text = value!,
-              validator: (value) => _emailController.text.isEmpty ? 'Email is required' : null,
+              validator: (value) =>
+                  _emailController.text.isEmpty ? 'Email is required' : null,
               decoration: const InputDecoration(labelText: 'Email'),
             ),
           ),
@@ -47,7 +48,8 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               controller: _pwController,
               onSaved: (value) => _pwController.text = value!,
               onChanged: (value) => _pwController.text = value,
-              validator: (value) => value!.isEmpty ? 'Password is required' : null,
+              validator: (value) =>
+                  value!.isEmpty ? 'Password is required' : null,
               obscureText: true,
               decoration: const InputDecoration(labelText: 'Password'),
             ),

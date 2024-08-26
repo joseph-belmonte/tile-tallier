@@ -219,7 +219,8 @@ class GameTableHelper extends DatabaseHelper {
 
     final isFavorite = gameJson['is_favorite'] == 1;
 
-    final game = Game.fromJson(gameJson).copyWith(players: players, isFavorite: isFavorite);
+    final game = Game.fromJson(gameJson)
+        .copyWith(players: players, isFavorite: isFavorite);
 
     return game;
   }
