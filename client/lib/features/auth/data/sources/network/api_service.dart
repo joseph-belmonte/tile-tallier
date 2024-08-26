@@ -9,7 +9,7 @@ import 'auth_service.dart';
 /// A service for making API requests to our Django server.
 class AuthApiService {
   /// The base URL for the API.
-  final String _baseUrl = '$baseUrl/api';
+  final String _baseUrl = '$baseUrl/$api_version';
   final AuthService _authService = AuthService();
 
   // Begin region: /account/

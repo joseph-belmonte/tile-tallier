@@ -5,11 +5,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../../shared/data/sources/local/local_storage_service.dart';
+import '../../../../shared/data/urls.dart';
 
 /// The [AuthService] class is responsible for handling authentication requests, managing
 /// tokens, and refreshing tokens.
 class AuthService {
-  final String _baseUrl = 'http://127.0.0.1:8000/api';
+  final String _baseUrl = '${baseUrl}/${api_version}';
   final LocalStorageService _localStorageService = LocalStorageService(
     secureStorage: FlutterSecureStorage(),
   );

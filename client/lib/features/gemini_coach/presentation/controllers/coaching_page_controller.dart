@@ -86,8 +86,8 @@ class CoachingController extends StateNotifier<CoachingPageState> {
         lastFetched: DateTime.now(),
       );
       await _localStorageService.saveAdvice(storedAdvice);
-    } catch (e) {
-      logger.e('Error fetching advice: $e');
+    } catch (e, st) {
+      logger.e('Error fetching advice: $e, $st');
       state = state.copyWith(advice: 'Error fetching advice', isLoading: false);
     }
   }

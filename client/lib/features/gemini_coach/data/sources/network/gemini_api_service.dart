@@ -25,9 +25,11 @@ class GeminiApiService {
     }
 
     // Check the last time advice was fetched, enforce some sort of time limit for rate limiting
+    // We may have one check from local storage and another from the backend.
 
     // Get the URL, we will make a request to my backend
-    const apiBaseUrl = '$baseUrl/api';
+    const apiBaseUrl = '$baseUrl/$api_version';
+
     final url = Uri.parse('$apiBaseUrl/gemini/advice/');
 
     // Get the header
