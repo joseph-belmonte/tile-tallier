@@ -63,6 +63,8 @@ class _CoachingPageState extends ConsumerState<CoachingPage> {
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
+              // Display the date of the last fetched advice
+
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
                 child: Text(

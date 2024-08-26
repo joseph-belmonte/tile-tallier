@@ -51,8 +51,7 @@ class CoachingController extends StateNotifier<CoachingPageState> {
   void _fetchAndSetGames(String playerId) async {
     final historyRepository = _ref.read(historyRepositoryProvider);
     try {
-      final fetchedGames =
-          await historyRepository.fetchGames(playerId: playerId);
+      final fetchedGames = await historyRepository.fetchGames(playerId: playerId);
       state = state.copyWith(games: fetchedGames);
     } catch (e) {
       logger.e('Error fetching games: $e');
@@ -61,12 +60,10 @@ class CoachingController extends StateNotifier<CoachingPageState> {
 
   void _handleAuthAndFetchAdvice(String playerId) async {
     final localAdvice = await _localStorageService.getAdvice(playerId);
-    if (localAdvice != null &&
-        DateTime.now().difference(localAdvice.lastFetched).inDays < 7) {
+    if (localAdvice != null && DateTime.now().difference(localAdvice.lastFetched).inDays < 7) {
       state = state.copyWith(
         advice: localAdvice.adviceText,
-        daysUntilNextAdvice:
-            7 - DateTime.now().difference(localAdvice.lastFetched).inDays,
+        daysUntilNextAdvice: 7 - DateTime.now().difference(localAdvice.lastFetched).inDays,
       );
       return;
     }
@@ -86,8 +83,8 @@ class CoachingController extends StateNotifier<CoachingPageState> {
         lastFetched: DateTime.now(),
       );
       await _localStorageService.saveAdvice(storedAdvice);
-    } catch (e) {
-      logger.e('Error fetching advice: $e');
+    } catch (e, st) {
+      logger.e('Error fetching advice: $e, $st');
       state = state.copyWith(advice: 'Error fetching advice', isLoading: false);
     }
   }

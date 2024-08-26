@@ -15,7 +15,6 @@ from .utils import *
 
 import sys
 import environ
-import os
 
 
 # Initialize environment variables
