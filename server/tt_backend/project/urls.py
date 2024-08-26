@@ -19,7 +19,9 @@ from django.contrib import admin
 from django.urls import path, include
 
 
+api_version = "v1"
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include("api.urls")),
+    path(f"api/{api_version}/", include("api.urls")),
 ]

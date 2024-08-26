@@ -14,6 +14,7 @@ class LoginForm extends ConsumerStatefulWidget {
 
 class _LoginFormState extends ConsumerState<LoginForm> {
   final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
   final _pwController = TextEditingController();
 
   @override
@@ -24,8 +25,8 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    var email = '';
-    var password = '';
+    _emailController.text = 'test@test.com';
+    _pwController.text = 'test@test.com';
 
     return Form(
       key: _formKey,
@@ -34,8 +35,9 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
-              onSaved: (value) => email = value!,
-              validator: (value) => value!.isEmpty ? 'Email is required' : null,
+              controller: _emailController,
+              onSaved: (value) => _emailController.text = value!,
+              validator: (value) => _emailController.text.isEmpty ? 'Email is required' : null,
               decoration: const InputDecoration(labelText: 'Email'),
             ),
           ),
@@ -43,10 +45,9 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
               controller: _pwController,
-              onSaved: (value) => password = value!,
-              onChanged: (value) => password = value,
-              validator: (value) =>
-                  value!.isEmpty ? 'Password is required' : null,
+              onSaved: (value) => _pwController.text = value!,
+              onChanged: (value) => _pwController.text = value,
+              validator: (value) => value!.isEmpty ? 'Password is required' : null,
               obscureText: true,
               decoration: const InputDecoration(labelText: 'Password'),
             ),
@@ -54,6 +55,8 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
+              final email = _emailController.text;
+              final password = _pwController.text;
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
                 ref.read(authProvider.notifier).login(email, password);
