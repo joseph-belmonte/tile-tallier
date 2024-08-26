@@ -59,7 +59,8 @@ class _PlayInputPageState extends ConsumerState<PlayInputPage> {
         ref.read(activeGameProvider).players.length;
     return PopScope(
       canPop: false,
-      onPopInvoked: (bool willPop) async {
+      // Update to onPopInvokedWithResult when it's available.
+      onPopInvokedWithResult: (bool willPop, dynamic _) async {
         if (willPop) return;
         final navigator = Navigator.of(context);
         final shouldPop = await _showQuitDialog(context);
