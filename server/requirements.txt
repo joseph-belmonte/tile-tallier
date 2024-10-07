@@ -5,9 +5,13 @@ django-admin-interface
 django-admin-autocomplete-filter
 django_filter
 django-environ
+dj-database-url
 environs
 google-generativeai
+gunicorn
 pylint-django
 pytest
 pytest-django
+sentry-sdk[django]
 uuid
+whitenoise[brotli]
