@@ -17,6 +17,7 @@
       "value": "project.settings"
     }
   },
+  "repository": "https://github.com/joseph-belmonte/tile-tallier/tree/main/server",
   "addons": [
     "heroku-postgresql:essential-0"
   ],
