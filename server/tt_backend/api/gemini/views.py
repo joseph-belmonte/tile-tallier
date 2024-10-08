@@ -6,8 +6,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 import google.generativeai as genai
 
-from ...api.permissions import IsAuthenticated
-from ...accounts.models import User
+from ..permissions import IsAuthenticated
+
 from .constants import SYSTEM_INSTRUCTION, SAFETY_SETTINGS, GENERATION_CONFIG
 
 # Load environment variables
