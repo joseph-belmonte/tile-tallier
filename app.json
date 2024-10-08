@@ -1,0 +1,50 @@
+{
+  "name": "your-django-app",
+  "description": "A Django app deployed to Heroku",
+  "env": {
+    "DJANGO_SECRET_KEY": {
+      "description": "Django secret key",
+      "required": true
+    },
+    "DATABASE_URL": {
+      "description": "Database URL for Heroku Postgres",
+      "required": true
+    },
+    "DEBUG": {
+      "description": "Set to False in production",
+      "required": true,
+      "value": "False"
+    },
+    "DJANGO_SETTINGS_MODULE": {
+      "description": "Django settings module",
+      "required": true,
+      "value": "project.settings"
+    }
+  },
+  "addons": [
+    "heroku-postgresql:hobby-dev"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ],
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "standard-1X"
+    }
+  },
+  "scripts": {
+    "postdeploy":"python manage.py migrate",
+    "test": "python manage.py test"
+  },
+  "environments": {
+    "test": {
+      "scripts": {
+        "test-setup": "python manage.py migrate",
+        "test": "python manage.py test"
+      }
+    }
+  }
+}
