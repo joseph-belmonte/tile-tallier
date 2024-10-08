@@ -1,5 +1,5 @@
 {
-  "name": "your-django-app",
+  "name": "tile-tallier-backend",
   "description": "A Django app deployed to Heroku",
   "env": {
     "DJANGO_SECRET_KEY": {
@@ -22,7 +22,7 @@
     }
   },
   "addons": [
-    "heroku-postgresql:hobby-dev"
+    "heroku-postgresql:essential-0"
   ],
   "buildpacks": [
     {
