@@ -6,10 +6,6 @@
       "description": "Django secret key",
       "required": true
     },
-    "DATABASE_URL": {
-      "description": "Database URL for Heroku Postgres",
-      "required": true
-    },
     "DEBUG": {
       "description": "Set to False in production",
       "required": true,
