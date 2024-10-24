@@ -38,12 +38,6 @@ jobs:
           cd client
           dart format --output=none --set-exit-if-changed .
 
-      # - name: Analyze project source
-      #   # Change to the client directory and analyze the project source
-      #   run: |
-      #     cd client
-      #     flutter analyze
-
       - name: Run client tests
         # Change to the client directory and run the tests
         run: |
@@ -98,53 +92,28 @@ jobs:
           python manage.py migrate
           python manage.py test
 
-  # Commenting this block out until we correctly set up the xcode requirements (signing/certificate)
-  # build_ios:
-  #   if: github.ref == 'refs/heads/production' # Specifies that this job should only run on the production branch
-  #   name: Build iOS
-  #   needs: [flutter_test] # Specifies that this job depends on the successful completion of flutter_test
-  #   runs-on: macos-latest # Specifies macOS runner for iOS build
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [flutter_test, server_test]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Set up Flutter
-  #       uses: subosito/flutter-action@v2
-  #       with:
-  #         channel: stable
-  #     - name: Install dependencies
-  #       run: flutter pub get
-  #     - name: Clean build
-  #       run: flutter clean # Cleans previous builds
-  #     - name: Build iOS
-  #       run: flutter build ipa --obfuscate --split-debug-info=build/app/outputs/symbols # Builds an iOS app archive (.ipa file)
-  #     - name: Upload Symbols
-  #       uses: actions/upload-artifact@v2
-  #       if: github.ref == 'refs/heads/production' # Specifies that this step should only run on the production branch
-  #       with:
-  #         name: ios-symbols
-  #         path: build/app/outputs/symbols
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
 
-  # build_apk:
-  #   if: github.ref == 'refs/heads/production' # Specifies that this job should only run on the production branch
-  #   name: Build Android
-  #   runs-on: ubuntu-latest # Specifies Ubuntu runner for Android build
-
-  #   needs: [flutter_test] # Specifies that this job depends on the successful completion of flutter_test
-
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Set up Flutter
-  #       uses: subosito/flutter-action@v2
-  #       with:
-  #         channel: stable
-  #     - name: Install dependencies
-  #       run: flutter pub get
-  #     - name: Clean build
-  #       run: flutter clean
-  #     - name: Build APK
-  #       run: flutter build apk --obfuscate --split-debug-info=build/app/outputs/symbols # Builds an Android APK file
-  #     - name: Upload Symbols
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: android-symbols
-  #         path: build/app/outputs/symbols
+      - name: Deploy to DigitalOcean
+        run: |
+          ssh -o StrictHostKeyChecking=no root@${{ secrets.DO_SERVER_IP }} << 'EOF'
+          cd /root/project
+          # Initialize sparse-checkout for Git (if not already set up)
+          git init
+          git remote add origin https://github.com/joseph-belmonte/tile-tallier.git
+          git config core.sparseCheckout true
+          echo "server/*" > .git/info/sparse-checkout
+          git pull origin main
+          sudo docker-compose down
+          sudo docker-compose up --build -d
+          EOF
