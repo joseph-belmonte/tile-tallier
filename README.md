@@ -1,5 +1,7 @@
 # Scrabble Scoring App Development Milestones
 
+[![Continuous Integration and Build](https://github.com/joseph-belmonte/tile-tallier/actions/workflows/ci.yml/badge.svg)](https://github.com/joseph-belmonte/tile-tallier/actions/workflows/ci.yml)
+
 ## Frontend Development
 
 - [x] Implement navigation between screens (scorekeeping, settings, main menu).
