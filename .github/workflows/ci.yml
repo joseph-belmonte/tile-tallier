@@ -12,7 +12,7 @@ jobs:
 
     env:
       # Reference the GitHub Secrets
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      DJANGO_SECRET_KEY: ${{ secrets.SECRET_KEY }}
       ACCESS_TOKEN_LIFETIME: ${{ secrets.ACCESS_TOKEN_LIFETIME }}
       REFRESH_TOKEN_LIFETIME: ${{ secrets.REFRESH_TOKEN_LIFETIME }}
       AUTH_TOKEN_SECRET: ${{ secrets.AUTH_TOKEN_SECRET }}
@@ -79,7 +79,7 @@ jobs:
       - name: Run server tests
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           ACCESS_TOKEN_LIFETIME: ${{ secrets.ACCESS_TOKEN_LIFETIME }}
           REFRESH_TOKEN_LIFETIME: ${{ secrets.REFRESH_TOKEN_LIFETIME }}
           AUTH_TOKEN_SECRET: ${{ secrets.AUTH_TOKEN_SECRET }}
