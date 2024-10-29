@@ -41,7 +41,7 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 
 # Determine debug mode from environment variable
-DEBUG = env("DJANGO_DEBUG", "False") == "True"
+DEBUG = env.bool("DJANGO_DEBUG", False) == "True"
 
 # Set ALLOWED_HOSTS based on the debug mode
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -168,9 +168,9 @@ DATABASES = {
         "NAME": env(
             "DATABASE_NAME", default=os.path.join(BASE_DIR, "tile_tallier_backend")
         ),
-        "USER": env("DATABASE_USERNAME", default="myprojectuser"),
-        "PASSWORD": env("DATABASE_PASSWORD", default="password"),
-        "HOST": env("DATABASE_HOST", default="127.0.0.1"),
+        "USER": env("DATABASE_USERNAME"),
+        "PASSWORD": env("DATABASE_PASSWORD"),
+        "HOST": env("DATABASE_HOST", default="db"),
         "PORT": env.int("DATABASE_PORT", default=5432),
         "OPTIONS": json.loads(env("DATABASE_OPTIONS", default="{}")),
     }
