@@ -162,19 +162,31 @@ WSGI_APPLICATION = "project.wsgi.application"
 # When running locally in development or in CI, a sqlite database file will be used instead
 # to simplify initial setup. Longer term it's recommended to use Postgres locally too.
 # TODO: set up postgres locally
-DATABASES = {
-    "default": {
-        "ENGINE": f'django.db.backends.{env("DATABASE_ENGINE", default="sqlite3")}',
-        "NAME": env(
-            "DATABASE_NAME", default=os.path.join(BASE_DIR, "tile_tallier_backend")
-        ),
-        "USER": env("DATABASE_USERNAME"),
-        "PASSWORD": env("DATABASE_PASSWORD"),
-        "HOST": env("DATABASE_HOST", default="db"),
-        "PORT": env.int("DATABASE_PORT", default=5432),
-        "OPTIONS": json.loads(env("DATABASE_OPTIONS", default="{}")),
+if "test" in sys.argv:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "test_db",  # Use a test-specific DB
+            "USER": "postgres",  # Default username for the test DB
+            "PASSWORD": "postgres",  # Default password for the test DB
+            "HOST": "localhost",  # Since the DB service is local to the CI runner
+            "PORT": 5432,  # Standard Postgres port
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": f'django.db.backends.{env("DATABASE_ENGINE", default="sqlite3")}',
+            "NAME": env(
+                "DATABASE_NAME", default=os.path.join(BASE_DIR, "tile_tallier_backend")
+            ),
+            "USER": env("DATABASE_USERNAME"),
+            "PASSWORD": env("DATABASE_PASSWORD"),
+            "HOST": env("DATABASE_HOST", default="db"),
+            "PORT": env.int("DATABASE_PORT", default=5432),
+            "OPTIONS": json.loads(env("DATABASE_OPTIONS", default="{}")),
+        }
+    }
 
 
 # Password validation
