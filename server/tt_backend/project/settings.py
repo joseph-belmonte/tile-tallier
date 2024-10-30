@@ -163,17 +163,19 @@ WSGI_APPLICATION = "project.wsgi.application"
 # to simplify initial setup. Longer term it's recommended to use Postgres locally too.
 # TODO: set up postgres locally
 if "test" in sys.argv:
+    print("Running in test mode")
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": "test_db",  # Use a test-specific DB
-            "USER": "postgres",  # Default username for the test DB
-            "PASSWORD": "postgres",  # Default password for the test DB
-            "HOST": "localhost",  # Since the DB service is local to the CI runner
-            "PORT": 5432,  # Standard Postgres port
+            "NAME": "test_db",
+            "USER": "postgres",
+            "PASSWORD": "postgres",
+            "HOST": "localhost",
+            "PORT": 5432,
         }
     }
 else:
+    print("Running in non-test mode")
     DATABASES = {
         "default": {
             "ENGINE": f'django.db.backends.{env("DATABASE_ENGINE", default="sqlite3")}',
