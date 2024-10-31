@@ -77,21 +77,37 @@ jobs:
           cd server
           pip install -r requirements.txt
 
-      - name: Debug - Print working directory and list files
-        run: |
-          pwd  # Print the current working directory
-          ls -R  # Recursively list all files and directories
+      # - name: Debug - Print working directory and list files
+      #   run: |
+      #     pwd  # Print the current working directory
+      #     ls -R  # Recursively list all files and directories
 
       - name: Run server tests
         env:
-          DJANGO_SETTINGS_MODULE: "project.settings_test" # Explicitly use test settings
+          # Postgres Config
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
-          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-          ACCESS_TOKEN_LIFETIME: ${{ secrets.ACCESS_TOKEN_LIFETIME }}
-          REFRESH_TOKEN_LIFETIME: ${{ secrets.REFRESH_TOKEN_LIFETIME }}
-          AUTH_TOKEN_SECRET: ${{ secrets.AUTH_TOKEN_SECRET }}
+          DATABASE_ENGINE: postgresql
+          DATABASE_NAME: tile_tallier_test_db
+          DATABASE_USERNAME: "dummy_database_username"
+          DATABASE_PASSWORD: "dummy_database_password"
+
+          # Django Config
+          DJANGO_DEBUG: True
+          DJANGO_SECRET_KEY: "django_secret_key"
+          DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1"
+
+          # JWT and Authentication settings
+          AUTH_JWT_SIGNING_KEY: "auth_jwt_signing_key"
+          AUTH_TOKEN_SECRET: "auth_token_secret"
+          ACCESS_TOKEN_LIFETIME: "60m"
+          REFRESH_TOKEN_LIFETIME: "1d"
+
+          # Pagination settings
+          API_DEFAULT_PAGE_SIZE: 10
+          API_MAX_PAGE_SIZE: 100
+
+          # Google API Key
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-          DJANGO_ALLOWED_HOSTS: ${{ vars.DJANGO_ALLOWED_HOSTS }}
 
         run: |
           source venv/bin/activate
