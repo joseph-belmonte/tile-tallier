@@ -77,6 +77,11 @@ jobs:
           cd server
           pip install -r requirements.txt
 
+      - name: Debug - Print working directory and list files
+        run: |
+          pwd  # Print the current working directory
+          ls -R  # Recursively list all files and directories
+
       - name: Run server tests
         env:
           DJANGO_SETTINGS_MODULE: "tt_backend.project.settings_test" # Explicitly use test settings
@@ -91,6 +96,8 @@ jobs:
         run: |
           source venv/bin/activate
           cd server/tt_backend
+          pwd
+          ls -R
           python manage.py makemigrations
           python manage.py migrate
           python manage.py test
