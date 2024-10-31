@@ -84,7 +84,7 @@ jobs:
 
       - name: Run server tests
         env:
-          DJANGO_SETTINGS_MODULE: "tt_backend.project.settings_test" # Explicitly use test settings
+          DJANGO_SETTINGS_MODULE: "project.settings_test" # Explicitly use test settings
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           ACCESS_TOKEN_LIFETIME: ${{ secrets.ACCESS_TOKEN_LIFETIME }}
