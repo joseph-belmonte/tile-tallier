@@ -133,13 +133,17 @@ jobs:
       - name: Deploy to DigitalOcean
         run: |
           ssh -o StrictHostKeyChecking=no root@198.199.74.219 << 'EOF'
-          cd /root/project
+          mkdir -p /root/tile-tallier/
+          cd /root/tile-tallier/
           # Initialize sparse-checkout for Git (if not already set up)
-          git init
-          git remote add origin https://github.com/joseph-belmonte/tile-tallier.git
-          git config core.sparseCheckout true
-          echo "server/*" > .git/info/sparse-checkout
+          if [ ! -d ".git"]; then
+            git clone https://github.com/joseph-belmonte/tile-tallier.git . 
+            # git config core.sparseCheckout true
+            # echo "server/*" > .git/info/sparse-checkout
+          fi
+
           git pull origin main
-          sudo docker-compose down
-          sudo docker-compose up --build -d
+          cd server
+          docker-compose down
+          docker-compose up --build -d
           EOF
