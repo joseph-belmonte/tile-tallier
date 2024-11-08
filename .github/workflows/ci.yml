@@ -142,7 +142,7 @@ jobs:
             # echo "server/*" > .git/info/sparse-checkout
           fi
 
-          git pull origin main
+          git pull origin connect-django-to-postgres-and-docker
           cd server
           docker-compose down
           docker-compose up --build -d
