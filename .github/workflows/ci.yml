@@ -132,7 +132,7 @@ jobs:
 
       - name: Deploy to DigitalOcean
         run: |
-          ssh -o StrictHostKeyChecking=no root@${{ secrets.DO_SERVER_IP }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no root@198.199.74.219 << 'EOF'
           cd /root/project
           # Initialize sparse-checkout for Git (if not already set up)
           git init
