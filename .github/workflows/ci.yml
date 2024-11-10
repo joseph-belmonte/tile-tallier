@@ -133,17 +133,23 @@ jobs:
       - name: Deploy to DigitalOcean
         run: |
           ssh -o StrictHostKeyChecking=no root@198.199.74.219 << 'EOF'
-          mkdir -p /root/tile-tallier/
-          cd /root/tile-tallier/
-          # Initialize sparse-checkout for Git (if not already set up)
-          if [ ! -d ".git" ]; then
-            git clone https://github.com/joseph-belmonte/tile-tallier.git . 
-            # git config core.sparseCheckout true
-            # echo "server/*" > .git/info/sparse-checkout
-          fi
+            # Create the project directory if it doesn't exist
+            mkdir -p /root/tile-tallier/
+            cd /root/tile-tallier/
 
-          git pull origin connect-django-to-postgres-and-docker
-          cd server
-          docker-compose down
-          docker-compose up --build -d
+            # Check if the .git directory exists to initialize only if necessary
+            if [ ! -d ".git" ]; then
+              git init
+              git remote add origin https://github.com/joseph-belmonte/tile-tallier.git
+              git config core.sparseCheckout true
+              echo "server/*" > .git/info/sparse-checkout
+            fi
+
+            # Ensure the branch name matches exactly with the one in the repository
+            git pull origin connect-django-to-postgres-and-docker
+
+            # Go to the server directory and manage Docker services
+            cd server
+            docker-compose down
+            docker-compose up --build -d
           EOF
