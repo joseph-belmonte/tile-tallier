@@ -12,7 +12,7 @@ jobs:
 
     env:
       # Reference the GitHub Secrets
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      DJANGO_SECRET_KEY: ${{ secrets.SECRET_KEY }}
       ACCESS_TOKEN_LIFETIME: ${{ secrets.ACCESS_TOKEN_LIFETIME }}
       REFRESH_TOKEN_LIFETIME: ${{ secrets.REFRESH_TOKEN_LIFETIME }}
       AUTH_TOKEN_SECRET: ${{ secrets.AUTH_TOKEN_SECRET }}
@@ -37,12 +37,6 @@ jobs:
         run: |
           cd client
           dart format --output=none --set-exit-if-changed .
-
-      # - name: Analyze project source
-      #   # Change to the client directory and analyze the project source
-      #   run: |
-      #     cd client
-      #     flutter analyze
 
       - name: Run client tests
         # Change to the client directory and run the tests
@@ -80,16 +74,42 @@ jobs:
         run: |
           python -m venv venv
           source venv/bin/activate
-          pip install -r server/requirements.txt
+          cd server
+          pip install -r requirements.txt
+
+      # - name: Debug - Print working directory and list files
+      #   run: |
+      #     pwd  # Print the current working directory
+      #     ls -R  # Recursively list all files and directories
 
       - name: Run server tests
         env:
+          # Postgres Config
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          ACCESS_TOKEN_LIFETIME: ${{ secrets.ACCESS_TOKEN_LIFETIME }}
-          REFRESH_TOKEN_LIFETIME: ${{ secrets.REFRESH_TOKEN_LIFETIME }}
-          AUTH_TOKEN_SECRET: ${{ secrets.AUTH_TOKEN_SECRET }}
-          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          DATABASE_ENGINE: postgresql
+          DATABASE_NAME: test_db
+          DATABASE_USERNAME: postgres
+          DATABASE_PASSWORD: postgres
+          DATABASE_HOST: localhost # Use 'localhost' instead of 'db' for CI
+          DATABASE_PORT: 5432
+
+          # Django Config
+          DJANGO_DEBUG: True
+          DJANGO_SECRET_KEY: "test_secret_key"
+          DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1"
+
+          # JWT and Authentication settings
+          AUTH_JWT_SIGNING_KEY: "test_auth_jwt_signing_key"
+          AUTH_TOKEN_SECRET: "test_auth_token_secret"
+          ACCESS_TOKEN_LIFETIME: "60m"
+          REFRESH_TOKEN_LIFETIME: "1d"
+
+          # Pagination settings
+          API_DEFAULT_PAGE_SIZE: 10
+          API_MAX_PAGE_SIZE: 100
+
+          # Google API Key
+          GOOGLE_API_KEY: "test_google_api_key"
 
         run: |
           source venv/bin/activate
@@ -98,53 +118,38 @@ jobs:
           python manage.py migrate
           python manage.py test
 
-  # Commenting this block out until we correctly set up the xcode requirements (signing/certificate)
-  # build_ios:
-  #   if: github.ref == 'refs/heads/production' # Specifies that this job should only run on the production branch
-  #   name: Build iOS
-  #   needs: [flutter_test] # Specifies that this job depends on the successful completion of flutter_test
-  #   runs-on: macos-latest # Specifies macOS runner for iOS build
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [flutter_test, server_test]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Set up Flutter
-  #       uses: subosito/flutter-action@v2
-  #       with:
-  #         channel: stable
-  #     - name: Install dependencies
-  #       run: flutter pub get
-  #     - name: Clean build
-  #       run: flutter clean # Cleans previous builds
-  #     - name: Build iOS
-  #       run: flutter build ipa --obfuscate --split-debug-info=build/app/outputs/symbols # Builds an iOS app archive (.ipa file)
-  #     - name: Upload Symbols
-  #       uses: actions/upload-artifact@v2
-  #       if: github.ref == 'refs/heads/production' # Specifies that this step should only run on the production branch
-  #       with:
-  #         name: ios-symbols
-  #         path: build/app/outputs/symbols
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
 
-  # build_apk:
-  #   if: github.ref == 'refs/heads/production' # Specifies that this job should only run on the production branch
-  #   name: Build Android
-  #   runs-on: ubuntu-latest # Specifies Ubuntu runner for Android build
+      - name: Deploy to DigitalOcean
+        run: |
+          ssh -o StrictHostKeyChecking=no root@198.199.74.219 << 'EOF'
+            # Create the project directory if it doesn't exist
+            mkdir -p /root/tile-tallier/
+            cd /root/tile-tallier/
 
-  #   needs: [flutter_test] # Specifies that this job depends on the successful completion of flutter_test
+            # Check if the .git directory exists to initialize only if necessary
+            if [ ! -d ".git" ]; then
+              git init
+              git remote add origin https://github.com/joseph-belmonte/tile-tallier.git
+              git config core.sparseCheckout true
+              echo "server/*" > .git/info/sparse-checkout
+            fi
 
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Set up Flutter
-  #       uses: subosito/flutter-action@v2
-  #       with:
-  #         channel: stable
-  #     - name: Install dependencies
-  #       run: flutter pub get
-  #     - name: Clean build
-  #       run: flutter clean
-  #     - name: Build APK
-  #       run: flutter build apk --obfuscate --split-debug-info=build/app/outputs/symbols # Builds an Android APK file
-  #     - name: Upload Symbols
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: android-symbols
-  #         path: build/app/outputs/symbols
+            # Ensure the branch name matches exactly with the one in the repository
+            git pull origin connect-django-to-postgres-and-docker
+
+            # Go to the server directory and manage Docker services
+            cd server
+            docker-compose down
+            docker-compose up --build -d
+          EOF

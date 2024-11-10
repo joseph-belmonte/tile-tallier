@@ -5,7 +5,6 @@ django-admin-interface
 django-admin-autocomplete-filter
 django_filter
 django-environ
-dj-database-url
 environs
 google-generativeai
 gunicorn

@@ -10,27 +10,25 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import json
 import os
-import dj_database_url
 from pathlib import Path
 from .utils import *
 import sys
 import environ
+import logging.config
 
 
 # Initialize environment variables
 env = environ.Env()
-environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+environ.Env.read_env(os.path.join(BASE_DIR, "../.env"))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
-# Before using your Heroku app in production, make sure to review Django's deployment checklist:
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # Django requires a unique secret key for each Django app, that is used by several of its
 # security features.
@@ -39,14 +37,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # https://docs.djangoproject.com/en/5.1/ref/settings/#std-setting-SECRET_KEY
 # https://devcenter.heroku.com/articles/config-vars
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 
-ALLOWED_HOSTS = []
+# Determine debug mode from environment variable
+DEBUG = env.bool("DJANGO_DEBUG", False) == "True"
 
-
+# Set ALLOWED_HOSTS based on the debug mode
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if DEBUG:
+    # In development, allow localhost
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+else:
+    # In production, use environment variable or default to a safe value
+    ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS")
 
 # Application definition
 INSTALLED_APPS = [
@@ -78,6 +82,12 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {"anon": "100/day", "user": "1000/day"},
+    "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
 }
@@ -148,30 +158,37 @@ WSGI_APPLICATION = "project.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 # set a "production" or "development" variable in .env and read that to check which case below
-# if IS_HEROKU_APP:
-#     # In production on Heroku the database configuration is derived from the `DATABASE_URL`
-#     # environment variable by the dj-database-url package. `DATABASE_URL` will be set
-#     # automatically by Heroku when a database addon is attached to your Heroku app. See:
-#     # https://devcenter.heroku.com/articles/provisioning-heroku-postgres#application-config-vars
-#     # https://github.com/jazzband/dj-database-url
-#     DATABASES = {
-#         "default": dj_database_url.config(
-#             env="DATABASE_URL",
-#             conn_max_age=600,
-#             conn_health_checks=True,
-#             ssl_require=True,
-#         ),
-#     }
-# else:
+
 # When running locally in development or in CI, a sqlite database file will be used instead
 # to simplify initial setup. Longer term it's recommended to use Postgres locally too.
 # TODO: set up postgres locally
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+if "test" in sys.argv:
+    print("Running in test mode")
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "test_db",
+            "USER": "postgres",
+            "PASSWORD": "postgres",
+            "HOST": "localhost",
+            "PORT": 5432,
+        }
     }
-}
+else:
+    print("Running in non-test mode")
+    DATABASES = {
+        "default": {
+            "ENGINE": f'django.db.backends.{env("DATABASE_ENGINE", default="sqlite3")}',
+            "NAME": env(
+                "DATABASE_NAME", default=os.path.join(BASE_DIR, "tile_tallier_backend")
+            ),
+            "USER": env("DATABASE_USERNAME"),
+            "PASSWORD": env("DATABASE_PASSWORD"),
+            "HOST": env("DATABASE_HOST", default="db"),
+            "PORT": env.int("DATABASE_PORT", default=5432),
+            "OPTIONS": json.loads(env("DATABASE_OPTIONS", default="{}")),
+        }
+    }
 
 
 # Password validation
@@ -209,6 +226,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 STORAGES = {
     # Enable WhiteNoise's GZip and Brotli compression of static assets:
@@ -235,3 +253,38 @@ if "test" in sys.argv:
             "NAME": ":memory:",  # In-memory database for tests
         }
     }
+
+
+# Logging Configuration
+
+# Clear prev config
+LOGGING_CONFIG = None
+
+# Get loglevel from env
+LOGLEVEL = os.getenv("DJANGO_LOGLEVEL", "info").upper()
+
+logging.config.dictConfig(
+    {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "console": {
+                "format": "%(asctime)s %(levelname)s [%(name)s:%(lineno)s] %(module)s %(process)d %(thread)d %(message)s",
+            },
+        },
+        "handlers": {
+            "console": {
+                "class": "logging.StreamHandler",
+                "formatter": "console",
+            },
+        },
+        "loggers": {
+            "": {
+                "level": LOGLEVEL,
+                "handlers": [
+                    "console",
+                ],
+            },
+        },
+    }
+)
