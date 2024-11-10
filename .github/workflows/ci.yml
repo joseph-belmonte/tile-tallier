@@ -146,7 +146,7 @@ jobs:
             fi
 
             # Ensure the branch name matches exactly with the one in the repository
-            git pull origin connect-django-to-postgres-and-docker
+            git pull origin main
 
             # Go to the server directory and manage Docker services
             cd server
