@@ -1,6 +1,6 @@
 # Overview
 
-This is an app that can be used to help you score a game of scrabble. You can play up to a 4 player game, and input words as you play, not worrying about the score, the app will keep track of that for you. It includes bingo functionality, letter and word multiplier functionality, and a word check based on the [Enable word list](https://www.bananagrammer.com/2013/12/the-amazing-enable-word-list-project.html). Other, smaller word lists are also included.
+This is an archived app that will no longer be worked on. It can be used to help you score a game of scrabble. You can play up to a 4 player game, and input words as you play, not worrying about the score, the app will keep track of that for you. It includes bingo functionality, letter and word multiplier functionality, and a word check based on the [Enable word list](https://www.bananagrammer.com/2013/12/the-amazing-enable-word-list-project.html). Other, smaller word lists are also included.
 
 # Architecture
 
