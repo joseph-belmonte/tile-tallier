@@ -10,7 +10,7 @@ import '../../../../shared/data/urls.dart';
 /// The [AuthService] class is responsible for handling authentication requests, managing
 /// tokens, and refreshing tokens.
 class AuthService {
-  final String _baseUrl = '${baseUrl}/${api_version}';
+  final String _baseUrl = '$baseUrl/$api_version';
   final LocalStorageService _localStorageService = LocalStorageService(
     secureStorage: FlutterSecureStorage(),
   );

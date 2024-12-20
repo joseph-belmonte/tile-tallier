@@ -1,62 +1,15 @@
-# Scrabble Scoring App Development Milestones
+# Overview
 
-[![Continuous Integration and Build](https://github.com/joseph-belmonte/tile-tallier/actions/workflows/ci.yml/badge.svg)](https://github.com/joseph-belmonte/tile-tallier/actions/workflows/ci.yml)
+This is an app that can be used to help you score a game of scrabble. You can play up to a 4 player game, and input words as you play, not worrying about the score, the app will keep track of that for you. It includes bingo functionality, letter and word multiplier functionality, and a word check based on the [Enable word list](https://www.bananagrammer.com/2013/12/the-amazing-enable-word-list-project.html). Other, smaller word lists are also included.
 
-## Frontend Development
+# Architecture
 
-- [x] Implement navigation between screens (scorekeeping, settings, main menu).
-- [ ] Ensure responsive and consistent design across devices and orientations.
+This is a monorepo that contains moth the frontend and backend code for the app. The frontend is a flutter app, and the backend is a django app.
 
-## Backend Development -
+## Frontend
 
-- [x] User registration and authentication
-- [ ] Track user purchase history/subscription status
+The frontend is a flutter app developed mainly for iOS. The code is organized by features and tries to follow CLEAN architecture principles. More notes available inside the `client/readme.md` .
 
-## Game Logic Integration
+## Backend
 
-- [x] Implement core Scrabble rules for word formation, scoring, and tile placement.
-- [x] Ensure accurate scoring based on tile values and special tile multipliers.
-
-## Local Gameplay Feature
-
-- [ ] Enable users to save and load game sessions.
-
-## Testing and Quality Assurance
-
-- [ ] Conduct thorough testing of app's functionality, including gameplay.
-- [ ] Address and fix bugs or usability issues identified during testing.
-- [ ] Optimize app performance and user experience.
-
-## Deployment on App Stores
-
-- [ ] Prepare the app for deployment on Apple App Store and Google Play Store.
-- [ ] Create app store listings with descriptions, screenshots, and graphics.
-- [ ] Submit the app for review and approval on both platforms.
-
-## Post-launch Support and Updates
-
-- [ ] Monitor user feedback and app reviews for issues and suggestions.
-- [ ] Maintain compatibility with latest iOS and Android versions.
-
-## Monetization Strategy
-
-- [ ] Complete RevenueCat integration to track purchases with our Django backend.
-- [ ] Confirm premium functionality works for a premium user.
-- [ ] Monitor revenue generation and adjust strategies as needed.
-
-## Marketing and Promotion
-
-- [ ] Develop a marketing plan to increase app visibility and downloads.
-- [ ] Use social media, ASO, and advertising to promote the app.
-- [ ] Engage with the Scrabble community to gain initial traction.
-
-## User Support and Community Engagement
-
-- [ ] Provide user support for inquiries and issues.
-- [ ] Foster an engaged user community through forums, social media, or in-app chat.
-- [ ] Gather feedback for future improvements and updates.
-
-## Analytics and Performance Evaluation
-
-- [ ] Implement analytics tools to track user engagement, retention, and in-app behavior.
-- [ ] Analyze data to make data-driven decisions for app improvements.
+The backend module contains several different django 'apps' including `accounts`, `api`, `common`, and `gemini` for google gemini api integration. It is set up to use docker and uses a customized django authentication system. 

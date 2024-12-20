@@ -25,42 +25,6 @@ class AppearanceSettingsPage extends ConsumerWidget {
       body: ListView(
         children: <Widget>[
           ListTile(
-            title: const Text('Brightness'),
-            leading: const Icon(Icons.brightness_4),
-            subtitle: const Text('Edit display brightness settings'),
-          ),
-          ListTile(
-            title: const Text('System Mode'),
-            leading: const Icon(Icons.phone_android),
-            trailing: themeMode.index == 0
-                ? AnimateInCheckIcon()
-                : AnimateOutCheckIcon(),
-            onTap: () => ref
-                .read(Settings.themeModeProvider.notifier)
-                .set(ThemeMode.system),
-          ),
-          ListTile(
-            title: const Text('Light Mode'),
-            leading: const Icon(Icons.light_mode),
-            trailing: themeMode.index == 1
-                ? AnimateInCheckIcon()
-                : AnimateOutCheckIcon(),
-            onTap: () => ref
-                .read(Settings.themeModeProvider.notifier)
-                .set(ThemeMode.light),
-          ),
-          ListTile(
-            title: const Text('Dark Mode'),
-            leading: const Icon(Icons.dark_mode),
-            trailing: themeMode.index == 2
-                ? AnimateInCheckIcon()
-                : AnimateOutCheckIcon(),
-            onTap: () => ref
-                .read(Settings.themeModeProvider.notifier)
-                .set(ThemeMode.dark),
-          ),
-          Divider(),
-          ListTile(
             title: const Text('Theming'),
             subtitle: const Text('Check out our premium themes!'),
             leading: const Icon(Icons.color_lens),
@@ -69,6 +33,30 @@ class AppearanceSettingsPage extends ConsumerWidget {
               context,
               MaterialPageRoute(builder: (_) => ThemeScreen()),
             ),
+          ),
+          Divider(),
+          ListTile(
+            title: const Text('Brightness'),
+            leading: const Icon(Icons.brightness_4),
+            subtitle: const Text('Edit display brightness settings'),
+          ),
+          ListTile(
+            title: const Text('System Mode'),
+            leading: const Icon(Icons.phone_android),
+            trailing: themeMode.index == 0 ? AnimateInCheckIcon() : AnimateOutCheckIcon(),
+            onTap: () => ref.read(Settings.themeModeProvider.notifier).set(ThemeMode.system),
+          ),
+          ListTile(
+            title: const Text('Light Mode'),
+            leading: const Icon(Icons.light_mode),
+            trailing: themeMode.index == 1 ? AnimateInCheckIcon() : AnimateOutCheckIcon(),
+            onTap: () => ref.read(Settings.themeModeProvider.notifier).set(ThemeMode.light),
+          ),
+          ListTile(
+            title: const Text('Dark Mode'),
+            leading: const Icon(Icons.dark_mode),
+            trailing: themeMode.index == 2 ? AnimateInCheckIcon() : AnimateOutCheckIcon(),
+            onTap: () => ref.read(Settings.themeModeProvider.notifier).set(ThemeMode.dark),
           ),
           Divider(),
           ListTile(
@@ -82,8 +70,7 @@ class AppearanceSettingsPage extends ConsumerWidget {
             trailing: scarbbleEdition == ScrabbleEdition.classic
                 ? AnimateInCheckIcon()
                 : AnimateOutCheckIcon(),
-            onTap: () => ref.read(scrabbleEditionProvider.notifier).state =
-                ScrabbleEdition.classic,
+            onTap: () => ref.read(scrabbleEditionProvider.notifier).state = ScrabbleEdition.classic,
           ),
           ListTile(
             title: const Text('Hasbro'),
@@ -91,8 +78,7 @@ class AppearanceSettingsPage extends ConsumerWidget {
             trailing: scarbbleEdition == ScrabbleEdition.hasbro
                 ? AnimateInCheckIcon()
                 : AnimateOutCheckIcon(),
-            onTap: () => ref.read(scrabbleEditionProvider.notifier).state =
-                ScrabbleEdition.hasbro,
+            onTap: () => ref.read(scrabbleEditionProvider.notifier).state = ScrabbleEdition.hasbro,
           ),
         ],
       ),
