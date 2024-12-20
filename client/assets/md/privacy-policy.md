@@ -68,7 +68,7 @@ By using the Application, you are giving your consent to the Service Provider pr
 
 **Contact us**
 
-If you have any questions regarding privacy while using the Application, or have questions about the practices, please contact the Service Provider via email at tile_tallier@belmo.dev.
+If you have any questions regarding privacy while using the Application, or have questions about the practices, please contact the Service Provider via email at example@example.com.
 
 ---
 

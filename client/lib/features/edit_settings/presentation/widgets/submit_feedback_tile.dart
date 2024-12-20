@@ -31,7 +31,7 @@ class SubmitFeedbackTile extends StatelessWidget {
               subject: 'App Feedback',
               body: feedback.text,
               attachmentPaths: [file.path],
-              recipients: ['tile_tally@belmo.dev'],
+              recipients: ['example@example.com'],
             );
 
             try {
